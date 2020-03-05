@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ get_asset('app.css') }}">
+    {% endblock %}
+</head>
+<body data-script="{% block script %}{% endblock %}">
+{% block body %}{% endblock %}
+{% block javascripts %}
+    <script src="{{ get_asset('app.js') }}"></script>
+{% endblock %}
+</body>
+</html>
