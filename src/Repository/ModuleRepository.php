@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Module;
+use App\Entity\{Module, ModuleParameter};
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -14,37 +14,69 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class ModuleRepository extends ServiceEntityRepository
 {
+    private $cache = [];
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Module::class);
     }
 
-    // /**
-    //  * @return Module[] Returns an array of Module objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function createModule(string $moduleLabel, bool $isActive = false, string $description = null): Module
     {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $module = (new Module)
+            ->setLabel($moduleLabel)
+            ->setIsActive($isActive)
+            ->setDescription($description);
 
-    /*
-    public function findOneBySomeField($value): ?Module
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $this->_em->persist($module);
+
+        return $module;
     }
-    */
+
+
+    public function createParameter(string $moduleLabel, string $parameterLabel, array $value, string $description = null): ModuleParameter
+    {
+        $module = $this->findOneBy(['label' => $moduleLabel]);
+
+
+        if ($module === null) {
+            throw new \Exception("The module << $moduleLabel >> doesn't exist!");
+        }
+
+
+        $moduleParameter = (new ModuleParameter)
+            ->setLabel($parameterLabel)
+            ->setValue($value)
+            ->setDescription($description)
+            ->setModule($module);
+
+            $this->_em->persist($moduleParameter);
+
+
+        $this->cache[$moduleLabel][$parameterLabel] = $moduleParameter;
+
+        return $moduleParameter;
+    }
+
+
+    public function getParameter(string $moduleLabel, string $parameterLabel): ?ModuleParameter
+    {
+        if (isset($this->cache[$moduleLabel][$parameterLabel])) {
+            return $this->cache[$moduleLabel][$parameterLabel];
+        }
+
+        /** @var ModuleParameter|null $moduleParameter */
+        $module = $this->createQueryBuilder('m')
+            ->leftJoin('parameters', 'p')
+            ->where('m.label = :moduleLabel')
+            ->andWhere('p.label = :parameterLabel')
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        $moduleParameter = $module->getParameter();
+
+        $this->cache[$moduleLabel][$parameterLabel] = $moduleParameter;
+
+        return $moduleParameter;
+    }
 }

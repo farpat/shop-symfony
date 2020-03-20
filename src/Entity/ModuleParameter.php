@@ -17,12 +17,6 @@ class ModuleParameter
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Module")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $module;
-
-    /**
      * @ORM\Column(type="text")
      */
     private $label;
@@ -37,21 +31,15 @@ class ModuleParameter
      */
     private $value = [];
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Module", inversedBy="parameters")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $module;
+
     public function getId (): ?int
     {
         return $this->id;
-    }
-
-    public function getModule (): ?Module
-    {
-        return $this->module;
-    }
-
-    public function setModule (?Module $module): self
-    {
-        $this->module = $module;
-
-        return $this;
     }
 
     public function getLabel (): ?string
@@ -86,6 +74,18 @@ class ModuleParameter
     public function setValue(array $value): self
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    public function getModule(): ?Module
+    {
+        return $this->module;
+    }
+
+    public function setModule(?Module $module): self
+    {
+        $this->module = $module;
 
         return $this;
     }

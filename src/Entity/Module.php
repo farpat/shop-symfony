@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,6 +32,16 @@ class Module
      * @ORM\Column(type="boolean", options={"default":0})
      */
     private $is_active = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ModuleParameter", mappedBy="module")
+     */
+    private $parameters;
+
+    public function __construct()
+    {
+        $this->parameters = new ArrayCollection();
+    }
 
     public function getId (): ?int
     {
@@ -68,6 +80,37 @@ class Module
     public function setIsActive (bool $is_active): self
     {
         $this->is_active = $is_active;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ModuleParameter[]
+     */
+    public function getParameters(): Collection
+    {
+        return $this->parameters;
+    }
+
+    public function addParameter(ModuleParameter $parameter): self
+    {
+        if (!$this->parameters->contains($parameter)) {
+            $this->parameters[] = $parameter;
+            $parameter->setModule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParameter(ModuleParameter $parameter): self
+    {
+        if ($this->parameters->contains($parameter)) {
+            $this->parameters->removeElement($parameter);
+            // set the owning side to null (unless already changed)
+            if ($parameter->getModule() === $this) {
+                $parameter->setModule(null);
+            }
+        }
 
         return $this;
     }
