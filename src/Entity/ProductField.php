@@ -32,7 +32,7 @@ class ProductField
     private $is_required;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="product_fields")
      * @ORM\JoinColumn(nullable=false)
      */
     private $category;
@@ -78,12 +78,12 @@ class ProductField
         return $this;
     }
 
-    public function getCategory (): ?Category
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    public function setCategory (?Category $category): self
+    public function setCategory(?Category $category): self
     {
         $this->category = $category;
 

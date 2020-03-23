@@ -5,17 +5,16 @@ namespace App\DataFixtures;
 use App\Entity\{Category, Product, Module};
 use App\Repository\ModuleRepository;
 use App\Services\DataFixtures\Fixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class ModuleFixtures extends Fixture
+class ModuleFixtures extends Fixture implements OrderedFixtureInterface
 {
 
     private function createModules(ModuleRepository $moduleRepository, ObjectManager $manager)
     {
         $moduleRepository->createModule('home', true, 'Home module');
         $moduleRepository->createModule('billing', true, 'Billing module');
-        //Forced to flush to add the modules because after we get it from database
-        $manager->flush();
     }
 
     private function createHomeModuleParameters(ModuleRepository $moduleRepository)
@@ -62,10 +61,17 @@ class ModuleFixtures extends Fixture
         $moduleRepository = $manager->getRepository(Module::class);
 
         $this->createModules($moduleRepository, $manager);
+        //Forced to flush to add the modules because after we get it from database
+        $manager->flush();
 
         $this->createHomeModuleParameters($moduleRepository);
         $this->createBillingModuleParameters($moduleRepository);
 
         $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 1;
     }
 }

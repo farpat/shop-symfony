@@ -58,10 +58,16 @@ class Category
      */
     private $visits;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductField", mappedBy="category", orphanRemoval=true)
+     */
+    private $product_fields;
+
     public function __construct ()
     {
         $this->products = new ArrayCollection();
         $this->visits = new ArrayCollection();
+        $this->product_fields = new ArrayCollection();
     }
 
     public function getId (): ?int
@@ -197,6 +203,37 @@ class Category
             // set the owning side to null (unless already changed)
             if ($visit->getProduct() === $this) {
                 $visit->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProductField[]
+     */
+    public function getProductFields(): Collection
+    {
+        return $this->product_fields;
+    }
+
+    public function addProductField(ProductField $productField): self
+    {
+        if (!$this->product_fields->contains($productField)) {
+            $this->product_fields[] = $productField;
+            $productField->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductField(ProductField $productField): self
+    {
+        if ($this->product_fields->contains($productField)) {
+            $this->product_fields->removeElement($productField);
+            // set the owning side to null (unless already changed)
+            if ($productField->getCategory() === $this) {
+                $productField->setCategory(null);
             }
         }
 
