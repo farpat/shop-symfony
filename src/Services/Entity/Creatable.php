@@ -9,18 +9,12 @@ trait Creatable
      */
     protected $created_at;
 
-    public function __construct ()
-    {
-        parent::__construct();
-        $this->created_at = new \DateTime;
-    }
-
     /**
-     * @param mixed $created_at
+     * @param DateTimeInterface $created_at
      *
      * @return Creatable
      */
-    public function setCreatedAt ($created_at)
+    public function setCreatedAt (\DateTimeInterface $created_at)
     {
         $this->created_at = $created_at;
         return $this;

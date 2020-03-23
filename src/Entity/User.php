@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Services\Entity\Creatable;
+use App\Services\Entity\Updatable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -12,6 +14,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
+
+    use Updatable, Creatable;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -51,25 +56,9 @@ class User implements UserInterface
     private $stripe_id;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $is_admin;
-
-    /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $remember_token;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $created_at;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $updated_at;
-
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="user", orphanRemoval=true)
      */
@@ -82,6 +71,7 @@ class User implements UserInterface
 
     public function __construct ()
     {
+        $this->created_at = new \DateTime;
         $this->addresses = new ArrayCollection();
         $this->billings = new ArrayCollection();
     }
@@ -113,16 +103,17 @@ class User implements UserInterface
         return (string)$this->email;
     }
 
+    public function isAdmin(): bool
+    {
+        return in_array('ROLE_ADMIN', $this->roles);
+    }
+
     /**
      * @see UserInterface
      */
     public function getRoles (): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return $this->roles;
     }
 
     public function setRoles (array $roles): self
@@ -200,18 +191,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getIsAdmin (): ?bool
-    {
-        return $this->is_admin;
-    }
-
-    public function setIsAdmin (bool $is_admin): self
-    {
-        $this->is_admin = $is_admin;
-
-        return $this;
-    }
-
     public function getRememberToken (): ?string
     {
         return $this->remember_token;
@@ -220,30 +199,6 @@ class User implements UserInterface
     public function setRememberToken (?string $remember_token): self
     {
         $this->remember_token = $remember_token;
-
-        return $this;
-    }
-
-    public function getCreatedAt (): ?\DateTimeInterface
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt (\DateTimeInterface $created_at): self
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getUpdatedAt (): ?\DateTimeInterface
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt (?\DateTimeInterface $updated_at): self
-    {
-        $this->updated_at = $updated_at;
 
         return $this;
     }

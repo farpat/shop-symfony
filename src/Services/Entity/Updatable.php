@@ -10,11 +10,11 @@ trait Updatable
     protected $updated_at;
 
     /**
-     * @param mixed $updated_at
+     * @param DateTimeInterface|null $updated_at
      *
      * @return Updatable
      */
-    public function setUpdatedAt ($updated_at)
+    public function setUpdatedAt (?\DateTimeInterface $updated_at)
     {
         $this->updated_at = $updated_at;
         return $this;

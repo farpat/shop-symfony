@@ -10,11 +10,11 @@ trait SoftDeletable
     protected $deleted_at = null;
 
     /**
-     * @param mixed $deleted_at
+     * @param \DateTimeInterface|null $deleted_at
      *
      * @return SoftDeletable
      */
-    public function setDeletedAt ($deleted_at)
+    public function setDeletedAt (?\DateTimeInterface $deleted_at)
     {
         $this->deleted_at = $deleted_at;
         return $this;

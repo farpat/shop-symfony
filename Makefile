@@ -83,7 +83,12 @@ build: install ## Build assets projects for production
 #	@$(php) artisan app:build-translations
 
 migrate: install ## Refresh database by running new migrations
-#	@$(php) artisan migrate:fresh --seed
+	@$(php) bin/console doctrine:database:drop --force
+	@$(php) bin/console doctrine:database:create
+	@rm -rf ./src/Migrations/*
+	@$(php) bin/console make:migration
+	@$(php) bin/console doctrine:migrations:migrate -n
+	@$(php) bin/console doctrine:fixtures:load -n
 
 bash: install ## Run bash in PHP container
 	@$(bash)
