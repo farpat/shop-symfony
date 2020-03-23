@@ -1,0 +1,10 @@
+<article class="card product">
+    {% if product.mainImage %}
+        <img src="{{ product.mainImage.urlThumbnail }}" class="card-img-top" alt="{{ product.label }}">
+    {% endif %}
+    <div class="card-body">
+        <h3 class="card-title">
+            <a href="#productUrl">{{ product.label }}</a>
+        </h3>
+    </div>
+</article>

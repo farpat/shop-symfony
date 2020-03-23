@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Entity\Module;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -14,37 +15,26 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class CategoryRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct (ManagerRegistry $registry)
     {
         parent::__construct($registry, Category::class);
     }
 
-    // /**
-    //  * @return Category[] Returns an array of Category objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getCategoriesInHome ()
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $categoryIdsInHomeParameter = $this->_em->getRepository(Module::class)->getParameter('home', 'categories');
+        if ($categoryIdsInHomeParameter === null) {
+            return [];
+        }
 
-    /*
-    public function findOneBySomeField($value): ?Category
-    {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+            ->select('c')
+            ->leftJoin('c.image', 'i')
+            ->where('c.id IN (:ids)')
+            ->setParameters([
+                'ids' => $categoryIdsInHomeParameter->getValue()
+            ])
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
     }
-    */
 }

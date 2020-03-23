@@ -1,0 +1,10 @@
+<article class="card category">
+    {% if category.image %}
+        <img src="{{ category.image.urlThumbnail }}" class="card-img-top" alt="{{ category.label }}">
+    {% endif %}
+    <div class="card-body">
+        <h3 class="card-title">
+            <a href="#categoryUrl">{{ category.label }}</a>
+        </h3>
+    </div>
+</article>

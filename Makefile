@@ -70,7 +70,7 @@ build: install ## Build assets projects for production
 	@$(npm) run build
 
 migrate: install ## Refresh database by running new migrations
-	@$(php) bin/console doctrine:fixtures:load -n
+	@$(php) bin/console doctrine:fixtures:load -n --purge-with-truncate
 
 bash: install ## Run bash in PHP container
 	@$(bash)

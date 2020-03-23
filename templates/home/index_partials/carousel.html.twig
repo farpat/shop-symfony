@@ -1,0 +1,36 @@
+{% set carouselParameter = parameter('home', 'carousel') %}
+{% set slides = carouselParameter ? carouselParameter.value : [] %}
+{% set carouselId = 'carousel-home' %}
+
+{% if slides is not empty %}
+    <section class="home-section slides">
+        <div id="{{ carouselId }}" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                {% for slide in slides %}
+                    <li data-target="#{{ carouselId }}" data-slide-to="{{ loop.index0 }}"
+                        {% if loop.first %}class="active"{% endif %}></li>
+                {% endfor %}
+            </ol>
+            <div class="carousel-inner">
+                {% for slide in slides %}
+                    <div class="carousel-item {% if loop.first %}active{% endif %}">
+                        <img src="{{ slide.img }}" alt="{{ slide.title }}" class="d-block w-100"
+                             style="max-height: 350px;">
+                        <div class="carousel-caption">
+                            <h3>{{ slide.title }}</h3>
+                            <p>{{ slide.description }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <a class="carousel-control-prev" href="#{{ carouselId }}" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">{% trans %}Previous {% endtrans %}</span>
+            </a>
+            <a class="carousel-control-next" href="#{{ carouselId }}" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">{% trans %}Next{% endtrans %}</span>
+            </a>
+        </div>
+    </section>
+{% endif %}

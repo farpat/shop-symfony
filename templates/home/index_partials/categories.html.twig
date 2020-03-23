@@ -1,0 +1,12 @@
+{% set categories = categoriesInHome() %}
+
+{% if categories is not empty %}
+    <section class="home-section categories">
+        <h2>{% trans %}Categories in the spotlight{% endtrans %}</h2>
+        <div class="card-deck">
+            {% for category in categories %}
+                {% include '_partials/category.html.twig' %}
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}

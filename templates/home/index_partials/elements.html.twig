@@ -1,0 +1,14 @@
+{% set elements = elementsInHome() %}
+
+{% if elements is not empty %}
+    <section class="home-section elements row">
+        {% for element in elements %}
+            <div class="col">
+                <div class="element">
+                    <i class="{{ element.icon }}"></i> <br>
+                    <h3>{{ element.title }}</h3>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+{% endif %}

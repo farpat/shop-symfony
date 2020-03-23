@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Module;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -14,37 +15,25 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class ProductRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct (ManagerRegistry $registry)
     {
         parent::__construct($registry, Product::class);
     }
 
-    // /**
-    //  * @return Product[] Returns an array of Product objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getProductsInHome ()
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $productIdsInHomepageParameter = $this->_em->getRepository(Module::class)->getParameter('home', 'products');
+        if ($productIdsInHomepageParameter === null) {
+            return [];
+        }
 
-    /*
-    public function findOneBySomeField($value): ?Product
-    {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+            ->leftJoin('p.main_image', 'i')
+            ->where('p.id IN (:ids)')
+            ->setParameters([
+                'ids' => $productIdsInHomepageParameter->getValue()
+            ])
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
     }
-    */
 }

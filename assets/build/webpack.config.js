@@ -49,10 +49,16 @@ let configWebpack = {
         publicPath: `${isDebug ? ('http://localhost:' + process.env.WEBPACK_DEV_SERVER_PORT) : ''}/assets/`,
     },
     resolve:      {
-        extensions: ['.js', '.json'],
+        extensions: ['.js', '.jsx', '.json'],
     },
     module:       {
         rules: [
+            //js
+            {
+                test:    /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                use:     {loader: "babel-loader"}
+            },
             //scss
             {
                 test: /\.scss$/,

@@ -1,0 +1,12 @@
+{% set products = productsInHome() %}
+
+{% if products is not empty %}
+    <section class="home-section products">
+        <h2>{% trans %}Products in the spotlight{% endtrans %}</h2>
+        <div class="card-deck">
+            {% for product in products %}
+                {% include '_partials/product.html.twig' %}
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
