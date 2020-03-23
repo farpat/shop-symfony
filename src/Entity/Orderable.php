@@ -66,6 +66,7 @@ abstract class Orderable
 
     public function __construct ()
     {
+        $this->created_at = new \DateTime;
         $this->items = new ArrayCollection();
     }
 

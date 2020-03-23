@@ -9,6 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Billing extends Orderable
 {
+    public const ORDERED_STATUS = 'ORDERED';
+    public const DELIVRED_STATUS = 'DELIVRED';
+
     /**
      * @ORM\Column(type="string", length=255)
      */

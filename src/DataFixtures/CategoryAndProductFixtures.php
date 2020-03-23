@@ -5,7 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\{Category, Image, Product, Tax};
 use App\Services\DataFixtures\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterface
 {

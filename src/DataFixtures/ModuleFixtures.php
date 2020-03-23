@@ -6,7 +6,7 @@ use App\Entity\{Category, Product, Module};
 use App\Repository\ModuleRepository;
 use App\Services\DataFixtures\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 class ModuleFixtures extends Fixture implements OrderedFixtureInterface
 {

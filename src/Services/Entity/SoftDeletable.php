@@ -12,9 +12,9 @@ trait SoftDeletable
     /**
      * @param \DateTimeInterface|null $deleted_at
      *
-     * @return SoftDeletable
+     * @return self
      */
-    public function setDeletedAt (?\DateTimeInterface $deleted_at)
+    public function setDeletedAt (?\DateTimeInterface $deleted_at): self
     {
         $this->deleted_at = $deleted_at;
         return $this;

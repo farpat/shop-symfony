@@ -2,11 +2,11 @@
 
 namespace App\DataFixtures;
 
-use App\Services\DataFixtures\Fixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use App\Entity\{Category, Image, Product, ProductField, ProductReference, Tax};
 use App\Repository\CategoryRepository;
+use App\Services\DataFixtures\Fixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 class ProductFieldAndProductReferenceFixtures extends Fixture implements OrderedFixtureInterface
 {
@@ -24,7 +24,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
         'width in cm'   => [4, 16, 32, 64],
     ];
 
-    public function load(ObjectManager $manager)
+    public function load (ObjectManager $manager)
     {
         /** @var CategoryRepository $categoryRepository */
         $categoryRepository = $manager->getRepository(Category::class);
@@ -50,7 +50,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
         $manager->flush();
     }
 
-    private function makeImage(ObjectManager $manager): Image
+    private function makeImage (ObjectManager $manager): Image
     {
         $id = random_int(1, 100);
         $normalSize = [1000, 400];
@@ -73,9 +73,10 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
 
     /**
      * @param Product $product
+     *
      * @return float[]
      */
-    private function computePricesOfProduct(Product $product)
+    private function computePricesOfProduct (Product $product)
     {
         $unitPriceExcludingTaxes = pow(10, random_int(1, 5));
 
@@ -98,7 +99,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
     /**
      * @return ProductField[]
      */
-    private function makeProductFields(Category $category, ObjectManager $manager): array
+    private function makeProductFields (Category $category, ObjectManager $manager): array
     {
         $numbers = self::NUMBER_PRODUCT_FIELDS;
         $strings = self::STRING_PRODUCT_FIELDS;
@@ -134,10 +135,10 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
      * @param Product $product
      * @param ProductField[] $productFields
      * @param Tax[] $taxes
-     * 
+     *
      * @return ProductReference[]
      */
-    private function makeProductReferences(Product $product, array $productFields, ObjectManager $manager): array
+    private function makeProductReferences (Product $product, array $productFields, ObjectManager $manager): array
     {
         [$unitPriceExcludingTaxes, $unitPriceIncludingTaxes] = $this->computePricesOfProduct($product);
 
@@ -146,7 +147,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
 
         for ($i = 0; $i < $productReferencesCount; $i++) {
             $filledProductfields = [];
-            
+
             if (!empty($productFields)) {
                 foreach ($productFields as $productField) {
                     $values = $productField->getType() === 'string' ?
@@ -180,29 +181,34 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
      * @param Product $product
      * @param ProductReference[] $productReferences
      * @param ObjectManager $manager
+     *
+     * @throws \Exception
      */
-    private function attachImages(Product $product, array $productReferences, ObjectManager $manager)
+    private function attachImages (Product $product, array $productReferences, ObjectManager $manager)
     {
         $imagesCount = random_int(0, 5);
         if ($imagesCount === 0) {
             return;
         }
 
+        $mainImage = null;
+
         foreach ($productReferences as $productReference) {
-            $images = [];
             for ($i = 0; $i < $imagesCount; $i++) {
                 $image = $this->makeImage($manager);
-                $images[] = $image;
+                if ($mainImage === null) {
+                    $mainImage = $image;
+                }
                 $productReference->addImage($image);
             }
 
-            $productReference->setMainImage($images[0]);
+            $productReference->setMainImage($mainImage);
         }
 
-        $product->setMainImage($images[0]);
+        $product->setMainImage($mainImage);
     }
 
-    public function getOrder()
+    public function getOrder ()
     {
         return 3;
     }

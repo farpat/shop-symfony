@@ -12,16 +12,16 @@ trait Updatable
     /**
      * @param DateTimeInterface|null $updated_at
      *
-     * @return Updatable
+     * @return self
      */
-    public function setUpdatedAt (?\DateTimeInterface $updated_at)
+    public function setUpdatedAt (?\DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return \DateTimeInterface|null
      */
     public function getUpdatedAt (): ?\DateTimeInterface
     {

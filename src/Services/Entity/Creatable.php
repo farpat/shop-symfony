@@ -10,18 +10,18 @@ trait Creatable
     protected $created_at;
 
     /**
-     * @param DateTimeInterface $created_at
+     * @param \DateTimeInterface $created_at
      *
-     * @return Creatable
+     * @return self
      */
-    public function setCreatedAt (\DateTimeInterface $created_at)
+    public function setCreatedAt (\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return \DateTimeInterface|null
      */
     public function getCreatedAt (): ?\DateTimeInterface
     {
