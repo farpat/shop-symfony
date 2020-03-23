@@ -40,7 +40,6 @@ update: ## Update the composer dependencies and npm dependencies
 	@$(composer) update
 	@$(npm) run update
 	@$(npm) install
-	@$(php) artisan app:build-translations
 
 clean: ## Remove composer dependencies (vendor folder) and npm dependencies (node_modules folder)
 	@echo "$(DANGER_COLOR_BOLD) Deleting composer and npm files/directories$(NO_COLOR)"
@@ -53,17 +52,6 @@ test: dev ## Run unit tests (parameters : dir=tests/Feature/LoginTest.php || fil
 	@echo "Creating database: $(PRIMARY_COLOR_BOLD)$(APP_NAME)_test$(NO_COLOR) ..."
 	@$(mariadb) "drop database if exists $(APP_NAME)_test; create database $(APP_NAME)_test;"
 	@$(php) vendor/bin/phpunit $(dir) --filter $(filter) --stop-on-failure
-
-dusk: install ## Run dusk tests (parameters : build=1 to build assets before run dusk tests)
-ifdef build
-	@echo "$(PRIMARY_COLOR)Building assets...$(NO_COLOR)"
-	make build
-endif
-	@docker-compose up -d nginx_dusk chrome
-	@$(mariadb) "drop database if exists $(APP_NAME)_test; create database $(APP_NAME)_test;"
-#	@$(php) artisan dusk
-	@docker-compose stop nginx_dusk php_dusk chrome
-	@echo "End of browser tests"
 
 dev: install ## Run development servers
 	@docker-compose up -d nginx_dev webpack_dev_server #laravel_echo_server
@@ -80,7 +68,6 @@ stop-dev: ## Stop development servers
 build: install ## Build assets projects for production
 	@rm -rf ./public/assets/*
 	@$(npm) run build
-#	@$(php) artisan app:build-translations
 
 migrate: install ## Refresh database by running new migrations
 	@$(php) bin/console doctrine:database:drop --force
