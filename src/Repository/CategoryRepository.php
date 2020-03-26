@@ -111,7 +111,7 @@ class CategoryRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->select('c', 'i')
             ->leftJoin('c.image', 'i')
-            ->where("LENGTH(nomenclature) - LENGTH(REPLACE(nomenclature,'.','')) + 1 = 1")
+            ->where('(LENGTH(c.nomenclature) - LENGTH(REPLACE(c.nomenclature, \'.\', \'\'))) + 1 = 1')
             ->getQuery()->getResult();
     }
 
@@ -120,7 +120,7 @@ class CategoryRepository extends ServiceEntityRepository
      *
      * @return Category[]
      */
-    private function getChidren (Category $parentCategory): array
+    public function getChildren (Category $parentCategory): array
     {
         if ($parentCategory->getIsLast()) {
             return [];
@@ -128,7 +128,7 @@ class CategoryRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('c')
             ->where('c.nomenclature LIKE :nomenclatureExpression')
-            ->andWhere("LENGTH(nomenclature) - LENGTH(REPLACE(nomenclature,'.','')) + 1 = :level")
+            ->andWhere('LENGTH(c.nomenclature) - LENGTH(REPLACE(c.nomenclature,\'.\',\'\')) + 1 = :level')
             ->setParameters([
                 'nomenclatureExpression' => "{$parentCategory->getNomenclature()}.%",
                 'level'                  => $parentCategory->getLevel() + 1

@@ -40,18 +40,17 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @Route("/categories/{categorySlug}-{categoryId}", name="show", methods={"GET"})
+     * @Route("/categories/{categorySlug}-{categoryId}", name="show", methods={"GET"}, requirements={"categorySlug":"[a-z\d\-]+", "categoryId":"\d+"})g
      * @Entity("category", expr="repository.getWithAllRelations(categoryId)")
      */
-    public function show (Category $category, string $categorySlug, Request $request)
+    public function show (Category $category, string $categorySlug, Request $request, CategoryService $categoryService)
     {
         $products = $this->categoryRepository->getProducts($category);
 
         $currentPage = $request->query->getInt('page');
 
         if ($currentPage === 0 || $categorySlug !== $category->getSlug()) {
-            return $this->redirectToRoute('category.show', ['categorySlug' => $category->getSlug(),
-                                                            'categoryId'   => $category->getId()]);
+            return $this->redirect($categoryService->getShowUrl($category));
         }
 
         $breadcrumb = [

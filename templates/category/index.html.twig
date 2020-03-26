@@ -1,0 +1,17 @@
+{% extends "_layouts/app.html.twig" %}
+
+{% block title %}
+    {% trans %}All categories{% endtrans %}
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>{% trans %}All categories{% endtrans %}</h1>
+
+        {{ breadcrumb(breadcrumb) }}
+
+        <section id="category-index" class="category-index">
+            {{ html | raw }}
+        </section>
+    </div>
+{% endblock %}

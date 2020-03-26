@@ -52,7 +52,7 @@ class ProductRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p')
             ->select('p.id', 'p.label', 'i.url_thumbnail as image',
-                "CONCAT('http://localhost:8000/', 'categories/', c.slug, '-', c.id, '/', p.slug, '-', p.id) as url",
+                'CONCAT("http://localhost:8000/categories/", c.slug, "-", c.id, "/", p.slug, "-", p.id) as url',
                 'MIN(pr.unit_price_excluding_taxes) as min_unit_price_including_taxes'
             )
             ->leftJoin('p.main_image', 'i')

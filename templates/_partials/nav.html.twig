@@ -8,34 +8,32 @@
     <div id="navbar" class="collapse navbar-collapse">
         <ul class="navbar-nav">
             <li class="nav-item">
-                {#                <a href="{{ path('categories.index') }}"#}
-                {#                   class="nav-link {{ is_active('categories.index') }}">{% trans %}All categories'{% endtrans %}</a>#}
+                <a href="{{ path('category.index') }}"
+                   class="nav-link {{ active('category.index') }}">{% trans %}All categories{% endtrans %}</a>
             </li>
-            {#            {{ navigation() }}#}
+            {{ navigation() }}
         </ul>
         <ul class="navbar-nav">
             <li class="nav-item form-search" id="form-search">
-                {#                <input type="search" data-url="{{ path('home.search') }}" class="form-control form-search-input">#}
+                <input type="search" data-url="{{ path('home.search') }}" class="form-control form-search-input">
             </li>
         </ul>
         <section class="navbar-nav ml-auto mt-3 mt-xl-0">
             <ul class="navbar-nav">
                 {% if app.user %}
                     <li class="nav-item">
-{#                        <a href="{{ path('user.profile') }}" class="nav-link">{{ app.user.name }}</a>#}
+                        {#                        <a href="{{ path('user.profile') }}" class="nav-link">{{ app.user.name }}</a>#}
                     </li>
                     <li class="nav-item mr-2">
-                        {#                    <form class="form-inline" action="{{ route('logout') }}" method="post">#}
-                        {#                        @csrf#}
-                        <button class="btn nav-link text-danger">{% trans %}Logout{% endtrans %}</button>
-                        </form>
+                        <a href="nav-link text-danger">{% trans %}Logout{% endtrans %}</a>
                     </li>
                 {% endif %}
 
                 {% if not app.user %}
                     <li class="nav-item mr-2">
-                        {#                    <a class="btn btn-outline-info" href="{{ path('register') }}">{% trans %}Register{% endtrans %}</a>#}
-                        {#                    <a class="btn btn-link text-info" href="{{ path('login') }}">{% trans %}Login{% endtrans %}</a>#}
+                        {#                                            <a class="btn btn-outline-info" href="{{ path('register') }}">{% trans %}Register{% endtrans %}</a>#}
+                        <a class="btn btn-link text-info"
+                           href="{{ path('security.login') }}">{% trans %}Login{% endtrans %}</a>
                     </li>
                 {% endif %}
 

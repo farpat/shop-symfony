@@ -1,5 +1,4 @@
-{% set carouselParameter = parameter('home', 'carousel') %}
-{% set slides = carouselParameter ? carouselParameter.value : [] %}
+{% set slides = parameter('home', 'carousel') %}
 {% set carouselId = 'carousel-home' %}
 
 {% if slides is not empty %}

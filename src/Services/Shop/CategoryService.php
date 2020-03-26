@@ -27,9 +27,14 @@ class CategoryService
     public function getShowUrl (Category $category)
     {
         return $this->urlGenerator->generate('category.show', [
-            'categorySlug' => $this->getSlug(),
-            'categoryId'   => $this->getId(),
+            'categorySlug' => $category->getSlug(),
+            'categoryId'   => $category->getId(),
         ]);
+    }
+
+    public function getIndexUrl ()
+    {
+        return $this->urlGenerator->generate('category.index');
     }
 
     public function generateHtml (array $parentCategories): string
@@ -41,7 +46,7 @@ class CategoryService
                 $altAttribute = $parentCategory->getImage() ? $parentCategory->getImage()->getAltThumbnail() : $parentCategory->getLabel();
                 $imageElement = "<img src='$sourceAttribute' alt='$altAttribute'>";
 
-                $children = $this->categoryRepository->getChidren($parentCategory);
+                $children = $this->categoryRepository->getChildren($parentCategory);
                 $string .= <<<HTML
                 <div class="media">
                     <a href="{$this->getShowUrl($parentCategory)}" class="media-link">
@@ -49,7 +54,7 @@ class CategoryService
                     </a>
                     <div class="media-body">
                         <h2><a href="{$this->getShowUrl($parentCategory)}">{$parentCategory->getLabel()}</a></h2>
-                        {$this->toHtml($children)}
+                        {$this->generateHtml($children)}
                     </div>
                 </div>
                 HTML;

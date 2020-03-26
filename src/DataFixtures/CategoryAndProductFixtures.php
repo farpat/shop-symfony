@@ -2,14 +2,15 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\{Category, Image, Product, Tax};
+use App\Entity\{Category, Product, Tax};
 use App\Services\DataFixtures\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterface
 {
-    public function load(ObjectManager $manager)
+    public function load (ObjectManager $manager)
     {
         $categoriesCount = random_int(10, 15);
         [$vatTax, $ecoTax] = $this->makeTaxes($manager);
@@ -30,7 +31,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
     /**
      * @return Tax[]
      */
-    private function attachTaxes(Product $product, Tax $vatTax, Tax $ecoTax)
+    private function attachTaxes (Product $product, Tax $vatTax, Tax $ecoTax)
     {
         $product->addTax($vatTax);
 
@@ -42,7 +43,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
     /**
      * @return Product[]
      */
-    private function makeProducts(Category $category, ObjectManager $manager): array
+    private function makeProducts (Category $category, ObjectManager $manager): array
     {
         $productsCount = random_int(10, 20);
         $products = [];
@@ -68,7 +69,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
         return $products;
     }
 
-    private function makeSubCategories(Category $parentCategory, ObjectManager $manager): array
+    private function makeSubCategories (Category $parentCategory, ObjectManager $manager): array
     {
         $subCategories = [];
 
@@ -82,6 +83,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
                 ->setSlug($slug)
                 ->setNomenclature($nomenclature)
                 ->setDescription($this->faker->paragraphs(3, true))
+                ->setImage($this->faker->boolean(75) ? $this->makeImage($manager) : null)
                 ->setIsLast(true);
 
             $manager->persist($subCategory);
@@ -91,37 +93,15 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
         return $subCategories;
     }
 
-    private function makeImage(ObjectManager $manager): Image
+    private function slugify (string $string): string
     {
-        $id = random_int(1, 100);
-        $normalSize = [1000, 400];
-        $thumbSize = [300, 120];
-
-        $url = "https://picsum.photos/id/{$id}/{$normalSize[0]}/{$normalSize[1]}/";
-        $urlThumbnail = "https://picsum.photos/id/{$id}/{$thumbSize[0]}/{$thumbSize[1]}/";
-        $alt = $this->faker->sentence;
-
-        $image = (new Image)
-            ->setUrl($url)
-            ->setAlt($alt)
-            ->setUrlThumbnail($urlThumbnail)
-            ->setAltThumbnail($alt);
-
-        $manager->persist($image);
-
-        return $image;
+        return (new AsciiSlugger())->slug(strtolower($string));
     }
 
-    private function slugify(string $string): string
-    {
-        return str_replace(' ', '-', strtolower($string));
-    }
-
-    private function makeCategory(ObjectManager $manager): Category
+    private function makeCategory (ObjectManager $manager): Category
     {
         $label = $this->faker->word;
         $slug = $this->slugify($label);
-
 
         $category = (new Category)
             ->setLabel($label)
@@ -141,7 +121,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
     /**
      * @return Tax[]
      */
-    private function makeTaxes(ObjectManager $manager): array
+    private function makeTaxes (ObjectManager $manager): array
     {
         $vatTax = (new Tax)->setLabel('VAT tax')->setType('PERCENTAGE')->setValue(20);
         $ecoTax = (new Tax)->setLabel('Eco tax')->setType('UNITY')->setValue(0.05);
@@ -152,7 +132,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
         return [$vatTax, $ecoTax];
     }
 
-    public function getOrder()
+    public function getOrder ()
     {
         return 2;
     }
