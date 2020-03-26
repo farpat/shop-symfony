@@ -11,5 +11,5 @@ if (script !== '') {
 }
 
 
-const exampleElement = document.getElementById('example');
-ReactDOM.render(<Example/>, exampleElement);
+// const exampleElement = document.getElementById('example');
+// ReactDOM.render(<Example/>, exampleElement);

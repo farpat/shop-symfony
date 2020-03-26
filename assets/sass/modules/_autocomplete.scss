@@ -1,0 +1,64 @@
+.autocomplete-suggestions {
+  text-align: left;
+  cursor: default;
+  border: 1px solid #ccc;
+  border-top: 0;
+  background: #fff;
+  box-shadow: -1px 1px 3px rgba($black, 0.1);
+  //max-height: calc(5 * 55px);
+
+  /* core styles should not be changed */
+  position: absolute;
+  display: none;
+  z-index: 9999;
+  overflow: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.autocomplete-suggestion {
+  position: relative;
+  padding: 0.5rem 0;
+  line-height: 23px;
+  color: #333;
+  display: flex;
+  cursor: pointer;
+
+  &:nth-child(even) {
+    background: rgba($black, 0.05);
+  }
+
+  &.selected {
+    background: rgba($black, 0.1);
+  }
+}
+
+.autocomplete-img {
+  padding: 0.25rem;
+
+  img {
+    max-width: 5rem;
+  }
+}
+
+.autocomplete-description {
+  margin-left: 0.5rem;
+
+  p {
+    margin: 0;
+  }
+
+  mark {
+    font-weight: bold;
+    background: transparent;
+    padding: 0;
+  }
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.autocomplete-description-price {
+  color: $primary;
+}

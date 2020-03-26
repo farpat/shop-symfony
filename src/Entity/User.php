@@ -69,6 +69,11 @@ class User implements UserInterface
      */
     private $billings;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Cart", inversedBy="user", cascade={"persist", "remove"})
+     */
+    private $cart;
+
     public function __construct ()
     {
         $this->created_at = new \DateTime;
@@ -103,7 +108,7 @@ class User implements UserInterface
         return (string)$this->email;
     }
 
-    public function isAdmin(): bool
+    public function isAdmin (): bool
     {
         return in_array('ROLE_ADMIN', $this->roles);
     }
@@ -237,12 +242,12 @@ class User implements UserInterface
     /**
      * @return Collection|Billing[]
      */
-    public function getBillings (): Collection
+    public function getBillings(): Collection
     {
         return $this->billings;
     }
 
-    public function addBilling (Billing $billing): self
+    public function addBilling(Billing $billing): self
     {
         if (!$this->billings->contains($billing)) {
             $this->billings[] = $billing;
@@ -252,7 +257,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function removeBilling (Billing $billing): self
+    public function removeBilling(Billing $billing): self
     {
         if ($this->billings->contains($billing)) {
             $this->billings->removeElement($billing);
@@ -261,6 +266,18 @@ class User implements UserInterface
                 $billing->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(?Cart $cart): self
+    {
+        $this->cart = $cart;
 
         return $this;
     }

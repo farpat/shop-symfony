@@ -34,8 +34,7 @@ class HomeExtension extends AbstractExtension
     {
         return [
             new TwigFunction('productsInHome', [$this, 'getProductsInHome']),
-            new TwigFunction('categoriesInHome', [$this, 'getCategoriesInHome']),
-            new TwigFunction('elementsInHome', [$this, 'getElementsInHome']),
+            new TwigFunction('categoriesInHome', [$this, 'getCategoriesInHome'])
         ];
     }
 
@@ -47,10 +46,5 @@ class HomeExtension extends AbstractExtension
     public function getCategoriesInHome (): array
     {
         return $this->categoryRepository->getCategoriesInHome();
-    }
-
-    public function getElementsInHome (): array
-    {
-        return $this->moduleRepository->getParameter('home', 'elements')->getValue();
     }
 }

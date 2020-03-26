@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Services\Support\Str;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,7 +35,7 @@ class ProductReference
     private $unit_price_including_taxes;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="json", nullable=false)
      */
     private $filled_product_fields = [];
 
@@ -81,6 +82,11 @@ class ProductReference
         return $this->unit_price_excluding_taxes;
     }
 
+    public function getFormattedUnitPriceExcludingTaxes (array $currencyParameter): string
+    {
+        return Str::getFormattedPrice($currencyParameter, $this->unit_price_excluding_taxes);
+    }
+
     public function setUnitPriceExcludingTaxes (string $unit_price_excluding_taxes): self
     {
         $this->unit_price_excluding_taxes = $unit_price_excluding_taxes;
@@ -91,6 +97,11 @@ class ProductReference
     public function getUnitPriceIncludingTaxes (): ?string
     {
         return $this->unit_price_including_taxes;
+    }
+
+    public function getFormattedUnitPriceIncludingTaxes (array $currencyParameter): string
+    {
+        return Str::getFormattedPrice($currencyParameter, $this->unit_price_including_taxes);
     }
 
     public function setUnitPriceIncludingTaxes (string $unit_price_including_taxes): self

@@ -1,0 +1,84 @@
+{% extends "_layouts/pdf.html.twig" %}
+
+{% block body %}
+    <div class="container my-5">
+        <div class="row">
+            <div class="col">
+                <p>
+                    <strong>Shop</strong><br>
+                    {{ parameter('billing', 'address').line1 }} <br>
+                    {% if parameter('billing', 'address').line2 %}
+                        {{ parameter('billing', 'address').line2 }}<br>
+                    {% endif %}
+                    {{ parameter('billing', 'address').postal_code }} {{ parameter('billing', 'address').city }}
+                    {{ parameter('billing', 'address').country }}<br>
+                    <br>
+                </p>
+                <p>
+                    <i class="fas fa-phone"></i> {{ parameter('billing', 'phone_number') }}
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="offset-6 col">
+                <strong>{{ billing.user.name }}</strong><br>
+                {{ billing.deliveredAddress.line1 }}<br>
+                {% if billing.deliveredAddress.line2 %}
+                    {{ billing.deliveredAddress.line2 }}
+                {% endif %}
+                {{ billing.deliveredAddress.postalCode }} {{ billing.deliveredAddress.city }}<br>
+                {{ billing.deliveredAddress.country }}
+            </div>
+        </div>
+
+        <h1 class="h4 mt-3">
+            {% trans %}Billing{% endtrans %}{{ billing.number }}- {{ billing.updatedAt | date('d F Y') }}
+        </h1>
+
+        <table class="table table-bordered my-5">
+            <thead>
+            <tr>
+                <th>{% trans %}Description{% endtrans %}</th>
+                <th>{% trans %}Quantity{% endtrans %}</th>
+                <th>{% trans %}Unit price excluding taxes{% endtrans %}</th>
+                <th>{% trans %}Amount excluding taxes{% endtrans %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in billing.items %}
+                <tr>
+                    <td>{{ item.productReference.label }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td class="text-right">{{ item.productReference.formattedUnitPriceExcludingTaxes(parameter('billing', 'currency')) }}</td>
+                    <td class="text-right">{{ item.productReference.formattedUnitPriceIncludingTaxes(parameter('billing', 'currency')) }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot class="header-cart-total">
+            <tr>
+                <td colspan="2">{% trans %}Total amount excluding taxes{% endtrans %} :</td>
+                <td colspan="2">{{ billing.formattedTotalAmountExcludingTaxes(parameter('billing', 'currency')) }}</td>
+            </tr>
+            <tr class="header-cart-total-vat">
+                <td class="text-right" colspan="2">{% trans %}Including taxes{% endtrans %}</td>
+                <td colspan="2">{{ billing.formattedIncludingTaxes(parameter('billing', 'currency')) }}</td>
+            </tr>
+            <tr style="font-size: 1.5rem;">
+                <td class="text-right" colspan="2">{% trans %}Total amount including taxes{% endtrans %} :</td>
+                <td colspan="2">{{ billing.formattedTotalAmountIncludingTaxes(parameter('billing', 'currency')) }}</td>
+            </tr>
+            </tfoot>
+        </table>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit
+        </p>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores exercitationem iusto quis repudiandae
+            sapiente? Ab aliquid consequatur cupiditate deleniti, eum illum laborum maxime, mollitia, nam nobis non
+            officiis saepe voluptatem.
+        </p>
+    </div>
+{% endblock %}

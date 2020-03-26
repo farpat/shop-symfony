@@ -25,12 +25,12 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         $allProductReferences = $manager->getRepository(ProductReference::class)->findAll();
 
         for ($i = 0; $i < $usersCount; $i++) {
-            $user = $this->makeUser($i);
+            $manager->persist($user = $this->makeUser($i));
+
             $addresses = $this->makeAddresses($user, $manager);
             $this->makeBillings($user, $addresses, $allProductReferences, $manager);
             $this->makeCart($user, $addresses, $allProductReferences, $manager);
 
-            $manager->persist($user);
         }
 
         $manager->flush();
@@ -191,13 +191,15 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
     private function makeOrderItems (int $itemsCount, Orderable $orderable, array $productReferences, ObjectManager $manager): array
     {
         $orderItems = [];
-        $productReferencesCount = count($productReferences);
         shuffle($productReferences);
-        /** @var ProductReference[] $productReferencesToUse */
-        $productReferencesToUse = array_slice($productReferences, 0, $productReferencesCount);
+        $productReferencesToUse = array_slice($productReferences, 0, $itemsCount);
 
         for ($i = 0; $i < $itemsCount; $i++) {
             $quantity = random_int(1, 10);
+
+            if (!isset($productReferencesToUse[$i])) {
+                dd($i, $productReferencesToUse, $productReferences);
+            }
 
             $amountExcludingTaxes = $quantity * $productReferencesToUse[$i]->getUnitPriceExcludingTaxes();
             $amountIncludingTaxes = $quantity * $productReferencesToUse[$i]->getUnitPriceIncludingTaxes();

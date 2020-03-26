@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}
-        <!-- Fonts -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
               integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
               crossorigin="anonymous">
@@ -13,6 +12,7 @@
     {% endblock %}
 </head>
 <body data-script="{% block script %}{% endblock %}">
+{% include '_partials/nav.html.twig' %}
 {% block body %}{% endblock %}
 {% block javascripts %}
     <script src="{{ get_asset('app.js') }}"></script>

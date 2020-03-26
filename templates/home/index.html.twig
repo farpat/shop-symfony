@@ -3,9 +3,6 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-    <div id="example">
-
-    </div>
     <div class="container">
         {% for element in elementsToDisplayInHomepage %}
             {% include 'home/index_partials/' ~ element ~'.html.twig' %}

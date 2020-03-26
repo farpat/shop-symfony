@@ -1,0 +1,40 @@
+.header-cart {
+  padding: 0.25rem;
+}
+
+.header-cart-item {
+  td {
+    vertical-align: middle;
+  }
+}
+
+.header-cart-item-quantity {
+  width: 4rem;
+}
+
+.header-cart-item-td-icon {
+  width: 3rem;
+
+  i {
+    color: $gray-500;
+  }
+}
+
+.header-cart-total {
+  tr {
+    text-align: right;
+
+    &:first-child td {
+      border-top: 1px solid rgba($black, 0.1);
+    }
+
+    td {
+      padding: 0.2rem 0.75rem 0.2rem 0.2rem;
+    }
+  }
+}
+
+.header-cart-total-vat {
+  color: $gray-700;
+  font-size: 0.9rem;
+}

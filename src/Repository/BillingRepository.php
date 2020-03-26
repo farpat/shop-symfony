@@ -14,37 +14,21 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class BillingRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct (ManagerRegistry $registry)
     {
         parent::__construct($registry, Billing::class);
     }
 
-    // /**
-    //  * @return Billing[] Returns an array of Billing objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getWithAllRelations (string $billingNumber): ?Billing
     {
         return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+            ->select('b', 'u', 'a', 'i', 'pr')
+            ->leftJoin('b.user', 'u')
+            ->leftJoin('b.delivered_address', 'a')
+            ->leftJoin('b.items', 'i')
+            ->leftJoin('i.product_reference', 'pr')
+            ->where('b.number = :number')
+            ->setParameter('number', $billingNumber)
+            ->getQuery()->getOneOrNullResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Billing
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

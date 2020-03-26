@@ -31,12 +31,6 @@ class ProductField
      */
     private $is_required;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="product_fields")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $category;
-
     public function getId (): ?int
     {
         return $this->id;
@@ -74,18 +68,6 @@ class ProductField
     public function setIsRequired (bool $is_required): self
     {
         $this->is_required = $is_required;
-
-        return $this;
-    }
-
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
 
         return $this;
     }

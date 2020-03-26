@@ -51,7 +51,7 @@ help: ## Display this help
 test: dev ## Run unit tests (parameters : dir=tests/Feature/LoginTest.php || filter=get)
 	@echo "Creating database: $(PRIMARY_COLOR_BOLD)$(APP_NAME)_test$(NO_COLOR) ..."
 	@$(mariadb) "drop database if exists $(APP_NAME)_test; create database $(APP_NAME)_test;"
-	@$(php) vendor/bin/phpunit $(dir) --filter $(filter) --stop-on-failure
+	@$(php) bin/phpunit $(dir) --filter $(filter) --stop-on-failure
 
 dev: install ## Run development servers
 	@docker-compose up -d nginx_dev webpack_dev_server #laravel_echo_server
@@ -70,7 +70,10 @@ build: install ## Build assets projects for production
 	@$(npm) run build
 
 migrate: install ## Refresh database by running new migrations
-	@$(php) bin/console doctrine:fixtures:load -n --purge-with-truncate
+	@$(php) bin/console doctrine:database:drop --force
+	@$(php) bin/console doctrine:database:create
+	@$(php) bin/console doctrine:migrations:migrate -n
+	@$(php) bin/console doctrine:fixtures:load -n
 
 bash: install ## Run bash in PHP container
 	@$(bash)

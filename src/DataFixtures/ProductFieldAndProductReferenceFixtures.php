@@ -28,22 +28,30 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
     {
         /** @var CategoryRepository $categoryRepository */
         $categoryRepository = $manager->getRepository(Category::class);
-        $subCategories = $categoryRepository
+        /** @var Category[] $categoriesFirstLevel */
+        $categoriesFirstLevel = $categoryRepository
             ->createQueryBuilder('c')
             ->leftJoin('c.products', 'p')
-            ->where('c.is_last = 1')
+            ->where('c.is_last = 0')
             ->getQuery()
             ->getResult();
 
-        foreach ($subCategories as $subCategory) {
-            $productFields = $this->makeProductFields($subCategory, $manager);
+        foreach ($categoriesFirstLevel as $category) {
+            /** @var Category[] $subCategories */
+            $subCategories = $categoryRepository->createQueryBuilder('c')
+                ->where('c.nomenclature LIKE :nomenclature')
+                ->setParameter('nomenclature', $category->getNomenclature() . '.%')
+                ->getQuery()->getResult();
+
+            $productFields = $this->makeProductFields($category, $manager, $subCategories);
             //Forced to flush because we need product field ids to create consistent product references
             $manager->flush();
 
-            foreach ($subCategory->getProducts() as $product) {
-                $productReferences = $this->makeProductReferences($product, $productFields, $manager);
-
-                $this->attachImages($product, $productReferences, $manager);
+            foreach ($subCategories as $subCategory) {
+                foreach ($subCategory->getProducts() as $product) {
+                    $productReferences = $this->makeProductReferences($product, $productFields, $manager);
+                    $this->attachImages($product, $productReferences, $manager);
+                }
             }
         }
 
@@ -97,9 +105,14 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
 
 
     /**
+     * @param Category $category
+     * @param ObjectManager $manager
+     * @param Category[] $subCategories
+     *
      * @return ProductField[]
+     * @throws \Exception
      */
-    private function makeProductFields (Category $category, ObjectManager $manager): array
+    private function makeProductFields (Category $category, ObjectManager $manager, $subCategories): array
     {
         $numbers = self::NUMBER_PRODUCT_FIELDS;
         $strings = self::STRING_PRODUCT_FIELDS;
@@ -118,10 +131,14 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
             unset(${$type . 's'}[$label]);
 
             $productField = (new ProductField)
-                ->setCategory($category)
                 ->setType($type)
                 ->setLabel($label)
                 ->setIsRequired(true);
+
+            $category->addProductField($productField);
+            foreach ($subCategories as $subCategory) {
+                $subCategory->addProductField($productField);
+            }
 
             $manager->persist($productField);
 

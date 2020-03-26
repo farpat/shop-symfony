@@ -2,7 +2,6 @@
 
 namespace App\Twig;
 
-use App\Entity\ModuleParameter;
 use App\Repository\ModuleRepository;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -26,8 +25,16 @@ class ModuleExtension extends AbstractExtension
         ];
     }
 
-    public function getParameter (string $moduleLabel, string $parameterLabel): ?ModuleParameter
+    /**
+     * @param string $moduleLabel
+     * @param string $parameterLabel
+     *
+     * @return array|string|null
+     * @throws \Exception
+     */
+    public function getParameter (string $moduleLabel, string $parameterLabel)
     {
-        return $this->moduleRepository->getParameter('home', 'carousel');
+        $value = $this->moduleRepository->getParameter($moduleLabel, $parameterLabel)->getValue();
+        return array_key_exists('_value', $value) ? $value['_value'] : $value;
     }
 }

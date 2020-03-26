@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Module;
 use App\Entity\Product;
+use App\Entity\ProductField;
+use App\Entity\ProductReference;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -20,7 +22,11 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    public function getProductsInHome ()
+    /**
+     * @return Product[]
+     * @throws \Exception
+     */
+    public function getProductsInHome (): array
     {
         $productIdsInHomepageParameter = $this->_em->getRepository(Module::class)->getParameter('home', 'products');
         if ($productIdsInHomepageParameter === null) {
@@ -35,5 +41,69 @@ class ProductRepository extends ServiceEntityRepository
             ])
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @param string $term
+     *
+     * @return Product[]
+     */
+    public function search (string $term): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p.id', 'p.label', 'i.url_thumbnail as image',
+                "CONCAT('http://localhost:8000/', 'categories/', c.slug, '-', c.id, '/', p.slug, '-', p.id) as url",
+                'MIN(pr.unit_price_excluding_taxes) as min_unit_price_including_taxes'
+            )
+            ->leftJoin('p.main_image', 'i')
+            ->leftJoin('p.category', 'c')
+            ->leftJoin('p.productReferences', 'pr')
+            ->where('p.label LIKE :label')
+            ->setMaxResults(5)
+            ->groupBy('p.id')
+            ->setParameters([
+                'label' => "%$term%"
+            ])
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return ProductField[]
+     */
+    public function getProductFields (Product $product): array
+    {
+        if ($product->getProductReferences()->isEmpty()) {
+            return [];
+        }
+
+        /** @var ProductReference $firstProductReference */
+        $firstProductReference = $product->getProductReferences()->first();
+        $productFieldsIds = array_keys($firstProductReference->getFilledProductFields());
+
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('pr')
+            ->from(ProductReference::class, 'pr')
+            ->where('pr.id IN (:ids)')
+            ->setParameter('ids', $productFieldsIds)
+            ->getQuery()
+            ->getResult();
+
+    }
+
+    public function getWithAllRelations (int $productId): ?Product
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.category', 'c')
+            ->leftJoin('p.productReferences', 'pr')
+            ->leftJoin('pr.images', 'i')
+            ->where('p.id = :id')
+            ->setParameters([
+                'id' => $productId
+            ])
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

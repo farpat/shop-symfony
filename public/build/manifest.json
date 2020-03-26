@@ -1,6 +1,0 @@
-{
-  "build/app.css": "http://0.0.0.0:3000/build/app.css",
-  "build/app.js": "http://0.0.0.0:3000/build/app.js",
-  "build/runtime.js": "http://0.0.0.0:3000/build/runtime.js",
-  "build/vendors~app.js": "http://0.0.0.0:3000/build/vendors~app.js"
-}

@@ -1,6 +1,7 @@
 /.idea
 .env
 /node_modules/
+/public/assets
 
 ###> symfony/framework-bundle ###
 /.env.local

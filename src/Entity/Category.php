@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Category
 {
+    public const PRODUCTS_PER_PAGE = 8;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -59,7 +61,7 @@ class Category
     private $visits;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductField", mappedBy="category", orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity="App\Entity\ProductField")
      */
     private $product_fields;
 
@@ -68,6 +70,11 @@ class Category
         $this->products = new ArrayCollection();
         $this->visits = new ArrayCollection();
         $this->product_fields = new ArrayCollection();
+    }
+
+    public function getLevel (): int
+    {
+        return substr_count($this->getNomenclature(), '.') + 1;
     }
 
     public function getId (): ?int
@@ -212,29 +219,24 @@ class Category
     /**
      * @return Collection|ProductField[]
      */
-    public function getProductFields(): Collection
+    public function getProductFields (): Collection
     {
         return $this->product_fields;
     }
 
-    public function addProductField(ProductField $productField): self
+    public function addProductField (ProductField $productField): self
     {
         if (!$this->product_fields->contains($productField)) {
             $this->product_fields[] = $productField;
-            $productField->setCategory($this);
         }
 
         return $this;
     }
 
-    public function removeProductField(ProductField $productField): self
+    public function removeProductField (ProductField $productField): self
     {
         if ($this->product_fields->contains($productField)) {
             $this->product_fields->removeElement($productField);
-            // set the owning side to null (unless already changed)
-            if ($productField->getCategory() === $this) {
-                $productField->setCategory(null);
-            }
         }
 
         return $this;

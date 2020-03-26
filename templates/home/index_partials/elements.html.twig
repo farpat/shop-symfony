@@ -1,4 +1,4 @@
-{% set elements = elementsInHome() %}
+{% set elements = parameter('home', 'elements') %}
 
 {% if elements is not empty %}
     <section class="home-section elements row">

@@ -1,0 +1,48 @@
+.input-group-quantity {
+  display: flex;
+
+  > span {
+    user-select: none;
+    -moz-user-input: none;
+    text-align: center;
+    border: $border-width solid $border-color;
+    border-radius: $border-radius;
+    padding: $input-btn-padding-y $input-btn-padding-x;
+
+    &.is-invalid {
+      border-color: $red;
+    }
+  }
+
+  > button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.input-group-quantity-vertical {
+  width: auto;
+  flex-direction: column-reverse;
+
+  > button {
+    padding: 0.25rem;
+  }
+}
+
+.input-group-quantity-horizontal {
+  flex-direction: row;
+
+  > button {
+    padding: 0 0.5rem;
+  }
+
+  @include media-breakpoint-down(sm) {
+    flex-direction: column-reverse;
+  }
+}

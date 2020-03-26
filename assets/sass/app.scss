@@ -1,1 +1,14 @@
-@import '~bootstrap/scss/bootstrap';
+@import "modules/variables-bootstrap";
+@import "~bootstrap/scss/bootstrap";
+
+@import "base";
+@import "modules/autocomplete";
+@import "modules/number";
+@import "modules/spinner";
+
+@import "modules/navbar";
+@import "modules/home";
+@import "modules/elements";
+@import "modules/product";
+@import "modules/category";
+@import "modules/cart";
