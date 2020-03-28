@@ -248,9 +248,6 @@
     "symfony/dependency-injection": {
         "version": "v5.0.5"
     },
-    "symfony/deprecation-contracts": {
-        "version": "2.1-dev"
-    },
     "symfony/doctrine-bridge": {
         "version": "v5.0.5"
     },
@@ -422,9 +419,6 @@
     },
     "symfony/polyfill-php73": {
         "version": "v1.14.0"
-    },
-    "symfony/polyfill-php80": {
-        "version": "1.15-dev"
     },
     "symfony/process": {
         "version": "v5.0.5"

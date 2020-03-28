@@ -12,3 +12,8 @@
 @import "modules/product";
 @import "modules/category";
 @import "modules/cart";
+
+label.required:after {
+  content: ' *';
+  color: $red;
+}

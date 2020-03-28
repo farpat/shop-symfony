@@ -2,12 +2,22 @@
 
 namespace App\Services\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 trait Updatable
 {
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $updated_at;
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getUpdatedAt (): ?\DateTimeInterface
+    {
+        return $this->updated_at;
+    }
 
     /**
      * @param DateTimeInterface|null $updated_at
@@ -21,10 +31,10 @@ trait Updatable
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @ORM\PreUpdate()
      */
-    public function getUpdatedAt (): ?\DateTimeInterface
+    public function updateDate ()
     {
-        return $this->updated_at;
+        $this->setUpdatedAt(new \DateTime());
     }
 }

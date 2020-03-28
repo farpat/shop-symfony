@@ -2,7 +2,7 @@
     <a class="navbar-brand" href="{{ path('home.index') }}">Shop</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
             aria-controls="navbar" aria-expanded="false" aria-label="{% trans %}Toggle navigation{% endtrans %}">
-        <span class="navbar-toggler-icon"/>
+        <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse">
@@ -31,7 +31,8 @@
 
                 {% if not app.user %}
                     <li class="nav-item mr-2">
-                        {#                                            <a class="btn btn-outline-info" href="{{ path('register') }}">{% trans %}Register{% endtrans %}</a>#}
+                        <a class="btn btn-outline-info"
+                           href="{{ path('register') }}">{% trans %}Register{% endtrans %}</a>
                         <a class="btn btn-link text-info"
                            href="{{ path('security.login') }}">{% trans %}Login{% endtrans %}</a>
                     </li>

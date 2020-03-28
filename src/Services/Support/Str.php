@@ -3,10 +3,29 @@
 namespace App\Services\Support;
 
 
-use App\Entity\ModuleParameter;
-
 class Str
 {
+    /**
+     * The cache of getSnakeCase-cased words.
+     *
+     * @var array
+     */
+    protected static $snakeCache = [];
+
+    /**
+     * The cache of camel-cased words.
+     *
+     * @var array
+     */
+    protected static $camelCache = [];
+
+    /**
+     * The cache of getPascalCase-cased words.
+     *
+     * @var array
+     */
+    protected static $pascalCache = [];
+
     public static function getFormattedPrice (array $currencyParameter, float $price): string
     {
         switch ($currencyParameter['style']) {
@@ -20,4 +39,66 @@ class Str
                 return (string)$price;
         }
     }
+
+    /**
+     * Convert a string to camel case.
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    public static function getCamelCase (string $string)
+    {
+        if (isset(static::$camelCache[$string])) {
+            return static::$camelCache[$string];
+        }
+
+        return static::$camelCache[$string] = lcfirst(static::getPascalCase($string));
+    }
+
+    /**
+     * Convert a string to snake case.
+     *
+     * @param string $string
+     * @param string $delimiter
+     *
+     * @return string
+     */
+    public static function getSnakeCase ($string, $delimiter = '_')
+    {
+        $key = $string;
+
+        if (isset(static::$snakeCache[$key][$delimiter])) {
+            return static::$snakeCache[$key][$delimiter];
+        }
+
+        if (!ctype_lower($string)) {
+            $string = preg_replace('/\s+/u', '', ucwords($string));
+
+            $string = static::lower(preg_replace('/(.)(?=[A-Z])/u', '$1' . $delimiter, $string));
+        }
+
+        return static::$snakeCache[$key][$delimiter] = $string;
+    }
+
+    /**
+     * Convert a string to pascal case.
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    public static function getPascalCase (string $string)
+    {
+        $key = $string;
+
+        if (isset(static::$pascalCache[$key])) {
+            return static::$pascalCache[$key];
+        }
+
+        $string = ucwords(str_replace(['-', '_'], ' ', $string));
+
+        return static::$pascalCache[$key] = str_replace(' ', '', $string);
+    }
+
 }
