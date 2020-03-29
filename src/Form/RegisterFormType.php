@@ -27,9 +27,11 @@ class RegisterFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'attr' => ['autofocus' => true],
+                'attr' => ['autoFocus' => true],
             ])
-            ->add('email', EmailType::class)
+            ->add('email', EmailType::class, [
+                'attr' => ['placeholder' => $this->translator->trans('Enter your e-mail')]
+            ])
             ->add('is_agree_with_terms', null, [
                 'label' => $this->translator->trans('Agree terms')
             ])

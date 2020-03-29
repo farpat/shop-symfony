@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import InputComponent from "./InputComponent";
 
-class TextComponent extends React.Component {
+class EmailComponent extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -12,10 +12,16 @@ class TextComponent extends React.Component {
             <div className="form-group">
                 {
                     this.props.label !== '' &&
-                    <label htmlFor={this.props.id} className={this.getClassName()}>{this.props.label}</label>
+                    <label htmlFor={this.props.id} className={this.getLabelClassName()}>{this.props.label}</label>
                 }
 
-                <InputComponent {...this.props}/>
+                <div className="input-group">
+                    <div className="input-group-prepend">
+                        <span className="input-group-text"><i className="far fa-envelope-open"/></span>
+                    </div>
+
+                    <InputComponent {...this.props}/>
+                </div>
             </div>
         );
     }
@@ -24,7 +30,7 @@ class TextComponent extends React.Component {
         return this.props.rules.includes('required');
     }
 
-    getClassName() {
+    getLabelClassName() {
         if (this.isRequired()) {
             return 'required';
         }
@@ -33,12 +39,12 @@ class TextComponent extends React.Component {
     }
 }
 
-TextComponent.propTypes = {
+EmailComponent.propTypes = {
     id:         PropTypes.string.isRequired,
-    parentForm: PropTypes.instanceOf(HTMLFormElement).isRequired,
+    parentForm: PropTypes.instanceOf(HTMLFormElement),
     attr:       PropTypes.object,
     label:      PropTypes.string,
     rules:      PropTypes.string,
 };
 
-export default TextComponent;
+export default EmailComponent;

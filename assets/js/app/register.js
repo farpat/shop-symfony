@@ -1,15 +1,26 @@
 import React, {Suspense} from "react";
 import ReactDOM from "react-dom";
+import TextComponent from "../src/components/TextComponent";
+import EmailComponent from "../src/components/EmailComponent";
 
-const registerFormElement = document.querySelector('form[name="register_form"]');
+const parentForm = document.querySelector('form[name="register_form"]');
 
 document.querySelectorAll('.js-form-component').forEach(function (field) {
-    const props = JSON.parse(field.getAttribute('props'));
-    props['parentForm'] = registerFormElement;
-    const Component = React.lazy(() => import(`../src/components/${field.dataset.component}`));
-    ReactDOM.render(<Suspense fallback={<div>Chargement...</div>}>
-            <Component {...props}/>
-        </Suspense>,
-        field
-    );
+    const props = {
+        ...JSON.parse(field.getAttribute('props')),
+        parentForm
+    };
+
+    let Component;
+    switch (field.dataset.component) {
+        case 'TextComponent':
+            Component = TextComponent;
+            break;
+        case 'EmailComponent':
+            Component = EmailComponent;
+            break;
+        default:
+            throw `src/components/${field.dataset.component} doesn't exist!`;
+    }
+    ReactDOM.render(<Suspense fallback={<div>Chargement...</div>}><Component {...props}/></Suspense>, field);
 });

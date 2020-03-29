@@ -11,6 +11,6 @@
             {{- form_help(form) -}}
         </div>
     {% else %}
-        <{{ widget_element }}{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}></{{ widget_element }}>
+        <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}></div>
     {% endif %}
 {%- endblock form_row -%}
