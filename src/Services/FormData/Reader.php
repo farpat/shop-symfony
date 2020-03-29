@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Annotation;
+namespace App\Services\FormData;
 
 
 use Doctrine\Common\Annotations\Reader as SymfonyReader;
@@ -11,7 +11,7 @@ class Reader
     //$cache[classFormData][field] => #annotations
     private $cache = [];
     /**
-     * @var AnnotationReader
+     * @var SymfonyReader
      */
     private $reader;
 

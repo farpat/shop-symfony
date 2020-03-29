@@ -4,9 +4,9 @@ namespace App\Form;
 
 use App\FormData\RegisterFormData;
 use App\Type\Component\EmailType;
+use App\Type\Component\PasswordType;
 use App\Type\Component\TextType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -41,8 +41,9 @@ class RegisterFormType extends AbstractType
                 'help'  => $this->translator->trans('The password must contain at least 6 chars')
             ])
             ->add('password_confirmation', PasswordType::class, [
-                'label' => false,
-                'attr'  => ['placeholder' => $this->translator->trans('Confirm your password')]
+                'label'    => false,
+                'attr'     => ['placeholder' => $this->translator->trans('Confirm your password')],
+                'with-key' => false,
             ]);
     }
 

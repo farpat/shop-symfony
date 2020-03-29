@@ -4,6 +4,7 @@ namespace App\FormData;
 
 
 use App\Entity\User;
+use App\Services\FormData\AssertExpression;
 use App\Validator\Unique;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -34,16 +35,17 @@ final class RegisterFormData
     /**
      * @var string
      * @Assert\NotBlank()
-     * @Assert\Length(min="6", minMessage="Your password should be at least {{ limit }} characters", max="4096")
+     * @Assert\Length(min="6", minMessage="Your password should be at least {{ limit }} characters")
      */
     private $password = '';
 
     /**
      * @var string
      * @Assert\NotBlank()
-     * @Assert\Expression(
+     * @AssertExpression(
      *     "this.getPassword() === this.getPasswordConfirmation()",
-     *     message="You must confirm the password"
+     *     message="You must confirm the password",
+     *     frontExpression="titi"
      * )
      */
     private $password_confirmation = '';
