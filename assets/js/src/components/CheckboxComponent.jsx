@@ -10,20 +10,10 @@ class PasswordComponent extends React.Component {
     render() {
         return (
             <div className="form-group">
-                {
-                    this.props.label !== '' &&
-                    <label htmlFor={this.props.id} className={this.getLabelClassName()}>{this.props.label}</label>
-                }
-
                 <div className="input-group">
-                    {
-                        this.props.withKey &&
-                        <div className="input-group-prepend">
-                            <span className="input-group-text"><i className="fas fa-key"/></span>
-                        </div>
-                    }
-
-                    <InputComponent {...this.props} type="password"/>
+                    <div className="custom-control custom-switch">
+                        <InputComponent {...this.props} type="checkbox"/>
+                    </div>
                 </div>
             </div>
         );
@@ -34,17 +24,18 @@ class PasswordComponent extends React.Component {
     }
 
     getLabelClassName() {
+        let className = 'custom-control-label';
+
         if (this.isRequired()) {
-            return 'required';
+            className += ' required';
         }
 
-        return '';
+        return className;
     }
 }
 
 PasswordComponent.propTypes = {
     id:         PropTypes.string.isRequired,
-    withKey:    PropTypes.bool.isRequired,
     parentForm: PropTypes.instanceOf(HTMLFormElement),
     attr:       PropTypes.object,
     label:      PropTypes.string,

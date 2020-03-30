@@ -3,9 +3,7 @@
 namespace App\Form;
 
 use App\FormData\RegisterFormData;
-use App\Type\Component\EmailType;
-use App\Type\Component\PasswordType;
-use App\Type\Component\TextType;
+use App\Type\Component\{CheckboxType, EmailType, PasswordType, TextType};
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -32,7 +30,7 @@ class RegisterFormType extends AbstractType
             ->add('email', EmailType::class, [
                 'attr' => ['placeholder' => $this->translator->trans('Enter your e-mail')]
             ])
-            ->add('is_agree_with_terms', null, [
+            ->add('is_agree_with_terms', CheckboxType::class, [
                 'label' => $this->translator->trans('Agree terms')
             ])
             ->add('password', PasswordType::class, [

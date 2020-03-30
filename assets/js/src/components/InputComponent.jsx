@@ -52,7 +52,7 @@ class InputComponent extends React.Component {
     }
 
     getError(event) {
-        const value = event.currentTarget.value;
+        const value = this.props.type === 'checkbox' ? event.currentTarget.checked : event.currentTarget.value;
 
         this.setState({
             error: this.getErrorValue(value)
@@ -60,11 +60,9 @@ class InputComponent extends React.Component {
     }
 
     changeValue(event) {
-        const newValue = event.currentTarget.value;
+        let newValue = this.props.type !== 'checkbox' ? event.currentTarget.value : event.currentTarget.checked;
 
-        this.setState({
-            value: newValue,
-        });
+        this.setState({value: newValue});
     }
 
     getErrorValue(value) {
@@ -81,15 +79,28 @@ class InputComponent extends React.Component {
         return '';
     }
 
+    getInputValue() {
+        if (this.props.type === 'checkbox') {
+            return 1;
+        }
+
+        return this.state.value;
+    }
+
     render() {
         return (
             <>
                 <input
-                    type={this.props.type} className={this.getClassName()} id={this.props.id}
+                    type={this.props.type} className={this.getInputClassName()} id={this.props.id}
                     aria-describedby={this.props.id + '_help'}
-                    value={this.state.value} onChange={this.changeValue} onBlur={this.getError}
+                    value={this.getInputValue()} checked={this.state.value} onChange={this.changeValue}
+                    onBlur={this.getError}
                     {...this.props.attr}
                 />
+                {
+                    this.props.type === 'checkbox' &&
+                    <label htmlFor={this.props.id} className="custom-control-label">{this.props.label}</label>
+                }
                 {
                     this.state.error !== '' &&
                     <div className="invalid-feedback">{this.state.error}</div>
@@ -102,8 +113,8 @@ class InputComponent extends React.Component {
         );
     }
 
-    getClassName() {
-        let className = 'form-control';
+    getInputClassName() {
+        let className = this.props.type !== 'checkbox' ? 'form-control' : 'custom-control-input';
 
         if (this.state.error !== '') {
             className += ' is-invalid';
@@ -116,8 +127,9 @@ class InputComponent extends React.Component {
 InputComponent.propTypes = {
     id:         PropTypes.string.isRequired,
     type:       PropTypes.string.isRequired,
-    withKey:    PropTypes.bool,
     parentForm: PropTypes.instanceOf(HTMLFormElement).isRequired,
+    error:      PropTypes.string,
+    withKey:    PropTypes.bool,
     attr:       PropTypes.object,
     help:       PropTypes.string,
     label:      PropTypes.string,

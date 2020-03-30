@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Expression;
+use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -86,6 +87,9 @@ class ComponentType extends TextType
             switch ($class) {
                 case NotBlank::class:
                     $attributes[] = 'Required';
+                    break;
+                case IsTrue::class:
+                    $attributes[] = 'IsTrue';
                     break;
                 case Email::class:
                     $attributes[] = 'Email';
