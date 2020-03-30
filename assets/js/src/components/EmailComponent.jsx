@@ -20,7 +20,7 @@ class EmailComponent extends React.Component {
                         <span className="input-group-text"><i className="far fa-envelope-open"/></span>
                     </div>
 
-                    <InputComponent {...this.props}/>
+                    <InputComponent {...this.props} type="email"/>
                 </div>
             </div>
         );

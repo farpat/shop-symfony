@@ -12,15 +12,26 @@ use Symfony\Component\Validator\Constraints\Expression;
  */
 class AssertExpression extends Expression
 {
-    public $frontExpression;
+    public $checkFunctionInFrontend;
 
     public function __construct ($options = null)
     {
         parent::__construct($options);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getRequiredOptions ()
     {
-        return array_merge(parent::getRequiredOptions(), ["frontExpression"]);
+        return array_merge(parent::getRequiredOptions(), ["checkFunctionInFrontend", "message"]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTargets ()
+    {
+        return [self::PROPERTY_CONSTRAINT];
     }
 }

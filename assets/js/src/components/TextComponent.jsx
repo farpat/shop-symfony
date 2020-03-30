@@ -15,7 +15,7 @@ class TextComponent extends React.Component {
                     <label htmlFor={this.props.id} className={this.getClassName()}>{this.props.label}</label>
                 }
 
-                <InputComponent {...this.props}/>
+                <InputComponent {...this.props} type="text"/>
             </div>
         );
     }

@@ -39,17 +39,13 @@ class ComponentType extends TextType
 
         $props = [
             'id'    => "field_{$formName}_{$form->getName()}",
-            'value' => $form->getViewData()
+            'value' => $form->getViewData(),
+            'label' => $this->makeLabelAttribute($options['label'], $form->getName())
         ];
 
         if ($rules = $this->makeRulesAttribute(get_class($parentForm->getViewData()), $form->getName())) {
             $props['rules'] = $rules;
         }
-
-        if ($label = $this->makeLabelAttribute($options['label'], $form->getName())) {
-            $props['label'] = $label;
-        }
-
 
         if ($attr = $options['attr']) {
             $props['attr'] = $attr;
@@ -60,6 +56,25 @@ class ComponentType extends TextType
         }
 
         return $props;
+    }
+
+    /**
+     * @param string|false|null $label
+     * @param string $defaultLabel
+     *
+     * @return string
+     */
+    protected function makeLabelAttribute ($label, string $defaultLabel): ?string
+    {
+        if ($label === false) {
+            return '';
+        }
+
+        if ($label === null) {
+            return ucfirst($defaultLabel);
+        }
+
+        return (string)$label;
     }
 
     protected function makeRulesAttribute (string $class, string $field): ?string
@@ -77,15 +92,13 @@ class ComponentType extends TextType
                     break;
                 case Length::class:
                     /** @var Length $constraintAnnotation */
-                    $attributes[] = "Length,min={$constraintAnnotation->min}#max={$constraintAnnotation->max}";
+                    $attributes[] = "Lengthßmin:{$constraintAnnotation->min}@max:{$constraintAnnotation->max}";
                     break;
                 case Expression::class:
                     throw new Exception("The annotation << $class >> is not supported. Please, use << " . AssertExpression::class . " >> instead");
                 case AssertExpression::class:
-                    dd($constraintAnnotation);
-                    // #field_register_form_password
-                    // #field_register_form_password_confirmation
-                    $attributes[] = "Expression";
+                    /** @var AssertExpression $constraintAnnotation */
+                    $attributes[] = "Expressionßexpression:{$constraintAnnotation->checkFunctionInFrontend}";
                     break;
                 default:
                     throw new Exception("The annotation << $class >> isn't not already handled");
@@ -96,25 +109,6 @@ class ComponentType extends TextType
             return null;
         }
 
-        return implode('|', $attributes);
-    }
-
-    /**
-     * @param string|false|null $label
-     * @param string $defaultLabel
-     *
-     * @return string
-     */
-    protected function makeLabelAttribute ($label, string $defaultLabel): ?string
-    {
-        if ($label === false) {
-            return null;
-        }
-
-        if ($label === null) {
-            return ucfirst($defaultLabel);
-        }
-
-        return (string)$label;
+        return implode('²', $attributes);
     }
 }

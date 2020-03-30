@@ -23,7 +23,7 @@ class PasswordComponent extends React.Component {
                         </div>
                     }
 
-                    <InputComponent {...this.props}/>
+                    <InputComponent {...this.props} type="password"/>
                 </div>
             </div>
         );

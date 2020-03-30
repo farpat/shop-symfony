@@ -45,7 +45,17 @@ final class RegisterFormData
      * @AssertExpression(
      *     "this.getPassword() === this.getPasswordConfirmation()",
      *     message="You must confirm the password",
-     *     frontExpression="titi"
+     *     checkFunctionInFrontend="
+    const passwordElement = document.querySelector('#field_register_form_password');
+
+    if (!this.tracked) {
+    const passwordConfirmationElement = document.querySelector('#field_register_form_password_confirmation');
+    passwordElement.addEventListener('blur', function (event) { passwordConfirmationElement.focus();passwordConfirmationElement.blur(); });
+    this.tracked = true;
+    }
+
+    value === passwordElement.value;
+    "
      * )
      */
     private $password_confirmation = '';

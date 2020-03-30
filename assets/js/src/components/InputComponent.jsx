@@ -27,31 +27,25 @@ class InputComponent extends React.Component {
 
         let rules = [];
 
-        for (let ruleSplitted of implodedRules.split('|')) {
+        for (let ruleSplitted of implodedRules.split('²')) {
 
-            let [ruleName, parameters] = ruleSplitted.split(',');
+            let [ruleName, parameters] = ruleSplitted.split('ß');
 
-            if (ruleName === 'Expression') {
-                throw '<< Expression >> is not managed for the moment';
+            const RuleClass = require(`../Security/Rules/${ruleName}Rule`).default;
+            let rule;
+            if (parameters) {
+                let parameter = {};
+                parameters.split('@').map(function (parameterExploded) {
+                    let [key, value] = parameterExploded.split(':');
+                    parameter[key] = value;
+                });
+
+                rule = new RuleClass(parameter);
+            } else {
+                rule = new RuleClass();
             }
 
-            if (ruleName === 'Email' || ruleName === 'Length' || ruleName === 'Required') {
-                const RuleClass = require(`../Security/Rules/${ruleName}Rule`).default;
-                let rule;
-                if (parameters) {
-                    let parameter = {};
-                    parameters.split('#').map(function (parameterExploded) {
-                        let [key, value] = parameterExploded.split('=');
-                        parameter[key] = value;
-                    });
-
-                    rule = new RuleClass(parameter);
-                } else {
-                    rule = new RuleClass();
-                }
-
-                rules.push(rule);
-            }
+            rules.push(rule);
         }
 
         return rules;
@@ -121,6 +115,7 @@ class InputComponent extends React.Component {
 
 InputComponent.propTypes = {
     id:         PropTypes.string.isRequired,
+    type:       PropTypes.string.isRequired,
     withKey:    PropTypes.bool,
     parentForm: PropTypes.instanceOf(HTMLFormElement).isRequired,
     attr:       PropTypes.object,
