@@ -6,6 +6,7 @@ namespace App\FormData;
 use App\Entity\User;
 use App\Services\FormData\AssertExpression;
 use App\Validator\Unique;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -28,14 +29,14 @@ final class RegisterFormData
 
     /**
      * @var bool
-     * @Assert\IsTrue(message="You should agree to our terms")
+     * @Assert\IsTrue(message="You must agree to our terms")
      */
     private $is_agree_with_terms = false;
 
     /**
      * @var string
      * @Assert\NotBlank()
-     * @Assert\Length(min="6", minMessage="Your password should be at least {{ limit }} characters")
+     * @Assert\Length(min="6", minMessage="The password should be at least %limit% characters")
      */
     private $password = '';
 
@@ -44,12 +45,12 @@ final class RegisterFormData
      * @Assert\NotBlank()
      * @AssertExpression(
      *     "this.getPassword() === this.getPasswordConfirmation()",
-     *     message="You must confirm the password",
+     *     message="This string doesn't match",
      *     checkFunctionInFrontend="
-    const passwordElement = document.querySelector('#field_register_form_password');
+    const passwordElement = document.querySelector('#register_form_password');
 
-    if (!this.tracked) {
-    const passwordConfirmationElement = document.querySelector('#field_register_form_password_confirmation');
+    if (this.tracked === undefined) {
+    const passwordConfirmationElement = document.querySelector('#register_form_password_confirmation');
     passwordElement.addEventListener('blur', function (event) { passwordConfirmationElement.focus();passwordConfirmationElement.blur(); });
     this.tracked = true;
     }
@@ -69,11 +70,11 @@ final class RegisterFormData
     }
 
     /**
-     * @param bool $is_agree_with_terms
+     * @param bool|null $is_agree_with_terms
      *
      * @return RegisterFormData
      */
-    public function setIsAgreeWithTerms (bool $is_agree_with_terms): RegisterFormData
+    public function setIsAgreeWithTerms (?bool $is_agree_with_terms): RegisterFormData
     {
         $this->is_agree_with_terms = $is_agree_with_terms;
         return $this;
@@ -98,13 +99,13 @@ final class RegisterFormData
         return $this;
     }
 
-    public function makeUser (): User
+    public function makeUser (UserPasswordEncoderInterface $passwordEncoder): User
     {
         $user = new User;
-        $user->setName($this->getName())
+        return $user->setName($this->getName())
             ->setEmail($this->getEmail())
             ->setRoles(['ROLE_USER'])
-            ->setPassword($this->getPassword());
+            ->setPassword($passwordEncoder->encodePassword($user, $user->getPassword()));
     }
 
     /**
@@ -120,7 +121,7 @@ final class RegisterFormData
      *
      * @return RegisterFormData
      */
-    public function setName (string $name): RegisterFormData
+    public function setName (?string $name): RegisterFormData
     {
         $this->name = $name;
         return $this;

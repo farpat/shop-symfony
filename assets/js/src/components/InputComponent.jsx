@@ -5,11 +5,13 @@ class InputComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        this.required = false;
         this.rules = this.makeRules(this.props.rules);
 
         this.state = {
-            value: this.props.value,
-            error: this.props.error || '',
+            value:      this.props.type !== 'checkbox' ? this.props.value : this.props.value != 0,
+            error:      this.props.error || '',
+            isRequired: false,
         };
 
         this.changeValue = this.changeValue.bind(this);
@@ -29,23 +31,20 @@ class InputComponent extends React.Component {
 
         for (let ruleSplitted of implodedRules.split('²')) {
 
-            let [ruleName, parameters] = ruleSplitted.split('ß');
+            let [ruleName, parametersInString] = ruleSplitted.split('ß');
 
-            const RuleClass = require(`../Security/Rules/${ruleName}Rule`).default;
-            let rule;
-            if (parameters) {
-                let parameter = {};
-                parameters.split('@').map(function (parameterExploded) {
-                    let [key, value] = parameterExploded.split(':');
-                    parameter[key] = value;
-                });
-
-                rule = new RuleClass(parameter);
-            } else {
-                rule = new RuleClass();
+            if (ruleName === 'NotBlank') {
+                this.required = true;
             }
 
-            rules.push(rule);
+            const RuleClass = require(`../Security/Rules/${ruleName}Rule`).default;
+            let parameters = {};
+            parametersInString.split('@').map(function (parameterExploded) {
+                let [key, value] = parameterExploded.split(':');
+                parameters[key] = value;
+            });
+
+            rules.push(new RuleClass(parameters));
         }
 
         return rules;
@@ -71,8 +70,9 @@ class InputComponent extends React.Component {
         }
 
         for (let rule of this.rules) {
-            if (!rule.check(value)) {
-                return 'error with ' + rule.name;
+            let error;
+            if (error = rule.check(value)) {
+                return error;
             }
         }
 
@@ -92,15 +92,18 @@ class InputComponent extends React.Component {
             <>
                 <input
                     type={this.props.type} className={this.getInputClassName()} id={this.props.id}
-                    aria-describedby={this.props.id + '_help'}
+                    name={this.props.name} required={this.required}
+                    aria-describedby={this.props.help ? this.props.id + '_help' : ''}
                     value={this.getInputValue()} checked={this.state.value} onChange={this.changeValue}
                     onBlur={this.getError}
                     {...this.props.attr}
                 />
+
                 {
                     this.props.type === 'checkbox' &&
                     <label htmlFor={this.props.id} className="custom-control-label">{this.props.label}</label>
                 }
+
                 {
                     this.state.error !== '' &&
                     <div className="invalid-feedback">{this.state.error}</div>
@@ -108,6 +111,10 @@ class InputComponent extends React.Component {
                 {
                     this.props.help &&
                     <small id={this.props.id + '_help'} className="form-text text-muted w-100">{this.props.help}</small>
+                }
+                {
+                    this.props.type === 'checkbox' && !this.state.value &&
+                    <input type='hidden' name={this.props.name} value="0"/>
                 }
             </>
         );
@@ -127,6 +134,7 @@ class InputComponent extends React.Component {
 InputComponent.propTypes = {
     id:         PropTypes.string.isRequired,
     type:       PropTypes.string.isRequired,
+    name:       PropTypes.string.isRequired,
     parentForm: PropTypes.instanceOf(HTMLFormElement).isRequired,
     error:      PropTypes.string,
     withKey:    PropTypes.bool,

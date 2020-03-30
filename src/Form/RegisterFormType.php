@@ -36,7 +36,7 @@ class RegisterFormType extends AbstractType
             ->add('password', PasswordType::class, [
                 'label' => false,
                 'attr'  => ['placeholder' => $this->translator->trans('Password')],
-                'help'  => $this->translator->trans('The password must contain at least 6 chars')
+                'help'  => $this->translator->trans('The password must contain at least %limit% chars', ['%limit%' => 6])
             ])
             ->add('password_confirmation', PasswordType::class, [
                 'label'    => false,
@@ -49,6 +49,7 @@ class RegisterFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => RegisterFormData::class,
+            'attr' => ['id' => 'register_form']
         ]);
     }
 }

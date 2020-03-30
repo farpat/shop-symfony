@@ -5,8 +5,6 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
@@ -88,7 +86,7 @@ class Product
         return $this->label;
     }
 
-    public function setLabel (string $label): self
+    public function setLabel (?string $label): self
     {
         $this->label = $label;
 
@@ -267,9 +265,5 @@ class Product
         }
 
         return $this;
-    }
-
-    public function getUrl (): string
-    {
     }
 }

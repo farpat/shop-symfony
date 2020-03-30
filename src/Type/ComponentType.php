@@ -14,14 +14,20 @@ use Symfony\Component\Validator\Constraints\Expression;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ComponentType extends TextType
 {
     protected Reader $reader;
+    /**
+     * @var TranslatorInterface
+     */
+    private TranslatorInterface $translator;
 
-    public function __construct (Reader $reader)
+    public function __construct (Reader $reader, TranslatorInterface $translator)
     {
         $this->reader = $reader;
+        $this->translator = $translator;
     }
 
     public function buildView (FormView $view, FormInterface $form, array $options)
@@ -37,11 +43,14 @@ class ComponentType extends TextType
     {
         $parentForm = $form->getParent();
         $formName = $parentForm->getName();
+        $errors = $form->getErrors();
 
         $props = [
-            'id'    => "field_{$formName}_{$form->getName()}",
             'value' => $form->getViewData(),
-            'label' => $this->makeLabelAttribute($options['label'], $form->getName())
+            'label' => $this->makeLabelAttribute($options['label'], $form->getName()),
+            'name'  => "{$formName}[{$form->getName()}]",
+            'id'    => "{$formName}_{$form->getName()}",
+            'error' => !isset($errors[0]) ? '' : $errors[0]->getMessage()
         ];
 
         if ($rules = $this->makeRulesAttribute(get_class($parentForm->getViewData()), $form->getName())) {
@@ -86,23 +95,37 @@ class ComponentType extends TextType
             $class = get_class($constraintAnnotation);
             switch ($class) {
                 case NotBlank::class:
-                    $attributes[] = 'Required';
+                    /** @var  NotBlank $constraintAnnotation */
+                    $message = $constraintAnnotation->message !== '' ? $constraintAnnotation->message : $this->translator->trans('This value should not be blank.');
+
+                    $attributes[] = "NotBlankßmessage:{$message}";
                     break;
                 case IsTrue::class:
-                    $attributes[] = 'IsTrue';
+                    /** @var  IsTrue $constraintAnnotation */
+                    $message = $constraintAnnotation->message !== '' ? $constraintAnnotation->message : $this->translator->trans('This value should be true.');
+
+                    $attributes[] = "IsTrueßmessage:{$message}";
                     break;
                 case Email::class:
-                    $attributes[] = 'Email';
+                    /** @var  Email $constraintAnnotation */
+                    $message = $constraintAnnotation->message !== '' ? $constraintAnnotation->message : $this->translator->trans('This value is not a valid email address.');
+
+                    $attributes[] = "Emailßmessage:{$message}";
                     break;
                 case Length::class:
                     /** @var Length $constraintAnnotation */
-                    $attributes[] = "Lengthßmin:{$constraintAnnotation->min}@max:{$constraintAnnotation->max}";
+                    $minMessage = $constraintAnnotation->minMessage !== '' ? $constraintAnnotation->minMessage : $this->translator->trans('The string must contain at least %limit% chars', ['%limit%' => $constraintAnnotation->min]);
+                    $maxMessage = $constraintAnnotation->maxMessage !== '' ? $constraintAnnotation->maxMessage : $this->translator->trans('The string must contain at most %limit% chars', ['%limit%' => $constraintAnnotation->max]);
+
+                    $attributes[] = "Lengthßmin:{$constraintAnnotation->min}@max:{$constraintAnnotation->max}@minMessage:{$minMessage}@maxMessage:{$maxMessage}";
                     break;
                 case Expression::class:
                     throw new Exception("The annotation << $class >> is not supported. Please, use << " . AssertExpression::class . " >> instead");
                 case AssertExpression::class:
                     /** @var AssertExpression $constraintAnnotation */
-                    $attributes[] = "Expressionßexpression:{$constraintAnnotation->checkFunctionInFrontend}";
+                    $message = $constraintAnnotation->message !== '' ? $constraintAnnotation->message : $this->translator->trans('This string doesn\'t match');
+
+                    $attributes[] = "Expressionßexpression:{$constraintAnnotation->checkFunctionInFrontend}@message:{$message}";
                     break;
                 default:
                     throw new Exception("The annotation << $class >> isn't not already handled");

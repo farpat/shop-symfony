@@ -12,24 +12,38 @@
             {% if app.user %}
                 <div class="mb-3">
                     {% trans with {'%username%' : app.user.username } %}You are logged in as %username%{% endtrans %},
-                    <a
-                            href="{{ path('security.logout') }}">{% trans %}Logout{% endtrans %}</a>
+                    <a href="{{ path('security.logout') }}">{% trans %}Logout{% endtrans %}</a>
                 </div>
             {% endif %}
 
-            <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-            <label for="inputEmail">Email</label>
-            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required
-                   autofocus>
-            <label for="inputPassword">Password</label>
-            <input type="password" name="password" id="inputPassword" class="form-control" required>
+            <h1>{% trans %}Log in{% endtrans %}</h1>
+
+            <div class="form-group">
+                <label for="login_form_email" class="">{% trans %}E-mail{% endtrans %}</label>
+                <div class="input-group">
+                    <div class="input-group-prepend"><span class="input-group-text"><i class="far fa-envelope-open"></i></span>
+                    </div>
+                    <input type="email" class="form-control" id="login_form_email"
+                           name="email" required
+                           placeholder="Enter your e-mail" value="{{ last_username }}" autofocus>
+                    <div class="invalid-feedback">This value should not be blank.</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="login_form_password" class="">{% trans %}Password{% endtrans %}</label>
+                <input type="password" class="form-control" id="login_form_password"
+                       name="password" required>
+            </div>
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" name="_remember_me"> Remember me
-                </label>
+            <div class="form-group">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input"
+                           name="_remember_me" id="_remember_me"><label
+                            for="_remember_me" class="custom-control-label">{% trans %}Remember me{% endtrans %}</label>
+                </div>
             </div>
 
             <button class="btn btn-lg btn-primary" type="submit">

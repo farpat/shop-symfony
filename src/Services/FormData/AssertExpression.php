@@ -24,7 +24,7 @@ class AssertExpression extends Expression
      */
     public function getRequiredOptions ()
     {
-        return array_merge(parent::getRequiredOptions(), ["checkFunctionInFrontend", "message"]);
+        return array_merge(parent::getRequiredOptions(), ["checkFunctionInFrontend"]);
     }
 
     /**

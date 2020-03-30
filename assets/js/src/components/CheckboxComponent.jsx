@@ -5,15 +5,15 @@ import InputComponent from "./InputComponent";
 class PasswordComponent extends React.Component {
     constructor(props) {
         super(props);
+
+        console.log(props);
     }
 
     render() {
         return (
             <div className="form-group">
-                <div className="input-group">
-                    <div className="custom-control custom-switch">
-                        <InputComponent {...this.props} type="checkbox"/>
-                    </div>
+                <div className="custom-control custom-switch">
+                    <InputComponent {...this.props} type="checkbox"/>
                 </div>
             </div>
         );
