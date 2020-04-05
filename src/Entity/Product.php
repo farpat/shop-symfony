@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
@@ -45,6 +46,7 @@ class Product
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="products")
+     * @MaxDepth(1)
      */
     private $category;
 
@@ -74,6 +76,27 @@ class Product
         $this->taxes = new ArrayCollection();
         $this->productReferences = new ArrayCollection();
         $this->visits = new ArrayCollection();
+    }
+
+    public function getMinUnitPriceIncludingTaxes (): float
+    {
+        $references = $this->getProductReferences();
+        $min = $references[0]->getUnitPriceIncludingTaxes();
+        foreach ($references as $reference) {
+            if ($min > $reference->getUnitPriceIncludingTaxes()) {
+                $min = $reference->getUnitPriceIncludingTaxes();
+            }
+        }
+
+        return $min;
+    }
+
+    /**
+     * @return Collection|ProductReference[]
+     */
+    public function getProductReferences (): Collection
+    {
+        return $this->productReferences;
     }
 
     public function getId (): ?int
@@ -203,14 +226,6 @@ class Product
         }
 
         return $this;
-    }
-
-    /**
-     * @return Collection|ProductReference[]
-     */
-    public function getProductReferences (): Collection
-    {
-        return $this->productReferences;
     }
 
     public function addProductReference (ProductReference $productReference): self

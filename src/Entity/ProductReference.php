@@ -27,12 +27,12 @@ class ProductReference
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
      */
-    private $unit_price_excluding_taxes;
+    private $unit_price_excluding_taxes = 0;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
      */
-    private $unit_price_including_taxes;
+    private $unit_price_including_taxes = 0;
 
     /**
      * @ORM\Column(type="json", nullable=false)
@@ -77,7 +77,7 @@ class ProductReference
         return $this;
     }
 
-    public function getUnitPriceExcludingTaxes (): ?string
+    public function getUnitPriceExcludingTaxes (): float
     {
         return $this->unit_price_excluding_taxes;
     }
@@ -87,14 +87,14 @@ class ProductReference
         return Str::getFormattedPrice($currencyParameter, $this->unit_price_excluding_taxes);
     }
 
-    public function setUnitPriceExcludingTaxes (string $unit_price_excluding_taxes): self
+    public function setUnitPriceExcludingTaxes (float $unit_price_excluding_taxes): self
     {
         $this->unit_price_excluding_taxes = $unit_price_excluding_taxes;
 
         return $this;
     }
 
-    public function getUnitPriceIncludingTaxes (): ?string
+    public function getUnitPriceIncludingTaxes (): float
     {
         return $this->unit_price_including_taxes;
     }
@@ -104,7 +104,7 @@ class ProductReference
         return Str::getFormattedPrice($currencyParameter, $this->unit_price_including_taxes);
     }
 
-    public function setUnitPriceIncludingTaxes (string $unit_price_including_taxes): self
+    public function setUnitPriceIncludingTaxes (float $unit_price_including_taxes): self
     {
         $this->unit_price_including_taxes = $unit_price_including_taxes;
 

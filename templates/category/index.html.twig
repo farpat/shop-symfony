@@ -5,10 +5,10 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
-        <h1>{% trans %}All categories{% endtrans %}</h1>
-
+    <div class="container">
         {{ breadcrumb(breadcrumb) }}
+
+        <h1>{% trans %}All categories{% endtrans %}</h1>
 
         <section id="category-index" class="category-index">
             {{ html | raw }}

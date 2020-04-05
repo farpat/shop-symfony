@@ -5,31 +5,41 @@ namespace App\Services\Shop;
 
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
+use App\Serializer\Normalizer\ProductNormalizer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncode;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class CategoryService
 {
-    /**
-     * @var CategoryRepository
-     */
-    private $categoryRepository;
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
+    private CategoryRepository $categoryRepository;
+    private UrlGeneratorInterface $urlGenerator;
+    private Serializer $productFieldSerializer;
 
-    public function __construct (CategoryRepository $categoryRepository, UrlGeneratorInterface $urlGenerator)
+    public function __construct (CategoryRepository $categoryRepository, UrlGeneratorInterface $urlGenerator, ProductService $productService)
     {
         $this->categoryRepository = $categoryRepository;
         $this->urlGenerator = $urlGenerator;
+        $this->productFieldSerializer = new Serializer([new GetSetMethodNormalizer()], [new JsonEncode(['json_encode_options' => JSON_PRETTY_PRINT])]);
+        $this->productSerializer = new Serializer([new ProductNormalizer($productService)], [new JsonEncode(['json_encode_options' => JSON_PRETTY_PRINT])]);
     }
 
-    public function getShowUrl (Category $category)
+    public function getProductFieldsSerialized (Category $category): ?string
     {
-        return $this->urlGenerator->generate('category.show', [
-            'categorySlug' => $category->getSlug(),
-            'categoryId'   => $category->getId(),
-        ]);
+        return $category->getProductFields()->isEmpty() ?
+            null :
+            $this->productFieldSerializer->serialize($category->getProductFields(), 'json', [
+                AbstractNormalizer::ATTRIBUTES => ['id', 'type', 'label']
+            ]);
+    }
+
+    public function getProductsSerialized (Category $category): ?string
+    {
+        return empty($products = $this->categoryRepository->getProducts($category)) ?
+            null :
+            $this->productSerializer->serialize($products, 'json');
     }
 
     public function getIndexUrl ()
@@ -63,5 +73,13 @@ class CategoryService
         }
 
         return $string;
+    }
+
+    public function getShowUrl (Category $category)
+    {
+        return $this->urlGenerator->generate('category.show', [
+            'categorySlug' => $category->getSlug(),
+            'categoryId'   => $category->getId(),
+        ]);
     }
 }

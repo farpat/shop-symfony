@@ -1,0 +1,38 @@
+{% extends "_layouts/app.html.twig" %}
+
+{% block title %}
+    {{ category.label }}
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        {{ breadcrumb(breadcrumb) }}
+
+        <section class="header-category-show">
+            {% if category.image %}
+                <img src="{{ category.image.url }}" alt="{{ category.image.alt }}">
+            {% endif %}
+
+            <h1>{{ category.label }}</h1>
+        </section>
+
+        <section id="category-show" class="row">
+            {% if productFieldsInJson is not empty %}
+                <div class="col-lg-3">
+                    Ici le composant <strong>filter-component</strong>
+                    <pre>
+                        product-fields-component
+                        {{ productFieldsInJson }}
+                    </pre>
+                </div>
+            {% endif %}
+
+            <div class="col-lg">
+                <pre>
+                    products-component
+                    {{ productsInJson }}
+                </pre>
+            </div>
+        </section>
+    </div>
+{% endblock %}

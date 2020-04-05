@@ -45,19 +45,19 @@ class CategoryController extends AbstractController
      */
     public function show (Category $category, string $categorySlug, Request $request, CategoryService $categoryService)
     {
-        $products = $this->categoryRepository->getProducts($category);
-
         $currentPage = $request->query->getInt('page');
-
-        if ($currentPage === 0 || $categorySlug !== $category->getSlug()) {
+        if ($currentPage === 1 || $categorySlug !== $category->getSlug()) {
             return $this->redirect($categoryService->getShowUrl($category));
         }
 
+        $productFieldsInJson = $categoryService->getProductFieldsSerialized($category);
+        $productsInJson = $categoryService->getProductsSerialized($category);
+
         $breadcrumb = [
-            ['label' => 'Category', 'url' => path('categories.index')],
+            ['label' => 'Category', 'url' => $categoryService->getShowUrl($category)],
             ['label' => $category->getLabel()]
         ];
 
-        return $this->render('category/show.html.twig', compact('category', 'products', 'breadcrumb'));
+        return $this->render('category/show.html.twig', compact('category', 'currentPage', 'productFieldsInJson', 'productsInJson', 'breadcrumb'));
     }
 }

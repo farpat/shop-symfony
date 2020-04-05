@@ -67,6 +67,7 @@ class CategoryRepository extends ServiceEntityRepository
     public function getWithAllRelations (int $categoryId): ?Category
     {
         return $this->createQueryBuilder('c')
+            ->select('c', 'i', 'pf')
             ->leftJoin('c.image', 'i')
             ->leftJoin('c.product_fields', 'pf')
             ->where('c.id = :id')
@@ -78,22 +79,25 @@ class CategoryRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Category|null $category
+     * @param Category $category
      *
-     * @return Product[]
+     * @return array
      */
-    public function getProducts (?Category $category): array
+    public function getProducts (Category $category): array
     {
-        $queryBuilder = $this->getEntityManager()->createQueryBuilder()
-            ->select('p', 'c')
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('p', 'partial c.{id, slug, nomenclature}', 'partial i.{id, url_thumbnail, alt_thumbnail}', 'partial pr.{id, unit_price_including_taxes}')
             ->from(Product::class, 'p')
             ->leftJoin('p.category', 'c')
+            ->leftJoin('p.main_image', 'i')
+            ->leftJoin('p.productReferences', 'pr')
             ->where(
-                $this->getEntityManager()->getExpressionBuilder()->in('c.id',
+                $this->getEntityManager()->getExpressionBuilder()->in('p.category',
                     $this->getEntityManager()->createQueryBuilder()
-                        ->select('c.id')
-                        ->from(Category::class, 'c')
-                        ->where('c.nomenclature = :nomenclature OR c.nomenclature like :nomenclatureExpression')
+                        ->select('c2.id')
+                        ->from(Category::class, 'c2')
+                        ->where('c2.nomenclature = :nomenclature OR c2.nomenclature LIKE :nomenclatureExpression')
+                        ->getDQL()
                 )
             )
             ->setParameters([

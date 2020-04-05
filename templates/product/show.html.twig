@@ -1,7 +1,12 @@
 {% extends '_layouts/app.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}
+    {{ product.label }}
+{% endblock %}
 
 {% block body %}
-    <h1>Title</h1>
+    <section class="container">
+        <h1>{{ product.label }}</h1>
+
+    </section>
 {% endblock %}

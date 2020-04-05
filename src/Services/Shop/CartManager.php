@@ -3,10 +3,7 @@
 namespace App\Services\Shop;
 
 
-use App\Entity\Cart;
-use App\Entity\OrderItem;
-use App\Entity\ProductReference;
-use App\Entity\User;
+use App\Entity\{Cart, OrderItem, ProductReference, User};
 use App\Repository\ProductReferenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
@@ -26,17 +23,26 @@ class CartManager
      */
     private $entityManager;
 
-    public function __construct (Security $security, ProductReferenceRepository $productReferenceRepository, EntityManagerInterface $entityManager)
+    public function __construct (Security $security, EntityManagerInterface $entityManager)
     {
         $this->user = $security->getUser();
-        $this->productReferenceRepository = $productReferenceRepository;
+        $this->productReferenceRepository = $entityManager->getRepository(ProductReference::class);
         $this->entityManager = $entityManager;
     }
 
-    private function checkQuantity (int $quantity)
+    public function deleteItem (int $productReferenceId): OrderItem
     {
-        if ($quantity < 1) {
-            throw new \InvalidArgumentException("The quantity must be greather than 1");
+        $productReference = $this->getProductReference($productReferenceId);
+
+        $cart = $this->getCart();
+        if (($orderItem = $cart->getOrderItem($productReference)) === null) {
+            throw new \InvalidArgumentException("The product reference is not in cart");
+        }
+
+        $cart->removeItem($orderItem);
+
+        if ($cart->getItemsCount() === 0) {
+            $this->entityManager->remove($cart);
         }
     }
 
@@ -65,22 +71,6 @@ class CartManager
         return $cart;
     }
 
-    public function deleteItem (int $productReferenceId): OrderItem
-    {
-        $productReference = $this->getProductReference($productReferenceId);
-
-        $cart = $this->getCart();
-        if (($orderItem = $cart->getOrderItem($productReference)) === null) {
-            throw new \InvalidArgumentException("The product reference is not in cart");
-        }
-
-        $cart->removeItem($orderItem);
-
-        if ($cart->getItemsCount() === 0) {
-            $this->entityManager->remove($cart);
-        }
-    }
-
     public function patchItem (int $quantity, int $productReferenceId): OrderItem
     {
         $this->checkQuantity($quantity);
@@ -98,6 +88,13 @@ class CartManager
             ->setQuantity($quantity)
             ->setAmountExcludingTaxes(($quantity * $productReference->getUnitPriceExcludingTaxes()) - $oldAmountExcludingTaxes)
             ->setAmountIncludingTaxes(($quantity * $productReference->getUnitPriceIncludingTaxes()) - $oldAmountIncludingTaxes);
+    }
+
+    private function checkQuantity (int $quantity)
+    {
+        if ($quantity < 1) {
+            throw new \InvalidArgumentException("The quantity must be greather than 1");
+        }
     }
 
     public function storeItem (int $quantity, int $productReferenceId): OrderItem
