@@ -1,16 +1,32 @@
-{%- block form_row -%}
+{% use "bootstrap_4_layout.html.twig" %}
+
+{% block form_row -%}
+    {%- if compound is defined and compound -%}
+        {%- set element = 'fieldset' -%}
+    {%- endif -%}
     {%- set widget_attr = {} -%}
     {%- if help is not empty -%}
         {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
     {%- endif -%}
     {% if widget_element is not defined %}
-        <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
-            {{- form_label(form) -}}
-            {{- form_errors(form) -}}
-            {{- form_widget(form, widget_attr) -}}
-            {{- form_help(form) -}}
-        </div>
+        <{{ element|default('div') }}{% with {attr: row_attr|merge({class: (row_attr.class|default('') ~ ' form-group')|trim})} %}{{ block('attributes') }}{% endwith %}>
+        {{- form_label(form) -}}
+        {{- form_widget(form, widget_attr) -}}
+        {{- form_help(form) -}}
+        </{{ element|default('div') }}>
     {% else %}
         <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}></div>
     {% endif %}
-{%- endblock form_row -%}
+{%- endblock form_row %}
+
+{% block email_widget -%}
+    {%- set type = type|default('email') -%}
+    <div class="input-group{{ group_class|default('') }}">
+        <div class="input-group-prepend">
+                <span class="input-group-text">
+                   <i class="far fa-envelope-open"></i>
+                </span>
+        </div>
+        {{- block('form_widget_simple') -}}
+    </div>
+{%- endblock email_widget %}

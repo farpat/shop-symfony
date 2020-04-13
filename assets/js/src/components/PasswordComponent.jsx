@@ -29,8 +29,9 @@ class PasswordComponent extends React.Component {
         );
     }
 
+
     isRequired() {
-        return this.props.rules.includes('NotBlank');
+        return this.props.rules.includes('NotBlankß');
     }
 
     getLabelClassName() {

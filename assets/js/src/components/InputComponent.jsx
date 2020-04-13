@@ -9,9 +9,8 @@ class InputComponent extends React.Component {
         this.rules = this.makeRules(this.props.rules);
 
         this.state = {
-            value:      this.props.type !== 'checkbox' ? this.props.value : this.props.value != 0,
-            error:      this.props.error || '',
-            isRequired: false,
+            value: this.props.type !== 'checkbox' ? this.props.value : this.props.value != 0,
+            error: this.props.error || '',
         };
 
         this.changeValue = this.changeValue.bind(this);
@@ -33,7 +32,7 @@ class InputComponent extends React.Component {
 
             let [ruleName, parametersInString] = ruleSplitted.split('ß');
 
-            if (ruleName === 'NotBlank') {
+            if (ruleName === 'NotBlank' || ruleName === 'IsTrue') {
                 this.required = true;
             }
 
@@ -101,7 +100,7 @@ class InputComponent extends React.Component {
 
                 {
                     this.props.type === 'checkbox' &&
-                    <label htmlFor={this.props.id} className="custom-control-label">{this.props.label}</label>
+                    <label htmlFor={this.props.id} className={this.getLabelClassName()}>{this.props.label}</label>
                 }
 
                 {
@@ -118,6 +117,16 @@ class InputComponent extends React.Component {
                 }
             </>
         );
+    }
+
+    getLabelClassName() {
+        let className = 'custom-control-label';
+
+        if (this.required) {
+            className += ' required';
+        }
+
+        return className;
     }
 
     getInputClassName() {

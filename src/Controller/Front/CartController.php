@@ -29,7 +29,7 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/cart-items", name="store-item", methods={"POST"})
+     * @Route("/cart-items", name="store_item", methods={"POST"})
      */
     public function storeItem (Request $request, EntityManagerInterface $entityManager)
     {
@@ -46,7 +46,7 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/cart-items/{productReferenceId}", name="patch-item", methods={"PATCH"})
+     * @Route("/cart-items/{productReferenceId}", name="patch_item", methods={"PATCH"})
      */
     public function patchItem (Request $request, int $productReferenceId, EntityManagerInterface $entityManager)
     {
@@ -63,7 +63,7 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/cart-items/{productReferenceId}", name="delete-item", methods={"DELETE"})
+     * @Route("/cart-items/{productReferenceId}", name="delete_item", methods={"DELETE"})
      */
     public function deleteItem (Request $request, int $productReferenceId, EntityManagerInterface $entityManager)
     {

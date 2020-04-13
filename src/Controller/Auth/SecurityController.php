@@ -7,10 +7,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
+/**
+ * @Route(name="security.")
+ */
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/login", name="security.login", methods={"GET", "POST"})
+     * @Route("/login", name="login", methods={"GET", "POST"})
      */
     public function login (AuthenticationUtils $authenticationUtils): Response
     {
@@ -21,11 +24,11 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('auth/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render('auth/security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
     /**
-     * @Route("/logout", name="security.logout", methods={"GET"})
+     * @Route("/logout", name="logout", methods={"GET"})
      */
     public function logout ()
     {

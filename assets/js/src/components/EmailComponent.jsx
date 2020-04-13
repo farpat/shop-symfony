@@ -27,7 +27,7 @@ class EmailComponent extends React.Component {
     }
 
     isRequired() {
-        return this.props.rules.includes('required');
+        return this.props.rules.includes('NotBlankß');
     }
 
     getLabelClassName() {

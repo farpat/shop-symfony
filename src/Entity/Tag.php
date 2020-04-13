@@ -11,6 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Tag
 {
+    const COMPLEMENTARITY_TYPE = 'COMPLEMENTARITY';
+    const SIMILARITY_TYPE = 'SIMILARITY';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -62,6 +65,10 @@ class Tag
 
     public function setType (string $type): self
     {
+        if (!in_array($type, [self::COMPLEMENTARITY_TYPE, self::SIMILARITY_TYPE])) {
+            throw new \InvalidArgumentException("The $type << $type >> doesn't exists!");
+        }
+
         $this->type = $type;
 
         return $this;

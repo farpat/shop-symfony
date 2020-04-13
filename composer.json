@@ -5,6 +5,7 @@
         "php": "^7.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-json": "*",
         "beberlei/doctrineextensions": "^1.2",
         "league/flysystem-bundle": "^1.4",
         "mikehaertl/phpwkhtmltopdf": "^2.4",
@@ -31,7 +32,7 @@
         "symfony/validator": "5.0.*",
         "symfony/web-link": "5.0.*",
         "symfony/yaml": "5.0.*",
-        "ext-json": "*"
+        "symfonycasts/reset-password-bundle": "^1.0"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.3",
