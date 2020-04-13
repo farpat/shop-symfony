@@ -2,9 +2,12 @@
 
 namespace App\Controller\Auth;
 
+use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
@@ -33,5 +36,26 @@ class SecurityController extends AbstractController
     public function logout ()
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+
+    /**
+     * @Route("/usurp/{user}", name="usurp.show", requirements={"user":"\d+"}, methods={"GET"})
+     * @param User $user
+     */
+    public function usurp (User $user)
+    {
+        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+        $this->get('security.token_storage')->setToken($token);
+        $this->get('session')->set('_security_main', serialize($token));
+        return $this->redirectToRoute('home.index');
+    }
+
+    /**
+     * @Route("/usurp", name="usurp.index", methods={"GET"})
+     */
+    public function usurpList (UserRepository $userRepository)
+    {
+        $users = $userRepository->findAll();
+        return $this->render('auth/security/usurp.html.twig', compact('users'));
     }
 }
