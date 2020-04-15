@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
- * @Route(name="security.")
+ * @Route(name="app_auth_security_")
  */
 class SecurityController extends AbstractController
 {
@@ -21,7 +21,7 @@ class SecurityController extends AbstractController
     public function login (AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-            return $this->redirectToRoute('home.index');
+            return $this->redirectToRoute('app_home_index');
         }
 
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -39,7 +39,7 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/usurp/{user}", name="usurp.show", requirements={"user":"\d+"}, methods={"GET"})
+     * @Route("/usurp/{user}", name="usurp_show", requirements={"user":"\d+"}, methods={"GET"})
      * @param User $user
      */
     public function usurp (User $user)
@@ -47,11 +47,11 @@ class SecurityController extends AbstractController
         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
         $this->get('security.token_storage')->setToken($token);
         $this->get('session')->set('_security_main', serialize($token));
-        return $this->redirectToRoute('home.index');
+        return $this->redirectToRoute('app_home_index');
     }
 
     /**
-     * @Route("/usurp", name="usurp.index", methods={"GET"})
+     * @Route("/usurp", name="usurp_index", methods={"GET"})
      */
     public function usurpList (UserRepository $userRepository)
     {

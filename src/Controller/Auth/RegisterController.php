@@ -14,7 +14,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class RegisterController extends AbstractController
 {
     /**
-     * @Route("/register", name="register", methods={"GET", "POST"})
+     * @Route("/register", name="app_auth_register", methods={"GET", "POST"})
      */
     public function register (Request $request, UserPasswordEncoderInterface $passwordEncoder, TranslatorInterface $translator): Response
     {
@@ -34,7 +34,7 @@ class RegisterController extends AbstractController
             $this->addFlash('success', $translator->trans('Your account is created with success! You received an email to confirm it.'));
 
 
-            return $this->redirectToRoute('home.index');
+            return $this->redirectToRoute('app_home_index');
         }
 
         return $this->render('auth/register.html.twig', [

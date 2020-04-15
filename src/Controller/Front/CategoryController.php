@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route(name="category.")
+ * @Route(name="app_category_")
  */
 class CategoryController extends AbstractController
 {

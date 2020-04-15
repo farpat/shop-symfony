@@ -20,7 +20,7 @@ class ProductService
 
     public function getShowUrl (Product $product)
     {
-        return $this->urlGenerator->generate('product.show', [
+        return $this->urlGenerator->generate('app_product_show', [
             'categorySlug' => $product->getCategory()->getSlug(),
             'categoryId'   => $product->getCategory()->getId(),
             'productSlug'  => $product->getSlug(),

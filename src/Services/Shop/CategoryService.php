@@ -44,7 +44,7 @@ class CategoryService
 
     public function getIndexUrl ()
     {
-        return $this->urlGenerator->generate('category.index');
+        return $this->urlGenerator->generate('app_category_index');
     }
 
     public function generateHtml (array $parentCategories): string
@@ -77,7 +77,7 @@ class CategoryService
 
     public function getShowUrl (Category $category)
     {
-        return $this->urlGenerator->generate('category.show', [
+        return $this->urlGenerator->generate('app_category_show', [
             'categorySlug' => $category->getSlug(),
             'categoryId'   => $category->getId(),
         ]);

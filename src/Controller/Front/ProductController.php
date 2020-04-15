@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route(name="product.")
+ * @Route(name="app_product_")
  */
 class ProductController extends AbstractController
 {

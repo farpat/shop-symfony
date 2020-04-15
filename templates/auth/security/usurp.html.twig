@@ -16,7 +16,7 @@
             {% for user in users %}
                 <tr>
                     <td>
-                        <a href="{{ path('security.usurp.show', {user: user.id}) }}">{{ user.email }}</a>
+                        <a href="{{ path('app_auth_security_usurp_show', {user: user.id}) }}">{{ user.email }}</a>
                     </td>
                     <td>{{ user.name }}</td>
                     <td>{{ user.isAdmin ? 'admin' : '' }}</td>

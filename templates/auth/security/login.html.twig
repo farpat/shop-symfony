@@ -12,7 +12,7 @@
             {% if app.user %}
                 <div class="mb-3">
                     {% trans with {'%username%' : app.user.username } %}You are logged in as %username%{% endtrans %},
-                    <a href="{{ path('security.logout') }}">{% trans %}Logout{% endtrans %}</a>
+                    <a href="{{ path('app_auth_security_logout') }}">{% trans %}Logout{% endtrans %}</a>
                 </div>
             {% endif %}
 
@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <a href="{{ path('reset-password.forgot_password_request') }}"
+                    <a href="{{ path('app_forgot_password_request') }}"
                        class="btn btn-link">{% trans %}Forgot your password ?{% endtrans %}</a>
                 </div>
             </div>

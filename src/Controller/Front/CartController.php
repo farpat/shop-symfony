@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 /**
- * @Route(name="cart.")
+ * @Route(name="app_cart_")
  */
 class CartController extends AbstractController
 {
