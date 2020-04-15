@@ -36,7 +36,7 @@ class InputComponent extends React.Component {
                 this.required = true;
             }
 
-            const RuleClass = require(`../Security/Rules/${ruleName}Rule`).default;
+            const RuleClass = require(`../../src/Security/Rules/${ruleName}Rule`).default;
             let parameters = {};
             parametersInString.split('@').map(function (parameterExploded) {
                 let [key, value] = parameterExploded.split(':');

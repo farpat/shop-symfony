@@ -21,8 +21,11 @@ class HomeController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      */
-    public function index (ModuleRepository $moduleRepository)
+    public function index (ModuleRepository $moduleRepository, ProductRepository $productRepository, CategoryRepository $categoryRepository)
     {
+        $c = $categoryRepository->search('t');
+        $p = $productRepository->search('t');
+
         $elementsToDisplayInHomepageParameter = $moduleRepository->getParameter('home', 'display');
 
         $elementsToDisplayInHomepage = $elementsToDisplayInHomepageParameter !== null ?

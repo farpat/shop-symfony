@@ -52,18 +52,15 @@ class ProductRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('p')
             ->select('p.id', 'p.label', 'i.url_thumbnail as image',
-                'CONCAT("http://localhost:8000/categories/", c.slug, "-", c.id, "/", p.slug, "-", p.id) as url',
-                'MIN(pr.unit_price_excluding_taxes) as min_unit_price_including_taxes'
-            )
+                "CONCAT('http://localhost:8000/categories/', c.slug, '-', c.id, '/', p.slug, '-', p.id) as url",
+                'MIN(pr.unit_price_including_taxes) as min_unit_price_including_taxes')
             ->leftJoin('p.main_image', 'i')
             ->leftJoin('p.category', 'c')
             ->leftJoin('p.productReferences', 'pr')
             ->where('p.label LIKE :label')
             ->setMaxResults(5)
             ->groupBy('p.id')
-            ->setParameters([
-                'label' => "%$term%"
-            ])
+            ->setParameter('label', "%$term%")
             ->getQuery()
             ->getArrayResult();
     }

@@ -12,7 +12,7 @@ function makeForm(formElement) {
             parentForm
         };
 
-        const Component = React.lazy(() => import(`../src/components/${field.dataset.component}`));
+        const Component = React.lazy(() => import(`../app/Form/${field.dataset.component}`));
 
         render(<Suspense fallback={<div>Chargement...</div>}><Component {...props}/></Suspense>, field);
     });
