@@ -31,7 +31,7 @@ class Module
     /**
      * @ORM\Column(type="boolean", options={"default":0})
      */
-    private $is_active = false;
+    private $isActive = false;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\ModuleParameter", mappedBy="module")
@@ -74,12 +74,12 @@ class Module
 
     public function getIsActive (): ?bool
     {
-        return $this->is_active;
+        return $this->isActive;
     }
 
-    public function setIsActive (bool $is_active): self
+    public function setIsActive (bool $isActive): self
     {
-        $this->is_active = $is_active;
+        $this->isActive = $isActive;
 
         return $this;
     }

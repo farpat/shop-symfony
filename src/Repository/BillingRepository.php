@@ -24,9 +24,9 @@ class BillingRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('b')
             ->select('b', 'u', 'a', 'i', 'pr')
             ->leftJoin('b.user', 'u')
-            ->leftJoin('b.delivered_address', 'a')
+            ->leftJoin('b.deliveredAddress', 'a')
             ->leftJoin('b.items', 'i')
-            ->leftJoin('i.product_reference', 'pr')
+            ->leftJoin('i.productReference', 'pr')
             ->where('b.number = :number')
             ->setParameter('number', $billingNumber)
             ->getQuery()->getOneOrNullResult();

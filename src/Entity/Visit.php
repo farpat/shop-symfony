@@ -28,7 +28,7 @@ abstract class Visit
     /**
      * @ORM\Column(type="string", length=255)
      */
-    protected $ip_address;
+    protected $ipAddress;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
@@ -42,12 +42,12 @@ abstract class Visit
 
     public function getIpAddress (): ?string
     {
-        return $this->ip_address;
+        return $this->ipAddress;
     }
 
-    public function setIpAddress (string $ip_address): self
+    public function setIpAddress (string $ipAddress): self
     {
-        $this->ip_address = $ip_address;
+        $this->ipAddress = $ipAddress;
 
         return $this;
     }

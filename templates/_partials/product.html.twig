@@ -4,7 +4,12 @@
     {% endif %}
     <div class="card-body">
         <h3 class="card-title">
-            <a href="#productUrl">{{ product.label }}</a>
+            <a href="{{ path('app_product_show', {
+                productId: product.id,
+                productSlug: product.slug,
+                categoryId: product.category.id,
+                categorySlug: product.category.slug,
+            }) }}">{{ product.label }}</a>
         </h3>
     </div>
 </article>

@@ -28,7 +28,7 @@ class BillingController extends AbstractController
 
         if ($request->query->getInt('force') === 1 || !$billingStorage->has($billing->getBillingPath())) {
             $billingPdf = new Pdf();
-            $billingPdf->addPage($this->renderView('billing/show.html.twig', ['billing' => $billing]));
+            $billingPdf->addPage($this->renderView('billing/show.html.twig', compact('billing')));
             $billingPdf->saveAs($completePath);
         }
 
@@ -43,7 +43,6 @@ class BillingController extends AbstractController
     public function view (Billing $billing)
     {
         $areAssetsAbsolute = false;
-        $this->getUser();
         return $this->render('billing/show.html.twig', compact('billing', 'areAssetsAbsolute'));
     }
 }

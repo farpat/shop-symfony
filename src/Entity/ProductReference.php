@@ -27,17 +27,17 @@ class ProductReference
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
      */
-    private $unit_price_excluding_taxes = 0;
+    private $unitPriceExcludingTaxes = 0;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
      */
-    private $unit_price_including_taxes = 0;
+    private $unitPriceIncludingTaxes = 0;
 
     /**
      * @ORM\Column(type="json", nullable=false)
      */
-    private $filled_product_fields = [];
+    private $filledProductFields = [];
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="productReferences")
@@ -48,7 +48,7 @@ class ProductReference
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Image")
      */
-    private $main_image;
+    private $mainImage;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Image")
@@ -79,46 +79,46 @@ class ProductReference
 
     public function getUnitPriceExcludingTaxes (): float
     {
-        return $this->unit_price_excluding_taxes;
+        return $this->unitPriceExcludingTaxes;
     }
 
     public function getFormattedUnitPriceExcludingTaxes (array $currencyParameter): string
     {
-        return Str::getFormattedPrice($currencyParameter, $this->unit_price_excluding_taxes);
+        return Str::getFormattedPrice($currencyParameter, $this->unitPriceExcludingTaxes);
     }
 
-    public function setUnitPriceExcludingTaxes (float $unit_price_excluding_taxes): self
+    public function setUnitPriceExcludingTaxes (float $unitPriceExcludingTaxes): self
     {
-        $this->unit_price_excluding_taxes = $unit_price_excluding_taxes;
+        $this->unitPriceExcludingTaxes = $unitPriceExcludingTaxes;
 
         return $this;
     }
 
     public function getUnitPriceIncludingTaxes (): float
     {
-        return $this->unit_price_including_taxes;
+        return $this->unitPriceIncludingTaxes;
     }
 
     public function getFormattedUnitPriceIncludingTaxes (array $currencyParameter): string
     {
-        return Str::getFormattedPrice($currencyParameter, $this->unit_price_including_taxes);
+        return Str::getFormattedPrice($currencyParameter, $this->unitPriceIncludingTaxes);
     }
 
-    public function setUnitPriceIncludingTaxes (float $unit_price_including_taxes): self
+    public function setUnitPriceIncludingTaxes (float $unitPriceIncludingTaxes): self
     {
-        $this->unit_price_including_taxes = $unit_price_including_taxes;
+        $this->unitPriceIncludingTaxes = $unitPriceIncludingTaxes;
 
         return $this;
     }
 
     public function getFilledProductFields (): ?array
     {
-        return $this->filled_product_fields;
+        return $this->filledProductFields;
     }
 
-    public function setFilledProductFields (array $filled_product_fields): self
+    public function setFilledProductFields (array $filledProductFields): self
     {
-        $this->filled_product_fields = $filled_product_fields;
+        $this->filledProductFields = $filledProductFields;
 
         return $this;
     }
@@ -137,12 +137,12 @@ class ProductReference
 
     public function getMainImage (): ?Image
     {
-        return $this->main_image;
+        return $this->mainImage;
     }
 
-    public function setMainImage (?Image $main_image): self
+    public function setMainImage (?Image $mainImage): self
     {
-        $this->main_image = $main_image;
+        $this->mainImage = $mainImage;
 
         return $this;
     }

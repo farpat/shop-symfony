@@ -43,7 +43,7 @@ class Category
     /**
      * @ORM\Column(type="boolean")
      */
-    private $is_last;
+    private $isLast;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Image")
@@ -63,13 +63,13 @@ class Category
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\ProductField")
      */
-    private $product_fields;
+    private $productFields;
 
     public function __construct ()
     {
         $this->products = new ArrayCollection();
         $this->visits = new ArrayCollection();
-        $this->product_fields = new ArrayCollection();
+        $this->productFields = new ArrayCollection();
     }
 
     public function getLevel (): int
@@ -132,12 +132,12 @@ class Category
 
     public function getIsLast (): ?bool
     {
-        return $this->is_last;
+        return $this->isLast;
     }
 
-    public function setIsLast (bool $is_last): self
+    public function setIsLast (bool $isLast): self
     {
-        $this->is_last = $is_last;
+        $this->isLast = $isLast;
 
         return $this;
     }
@@ -221,13 +221,13 @@ class Category
      */
     public function getProductFields (): Collection
     {
-        return $this->product_fields;
+        return $this->productFields;
     }
 
     public function addProductField (ProductField $productField): self
     {
-        if (!$this->product_fields->contains($productField)) {
-            $this->product_fields[] = $productField;
+        if (!$this->productFields->contains($productField)) {
+            $this->productFields[] = $productField;
         }
 
         return $this;
@@ -235,8 +235,8 @@ class Category
 
     public function removeProductField (ProductField $productField): self
     {
-        if ($this->product_fields->contains($productField)) {
-            $this->product_fields->removeElement($productField);
+        if ($this->productFields->contains($productField)) {
+            $this->productFields->removeElement($productField);
         }
 
         return $this;

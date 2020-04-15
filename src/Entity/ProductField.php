@@ -29,7 +29,7 @@ class ProductField
     /**
      * @ORM\Column(type="boolean")
      */
-    private $is_required;
+    private $isRequired;
 
     public function getId (): ?int
     {
@@ -62,12 +62,12 @@ class ProductField
 
     public function getIsRequired (): ?bool
     {
-        return $this->is_required;
+        return $this->isRequired;
     }
 
-    public function setIsRequired (bool $is_required): self
+    public function setIsRequired (bool $isRequired): self
     {
-        $this->is_required = $is_required;
+        $this->isRequired = $isRequired;
 
         return $this;
     }

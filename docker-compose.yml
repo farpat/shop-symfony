@@ -74,4 +74,4 @@ services:
         volumes:
             - .:${PROJECT_PATH}
         working_dir: ${PROJECT_PATH}
-        command: "npm run dev"
+        command: npm run dev

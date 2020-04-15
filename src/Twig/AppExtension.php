@@ -82,10 +82,11 @@ class AppExtension extends AbstractExtension
 
         $liHtml = '<nav aria-label="breadcrumb"><ol class="breadcrumb">';
         for ($i = 0; $i < $linksCount; $i++) {
+            $label = ucfirst($links[$i]['label']);
             if ($i + 1 < $linksCount) {
-                $liHtml .= "<li class='breadcrumb-item'><a href='{$links[$i]['url']}'>{$links[$i]['label']}</a></li>";
+                $liHtml .= "<li class='breadcrumb-item'><a href='{$links[$i]['url']}'>{$label}</a></li>";
             } else {
-                $liHtml .= "<li class='breadcrumb-item' aria-current='page'>{$links[$i]['label']}</li>";
+                $liHtml .= "<li class='breadcrumb-item' aria-current='page'>{$label}</li>";
             }
         }
         $liHtml .= '</nav></ol>';

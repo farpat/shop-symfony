@@ -29,12 +29,12 @@ class Image
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $url_thumbnail;
+    private $urlThumbnail;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $alt_thumbnail;
+    private $altThumbnail;
 
     public function getId (): ?int
     {
@@ -67,24 +67,24 @@ class Image
 
     public function getUrlThumbnail (): ?string
     {
-        return $this->url_thumbnail;
+        return $this->urlThumbnail;
     }
 
-    public function setUrlThumbnail (?string $url_thumbnail): self
+    public function setUrlThumbnail (?string $urlThumbnail): self
     {
-        $this->url_thumbnail = $url_thumbnail;
+        $this->urlThumbnail = $urlThumbnail;
 
         return $this;
     }
 
     public function getAltThumbnail (): ?string
     {
-        return $this->alt_thumbnail;
+        return $this->altThumbnail;
     }
 
-    public function setAltThumbnail (?string $alt_thumbnail): self
+    public function setAltThumbnail (?string $altThumbnail): self
     {
-        $this->alt_thumbnail = $alt_thumbnail;
+        $this->altThumbnail = $altThumbnail;
 
         return $this;
     }

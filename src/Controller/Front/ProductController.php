@@ -4,8 +4,6 @@ namespace App\Controller\Front;
 
 use App\Entity\Product;
 use App\Repository\ProductRepository;
-use App\Services\Shop\CategoryService;
-use App\Services\Shop\ProductService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,18 +21,24 @@ class ProductController extends AbstractController
      *     )
      * @Entity("product", expr="repository.getWithAllRelations(productId)")
      */
-    public function show (Product $product, string $categorySlug, int $categoryId, string $productSlug, ProductRepository $productRepository, ProductService $productService, CategoryService $categoryService)
+    public function show (Product $product, string $categorySlug, int $categoryId, string $productSlug, ProductRepository $productRepository)
     {
         if ($categorySlug !== $product->getCategory()->getSlug() || $productSlug !== $product->getSlug() || $categoryId !== $product->getCategory()->getId()) {
-            return $this->redirect($productService->getShowUrl($product));
+            return $this->redirect($this->generateUrl('app_product_show', [
+                'productId'    => $product->getId(),
+                'productSlug'  => $product->getSlug(),
+                'categoryId'   => $product->getCategory()->getId(),
+                'categorySlug' => $product->getCategory()->getSlug(),
+            ]));
         }
 
         $productFields = $productRepository->getProductFields($product);
 
         $breadcrumb = [
-            ['label' => 'category', 'url' => $categoryService->getIndexUrl()],
+            ['label' => 'category', 'url' => $this->generateUrl('app_category_index')],
             ['label' => $product->getCategory()->getLabel(),
-             'url'   => $categoryService->getShowUrl($product->getCategory())],
+             'url'   => $this->generateUrl('app_category_show', ['categoryId'   => $categoryId,
+                                                                 'categorySlug' => $categorySlug])],
             ['label' => $product->getLabel()]
         ];
 

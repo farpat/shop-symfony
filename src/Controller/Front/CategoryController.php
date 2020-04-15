@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * @Route(name="app_category_")
@@ -43,18 +44,26 @@ class CategoryController extends AbstractController
      * @Route("/categories/{categorySlug}-{categoryId}", name="show", methods={"GET"}, requirements={"categorySlug":"[a-z\d\-]+", "categoryId":"\d+"})g
      * @Entity("category", expr="repository.getWithAllRelations(categoryId)")
      */
-    public function show (Category $category, string $categorySlug, Request $request, CategoryService $categoryService)
+    public function show (Category $category, string $categorySlug, Request $request, CategoryRepository $categoryRepository, SerializerInterface $serializer)
     {
+        $categoryShowUrl = $this->generateUrl('app_category_show', [
+            'categoryId'   => $category->getId(),
+            'categorySlug' => $category->getSlug(),
+        ]);
+
         $currentPage = $request->query->getInt('page');
         if ($currentPage === 1 || $categorySlug !== $category->getSlug()) {
-            return $this->redirect($categoryService->getShowUrl($category));
+            return $this->redirect($categoryShowUrl);
         }
 
-        $productFieldsInJson = $categoryService->getProductFieldsSerialized($category);
-        $productsInJson = $categoryService->getProductsSerialized($category);
+        $productFields = $category->getProductFields();
+        $products = $categoryRepository->getProducts($category);
+
+        $productFieldsInJson = $serializer->serialize($productFields, 'json');
+        $productsInJson = $serializer->serialize($products, 'json');
 
         $breadcrumb = [
-            ['label' => 'Category', 'url' => $categoryService->getShowUrl($category)],
+            ['label' => 'Category', 'url' => $categoryShowUrl],
             ['label' => $category->getLabel()]
         ];
 

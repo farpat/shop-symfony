@@ -42,7 +42,7 @@ class Product
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Image")
      */
-    private $main_image;
+    private $mainImage;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="products")
@@ -154,12 +154,12 @@ class Product
 
     public function getMainImage (): ?Image
     {
-        return $this->main_image;
+        return $this->mainImage;
     }
 
-    public function setMainImage (?Image $main_image): self
+    public function setMainImage (?Image $mainImage): self
     {
-        $this->main_image = $main_image;
+        $this->mainImage = $mainImage;
 
         return $this;
     }

@@ -46,8 +46,7 @@ class CategoryRepository extends ServiceEntityRepository
     public function search (string $term): array
     {
         return $this->createQueryBuilder('c')
-            ->select('c.id', 'c.label', 'i.url_thumbnail as image',
-                "CONCAT('http://localhost:8000/', 'categories/', c.slug, '-', c.id) as url")
+            ->select('c', 'i')
             ->leftJoin('c.image', 'i')
             ->where('c.label LIKE :label')
             ->setMaxResults(2)
@@ -55,7 +54,7 @@ class CategoryRepository extends ServiceEntityRepository
                 'label' => "%$term%"
             ])
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
     }
 
     /**
@@ -69,7 +68,7 @@ class CategoryRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->select('c', 'i', 'pf')
             ->leftJoin('c.image', 'i')
-            ->leftJoin('c.product_fields', 'pf')
+            ->leftJoin('c.productFields', 'pf')
             ->where('c.id = :id')
             ->setParameters([
                 'id' => $categoryId
@@ -86,10 +85,10 @@ class CategoryRepository extends ServiceEntityRepository
     public function getProducts (Category $category): array
     {
         return $this->getEntityManager()->createQueryBuilder()
-            ->select('p', 'partial c.{id, slug, nomenclature}', 'partial i.{id, url_thumbnail, alt_thumbnail}', 'partial pr.{id, unit_price_including_taxes}')
+            ->select('p', 'c', 'i', 'pr')
             ->from(Product::class, 'p')
             ->leftJoin('p.category', 'c')
-            ->leftJoin('p.main_image', 'i')
+            ->leftJoin('p.mainImage', 'i')
             ->leftJoin('p.productReferences', 'pr')
             ->where(
                 $this->getEntityManager()->getExpressionBuilder()->in('p.category',

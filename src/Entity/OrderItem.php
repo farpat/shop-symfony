@@ -24,18 +24,18 @@ class OrderItem
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
      */
-    private $amount_excluding_taxes;
+    private $amountExcludingTaxes;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
      */
-    private $amount_including_taxes;
+    private $amountIncludingTaxes;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ProductReference")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $product_reference;
+    private $productReference;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Orderable", inversedBy="items")
@@ -63,36 +63,36 @@ class OrderItem
 
     public function getAmountExcludingTaxes (): ?string
     {
-        return $this->amount_excluding_taxes;
+        return $this->amountExcludingTaxes;
     }
 
-    public function setAmountExcludingTaxes (string $amount_excluding_taxes): self
+    public function setAmountExcludingTaxes (string $amountExcludingTaxes): self
     {
-        $this->amount_excluding_taxes = $amount_excluding_taxes;
+        $this->amountExcludingTaxes = $amountExcludingTaxes;
 
         return $this;
     }
 
     public function getAmountIncludingTaxes (): ?string
     {
-        return $this->amount_including_taxes;
+        return $this->amountIncludingTaxes;
     }
 
-    public function setAmountIncludingTaxes (string $amount_including_taxes): self
+    public function setAmountIncludingTaxes (string $amountIncludingTaxes): self
     {
-        $this->amount_including_taxes = $amount_including_taxes;
+        $this->amountIncludingTaxes = $amountIncludingTaxes;
 
         return $this;
     }
 
     public function getProductReference (): ?ProductReference
     {
-        return $this->product_reference;
+        return $this->productReference;
     }
 
-    public function setProductReference (?ProductReference $product_reference): self
+    public function setProductReference (?ProductReference $productReference): self
     {
-        $this->product_reference = $product_reference;
+        $this->productReference = $productReference;
 
         return $this;
     }

@@ -34,7 +34,7 @@ class Address
     /**
      * @ORM\Column(type="string", length=50)
      */
-    private $postal_code;
+    private $postalCode;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -105,12 +105,12 @@ class Address
 
     public function getPostalCode (): ?string
     {
-        return $this->postal_code;
+        return $this->postalCode;
     }
 
-    public function setPostalCode (string $postal_code): self
+    public function setPostalCode (string $postalCode): self
     {
-        $this->postal_code = $postal_code;
+        $this->postalCode = $postalCode;
 
         return $this;
     }

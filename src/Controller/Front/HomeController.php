@@ -8,6 +8,7 @@ use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * @Route(name="app_home_")
@@ -23,9 +24,6 @@ class HomeController extends AbstractController
      */
     public function index (ModuleRepository $moduleRepository, ProductRepository $productRepository, CategoryRepository $categoryRepository)
     {
-        $c = $categoryRepository->search('t');
-        $p = $productRepository->search('t');
-
         $elementsToDisplayInHomepageParameter = $moduleRepository->getParameter('home', 'display');
 
         $elementsToDisplayInHomepage = $elementsToDisplayInHomepageParameter !== null ?
@@ -43,15 +41,15 @@ class HomeController extends AbstractController
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function search (Request $request, CategoryRepository $categoryRepository, ProductRepository $productRepository)
+    public function search (Request $request, CategoryRepository $categoryRepository, ProductRepository $productRepository, NormalizerInterface $normalizer)
     {
         $term = $request->query->get('q');
         if ($term === null) {
             return $this->json([], 400);
         }
 
-        $categories = $categoryRepository->search($term);
-        $products = $productRepository->search($term);
+        $categories = $normalizer->normalize($categoryRepository->search($term), 'search');
+        $products = $normalizer->normalize($productRepository->search($term), 'search');
 
         return $this->json(array_merge($categories, $products));
     }

@@ -50,17 +50,17 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $email_verified_at;
+    private $emailVerifiedAt;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $stripe_id;
+    private $stripeId;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $remember_token;
+    private $rememberToken;
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="user", orphanRemoval=true)
      */
@@ -176,36 +176,36 @@ class User implements UserInterface
 
     public function getEmailVerifiedAt (): ?\DateTimeInterface
     {
-        return $this->email_verified_at;
+        return $this->emailVerifiedAt;
     }
 
-    public function setEmailVerifiedAt (?\DateTimeInterface $email_verified_at): self
+    public function setEmailVerifiedAt (?\DateTimeInterface $emailVerifiedAt): self
     {
-        $this->email_verified_at = $email_verified_at;
+        $this->emailVerifiedAt = $emailVerifiedAt;
 
         return $this;
     }
 
     public function getStripeId (): ?string
     {
-        return $this->stripe_id;
+        return $this->stripeId;
     }
 
-    public function setStripeId (?string $stripe_id): self
+    public function setStripeId (?string $stripeId): self
     {
-        $this->stripe_id = $stripe_id;
+        $this->stripeId = $stripeId;
 
         return $this;
     }
 
     public function getRememberToken (): ?string
     {
-        return $this->remember_token;
+        return $this->rememberToken;
     }
 
-    public function setRememberToken (?string $remember_token): self
+    public function setRememberToken (?string $rememberToken): self
     {
-        $this->remember_token = $remember_token;
+        $this->rememberToken = $rememberToken;
 
         return $this;
     }

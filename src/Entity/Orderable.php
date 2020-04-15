@@ -37,22 +37,22 @@ abstract class Orderable
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Address")
      */
-    protected $delivered_address;
+    protected $deliveredAddress;
 
     /**
      * @ORM\Column(type="integer", options={"default": 0})
      */
-    protected $items_count = 0;
+    protected $itemsCount = 0;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
      */
-    protected $total_amount_excluding_taxes = 0;
+    protected $totalAmountExcludingTaxes = 0;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2)
      */
-    protected $total_amount_including_taxes = 0;
+    protected $totalAmountIncludingTaxes = 0;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\OrderItem", mappedBy="orderable", orphanRemoval=true)
@@ -85,31 +85,31 @@ abstract class Orderable
 
     public function getDeliveredAddress (): ?Address
     {
-        return $this->delivered_address;
+        return $this->deliveredAddress;
     }
 
-    public function setDeliveredAddress (?Address $delivered_address): self
+    public function setDeliveredAddress (?Address $deliveredAddress): self
     {
-        $this->delivered_address = $delivered_address;
+        $this->deliveredAddress = $deliveredAddress;
 
         return $this;
     }
 
     public function getItemsCount (): ?int
     {
-        return $this->items_count;
+        return $this->itemsCount;
     }
 
-    public function setItemsCount (int $items_count): self
+    public function setItemsCount (int $itemsCount): self
     {
-        $this->items_count = $items_count;
+        $this->itemsCount = $itemsCount;
 
         return $this;
     }
 
     public function getIncludingTaxes ()
     {
-        return $this->total_amount_including_taxes - $this->total_amount_excluding_taxes;
+        return $this->totalAmountIncludingTaxes - $this->totalAmountExcludingTaxes;
     }
 
     public function getFormattedIncludingTaxes (array $currencyParameter): string
@@ -119,7 +119,7 @@ abstract class Orderable
 
     public function getTotalAmountExcludingTaxes (): ?string
     {
-        return $this->total_amount_excluding_taxes;
+        return $this->totalAmountExcludingTaxes;
     }
 
     public function getFormattedTotalAmountExcludingTaxes (array $currencyParameter): string
@@ -127,16 +127,16 @@ abstract class Orderable
         return Str::getFormattedPrice($currencyParameter, $this->getTotalAmountExcludingTaxes());
     }
 
-    public function setTotalAmountExcludingTaxes (string $total_amount_excluding_taxes): self
+    public function setTotalAmountExcludingTaxes (string $totalAmountExcludingTaxes): self
     {
-        $this->total_amount_excluding_taxes = $total_amount_excluding_taxes;
+        $this->totalAmountExcludingTaxes = $totalAmountExcludingTaxes;
 
         return $this;
     }
 
     public function getTotalAmountIncludingTaxes (): ?string
     {
-        return $this->total_amount_including_taxes;
+        return $this->totalAmountIncludingTaxes;
     }
 
     public function getFormattedTotalAmountIncludingTaxes (array $currencyParameter): string
@@ -144,9 +144,9 @@ abstract class Orderable
         return Str::getFormattedPrice($currencyParameter, $this->getTotalAmountIncludingTaxes());
     }
 
-    public function setTotalAmountIncludingTaxes (string $total_amount_including_taxes): self
+    public function setTotalAmountIncludingTaxes (string $totalAmountIncludingTaxes): self
     {
-        $this->total_amount_including_taxes = $total_amount_including_taxes;
+        $this->totalAmountIncludingTaxes = $totalAmountIncludingTaxes;
 
         return $this;
     }

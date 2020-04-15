@@ -12,6 +12,7 @@ use App\Services\Shop\CategoryService;
 use App\Services\Shop\ProductService;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class NavigationService
 {
@@ -44,10 +45,15 @@ class NavigationService
      * @var ProductService
      */
     private $productService;
+    /**
+     * @var UrlGeneratorInterface
+     */
+    private UrlGeneratorInterface $urlGenerator;
 
     public function __construct (
         ModuleRepository $moduleRepository,
         RequestStack $request,
+        UrlGeneratorInterface $urlGenerator,
         ProductRepository $productRepository, ProductService $productService,
         CategoryRepository $categoryRepository, CategoryService $categoryService)
     {
@@ -57,6 +63,7 @@ class NavigationService
         $this->productService = $productService;
         $this->categoryRepository = $categoryRepository;
         $this->categoryService = $categoryService;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function generateHtml (): string
@@ -76,19 +83,6 @@ class NavigationService
         }
 
         return $html;
-    }
-
-    /**
-     * @param Product[]|Category[] $array
-     */
-    private function getById (array $array)
-    {
-        $newArray = [];
-        foreach ($array as $item) {
-            $newArray[$item->getId()] = $item;
-        }
-
-        return $newArray;
     }
 
     private function setResources (array $links)
@@ -129,23 +123,20 @@ class NavigationService
     }
 
     /**
-     * @param Product|Category $entity
-     *
-     * @return string
+     * @param Product[]|Category[] $array
      */
-    private function getUrl ($entity): string
+    private function getById (array $array)
     {
-        switch (get_class($entity)) {
-            case Product::class:
-                return $this->productService->getShowUrl($entity);
-            case Category::class:
-                return $this->categoryService->getShowUrl($entity);
+        $newArray = [];
+        foreach ($array as $item) {
+            $newArray[$item->getId()] = $item;
         }
 
-        return '';
+        return $newArray;
     }
 
-    private function renderLink1 (string $link1): string
+    private
+    function renderLink1 (string $link1): string
     {
         $resource = $this->getResource($link1);
         $url = $this->getUrl($resource);
@@ -161,7 +152,8 @@ class NavigationService
      * @return Product|Category
      * @throws Exception
      */
-    private function getResource (string $link1)
+    private
+    function getResource (string $link1)
     {
         [$model, $id] = explode(':', $link1);
 
@@ -172,7 +164,29 @@ class NavigationService
         return $resource;
     }
 
-    private function renderLinks2 (string $link, array $links): string
+    private function getUrl ($entity): string
+    {
+        if ($entity instanceof Product) {
+            return $this->urlGenerator->generate('app_product_show', [
+                'productId'    => $entity->getId(),
+                'productSlug'  => $entity->getSlug(),
+                'categoryId'   => $entity->getCategory()->getId(),
+                'categorySlug' => $entity->getCategory()->getSlug()
+            ]);
+        }
+
+        if ($entity instanceof Category) {
+            return $this->urlGenerator->generate('app_category_show', [
+                'categoryId'   => $entity->getId(),
+                'categorySlug' => $entity->getSlug()
+            ]);
+        }
+
+        return '';
+    }
+
+    private
+    function renderLinks2 (string $link, array $links): string
     {
         $resource = $this->getResource($link);
 
@@ -194,7 +208,8 @@ class NavigationService
 HTML;
     }
 
-    private function renderLink2 (string $link): string
+    private
+    function renderLink2 (string $link): string
     {
         $resource = $this->getResource($link);
         $url = $this->getUrl($resource);
