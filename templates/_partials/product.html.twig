@@ -1,15 +1,18 @@
+{% set url = path('app_product_show', {
+    productId: product.id,
+    productSlug: product.slug,
+    categoryId: product.category.id,
+    categorySlug: product.category.slug,
+}) %}
 <article class="card product">
     {% if product.mainImage %}
-        <img src="{{ product.mainImage.urlThumbnail }}" class="card-img-top" alt="{{ product.label }}">
+        <a href="{{ url }}">
+            <img src="{{ product.mainImage.urlThumbnail }}" class="card-img-top" alt="{{ product.label }}">
+        </a>
     {% endif %}
     <div class="card-body">
         <h3 class="card-title">
-            <a href="{{ path('app_product_show', {
-                productId: product.id,
-                productSlug: product.slug,
-                categoryId: product.category.id,
-                categorySlug: product.category.slug,
-            }) }}">{{ product.label }}</a>
+            <a href="{{ url }}">{{ product.label }}</a>
         </h3>
     </div>
 </article>

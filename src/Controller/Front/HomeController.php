@@ -7,6 +7,7 @@ use App\Repository\ModuleRepository;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -40,12 +41,13 @@ class HomeController extends AbstractController
      * @param ProductRepository $productRepository
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
     public function search (Request $request, CategoryRepository $categoryRepository, ProductRepository $productRepository, NormalizerInterface $normalizer)
     {
         $term = $request->query->get('q');
-        if ($term === null) {
-            return $this->json([], 400);
+        if ($term === null || strlen((string)$term) === 1) {
+            return $this->json([], Response::HTTP_BAD_REQUEST);
         }
 
         $categories = $normalizer->normalize($categoryRepository->search($term), 'search');

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container">
+    <main class="container">
         {{ breadcrumb(breadcrumb) }}
 
         <h1>{% trans %}All categories{% endtrans %}</h1>
@@ -13,5 +13,5 @@
         <section id="category-index" class="category-index">
             {{ html | raw }}
         </section>
-    </div>
+    </main>
 {% endblock %}
