@@ -4,8 +4,11 @@
     {{ category.label }}
 {% endblock %}
 
+{% block script 'category-show' %}
+
 {% block body %}
-    <div class="container mt-4">
+    <!--suppress CheckTagEmptyBody -->
+    <main class="container">
         {{ breadcrumb(breadcrumb) }}
 
         <section class="header-category-show">
@@ -19,21 +22,13 @@
         <section id="category-show" class="row">
             {% if productFieldsInJson is not empty %}
                 <div class="col-lg-3">
-                    Ici le composant <strong>product-fields-component</strong>
-                    <pre>
-                        product-fields-component
-                        {{ productFieldsInJson }}
-                    </pre>
+                    <section id="product-fields-component" data-product-fields="{{ productFieldsInJson }}"></section>
                 </div>
             {% endif %}
 
             <div class="col-lg">
-                Ici le composant <strong>products-component</strong>
-                <pre>
-                    products-component
-                    {{ productsInJson }}
-                </pre>
+                <section id="products-component" data-products="{{ productsInJson }}"></section>
             </div>
         </section>
-    </div>
+    </main>
 {% endblock %}

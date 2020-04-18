@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
+import {hot} from "react-hot-loader/root";
 import InputComponent from "./InputComponent";
 
 class EmailComponent extends React.Component {
@@ -47,4 +48,4 @@ EmailComponent.propTypes = {
     rules:      PropTypes.string,
 };
 
-export default EmailComponent;
+export default hot(EmailComponent);

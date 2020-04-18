@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
+import {hot} from "react-hot-loader/root";
 import InputComponent from "./InputComponent";
 
 class PasswordComponent extends React.Component {
@@ -52,4 +53,4 @@ PasswordComponent.propTypes = {
     rules:      PropTypes.string,
 };
 
-export default PasswordComponent;
+export default hot(PasswordComponent);

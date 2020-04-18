@@ -31,7 +31,7 @@ class HomeController extends AbstractController
             $elementsToDisplayInHomepageParameter->getValue() :
             [];
 
-        return $this->render('home/index.html.twig', compact('elementsToDisplayInHomepage'));
+        return $this->render('home/index.html.twig', ['elementsToDisplayInHomepage' => $elementsToDisplayInHomepage]);
     }
 
     /**

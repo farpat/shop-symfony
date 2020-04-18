@@ -5,8 +5,12 @@
 {% endblock %}
 
 {% block body %}
-    <section class="container">
-        <h1>{{ product.label }}</h1>
+    <main class="container">
+        {{ breadcrumb(breadcrumb) }}
 
-    </section>
+        <section class="header-product-show">
+            <h1>{{ product.label }}</h1>
+        </section>
+
+    </main>
 {% endblock %}

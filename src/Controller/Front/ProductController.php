@@ -42,6 +42,10 @@ class ProductController extends AbstractController
             ['label' => $product->getLabel()]
         ];
 
-        return $this->render('product/show.html.twig', compact('product', 'productFields', 'breadcrumb'));
+        return $this->render('product/show.html.twig', [
+            'product' => $product,
+            'productFields' => $productRepository->getProductFields($product),
+            'breadcrumb' => $breadcrumb
+        ]);
     }
 }

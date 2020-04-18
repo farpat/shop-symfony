@@ -1,8 +1,9 @@
 import React from "react";
+import {hot} from "react-hot-loader/root";
 import PropTypes from 'prop-types';
 import InputComponent from "./InputComponent";
 
-class PasswordComponent extends React.Component {
+class CheckboxComponent extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -32,7 +33,7 @@ class PasswordComponent extends React.Component {
     }
 }
 
-PasswordComponent.propTypes = {
+CheckboxComponent.propTypes = {
     id:         PropTypes.string.isRequired,
     parentForm: PropTypes.instanceOf(HTMLFormElement),
     attr:       PropTypes.object,
@@ -40,4 +41,4 @@ PasswordComponent.propTypes = {
     rules:      PropTypes.string,
 };
 
-export default PasswordComponent;
+export default hot(CheckboxComponent);

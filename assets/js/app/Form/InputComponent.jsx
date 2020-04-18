@@ -92,7 +92,7 @@ class InputComponent extends React.Component {
                 <input
                     type={this.props.type} className={this.getInputClassName()} id={this.props.id}
                     name={this.props.name} required={this.required}
-                    aria-describedby={this.props.help ? this.props.id + '_help' : ''}
+                    aria-describedby={this.props.help ? this.props.id + '_help' : false}
                     value={this.getInputValue()} checked={this.state.value} onChange={this.changeValue}
                     onBlur={this.getError}
                     {...this.props.attr}

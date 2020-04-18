@@ -29,14 +29,11 @@ class ProductNormalizer implements NormalizerInterface
      */
     public function normalize ($object, $format = null, array $context = []): array
     {
-        $image = $object->getMainImage();
-        $category = $object->getCategory();
-
-        $normalizedCategory = $category ?
-            ['slug' => $category->getSlug(), 'level' => $category->getLevel()] :
-            null;
-        $normalizedImage = $image ?
-            ['url_thumbnail' => $image->getUrlThumbnail(), 'alt_thumbnail' => $image->getAltThumbnail()] :
+        $normalizedImage = $object->getMainImage() ?
+            [
+                'url_thumbnail' => $object->getMainImage()->getUrlThumbnail(),
+                'alt_thumbnail' => $object->getMainImage()->getAltThumbnail()
+            ] :
             null;
 
         return [
@@ -52,7 +49,6 @@ class ProductNormalizer implements NormalizerInterface
             'excerpt'                        => $object->getExcerpt(),
             'min_unit_price_excluding_taxes' => $object->getMinUnitPriceIncludingTaxes(),
             'image'                          => $normalizedImage,
-            'category'                       => $normalizedCategory,
         ];
     }
 

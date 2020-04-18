@@ -31,13 +31,14 @@ class CategoryController extends AbstractController
      */
     public function index (CategoryService $categoryService)
     {
-        $html = $categoryService->generateHtml($this->categoryRepository->getRootCategories());
-
         $breadcrumb = [
             ['label' => 'Category']
         ];
 
-        return $this->render('category/index.html.twig', compact('html', 'breadcrumb'));
+        return $this->render('category/index.html.twig', [
+            'breadcrumb' => $breadcrumb,
+            'html'       => $categoryService->generateHtml($this->categoryRepository->getRootCategories())
+        ]);
     }
 
     /**
@@ -46,27 +47,26 @@ class CategoryController extends AbstractController
      */
     public function show (Category $category, string $categorySlug, Request $request, CategoryRepository $categoryRepository, SerializerInterface $serializer)
     {
-        $categoryShowUrl = $this->generateUrl('app_category_show', [
-            'categoryId'   => $category->getId(),
-            'categorySlug' => $category->getSlug(),
-        ]);
-
         $currentPage = $request->query->getInt('page');
         if ($currentPage === 1 || $categorySlug !== $category->getSlug()) {
-            return $this->redirect($categoryShowUrl);
+            return $this->redirect($this->generateUrl('app_category_show', [
+                'categoryId'   => $category->getId(),
+                'categorySlug' => $category->getSlug(),
+            ]));
         }
 
-        $productFields = $category->getProductFields();
-        $products = $categoryRepository->getProducts($category);
-
-        $productFieldsInJson = $serializer->serialize($productFields, 'json');
-        $productsInJson = $serializer->serialize($products, 'json');
-
         $breadcrumb = [
-            ['label' => 'Category', 'url' => $categoryShowUrl],
+            ['label' => 'Category', 'url' => $this->generateUrl('app_category_index')],
             ['label' => $category->getLabel()]
         ];
 
-        return $this->render('category/show.html.twig', compact('category', 'currentPage', 'productFieldsInJson', 'productsInJson', 'breadcrumb'));
+
+        return $this->render('category/show.html.twig', [
+            'category'            => $category,
+            'currentPage'         => $currentPage,
+            'productFieldsInJson' => $serializer->serialize($category->getProductFields(), 'json'),
+            'productsInJson'      => $serializer->serialize($categoryRepository->getProducts($category), 'json'),
+            'breadcrumb'          => $breadcrumb
+        ]);
     }
 }

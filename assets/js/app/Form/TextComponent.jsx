@@ -1,4 +1,5 @@
 import React from "react";
+import {hot} from "react-hot-loader/root";
 import PropTypes from 'prop-types';
 import InputComponent from "./InputComponent";
 
@@ -41,4 +42,4 @@ TextComponent.propTypes = {
     rules:      PropTypes.string,
 };
 
-export default TextComponent;
+export default hot(TextComponent);
