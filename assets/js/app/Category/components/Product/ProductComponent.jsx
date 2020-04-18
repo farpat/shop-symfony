@@ -9,7 +9,7 @@ class ProductComponent extends React.Component {
     render() {
         return (
             <div className="col-md-4 mb-3">
-                <article className="card-product">
+                <article className="card product">
                     {
                         this.props.product.image &&
                         <a href="#"><img src={this.props.product.image.url_thumbnail}

@@ -32,6 +32,7 @@ let configWebpack = {
         },
     },
     mode:         isDebug ? 'development' : 'production',
+    devtool:      isDebug ? 'cheap-module-source-map' : false,
     optimization: {
         minimizer: [
             new terserPlugin({

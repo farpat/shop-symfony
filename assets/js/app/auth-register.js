@@ -1,16 +1,6 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import {AppContainer} from "react-hot-loader";
+import {render} from "react-dom";
 
-/**
- *
- * @param {React.Component} Component
- * @param {HTMLElement} field
- * @param {Object} props
- */
-const render = function (Component, field, props) {
-    ReactDOM.render(<AppContainer><Component {...props}/></AppContainer>, field);
-}
 
 /**
  *
@@ -18,13 +8,9 @@ const render = function (Component, field, props) {
  */
 const makeForm = function (parentForm) {
     parentForm.querySelectorAll('.js-form-component').forEach(function (field) {
-        const props = {
-            ...JSON.parse(field.getAttribute('props')),
-            parentForm
-        };
-
+        const props = {...JSON.parse(field.getAttribute('props')), parentForm};
         const Component = require(`./Form/${field.dataset.component}`).default;
-        render(Component, field, props);
+        render(<Component {...props}/>, field);
     });
 }
 

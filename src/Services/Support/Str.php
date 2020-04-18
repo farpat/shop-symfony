@@ -57,31 +57,6 @@ class Str
     }
 
     /**
-     * Convert a string to snake case.
-     *
-     * @param string $string
-     * @param string $delimiter
-     *
-     * @return string
-     */
-    public static function getSnakeCase ($string, $delimiter = '_')
-    {
-        $key = $string;
-
-        if (isset(static::$snakeCache[$key][$delimiter])) {
-            return static::$snakeCache[$key][$delimiter];
-        }
-
-        if (!ctype_lower($string)) {
-            $string = preg_replace('/\s+/u', '', ucwords($string));
-
-            $string = static::lower(preg_replace('/(.)(?=[A-Z])/u', '$1' . $delimiter, $string));
-        }
-
-        return static::$snakeCache[$key][$delimiter] = $string;
-    }
-
-    /**
      * Convert a string to pascal case.
      *
      * @param string $string
@@ -99,6 +74,30 @@ class Str
         $string = ucwords(str_replace(['-', '_'], ' ', $string));
 
         return static::$pascalCache[$key] = str_replace(' ', '', $string);
+    }
+
+    /**
+     * Convert a string to snake case.
+     *
+     * @param string $string
+     * @param string $delimiter
+     *
+     * @return string
+     */
+    public static function getSnakeCase ($string, $delimiter = '_')
+    {
+        $key = $string;
+
+        if (isset(static::$snakeCache[$key][$delimiter])) {
+            return static::$snakeCache[$key][$delimiter];
+        }
+
+        if (!ctype_lower($string)) {
+            $string = preg_replace('/\s+/u', '', ucwords($string));
+            $string = mb_strtolower(preg_replace('/(.)(?=[A-Z])/u', '$1' . $delimiter, $string), 'UTF-8');
+        }
+
+        return static::$snakeCache[$key][$delimiter] = $string;
     }
 
 }

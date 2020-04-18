@@ -3,6 +3,7 @@
 namespace App\Controller\Front;
 
 use App\Entity\Category;
+use App\Entity\Product;
 use App\Repository\CategoryRepository;
 use App\Services\Shop\CategoryService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -60,10 +61,10 @@ class CategoryController extends AbstractController
             ['label' => $category->getLabel()]
         ];
 
-
         return $this->render('category/show.html.twig', [
             'category'            => $category,
-            'currentPage'         => $currentPage,
+            'currentPage'         => $currentPage === 0 ? 1 : $currentPage,
+            'perPage'             => Product::PER_PAGE,
             'productFieldsInJson' => $serializer->serialize($category->getProductFields(), 'json'),
             'productsInJson'      => $serializer->serialize($categoryRepository->getProducts($category), 'json'),
             'breadcrumb'          => $breadcrumb

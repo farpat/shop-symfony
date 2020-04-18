@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
  */
 class Product
 {
+    const PER_PAGE = 6;
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

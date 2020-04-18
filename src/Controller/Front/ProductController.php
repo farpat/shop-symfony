@@ -32,8 +32,6 @@ class ProductController extends AbstractController
             ]));
         }
 
-        $productFields = $productRepository->getProductFields($product);
-
         $breadcrumb = [
             ['label' => 'category', 'url' => $this->generateUrl('app_category_index')],
             ['label' => $product->getCategory()->getLabel(),
@@ -43,9 +41,9 @@ class ProductController extends AbstractController
         ];
 
         return $this->render('product/show.html.twig', [
-            'product' => $product,
+            'product'       => $product,
             'productFields' => $productRepository->getProductFields($product),
-            'breadcrumb' => $breadcrumb
+            'breadcrumb'    => $breadcrumb,
         ]);
     }
 }
