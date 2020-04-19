@@ -2,8 +2,8 @@ import React from "react";
 import {render} from "react-dom";
 import {Provider} from "react-redux";
 import {createStore} from "redux";
-import reducers from "./Category/reducers/index";
-import ProductFieldsContainer from "./Category/containers/ProductField/ProductFieldsContainer";
+import reducers from "./Category/reducers";
+import ProductFieldsComponent from "./Category/components/ProductField/ProductFieldsComponent";
 
 const productElement = document.querySelector('#products-component');
 if (productElement) {
@@ -19,7 +19,7 @@ if (productElement) {
         },
         productFields: {
             allProductFields: productFieldsElement ? JSON.parse(productFieldsElement.dataset.productFields) : null,
-            filters:          {"color-1": "red"},
+            filters:          {},
         },
     };
 
@@ -28,7 +28,7 @@ if (productElement) {
     // render(<Provider store={store}><ProductsComponent/></Provider>, productElement);
 
     if (data.productFields.allProductFields.length > 0) {
-        render(<Provider store={store}><ProductFieldsContainer/></Provider>, productFieldsElement);
+        render(<Provider store={store}><ProductFieldsComponent/></Provider>, productFieldsElement);
     }
 }
 

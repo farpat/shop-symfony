@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {connect} from "react-redux";
 
 class NumberFieldComponent extends React.Component {
     constructor(props) {
@@ -51,4 +52,19 @@ NumberFieldComponent.propTypes = {
     updateFilter: PropTypes.func.isRequired
 };
 
-export default NumberFieldComponent;
+
+const mapStateToProps = (state) => {
+    return {
+        filters: state.productFields.filters,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateFilter: (key, value) => {
+            dispatch({type: 'UPDATE_FILTER', key, value});
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NumberFieldComponent);

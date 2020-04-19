@@ -1,8 +1,9 @@
 import React from "react";
 import {hot} from "react-hot-loader/root";
 import PropTypes from "prop-types";
-import NumberFieldContainer from "../../containers/ProductField/NumberFieldContainer";
-import StringFieldContainer from "../../containers/ProductField/StringFieldContainer";
+import {connect} from "react-redux";
+import NumberFieldComponent from "./NumberFieldComponent";
+import StringFieldComponent from "./StringFieldComponent";
 
 class ProductFieldsComponent extends React.Component {
     constructor(props) {
@@ -15,9 +16,9 @@ class ProductFieldsComponent extends React.Component {
                 {
                     this.props.productFields.map(productField => {
                         if (productField.type === 'number') {
-                            return <NumberFieldContainer key={productField.key} productField={productField}/>
+                            return <NumberFieldComponent key={productField.key} productField={productField}/>
                         } else if (productField.type === 'string') {
-                            return <StringFieldContainer key={productField.key} productField={productField}/>
+                            return <StringFieldComponent key={productField.key} productField={productField}/>
                         }
                     })
                 }
@@ -34,4 +35,15 @@ ProductFieldsComponent.propTypes = {
     }))
 };
 
-export default hot(ProductFieldsComponent);
+
+const mapStateToProps = (state) => {
+    return {
+        productFields: state.productFields.allProductFields
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {}
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(hot(ProductFieldsComponent));

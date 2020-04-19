@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {connect} from "react-redux";
 
 class StringFieldComponent extends React.Component {
     constructor(props) {
@@ -39,4 +40,18 @@ StringFieldComponent.propTypes = {
     updateFilter: PropTypes.func.isRequired
 };
 
-export default StringFieldComponent;
+const mapStateToProps = (state) => {
+    return {
+        filters: state.productFields.filters,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateFilter: (key, value) => {
+            dispatch({type: 'UPDATE_FILTER', key, value});
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(StringFieldComponent);
