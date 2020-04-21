@@ -11,7 +11,7 @@
                 <a href="{{ path('app_category_index') }}"
                    class="nav-link {{ active('app_category_index') }}">{% trans %}All categories{% endtrans %}</a>
             </li>
-            {{ navigation() }}
+            {{ NavigationService.generateHtml() | raw }}
         </ul>
         <ul class="navbar-nav">
             <li class="nav-item form-search" id="form-search">

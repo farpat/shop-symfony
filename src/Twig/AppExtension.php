@@ -39,13 +39,7 @@ class AppExtension extends AbstractExtension
             new TwigFunction('get_asset', [$this, 'getAsset']),
             new TwigFunction('breadcrumb', [$this, 'getBreadcrumb'], ['is_safe' => ['html']]),
             new TwigFunction('active', [$this, 'isActive']),
-            new TwigFunction('navigation', [$this, 'getNavigation'], ['is_safe' => ['html']]),
         ];
-    }
-
-    public function getNavigation (): string
-    {
-        return $this->navigationService->generateHtml();
     }
 
     public function isActive (string $route): string

@@ -41,7 +41,7 @@ class ProductNormalizer implements NormalizerInterface, CacheableSupportsMethodI
             'label'                          => $object->getLabel(),
             'slug'                           => $object->getSlug(),
             'excerpt'                        => $object->getExcerpt(),
-            'min_unit_price_excluding_taxes' => $object->getMinUnitPriceIncludingTaxes(),
+            'min_unit_price_including_taxes' => $object->getMinUnitPriceIncludingTaxes(),
             'image'                          => $object->getMainImage() ? [
                 'url_thumbnail' => $object->getMainImage()->getUrlThumbnail(),
                 'alt_thumbnail' => $object->getMainImage()->getAltThumbnail()

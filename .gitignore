@@ -2,6 +2,7 @@
 .env
 /node_modules/
 /public/assets
+/assets/js-lang
 
 ###> symfony/framework-bundle ###
 /.env.local

@@ -8,7 +8,7 @@ import ProductsComponent from "./Category/components/Product/ProductsComponent";
 
 const productElement = document.querySelector('#products-component');
 if (productElement) {
-    const {products: productsInString, currentPage, perPage} = productElement.dataset;
+    const {products: productsInString, currentPage, perPage, currency} = productElement.dataset;
     const productFieldsElement = document.querySelector('#product-fields-component');
 
     const data = {
@@ -16,6 +16,7 @@ if (productElement) {
             allProducts:      JSON.parse(productsInString),
             allProductFields: productFieldsElement ? JSON.parse(productFieldsElement.dataset.productFields) : null,
             perPage:          Number.parseInt(perPage),
+            currency,
             currentProducts:  [],
             currentPage:      Number.parseInt(currentPage),
             currentFilters:   {},

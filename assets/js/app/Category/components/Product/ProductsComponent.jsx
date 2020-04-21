@@ -41,12 +41,14 @@ class ProductsComponent extends React.Component {
 
 ProductsComponent.propTypes = {
     products:    PropTypes.arrayOf(PropTypes.shape({
-        id:      PropTypes.number.isRequired,
-        url:     PropTypes.string.isRequired,
-        excerpt: PropTypes.string,
-        label:   PropTypes.string.isRequired,
-        image:   PropTypes.shape({
-            url_thumbnail: PropTypes.string.isRequired
+        id:                             PropTypes.number.isRequired,
+        url:                            PropTypes.string.isRequired,
+        excerpt:                        PropTypes.string,
+        label:                          PropTypes.string.isRequired,
+        min_unit_price_including_taxes: PropTypes.number.isRequired,
+        image:                          PropTypes.shape({
+            url_thumbnail: PropTypes.string.isRequired,
+            alt_thumbnail: PropTypes.string,
         })
     })),
     currentPage: PropTypes.number.isRequired,
