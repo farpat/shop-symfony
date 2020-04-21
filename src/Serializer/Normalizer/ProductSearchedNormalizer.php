@@ -4,9 +4,10 @@ namespace App\Serializer\Normalizer;
 
 use App\Entity\Product;
 use App\Services\Shop\ProductService;
+use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class ProductSearchedNormalizer implements NormalizerInterface
+class ProductSearchedNormalizer implements NormalizerInterface, CacheableSupportsMethodInterface
 {
     private ProductService $productService;
 
@@ -36,5 +37,10 @@ class ProductSearchedNormalizer implements NormalizerInterface
     public function supportsNormalization ($data, $format = null): bool
     {
         return $data instanceof Product && $format === 'search';
+    }
+
+    public function hasCacheableSupportsMethod (): bool
+    {
+        return true;
     }
 }

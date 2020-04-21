@@ -4,9 +4,10 @@ namespace App\Serializer\Normalizer;
 
 use App\Entity\Product;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class ProductNormalizer implements NormalizerInterface
+class ProductNormalizer implements NormalizerInterface, CacheableSupportsMethodInterface
 {
 
     /**
@@ -29,13 +30,6 @@ class ProductNormalizer implements NormalizerInterface
      */
     public function normalize ($object, $format = null, array $context = []): array
     {
-        $normalizedImage = $object->getMainImage() ?
-            [
-                'url_thumbnail' => $object->getMainImage()->getUrlThumbnail(),
-                'alt_thumbnail' => $object->getMainImage()->getAltThumbnail()
-            ] :
-            null;
-
         return [
             'id'                             => $object->getId(),
             'url'                            => $this->urlGenerator->generate('app_product_show', [
@@ -48,12 +42,21 @@ class ProductNormalizer implements NormalizerInterface
             'slug'                           => $object->getSlug(),
             'excerpt'                        => $object->getExcerpt(),
             'min_unit_price_excluding_taxes' => $object->getMinUnitPriceIncludingTaxes(),
-            'image'                          => $normalizedImage,
+            'image'                          => $object->getMainImage() ? [
+                'url_thumbnail' => $object->getMainImage()->getUrlThumbnail(),
+                'alt_thumbnail' => $object->getMainImage()->getAltThumbnail()
+            ] : null,
+            'references'                     => array_map(fn($productReference) => ['filled_product_fields' => $productReference->getFilledProductFields()], $object->getProductReferences()->toArray())
         ];
     }
 
     public function supportsNormalization ($data, $format = null): bool
     {
         return $data instanceof Product && $format === 'json';
+    }
+
+    public function hasCacheableSupportsMethod (): bool
+    {
+        return true;
     }
 }

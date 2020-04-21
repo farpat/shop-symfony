@@ -38,7 +38,7 @@ ProductFieldsComponent.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        productFields: state.productFields.allProductFields
+        productFields: state.products.allProductFields
     }
 };
 

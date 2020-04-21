@@ -8,8 +8,8 @@ class NumberFieldComponent extends React.Component {
         this.changeValue = this.changeValue.bind(this);
     }
 
-    changeValue(event) {
-        this.props.updateFilter(this.props.productField.key, event.value);
+    changeValue(suffix, event) {
+        this.props.updateFilter(this.getFilterKey(suffix), event.target.value);
     }
 
     getValue(key) {
@@ -27,13 +27,13 @@ class NumberFieldComponent extends React.Component {
                 <div className="row no-gutters">
                     <div className="col">
                         <input name={this.getFilterKey('min')} value={this.getValue(this.getFilterKey('min'))}
-                               onChange={this.changeValue}
+                               onChange={this.changeValue.bind(this, 'min')}
                                className="form-control"
                                placeholder="min" type="number"/>
                     </div>
                     <div className="col">
                         <input name={this.getFilterKey('max')} value={this.getValue(this.getFilterKey('max'))}
-                               onChange={this.changeValue}
+                               onChange={this.changeValue.bind(this, 'max')}
                                className="form-control"
                                placeholder="max" type="number"/>
                     </div>
@@ -55,7 +55,7 @@ NumberFieldComponent.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        filters: state.productFields.filters,
+        filters: state.products.currentFilters,
     };
 };
 

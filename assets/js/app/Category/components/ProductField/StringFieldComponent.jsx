@@ -18,15 +18,16 @@ class StringFieldComponent extends React.Component {
 
     render() {
         return (
-            <div className="form-group">
-                <p className="mb-1">{this.props.productField.label}</p>
-                <input name={this.props.productField.key} type="text"
-                       value={this.getValue(this.props.productField.key)}
-                       onChange={this.changeValue}
-                       placeholder={this.props.productField.label}
-                       className="form-control"/>
-            </div>
-        );
+        <div className="form-group">
+            <p className="mb-1">{this.props.productField.label}</p>
+            <input name={this.props.productField.key} type="text"
+                   value={this.getValue(this.props.productField.key)}
+                   onChange={this.changeValue}
+                   placeholder={this.props.productField.label}
+                   className="form-control"/>
+        </div>
+    )
+        ;
     }
 }
 
@@ -42,7 +43,7 @@ StringFieldComponent.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        filters: state.productFields.filters,
+        filters: state.products.currentFilters,
     };
 };
 
