@@ -15,8 +15,8 @@ class ProductComponent extends React.Component {
                     {
                         this.props.product.image &&
                         <a href={this.props.product.url}>
-                            <img src={this.props.product.image.url_thumbnail}
-                                 alt={this.props.product.image.alt_thumbnail}
+                            <img src={this.props.product.image.urlThumbnail}
+                                 alt={this.props.product.image.altThumbnail}
                                  className="card-img-top"/>
                         </a>
                     }
@@ -26,7 +26,7 @@ class ProductComponent extends React.Component {
                             {this.props.product.excerpt}
 
                             <p className="mt-2 m-0">
-                                From <span className="badge badge-secondary">{Str.toLocaleCurrency(this.props.product.min_unit_price_including_taxes, this.props.currency)}</span>
+                                From <span className="badge badge-secondary">{Str.toLocaleCurrency(this.props.product.minUnitPriceIncludingTaxes, this.props.currency)}</span>
                             </p>
                         </div>
                     </div>
@@ -42,10 +42,10 @@ ProductComponent.propTypes = {
         url:                            PropTypes.string.isRequired,
         excerpt:                        PropTypes.string,
         label:                          PropTypes.string.isRequired,
-        min_unit_price_including_taxes: PropTypes.number.isRequired,
+        minUnitPriceIncludingTaxes: PropTypes.number.isRequired,
         image:                          PropTypes.shape({
-            url_thumbnail: PropTypes.string.isRequired,
-            alt_thumbnail: PropTypes.string,
+            urlThumbnail: PropTypes.string.isRequired,
+            altThumbnail: PropTypes.string,
         })
     }),
     currency: PropTypes.string.isRequired

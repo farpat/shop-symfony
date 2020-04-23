@@ -61,9 +61,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updateFilter: (key, value) => {
-            dispatch({type: 'UPDATE_FILTER', key, value});
-        },
+        updateFilter: (key, value) => dispatch({type: 'UPDATE_FILTER', key, value}),
     };
 };
 

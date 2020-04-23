@@ -19,12 +19,11 @@ class ProductsNavigation extends React.Component {
                            className="page-link">&larr; Previous</a>
                     </li>
                     {
-                        pages.map(page => {
-                            return <li className={this.getItemClass(page)} key={page}>
+                        pages.map(page =>
+                            <li className={this.getItemClass(page)} key={page}>
                                 <a href="#" onClick={this.goTo.bind(this, page)}
                                    className="page-link">{page}</a>
-                            </li>
-                        })
+                            </li>)
                     }
                     <li className={this.getNextItemClass()}>
                         <a href="#" onClick={this.goTo.bind(this, this.props.currentPage + 1)}
@@ -91,7 +90,7 @@ ProductsNavigation.propTypes = {
         excerpt: PropTypes.string,
         label:   PropTypes.string.isRequired,
         image:   PropTypes.shape({
-            url_thumbnail: PropTypes.string.isRequired
+            urlThumbnail: PropTypes.string.isRequired
         })
     })),
     perPage:     PropTypes.number.isRequired,
@@ -110,9 +109,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        goTo: (page) => {
-            return dispatch({type: 'UPDATE_PAGE', page});
-        }
+        goTo: (page) => dispatch({type: 'UPDATE_PAGE', page})
     }
 };
 

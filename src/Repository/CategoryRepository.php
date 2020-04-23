@@ -36,9 +36,7 @@ class CategoryRepository extends ServiceEntityRepository
             ->select('c', 'i')
             ->leftJoin('c.image', 'i')
             ->where('c.id IN (:ids)')
-            ->setParameters([
-                'ids' => $categoryIdsInHomeParameter->getValue()
-            ])
+            ->setParameter('ids', $categoryIdsInHomeParameter->getValue())
             ->getQuery()
             ->getResult();
     }
@@ -50,9 +48,7 @@ class CategoryRepository extends ServiceEntityRepository
             ->leftJoin('c.image', 'i')
             ->where('c.label LIKE :label')
             ->setMaxResults(2)
-            ->setParameters([
-                'label' => "%$term%"
-            ])
+            ->setParameter('label', "%$term%")
             ->getQuery()
             ->getResult();
     }

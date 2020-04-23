@@ -4,12 +4,22 @@
     {{ product.label }}
 {% endblock %}
 
+{% block script 'product-show' %}
+
 {% block body %}
     <main class="container">
         {{ breadcrumb(breadcrumb) }}
 
         <section class="header-product-show">
             <h1>{{ product.label }}</h1>
+        </section>
+
+        <section id="product-show">
+            <div id="product-component" data-product-references="{{ productReferencesInJson }}" data-currency="{{ parameter('billing', 'currency').code }}"></div>
+
+            <section class="mt-2 text-justify">
+                {{ product.description | raw }}
+            </section>
         </section>
 
     </main>

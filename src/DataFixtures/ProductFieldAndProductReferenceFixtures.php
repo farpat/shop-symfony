@@ -2,7 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\{Category, Image, Product, ProductField, ProductReference, Tax};
+use App\Entity\{Category, Product, ProductField, ProductReference, Tax};
 use App\Repository\CategoryRepository;
 use App\Services\DataFixtures\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -32,7 +32,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
         $categoriesFirstLevel = $categoryRepository
             ->createQueryBuilder('c')
             ->leftJoin('c.products', 'p')
-            ->where('c.is_last = 0')
+            ->where('c.isLast = 0')
             ->getQuery()
             ->getResult();
 
@@ -57,31 +57,6 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
 
         $manager->flush();
     }
-
-    /**
-     * @param Product $product
-     *
-     * @return float[]
-     */
-    private function computePricesOfProduct (Product $product)
-    {
-        $unitPriceExcludingTaxes = pow(10, random_int(1, 5));
-
-        $totalTaxes = array_reduce($product->getTaxes()->toArray(), function ($acc, Tax $tax) use ($unitPriceExcludingTaxes) {
-            if ($tax->getType() === Tax::UNITY_TYPE) {
-                $acc += $tax->getValue();
-            } elseif ($tax->getType() === Tax::PERCENTAGE_TYPE) {
-                $acc += $unitPriceExcludingTaxes * ($tax->getValue() / 100);
-            }
-
-            return $acc;
-        }, 0);
-
-        $unitPriceIncludingTaxes = $totalTaxes + $unitPriceExcludingTaxes;
-
-        return [$unitPriceExcludingTaxes, $unitPriceIncludingTaxes];
-    }
-
 
     /**
      * @param Category $category
@@ -143,6 +118,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
 
         for ($i = 0; $i < $productReferencesCount; $i++) {
             $filledProductfields = [];
+            $labelsArray = [];
 
             if (!empty($productFields)) {
                 foreach ($productFields as $productField) {
@@ -153,12 +129,12 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
                     $value = $values[array_rand($values)];
 
                     $filledProductfields[$productField->getId()] = $value;
-                    $labelsArray[] = $productField->getLabel() . ' - ' . $value;
+                    $labelsArray[] = $productField->getLabel() . ': ' . $value;
                 }
             }
 
             $productReference = (new ProductReference)
-                ->setLabel($product->getLabel())
+                ->setLabel($product->getLabel() . (!empty($labelsArray) ? ' => ' . implode(' | ', $labelsArray) : ''))
                 ->setProduct($product)
                 ->setUnitPriceExcludingTaxes($unitPriceExcludingTaxes)
                 ->setUnitPriceIncludingTaxes($unitPriceIncludingTaxes)
@@ -171,6 +147,30 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
         }
 
         return $productReferences;
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return float[]
+     */
+    private function computePricesOfProduct (Product $product)
+    {
+        $unitPriceExcludingTaxes = pow(10, random_int(1, 5));
+
+        $totalTaxes = array_reduce($product->getTaxes()->toArray(), function ($acc, Tax $tax) use ($unitPriceExcludingTaxes) {
+            if ($tax->getType() === Tax::UNITY_TYPE) {
+                $acc += $tax->getValue();
+            } elseif ($tax->getType() === Tax::PERCENTAGE_TYPE) {
+                $acc += $unitPriceExcludingTaxes * ($tax->getValue() / 100);
+            }
+
+            return $acc;
+        }, 0);
+
+        $unitPriceIncludingTaxes = $totalTaxes + $unitPriceExcludingTaxes;
+
+        return [$unitPriceExcludingTaxes, $unitPriceIncludingTaxes];
     }
 
     /**

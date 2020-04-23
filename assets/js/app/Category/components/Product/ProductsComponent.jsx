@@ -24,10 +24,7 @@ class ProductsComponent extends React.Component {
                 <ProductsNavigation/>
                 <div className="row">
                     {
-                        productsToDisplay.length > 0 &&
-                        productsToDisplay.map(product => {
-                            return <ProductComponent key={product.id} product={product}/>
-                        })
+                        productsToDisplay.map(product => <ProductComponent key={product.id} product={product}/>)
                     }
                     {
                         productsToDisplay.length === 0 &&
@@ -41,14 +38,14 @@ class ProductsComponent extends React.Component {
 
 ProductsComponent.propTypes = {
     products:    PropTypes.arrayOf(PropTypes.shape({
-        id:                             PropTypes.number.isRequired,
-        url:                            PropTypes.string.isRequired,
-        excerpt:                        PropTypes.string,
-        label:                          PropTypes.string.isRequired,
-        min_unit_price_including_taxes: PropTypes.number.isRequired,
-        image:                          PropTypes.shape({
-            url_thumbnail: PropTypes.string.isRequired,
-            alt_thumbnail: PropTypes.string,
+        id:                         PropTypes.number.isRequired,
+        url:                        PropTypes.string.isRequired,
+        excerpt:                    PropTypes.string,
+        label:                      PropTypes.string.isRequired,
+        minUnitPriceIncludingTaxes: PropTypes.number.isRequired,
+        image:                      PropTypes.shape({
+            urlThumbnail: PropTypes.string.isRequired,
+            altThumbnail: PropTypes.string,
         })
     })),
     currentPage: PropTypes.number.isRequired,

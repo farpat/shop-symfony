@@ -30,7 +30,7 @@ class ProductSearchedNormalizer implements NormalizerInterface, CacheableSupport
             'label'                          => $object->getLabel(),
             'image'                          => $object->getMainImage() ? $object->getMainImage()->getUrlThumbnail() : null,
             'url'                            => $this->productService->getShowUrl($object),
-            'min_unit_price_including_taxes' => $object->getMinUnitPriceIncludingTaxes()
+            'minUnitPriceIncludingTaxes' => $object->getMinUnitPriceIncludingTaxes()
         ];
     }
 

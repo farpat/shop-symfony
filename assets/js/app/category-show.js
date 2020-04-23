@@ -6,9 +6,9 @@ import reducers from "./Category/reducers";
 import ProductFieldsComponent from "./Category/components/ProductField/ProductFieldsComponent";
 import ProductsComponent from "./Category/components/Product/ProductsComponent";
 
-const productElement = document.querySelector('#products-component');
-if (productElement) {
-    const {products: productsInString, currentPage, perPage, currency} = productElement.dataset;
+const productsElement = document.querySelector('#products-component');
+if (productsElement) {
+    const {products: productsInString, currentPage, perPage, currency} = productsElement.dataset;
     const productFieldsElement = document.querySelector('#product-fields-component');
 
     const data = {
@@ -25,7 +25,7 @@ if (productElement) {
 
     const store = createStore(reducers, data);
 
-    render(<Provider store={store}><ProductsComponent/></Provider>, productElement);
+    render(<Provider store={store}><ProductsComponent/></Provider>, productsElement);
 
     if (data.products.allProductFields.length > 0) {
         render(<Provider store={store}><ProductFieldsComponent/></Provider>, productFieldsElement);

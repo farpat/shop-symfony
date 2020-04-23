@@ -36,9 +36,7 @@ class ProductRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->leftJoin('p.mainImage', 'i')
             ->where('p.id IN (:ids)')
-            ->setParameters([
-                'ids' => $productIdsInHomepageParameter->getValue()
-            ])
+            ->setParameter('ids', $productIdsInHomepageParameter->getValue())
             ->getQuery()
             ->getResult();
     }
@@ -68,7 +66,7 @@ class ProductRepository extends ServiceEntityRepository
      *
      * @return ProductField[]
      */
-    public function getProductFields (Product $product): array
+    public function getProductReferences (Product $product): array
     {
         if ($product->getProductReferences()->isEmpty()) {
             return [];
@@ -95,9 +93,7 @@ class ProductRepository extends ServiceEntityRepository
             ->leftJoin('p.productReferences', 'pr')
             ->leftJoin('pr.images', 'i')
             ->where('p.id = :id')
-            ->setParameters([
-                'id' => $productId
-            ])
+            ->setParameter('id', $productId)
             ->getQuery()
             ->getOneOrNullResult();
     }

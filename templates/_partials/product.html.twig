@@ -4,7 +4,7 @@
     categoryId: product.category.id,
     categorySlug: product.category.slug,
 }) %}
-<article class="product">
+<article class="card product">
     {% if product.mainImage %}
         <a href="{{ url }}">
             <img src="{{ product.mainImage.urlThumbnail }}" class="card-img-top" alt="{{ product.label }}">
