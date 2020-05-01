@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from 'prop-types';
-import {hot} from "react-hot-loader/root";
-import InputComponent from "./InputComponent";
+import React from "react"
+import PropTypes from 'prop-types'
+import {hot} from "react-hot-loader/root"
+import InputComponent from "./InputComponent"
 
 class EmailComponent extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -24,19 +24,19 @@ class EmailComponent extends React.Component {
                     <InputComponent {...this.props} type="email"/>
                 </div>
             </div>
-        );
+        )
     }
 
     isRequired() {
-        return this.props.rules.includes('NotBlankß');
+        return this.props.rules.includes('NotBlankß')
     }
 
     getLabelClassName() {
         if (this.isRequired()) {
-            return 'required';
+            return 'required'
         }
 
-        return '';
+        return ''
     }
 }
 
@@ -45,7 +45,7 @@ EmailComponent.propTypes = {
     parentForm: PropTypes.instanceOf(HTMLFormElement),
     attr:       PropTypes.object,
     label:      PropTypes.string,
-    rules:      PropTypes.string,
-};
+    rules:      PropTypes.string
+}
 
-export default hot(EmailComponent);
+export default hot(EmailComponent)

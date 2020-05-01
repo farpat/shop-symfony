@@ -1,19 +1,19 @@
-require('dotenv').config();
-const webpack = require('webpack');
-const config = require('./config');
-const path = require('path');
-const isDebug = process.env.NODE_ENV === 'development';
+require('dotenv').config()
+const webpack = require('webpack')
+const config = require('./config')
+const path = require('path')
+const isDebug = process.env.NODE_ENV === 'development'
 
-const terserPlugin = require('terser-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const Chokidar = require('chokidar');
+const terserPlugin = require('terser-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const Chokidar = require('chokidar')
 
 let configWebpack = {
     devServer:    {
         before(app, server) {
             Chokidar.watch(config.refresh).on('change', function () {
-                server.sockWrite(server.sockets, 'content-changed');
+                server.sockWrite(server.sockets, 'content-changed')
             })
         },
         headers:        {
@@ -29,7 +29,7 @@ let configWebpack = {
         stats:          {
             colors: true,
             chunks: false
-        },
+        }
     },
     mode:         isDebug ? 'development' : 'production',
     devtool:      isDebug ? 'cheap-module-source-map' : false,
@@ -47,7 +47,7 @@ let configWebpack = {
     output:       {
         path:       path.resolve('./public/assets'),
         filename:   isDebug ? '[name].js' : '[name].[chunkhash:4].js',
-        publicPath: `${isDebug ? ('http://localhost:' + process.env.WEBPACK_DEV_SERVER_PORT) : ''}/assets/`,
+        publicPath: `${isDebug ? ('http://localhost:' + process.env.WEBPACK_DEV_SERVER_PORT) : ''}/assets/`
     },
     resolve:      {
         extensions: ['.js', '.jsx', '.json'],
@@ -69,7 +69,7 @@ let configWebpack = {
                     {loader: 'css-loader', options: {sourceMap: isDebug}},
                     {loader: 'postcss-loader', options: {sourceMap: isDebug}},
                     {loader: 'sass-loader', options: {sourceMap: isDebug}}
-                ],
+                ]
             },
             //css
             {
@@ -78,7 +78,7 @@ let configWebpack = {
                     isDebug ? {loader: 'style-loader'} : MiniCssExtractPlugin.loader,
                     {loader: 'css-loader', options: {sourceMap: isDebug}},
                     {loader: 'postcss-loader', options: {sourceMap: isDebug}}
-                ],
+                ]
             },
             //fonts
             {
@@ -99,7 +99,7 @@ let configWebpack = {
                         options: {enabled: !isDebug}
                     }
                 ]
-            },
+            }
         ]
     },
     plugins:      [
@@ -110,19 +110,19 @@ let configWebpack = {
 
         new MiniCssExtractPlugin({
             filename: '[name].[hash:4].css',
-            disable:  isDebug,
-        }),
-    ],
-};
+            disable:  isDebug
+        })
+    ]
+}
 
 if (!isDebug) {
-    const WebpackBundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-    const ManifestPlugin = require('webpack-manifest-plugin');
+    const WebpackBundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+    const ManifestPlugin = require('webpack-manifest-plugin')
 
     configWebpack.plugins.push(
         new WebpackBundleAnalyzerPlugin({
             analyzerMode: 'static',
-            openAnalyzer: false,
+            openAnalyzer: false
         }),
 
         new ManifestPlugin(),
@@ -132,7 +132,7 @@ if (!isDebug) {
                 NODE_ENV: '"production"'
             }
         })
-    );
+    )
 }
 
-module.exports = configWebpack;
+module.exports = configWebpack

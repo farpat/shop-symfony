@@ -1,11 +1,11 @@
-import React from "react";
-import {hot} from "react-hot-loader/root";
-import PropTypes from 'prop-types';
-import InputComponent from "./InputComponent";
+import React from "react"
+import {hot} from "react-hot-loader/root"
+import PropTypes from 'prop-types'
+import InputComponent from "./InputComponent"
 
 class TextComponent extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -18,19 +18,19 @@ class TextComponent extends React.Component {
 
                 <InputComponent {...this.props} type="text"/>
             </div>
-        );
+        )
     }
 
     isRequired() {
-        return this.props.rules.includes('NotBlankß');
+        return this.props.rules.includes('NotBlankß')
     }
 
     getClassName() {
         if (this.isRequired()) {
-            return 'required';
+            return 'required'
         }
 
-        return '';
+        return ''
     }
 }
 
@@ -39,7 +39,7 @@ TextComponent.propTypes = {
     parentForm: PropTypes.instanceOf(HTMLFormElement).isRequired,
     attr:       PropTypes.object,
     label:      PropTypes.string,
-    rules:      PropTypes.string,
-};
+    rules:      PropTypes.string
+}
 
-export default hot(TextComponent);
+export default hot(TextComponent)

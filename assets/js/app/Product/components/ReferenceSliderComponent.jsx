@@ -1,45 +1,45 @@
-import React from "react";
-import PropTypes from 'prop-types';
-import {connect} from "react-redux";
+import React from "react"
+import PropTypes from 'prop-types'
+import {connect} from "react-redux"
 
 class ReferenceSliderComponent extends React.Component {
     constructor(props) {
-        super(props);
-        this.getTarget = this.getTarget.bind(this);
+        super(props)
+        this.getTarget = this.getTarget.bind(this)
     }
 
     getId() {
-        return 'carousel-reference-' + this.props.currentReference.id;
+        return 'carousel-reference-' + this.props.currentReference.id
     }
 
     getItemClass(index) {
-        let className = 'carousel-item';
+        let className = 'carousel-item'
 
         if (index === this.getActivatedIndex()) {
-            className += ' active';
+            className += ' active'
         }
-        return className;
+        return className
     }
 
     getIndicatorClass(index) {
         if (index === this.getActivatedIndex()) {
-            return 'active';
+            return 'active'
         }
-        return '';
+        return ''
     }
 
     getActivatedIndex() {
-        return this.props.activatedIndexByReference[this.props.currentReference.id] || 0;
+        return this.props.activatedIndexByReference[this.props.currentReference.id] || 0
     }
 
     getTarget() {
-        return '#' + this.getId();
+        return '#' + this.getId()
     }
 
     componentDidMount() {
         $(this.getTarget).on('slid.bs.carousel', (e) => {
-            this.props.changeActivatedIndex(this.props.currentReference, e.to);
-        });
+            this.props.changeActivatedIndex(this.props.currentReference, e.to)
+        })
     }
 
 
@@ -85,7 +85,7 @@ class ReferenceSliderComponent extends React.Component {
                     </ol>
                 }
             </div>
-        );
+        )
     }
 }
 
@@ -98,18 +98,18 @@ ReferenceSliderComponent.propTypes = {
             url:          PropTypes.string.isRequired,
             alt:          PropTypes.string.isRequired,
             urlThumbnail: PropTypes.string.isRequired,
-            altThumbnail: PropTypes.string.isRequired,
+            altThumbnail: PropTypes.string.isRequired
         })),
         unitPriceIncludingTaxes: PropTypes.number.isRequired
     }),
     activatedIndexByReference: PropTypes.object.isRequired,
 
-    changeActivatedIndex: PropTypes.func.isRequired,
-};
+    changeActivatedIndex: PropTypes.func.isRequired
+}
 
 const mapStateToProps = (state) => {
-    return {};
-};
+    return {}
+}
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -117,8 +117,8 @@ const mapDispatchToProps = (dispatch) => {
             type: 'UPDATE_ACTIVATED_SLIDER_INDEX_BY_REFERENCE',
             reference,
             index
-        }),
-    };
-};
+        })
+    }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReferenceSliderComponent)

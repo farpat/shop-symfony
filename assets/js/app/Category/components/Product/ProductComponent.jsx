@@ -1,11 +1,11 @@
-import React from "react";
-import {connect} from "react-redux";
-import PropTypes from "prop-types";
-import Str from "../../../../src/String/Str";
+import React from "react"
+import {connect} from "react-redux"
+import PropTypes from "prop-types"
+import Str from "../../../../src/String/Str"
 
 class ProductComponent extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -26,39 +26,40 @@ class ProductComponent extends React.Component {
                             {this.props.product.excerpt}
 
                             <p className="mt-2 m-0">
-                                From <span className="badge badge-secondary">{Str.toLocaleCurrency(this.props.product.minUnitPriceIncludingTaxes, this.props.currency)}</span>
+                                From <span
+                                className="badge badge-secondary">{Str.toLocaleCurrency(this.props.product.minUnitPriceIncludingTaxes, this.props.currency)}</span>
                             </p>
                         </div>
                     </div>
                 </article>
             </div>
-        );
+        )
     }
 }
 
 ProductComponent.propTypes = {
     product:  PropTypes.shape({
-        id:                             PropTypes.number.isRequired,
-        url:                            PropTypes.string.isRequired,
-        excerpt:                        PropTypes.string,
-        label:                          PropTypes.string.isRequired,
+        id:                         PropTypes.number.isRequired,
+        url:                        PropTypes.string.isRequired,
+        excerpt:                    PropTypes.string,
+        label:                      PropTypes.string.isRequired,
         minUnitPriceIncludingTaxes: PropTypes.number.isRequired,
-        image:                          PropTypes.shape({
+        image:                      PropTypes.shape({
             urlThumbnail: PropTypes.string.isRequired,
-            altThumbnail: PropTypes.string,
+            altThumbnail: PropTypes.string
         })
     }),
     currency: PropTypes.string.isRequired
-};
+}
 
 const mapStateToProps = (state) => {
     return {
-        currency: state.products.currency
+        currency: state.currency
     }
-};
+}
 
 const mapDispatchToProps = (dispatch) => {
     return {}
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductComponent)

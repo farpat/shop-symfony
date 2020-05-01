@@ -1,9 +1,9 @@
 module.exports = {
-    entry: {
+    entry:   {
         app: [
             './assets/sass/app.scss',
-            './assets/js/app.js',
+            './assets/js/app.js'
         ]
     },
-    refresh: ['templates/**/*.twig'],
-};
+    refresh: ['templates/**/*.twig']
+}

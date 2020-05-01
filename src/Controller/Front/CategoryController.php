@@ -48,8 +48,9 @@ class CategoryController extends AbstractController
      */
     public function show (Category $category, string $categorySlug, Request $request, CategoryRepository $categoryRepository, SerializerInterface $serializer)
     {
-        $currentPage = $request->query->getInt('page');
-        if ($currentPage === 1 || $categorySlug !== $category->getSlug()) {
+        $currentPage = $request->query->get('page');
+
+        if (($currentPage !== null && filter_var($currentPage, FILTER_VALIDATE_INT) === false) || $currentPage === '1' || $categorySlug !== $category->getSlug()) {
             return $this->redirect($this->generateUrl('app_category_show', [
                 'categoryId'   => $category->getId(),
                 'categorySlug' => $category->getSlug(),
@@ -63,7 +64,7 @@ class CategoryController extends AbstractController
 
         return $this->render('category/show.html.twig', [
             'category'            => $category,
-            'currentPage'         => $currentPage === 0 ? 1 : $currentPage,
+            'currentPage'         => $currentPage > 0 ? $currentPage : 1,
             'perPage'             => Product::PER_PAGE,
             'productFieldsInJson' => $serializer->serialize($category->getProductFields(), 'json'),
             'productsInJson'      => $serializer->serialize($categoryRepository->getProducts($category), 'json'),

@@ -1,11 +1,11 @@
-import React from "react";
-import {connect} from "react-redux";
-import PropTypes from 'prop-types';
-import ReferenceNavItemComponent from "./ReferenceNavItemComponent";
+import React from "react"
+import {connect} from "react-redux"
+import PropTypes from 'prop-types'
+import ReferenceNavItemComponent from "./ReferenceNavItemComponent"
 
 class ReferenceNavComponent extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -17,24 +17,24 @@ class ReferenceNavComponent extends React.Component {
                     )
                 }
             </nav>
-        );
+        )
     }
 }
 
 ReferenceNavComponent.propTypes = {
     references: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired,
-    })),
-};
+        id: PropTypes.number.isRequired
+    }))
+}
 
 const mapStateToProps = (state) => {
     return {
-        references: state.product.productReferences
-    };
-};
+        references: state.productReducer.productReferences
+    }
+}
 
 const mapDispatchToProps = (dispatch) => {
-    return {};
-};
+    return {}
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReferenceNavComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ReferenceNavComponent)

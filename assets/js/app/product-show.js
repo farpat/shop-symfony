@@ -1,25 +1,22 @@
-import React from "react";
-import {render} from "react-dom";
-import {Provider} from "react-redux";
-import {createStore} from "redux";
-import reducers from "./Product/reducers";
-import ProductComponent from "./Product/components/ProductComponent";
+import React from "react"
+import {render} from "react-dom"
+import {Provider} from "react-redux"
+import {combineReducers, createStore} from "redux"
+import ProductComponent from "./Product/components/ProductComponent"
+import productService from "./Product/ProductService"
+import productReducer from "./Product/reducer/productReducer"
+import cartReducer from "./Cart/reducer/cartReducer"
 
-const productElement = document.querySelector('#product-component');
-const {productReferences: productReferencesInString, currency} = productElement.dataset;
-const productReferences = JSON.parse(productReferencesInString);
-const currentReference = productReferences[0];
+const productElement = document.querySelector('#product-component')
 
-let activatedSliderIndexByReference = {};
-productReferences.map(reference => activatedSliderIndexByReference[reference.id] = 0);
+productService.loadData(productElement)
 
-const data = {
-    product: {
-        productReferences,
-        currentReference,
-        currency,
-        activatedSliderIndexByReference,
-    }
-};
-
-render(<Provider store={createStore(reducers, data)}><ProductComponent/></Provider>, productElement);
+render(
+    <Provider store={createStore(combineReducers({productReducer, cartReducer}), {
+        productReducer: productService.getData(),
+        cartReducer: {}
+    })}>
+        <ProductComponent/>
+    </Provider>,
+    productElement
+)

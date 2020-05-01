@@ -1,12 +1,12 @@
-import Rule from "../Rule";
+import Rule from "../Rule"
 
 export default class ExpressionRule extends Rule {
     constructor(parameter) {
-        super(parameter);
-        this.name = 'expression';
+        super(parameter)
+        this.name = 'expression'
     }
 
     check(value) {
-        return eval(this.parameter.expression) ? '' : this.parameter.message;
+        return eval(this.parameter.expression) ? '' : this.parameter.message
     }
 }

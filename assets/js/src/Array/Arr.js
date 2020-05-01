@@ -1,4 +1,4 @@
-import Str from "../String/Str";
+import Str from "../String/Str"
 
 class Arr {
     /**
@@ -9,16 +9,16 @@ class Arr {
      */
     getNestedProperty(object, keys) {
         for (let i = 0; i < keys.length; i++) {
-            let key = keys[i];
+            let key = keys[i]
 
             if (!object || !object.hasOwnProperty(key)) {
-                return undefined;
+                return undefined
             }
 
-            object = object[key];
+            object = object[key]
         }
 
-        return object;
+        return object
     }
 
     /**
@@ -27,13 +27,13 @@ class Arr {
      * @return {Boolean}
      */
     isAssociative(obj) {
-        const keys = Object.keys(obj);
+        const keys = Object.keys(obj)
 
         if (keys.length === 0) {
-            return false;
+            return false
         }
 
-        return !!!keys.find(key => !Str.isNumeric(key));
+        return !!!keys.find(key => !Str.isNumeric(key))
     }
 
     /**
@@ -42,13 +42,13 @@ class Arr {
      * @returns {undefined|*}
      */
     getFirstValue(object) {
-        const keys = Object.keys(object);
+        const keys = Object.keys(object)
 
         if (keys.length === 0) {
-            return undefined;
+            return undefined
         }
 
-        return object[keys[0]];
+        return object[keys[0]]
     }
 
     /**
@@ -57,13 +57,13 @@ class Arr {
      * @returns {undefined|*}
      */
     last(obj) {
-        const keys = Object.keys(obj);
+        const keys = Object.keys(obj)
 
         if (keys.length === 0) {
-            return null;
+            return null
         }
 
-        return obj[keys[keys.length - 1]];
+        return obj[keys[keys.length - 1]]
     }
 
     /**
@@ -73,14 +73,14 @@ class Arr {
      */
     isEmpty(arr) {
         if (arr.length !== undefined && arr.length === 0) {
-            return true;
+            return true
         }
 
         if (typeof arr === 'object' && Object.keys(arr).length === 0) {
-            return true;
+            return true
         }
 
-        return false;
+        return false
     }
 
     /**
@@ -90,31 +90,31 @@ class Arr {
      * @param {*} value
      */
     returnNestedObject(object, string, value) {
-        let nestedObject = {...object}; //To ensure don't reset object's reference
-        let nextObject = {};
+        let nestedObject = {...object} //To ensure don't reset object's reference
+        let nextObject = {}
 
-        const matches = Array.from(string.matchAll(/\[?([\w_-]+)\]?/g));
+        const matches = Array.from(string.matchAll(/\[?([\w_-]+)\]?/g))
 
         for (let i = 0; i < matches.length; i++) {
-            let key = matches[i][1];
+            let key = matches[i][1]
 
             if (i === 0) { //start
                 if (nestedObject[key] === undefined) {
-                    nestedObject[key] = {};
+                    nestedObject[key] = {}
                 }
-                nextObject = nestedObject[key];
+                nextObject = nestedObject[key]
             } else if (i === matches.length - 1) { //end
-                nextObject[key] = value;
+                nextObject[key] = value
             } else { //middle
                 if (nextObject[key] === undefined) {
-                    nextObject[key] = {};
+                    nextObject[key] = {}
                 }
-                nextObject = nextObject[key];
+                nextObject = nextObject[key]
             }
         }
 
-        return nestedObject;
+        return nestedObject
     }
 }
 
-export default new Arr();
+export default new Arr()

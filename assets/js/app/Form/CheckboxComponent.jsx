@@ -1,11 +1,11 @@
-import React from "react";
-import {hot} from "react-hot-loader/root";
-import PropTypes from 'prop-types';
-import InputComponent from "./InputComponent";
+import React from "react"
+import {hot} from "react-hot-loader/root"
+import PropTypes from 'prop-types'
+import InputComponent from "./InputComponent"
 
 class CheckboxComponent extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -15,21 +15,21 @@ class CheckboxComponent extends React.Component {
                     <InputComponent {...this.props} type="checkbox"/>
                 </div>
             </div>
-        );
+        )
     }
 
     isRequired() {
-        return this.props.rules.includes('required');
+        return this.props.rules.includes('required')
     }
 
     getLabelClassName() {
-        let className = 'custom-control-label';
+        let className = 'custom-control-label'
 
         if (this.isRequired()) {
-            className += ' required';
+            className += ' required'
         }
 
-        return className;
+        return className
     }
 }
 
@@ -38,7 +38,7 @@ CheckboxComponent.propTypes = {
     parentForm: PropTypes.instanceOf(HTMLFormElement),
     attr:       PropTypes.object,
     label:      PropTypes.string,
-    rules:      PropTypes.string,
-};
+    rules:      PropTypes.string
+}
 
-export default hot(CheckboxComponent);
+export default hot(CheckboxComponent)

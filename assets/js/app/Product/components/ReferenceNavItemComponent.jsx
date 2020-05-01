@@ -1,10 +1,10 @@
-import React from "react";
-import PropTypes from 'prop-types';
-import {connect} from "react-redux";
+import React from "react"
+import PropTypes from 'prop-types'
+import {connect} from "react-redux"
 
 class ReferenceNavItemComponent extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -20,28 +20,28 @@ class ReferenceNavItemComponent extends React.Component {
                     <h2 className={this.getTitleClass()}>{this.props.reference.label}</h2>
                 </a>
             </div>
-        );
+        )
     }
 
     getLiClass() {
-        let className = 'nav-product-reference-item';
+        let className = 'nav-product-reference-item'
         if (this.props.reference === this.props.currentReference) {
-            className += ' bg-primary';
+            className += ' bg-primary'
         }
-        return className;
+        return className
     }
 
     getTitleClass() {
-        let className = 'nav-product-reference-item-title';
+        let className = 'nav-product-reference-item-title'
         if (this.props.reference === this.props.currentReference) {
-            className += ' text-white';
+            className += ' text-white'
         }
-        return className;
+        return className
     }
 
     setCurrentReference(reference, event) {
-        event.preventDefault();
-        this.props.setCurrentReference(reference);
+        event.preventDefault()
+        this.props.setCurrentReference(reference)
     }
 }
 
@@ -51,27 +51,27 @@ ReferenceNavItemComponent.propTypes = {
         label:     PropTypes.string.isRequired,
         mainImage: PropTypes.shape({
             urlThumbnail: PropTypes.string.isRequired,
-            altThumbnail: PropTypes.string.isRequired,
+            altThumbnail: PropTypes.string.isRequired
         })
     }),
     currentReference: PropTypes.shape({
         id:    PropTypes.number.isRequired,
-        label: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired
     }),
 
-    setCurrentReference: PropTypes.func.isRequired,
-};
+    setCurrentReference: PropTypes.func.isRequired
+}
 
 const mapStateToProps = (state) => {
     return {
-        currentReference: state.product.currentReference
-    };
-};
+        currentReference: state.productReducer.currentReference
+    }
+}
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setCurrentReference: (reference) => dispatch({type: 'UPDATE_REFERENCE', reference}),
-    };
-};
+        setCurrentReference: (reference) => dispatch({type: 'UPDATE_REFERENCE', reference})
+    }
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReferenceNavItemComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ReferenceNavItemComponent)

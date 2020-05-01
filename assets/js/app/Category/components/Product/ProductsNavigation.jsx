@@ -1,15 +1,15 @@
-import React from "react";
-import PropTypes from 'prop-types';
-import {connect} from "react-redux";
-import range from "lodash/range";
+import React from "react"
+import PropTypes from 'prop-types'
+import {connect} from "react-redux"
+import range from "lodash/range"
 
 class ProductsNavigation extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     render() {
-        const pages = this.getPages();
+        const pages = this.getPages()
 
         return (
             <nav aria-label="Product pagination" className={this.getNavClass(pages)}>
@@ -31,55 +31,55 @@ class ProductsNavigation extends React.Component {
                     </li>
                 </ul>
             </nav>
-        );
+        )
     }
 
     getNavClass(pages) {
         if (pages.length === 0) {
-            return 'd-none';
+            return 'd-none'
         }
 
-        return 'mt-2';
+        return 'mt-2'
     }
 
     getPages() {
-        const pagesCount = Math.ceil(this.props.products.length / this.props.perPage);
+        const pagesCount = Math.ceil(this.props.products.length / this.props.perPage)
         if (pagesCount === 0) {
-            return [];
+            return []
         }
-        return range(1, pagesCount + 1);
+        return range(1, pagesCount + 1)
     }
 
     getItemClass(page) {
-        let className = 'page-item';
+        let className = 'page-item'
         if (this.props.currentPage === page) {
-            className += ' active';
+            className += ' active'
         }
 
-        return className;
+        return className
     }
 
     getPreviousItemClass() {
-        let className = 'page-item';
+        let className = 'page-item'
         if (this.props.currentPage === 1) {
-            className += ' disabled';
+            className += ' disabled'
         }
 
-        return className;
+        return className
     }
 
     getNextItemClass() {
-        let className = 'page-item';
+        let className = 'page-item'
         if (this.props.currentPage === this.getPages().length) {
-            className += ' disabled';
+            className += ' disabled'
         }
 
-        return className;
+        return className
     }
 
     goTo(pageToSet, event) {
-        event.preventDefault();
-        this.props.goTo(pageToSet);
+        event.preventDefault()
+        this.props.goTo(pageToSet)
     }
 }
 
@@ -96,21 +96,21 @@ ProductsNavigation.propTypes = {
     perPage:     PropTypes.number.isRequired,
     currentPage: PropTypes.number.isRequired,
 
-    goTo: PropTypes.func.isRequired,
-};
+    goTo: PropTypes.func.isRequired
+}
 
 const mapStateToProps = (state) => {
     return {
-        products:    state.products.currentProducts,
-        perPage:     state.products.perPage,
-        currentPage: state.products.currentPage
-    };
-};
+        products:    state.currentProducts,
+        perPage:     state.perPage,
+        currentPage: state.currentPage
+    }
+}
 
 const mapDispatchToProps = (dispatch) => {
     return {
         goTo: (page) => dispatch({type: 'UPDATE_PAGE', page})
     }
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductsNavigation);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductsNavigation)

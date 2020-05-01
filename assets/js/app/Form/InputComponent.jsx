@@ -1,20 +1,20 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from "react"
+import PropTypes from "prop-types"
 
 class InputComponent extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
 
-        this.required = false;
-        this.rules = this.makeRules(this.props.rules);
+        this.required = false
+        this.rules = this.makeRules(this.props.rules)
 
         this.state = {
             value: this.props.type !== 'checkbox' ? this.props.value : this.props.value != 0,
-            error: this.props.error || '',
-        };
+            error: this.props.error || ''
+        }
 
-        this.changeValue = this.changeValue.bind(this);
-        this.getError = this.getError.bind(this);
+        this.changeValue = this.changeValue.bind(this)
+        this.getError = this.getError.bind(this)
     }
 
     /**
@@ -23,34 +23,34 @@ class InputComponent extends React.Component {
      */
     makeRules(implodedRules) {
         if (implodedRules === undefined || implodedRules === '') {
-            return [];
+            return []
         }
 
-        let rules = [];
+        let rules = []
 
         for (let ruleSplitted of implodedRules.split('²')) {
 
-            let [ruleName, parametersInString] = ruleSplitted.split('ß');
+            let [ruleName, parametersInString] = ruleSplitted.split('ß')
 
             if (ruleName === 'NotBlank' || ruleName === 'IsTrue') {
-                this.required = true;
+                this.required = true
             }
 
-            const RuleClass = require(`../../src/Security/Rules/${ruleName}Rule`).default;
-            let parameters = {};
+            const RuleClass = require(`../../src/Security/Rules/${ruleName}Rule`).default
+            let parameters = {}
             parametersInString.split('@').map(function (parameterExploded) {
-                let [key, value] = parameterExploded.split(':');
-                parameters[key] = value;
-            });
+                let [key, value] = parameterExploded.split(':')
+                parameters[key] = value
+            })
 
-            rules.push(new RuleClass(parameters));
+            rules.push(new RuleClass(parameters))
         }
 
-        return rules;
+        return rules
     }
 
     getError(event) {
-        const value = this.props.type === 'checkbox' ? event.currentTarget.checked : event.currentTarget.value;
+        const value = this.props.type === 'checkbox' ? event.currentTarget.checked : event.currentTarget.value
 
         this.setState({
             error: this.getErrorValue(value)
@@ -58,32 +58,32 @@ class InputComponent extends React.Component {
     }
 
     changeValue(event) {
-        let newValue = this.props.type !== 'checkbox' ? event.currentTarget.value : event.currentTarget.checked;
+        let newValue = this.props.type !== 'checkbox' ? event.currentTarget.value : event.currentTarget.checked
 
-        this.setState({value: newValue});
+        this.setState({value: newValue})
     }
 
     getErrorValue(value) {
         if (this.rules.length === 0) {
-            return '';
+            return ''
         }
 
         for (let rule of this.rules) {
-            let error;
+            let error
             if (error = rule.check(value)) {
-                return error;
+                return error
             }
         }
 
-        return '';
+        return ''
     }
 
     getInputValue() {
         if (this.props.type === 'checkbox') {
-            return 1;
+            return 1
         }
 
-        return this.state.value;
+        return this.state.value
     }
 
     render() {
@@ -116,27 +116,27 @@ class InputComponent extends React.Component {
                     <input type='hidden' name={this.props.name} value="0"/>
                 }
             </>
-        );
+        )
     }
 
     getLabelClassName() {
-        let className = 'custom-control-label';
+        let className = 'custom-control-label'
 
         if (this.required) {
-            className += ' required';
+            className += ' required'
         }
 
-        return className;
+        return className
     }
 
     getInputClassName() {
-        let className = this.props.type !== 'checkbox' ? 'form-control' : 'custom-control-input';
+        let className = this.props.type !== 'checkbox' ? 'form-control' : 'custom-control-input'
 
         if (this.state.error !== '') {
-            className += ' is-invalid';
+            className += ' is-invalid'
         }
 
-        return className;
+        return className
     }
 }
 
@@ -150,7 +150,7 @@ InputComponent.propTypes = {
     attr:       PropTypes.object,
     help:       PropTypes.string,
     label:      PropTypes.string,
-    rules:      PropTypes.string,
-};
+    rules:      PropTypes.string
+}
 
-export default InputComponent;
+export default InputComponent

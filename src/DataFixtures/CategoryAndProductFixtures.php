@@ -31,42 +31,39 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
     /**
      * @return Tax[]
      */
-    private function attachTaxes (Product $product, Tax $vatTax, Tax $ecoTax)
+    private function makeTaxes (ObjectManager $manager): array
     {
-        $product->addTax($vatTax);
+        $vatTax = (new Tax)->setLabel('VAT tax')->setType('PERCENTAGE')->setValue(20);
+        $ecoTax = (new Tax)->setLabel('Eco tax')->setType('UNITY')->setValue(0.05);
 
-        if ($this->faker->boolean(25)) {
-            $product->addTax($ecoTax);
-        }
+        $manager->persist($vatTax);
+        $manager->persist($ecoTax);
+
+        return [$vatTax, $ecoTax];
     }
 
-    /**
-     * @return Product[]
-     */
-    private function makeProducts (Category $category, ObjectManager $manager): array
+    private function makeCategory (ObjectManager $manager): Category
     {
-        $productsCount = random_int(10, 20);
-        $products = [];
+        $label = $this->faker->word;
+        $slug = $this->slugify($label);
 
-        for ($i = 0; $i < $productsCount; $i++) {
-            $label = ucfirst($this->faker->unique()->words(3, true));
-            $slug = $this->slugify($label);
-            $excerpt = $this->faker->boolean(75) ? $this->faker->sentence(7) : null;
-            $description = $excerpt ? $this->faker->paragraphs(5, true) : null;
+        $category = (new Category)
+            ->setLabel($label)
+            ->setNomenclature(strtoupper($label))
+            ->setSlug($slug)
+            ->setDescription($this->faker->paragraphs(3, true))
+            ->setIsLast(false)
+            ->setImage($this->faker->boolean(75) ? $this->makeImage($manager) : null);
 
-            $product = (new Product)
-                ->setLabel($label)
-                ->setSlug($slug)
-                ->setExcerpt($excerpt)
-                ->setDescription($description)
-                ->setCategory($category);
 
-            $manager->persist($product);
+        $manager->persist($category);
 
-            $products[] = $product;
-        }
+        return $category;
+    }
 
-        return $products;
+    private function slugify (string $string): string
+    {
+        return (new AsciiSlugger())->slug(strtolower($string));
     }
 
     private function makeSubCategories (Category $parentCategory, ObjectManager $manager): array
@@ -93,43 +90,49 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
         return $subCategories;
     }
 
-    private function slugify (string $string): string
+    /**
+     * @return Product[]
+     */
+    private function makeProducts (Category $category, ObjectManager $manager): array
     {
-        return (new AsciiSlugger())->slug(strtolower($string));
+        $productsCount = random_int(10, 20);
+        $products = [];
+
+        for ($i = 0; $i < $productsCount; $i++) {
+            $label = ucfirst($this->faker->unique()->words(3, true));
+            $slug = $this->slugify($label);
+            $excerpt = $this->faker->boolean(75) ? $this->faker->sentence(7) : null;
+            $description = $excerpt ?
+                array_reduce($this->faker->paragraphs(5), function (string $carry, string $paragraph) {
+                    $carry .= '<p>' . $paragraph . '</p>';
+                    return $carry;
+                }, '') : null;
+
+            $product = (new Product)
+                ->setLabel($label)
+                ->setSlug($slug)
+                ->setExcerpt($excerpt)
+                ->setDescription($description)
+                ->setCategory($category);
+
+            $manager->persist($product);
+
+            $products[] = $product;
+        }
+
+        return $products;
     }
-
-    private function makeCategory (ObjectManager $manager): Category
-    {
-        $label = $this->faker->word;
-        $slug = $this->slugify($label);
-
-        $category = (new Category)
-            ->setLabel($label)
-            ->setNomenclature(strtoupper($label))
-            ->setSlug($slug)
-            ->setDescription($this->faker->paragraphs(3, true))
-            ->setIsLast(false)
-            ->setImage($this->faker->boolean(75) ? $this->makeImage($manager) : null);
-
-
-        $manager->persist($category);
-
-        return $category;
-    }
-
 
     /**
      * @return Tax[]
      */
-    private function makeTaxes (ObjectManager $manager): array
+    private function attachTaxes (Product $product, Tax $vatTax, Tax $ecoTax)
     {
-        $vatTax = (new Tax)->setLabel('VAT tax')->setType('PERCENTAGE')->setValue(20);
-        $ecoTax = (new Tax)->setLabel('Eco tax')->setType('UNITY')->setValue(0.05);
+        $product->addTax($vatTax);
 
-        $manager->persist($vatTax);
-        $manager->persist($ecoTax);
-
-        return [$vatTax, $ecoTax];
+        if ($this->faker->boolean(25)) {
+            $product->addTax($ecoTax);
+        }
     }
 
     public function getOrder ()

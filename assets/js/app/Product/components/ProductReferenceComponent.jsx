@@ -1,12 +1,12 @@
-import React from "react";
-import PropTypes from 'prop-types';
-import ReferenceSliderComponent from "./ReferenceSliderComponent";
-import Str from "../../../src/String/Str";
-import {connect} from "react-redux";
+import React from "react"
+import PropTypes from 'prop-types'
+import ReferenceSliderComponent from "./ReferenceSliderComponent"
+import Str from "../../../src/String/Str"
+import {connect} from "react-redux"
 
 class ProductReferenceComponent extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -15,7 +15,8 @@ class ProductReferenceComponent extends React.Component {
                 {
                     this.props.currentReference.mainImage &&
                     <div className="col-md-8">
-                        <ReferenceSliderComponent currentReference={this.props.currentReference} activatedIndexByReference={this.props.activatedSliderIndexByReference}/>
+                        <ReferenceSliderComponent currentReference={this.props.currentReference}
+                                                  activatedIndexByReference={this.props.activatedSliderIndexByReference}/>
                     </div>
                 }
                 <div className="col-md">
@@ -29,7 +30,7 @@ class ProductReferenceComponent extends React.Component {
                     </ul>
                 </div>
             </article>
-        );
+        )
     }
 }
 
@@ -39,22 +40,22 @@ ProductReferenceComponent.propTypes = {
         label:                   PropTypes.string.isRequired,
         mainImage:               PropTypes.shape({
             urlThumbnail: PropTypes.string.isRequired,
-            altThumbnail: PropTypes.string.isRequired,
+            altThumbnail: PropTypes.string.isRequired
         }),
         unitPriceIncludingTaxes: PropTypes.number.isRequired
     }),
     currency:                        PropTypes.string.isRequired,
-    activatedSliderIndexByReference: PropTypes.object.isRequired,
-};
+    activatedSliderIndexByReference: PropTypes.object.isRequired
+}
 
 const mapStateToProps = (state) => {
     return {
-        activatedSliderIndexByReference: state.product.activatedSliderIndexByReference,
-    };
-};
+        activatedSliderIndexByReference: state.productReducer.activatedSliderIndexByReference
+    }
+}
 
 const mapDispatchToProps = (dispatch) => {
-    return {};
-};
+    return {}
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductReferenceComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductReferenceComponent)

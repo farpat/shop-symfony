@@ -1,8 +1,6 @@
 {% extends '_layouts/app.html.twig' %}
 
-{% block title %}
-    {{ product.label }}
-{% endblock %}
+{% block title product.label %}
 
 {% block script 'product-show' %}
 
@@ -15,7 +13,8 @@
         </section>
 
         <section id="product-show">
-            <div id="product-component" data-product-references="{{ productReferencesInJson }}" data-currency="{{ parameter('billing', 'currency').code }}"></div>
+            <div id="product-component" data-product-references="{{ productReferencesInJson }}"
+                 data-currency="{{ parameter('billing', 'currency').code }}"></div>
 
             <section class="mt-2 text-justify">
                 {{ product.description | raw }}

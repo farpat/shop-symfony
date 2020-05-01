@@ -1,13 +1,10 @@
 {% extends "_layouts/app.html.twig" %}
 
-{% block title %}
-    {{ category.label }}
-{% endblock %}
+{% block title category.label %}
 
 {% block script 'category-show' %}
 
 {% block body %}
-    <!--suppress CheckTagEmptyBody -->
     <main class="container">
         {{ breadcrumb(breadcrumb) }}
 
@@ -33,7 +30,8 @@
             {% if productFieldsInJson is not empty and productsInJson is not empty %}
                 <div class="col-lg">
                     <section id="products-component" data-products="{{ productsInJson }}"
-                             data-current-page="{{ currentPage }}" data-per-page="{{ perPage }}" data-currency="{{ parameter('billing', 'currency').code }}">
+                             data-current-page="{{ currentPage }}" data-per-page="{{ perPage }}"
+                             data-currency="{{ parameter('billing', 'currency').code }}">
                     </section>
                 </div>
             {% endif %}

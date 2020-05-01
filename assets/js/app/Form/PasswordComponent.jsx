@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from 'prop-types';
-import {hot} from "react-hot-loader/root";
-import InputComponent from "./InputComponent";
+import React from "react"
+import PropTypes from 'prop-types'
+import {hot} from "react-hot-loader/root"
+import InputComponent from "./InputComponent"
 
 class PasswordComponent extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -27,20 +27,20 @@ class PasswordComponent extends React.Component {
                     <InputComponent {...this.props} type="password"/>
                 </div>
             </div>
-        );
+        )
     }
 
 
     isRequired() {
-        return this.props.rules.includes('NotBlankß');
+        return this.props.rules.includes('NotBlankß')
     }
 
     getLabelClassName() {
         if (this.isRequired()) {
-            return 'required';
+            return 'required'
         }
 
-        return '';
+        return ''
     }
 }
 
@@ -50,7 +50,7 @@ PasswordComponent.propTypes = {
     parentForm: PropTypes.instanceOf(HTMLFormElement),
     attr:       PropTypes.object,
     label:      PropTypes.string,
-    rules:      PropTypes.string,
-};
+    rules:      PropTypes.string
+}
 
-export default hot(PasswordComponent);
+export default hot(PasswordComponent)

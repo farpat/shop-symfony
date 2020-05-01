@@ -1,23 +1,23 @@
-import React from "react";
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
+import React from "react"
+import PropTypes from "prop-types"
+import {connect} from "react-redux"
 
 class NumberFieldComponent extends React.Component {
     constructor(props) {
-        super(props);
-        this.changeValue = this.changeValue.bind(this);
+        super(props)
+        this.changeValue = this.changeValue.bind(this)
     }
 
     changeValue(suffix, event) {
-        this.props.updateFilter(this.getFilterKey(suffix), event.target.value);
+        this.props.updateFilter(this.getFilterKey(suffix), event.target.value)
     }
 
     getValue(key) {
-        return this.props.filters[key] || '';
+        return this.props.filters[key] || ''
     }
 
     getFilterKey(suffix) {
-        return `${this.props.productField.key}-${suffix}`;
+        return `${this.props.productField.key}-${suffix}`
     }
 
     render() {
@@ -39,7 +39,7 @@ class NumberFieldComponent extends React.Component {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 }
 
@@ -50,19 +50,21 @@ NumberFieldComponent.propTypes = {
     }),
 
     updateFilter: PropTypes.func.isRequired
-};
+}
 
 
 const mapStateToProps = (state) => {
+    console.log(state.currentFilters)
+
     return {
-        filters: state.products.currentFilters,
-    };
-};
+        filters: state.currentFilters
+    }
+}
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updateFilter: (key, value) => dispatch({type: 'UPDATE_FILTER', key, value}),
-    };
-};
+        updateFilter: (key, value) => dispatch({type: 'UPDATE_FILTER', key, value})
+    }
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(NumberFieldComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(NumberFieldComponent)

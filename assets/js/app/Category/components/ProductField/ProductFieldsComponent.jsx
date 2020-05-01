@@ -1,13 +1,13 @@
-import React from "react";
-import {hot} from "react-hot-loader/root";
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
-import NumberFieldComponent from "./NumberFieldComponent";
-import StringFieldComponent from "./StringFieldComponent";
+import React from "react"
+import {hot} from "react-hot-loader/root"
+import PropTypes from "prop-types"
+import {connect} from "react-redux"
+import NumberFieldComponent from "./NumberFieldComponent"
+import StringFieldComponent from "./StringFieldComponent"
 
 class ProductFieldsComponent extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -23,7 +23,7 @@ class ProductFieldsComponent extends React.Component {
                     })
                 }
             </div>
-        );
+        )
     }
 }
 
@@ -33,17 +33,17 @@ ProductFieldsComponent.propTypes = {
         type:  PropTypes.string.isRequired,
         label: PropTypes.string.isRequired
     }))
-};
+}
 
 
 const mapStateToProps = (state) => {
     return {
-        productFields: state.products.allProductFields
+        productFields: state.allProductFields
     }
-};
+}
 
 const mapDispatchToProps = (dispatch) => {
     return {}
-};
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(hot(ProductFieldsComponent));
+export default connect(mapStateToProps, mapDispatchToProps)(hot(ProductFieldsComponent))
