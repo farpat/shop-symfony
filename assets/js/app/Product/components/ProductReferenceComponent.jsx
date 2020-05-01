@@ -10,7 +10,7 @@ class ProductReferenceComponent extends React.Component {
     }
 
     updateQuantity(reference, event) {
-        this.props.updateQuantity(reference, event.target.value)
+        this.props.updateQuantity(reference, Number.parseInt(event.target.value))
     }
 
     addInCart(reference) {
@@ -22,7 +22,7 @@ class ProductReferenceComponent extends React.Component {
     }
 
     getCartItem(reference) {
-        return this.props.cartItems[reference.id]
+        return this.props.items[reference.id]
     }
 
 
@@ -85,7 +85,7 @@ ProductReferenceComponent.propTypes = {
     currency:                        PropTypes.string.isRequired,
     activatedSliderIndexByReference: PropTypes.object.isRequired,
     quantities:                      PropTypes.object.isRequired,
-    cartItems:                       PropTypes.object.isRequired,
+    items:                       PropTypes.object.isRequired,
 
     updateQuantity: PropTypes.func.isRequired,
     addInCart:      PropTypes.func.isRequired
@@ -95,7 +95,7 @@ const mapStateToProps = (state) => {
     return {
         activatedSliderIndexByReference: state.productReducer.activatedSliderIndexByReference,
         quantities:                      state.cartReducer.quantities,
-        cartItems:                       state.cartReducer.cartItems
+        items: state.cartReducer.items
     }
 }
 

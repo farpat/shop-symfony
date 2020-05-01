@@ -8,7 +8,6 @@ import productReducer from "./Product/reducer/productReducer"
 import cartReducer from "./Cart/reducer/cartReducer"
 
 const productElement = document.querySelector('#product-component')
-
 productService.loadData(productElement)
 
 render(

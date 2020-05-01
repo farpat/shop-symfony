@@ -10,7 +10,7 @@ class CartService {
     loadData(headCartElement) {
         this.data = {
             quantities: {},
-            cartItems:  JSON.parse(headCartElement.dataset.items)
+            items:      JSON.parse(headCartElement.dataset.items)
         }
     }
 
@@ -29,8 +29,8 @@ class CartService {
     addInCart(reference, quantity) {
         this.data = {
             ...this.data,
-            cartItems: {
-                ...this.data.cartItems,
+            items: {
+                ...this.data.items,
                 [reference.id]: {quantity, reference}
             }
         }
@@ -39,6 +39,7 @@ class CartService {
     }
 
     getData() {
+        console.log(this.data)
         return this.data
     }
 }
