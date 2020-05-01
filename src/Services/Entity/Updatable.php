@@ -33,7 +33,7 @@ trait Updatable
     /**
      * @ORM\PreUpdate()
      */
-    public function updateDate ()
+    public function updateUpdatedAt ()
     {
         $this->setUpdatedAt(new \DateTime());
     }

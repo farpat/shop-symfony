@@ -39,9 +39,8 @@
                     </li>
                 {% endif %}
 
-                <li id="cart-nav" class="nav-item">
-                    {#                    <header-cart-component></header-cart-component>#}
-                </li>
+                <li id="cart-nav" class="nav-item"
+                    data-items="{{ CartManager.items | json_encode(constant('JSON_FORCE_OBJECT')) }}"></li>
             </ul>
         </section>
     </div>

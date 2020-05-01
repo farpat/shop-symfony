@@ -36,6 +36,22 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         $manager->flush();
     }
 
+    private function makeUser (int $i): User
+    {
+        $i++;
+        $user = new User;
+
+        $user
+            ->setName($this->faker->name)
+            ->setRoles($this->faker->boolean(15) ? ['ROLE_ADMIN', 'ROLE_ADMIN'] : ['ROLE_USER'])
+            ->setEmail("user$i@local.dev")
+            ->setPassword($this->encoder->encodePassword($user, 'secret'))
+            ->setEmailVerifiedAt($this->faker->dateTime())
+            ->setRememberToken(null);
+
+        return $user;
+    }
+
     /**
      * @return Address[]
      */
@@ -73,64 +89,6 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         return $addresses;
     }
 
-    private function makeUser (int $i): User
-    {
-        $i++;
-        $user = new User;
-
-        $user
-            ->setName($this->faker->name)
-            ->setRoles($this->faker->boolean(15) ? ['ROLE_ADMIN', 'ROLE_ADMIN'] : ['ROLE_USER'])
-            ->setEmail("user$i@local.dev")
-            ->setPassword($this->encoder->encodePassword($user, 'secret'))
-            ->setEmailVerifiedAt($this->faker->dateTime())
-            ->setRememberToken(null);
-
-        return $user;
-    }
-
-    public function getOrder ()
-    {
-        return 4;
-    }
-
-    /**
-     * @param User $user
-     * @param array $addresses
-     * @param array $allProductReferences
-     * @param ObjectManager $manager
-     *
-     * @return Cart
-     * @throws \Exception
-     */
-    private function makeCart (User $user, array $addresses, array $allProductReferences, ObjectManager $manager)
-    {
-        $now = new \DateTime;
-
-        $cart = (new Cart)
-            ->setUser($user)
-            ->setUpdatedAt($now)
-            ->setComment($this->faker->boolean(25) ? $this->faker->sentence : null)
-            ->setDeliveredAddress($addresses[random_int(0, count($addresses) - 1)]);
-
-        $items = $this->makeOrderItems(random_int(1, 5), $cart, $allProductReferences, $manager);
-
-        $cart
-            ->setItemsCount(count($items))
-            ->setTotalAmountExcludingTaxes(array_reduce($items, function (float $acc, OrderItem $item) {
-                $acc += $item->getAmountExcludingTaxes();
-                return $acc;
-            }, 0))
-            ->setTotalAmountIncludingTaxes(array_reduce($items, function (float $acc, OrderItem $item) {
-                $acc += $item->getAmountIncludingTaxes();
-                return $acc;
-            }, 0));
-
-        $manager->persist($cart);
-
-        return $cart;
-    }
-
     /**
      * @param User $user
      * @param array $addresses
@@ -152,7 +110,6 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
 
             $billing = (new Billing)
                 ->setUser($user)
-                ->setUpdatedAt($now)
                 ->setComment($this->faker->boolean(25) ? $this->faker->sentence : null)
                 ->setDeliveredAddress($addresses[random_int(0, count($addresses) - 1)])
                 ->setNumber($now->format('Y-m') . '-' . (++$currentBillingNumber))
@@ -217,5 +174,45 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         }
 
         return $orderItems;
+    }
+
+    /**
+     * @param User $user
+     * @param array $addresses
+     * @param array $allProductReferences
+     * @param ObjectManager $manager
+     *
+     * @return Cart
+     * @throws \Exception
+     */
+    private function makeCart (User $user, array $addresses, array $allProductReferences, ObjectManager $manager)
+    {
+        $cart = (new Cart)
+            ->setUser($user)
+            ->setUpdatedAt(new \DateTime())
+            ->setComment($this->faker->boolean(25) ? $this->faker->sentence : null)
+            ->setDeliveredAddress($addresses[random_int(0, count($addresses) - 1)]);
+
+        $items = $this->makeOrderItems(random_int(1, 5), $cart, $allProductReferences, $manager);
+
+        $cart
+            ->setItemsCount(count($items))
+            ->setTotalAmountExcludingTaxes(array_reduce($items, function (float $acc, OrderItem $item) {
+                $acc += $item->getAmountExcludingTaxes();
+                return $acc;
+            }, 0))
+            ->setTotalAmountIncludingTaxes(array_reduce($items, function (float $acc, OrderItem $item) {
+                $acc += $item->getAmountIncludingTaxes();
+                return $acc;
+            }, 0));
+
+        $manager->persist($cart);
+
+        return $cart;
+    }
+
+    public function getOrder ()
+    {
+        return 4;
     }
 }

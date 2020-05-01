@@ -5,8 +5,8 @@ namespace App\Controller\Front;
 use App\Services\Shop\CartManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -31,14 +31,16 @@ class CartController extends AbstractController
      */
     public function storeItem (Request $request)
     {
-        $orderItem = $this->cartManager->storeItem(
+        $orderItem = $this->cartManager->addItem(
             $request->request->getInt('quantity'),
             $request->request->getInt('productReferenceId')
         );
 
-        $this->entityManager->flush();
+        if ($this->getUser()) {
+            $this->entityManager->flush();
+        }
 
-        return new Response($this->serializer->serialize($orderItem, 'json'));
+        return new JsonResponse($orderItem);
     }
 
     /**
@@ -51,9 +53,11 @@ class CartController extends AbstractController
             $productReferenceId
         );
 
-        $this->entityManager->flush();
+        if ($this->getUser()) {
+            $this->entityManager->flush();
+        }
 
-        return new Response($this->serializer->serialize($orderItem, 'json'));
+        return new JsonResponse($orderItem);
     }
 
     /**
@@ -65,9 +69,11 @@ class CartController extends AbstractController
             $productReferenceId
         );
 
-        $this->entityManager->flush();
+        if ($this->getUser()) {
+            $this->entityManager->flush();
+        }
 
-        return new Response($this->serializer->serialize($orderItem, 'json'));
+        return new JsonResponse($orderItem);
     }
 
     /**

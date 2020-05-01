@@ -5,28 +5,25 @@ namespace App\Services\Shop;
 
 use App\Entity\{Cart, OrderItem, ProductReference, User};
 use App\Repository\ProductReferenceRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
 class CartManager
 {
-    /**
-     * @var User
-     */
-    private $user;
-    /**
-     * @var ProductReferenceRepository
-     */
-    private $productReferenceRepository;
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private const COOKIE_KEY = 'cart-items';
+    private ProductReferenceRepository $productReferenceRepository;
+    private EntityManagerInterface $entityManager;
+    private ?Request $request;
+    private ?User $user;
 
-    public function __construct (Security $security, EntityManagerInterface $entityManager)
+    public function __construct (Security $security, EntityManagerInterface $entityManager, RequestStack $requestStack, ProductReferenceRepository $productReferenceRepository)
     {
         $this->user = $security->getUser();
-        $this->productReferenceRepository = $entityManager->getRepository(ProductReference::class);
+        $this->request = $requestStack->getCurrentRequest();
+        $this->productReferenceRepository = $productReferenceRepository;
         $this->entityManager = $entityManager;
     }
 
@@ -34,15 +31,19 @@ class CartManager
     {
         $productReference = $this->getProductReference($productReferenceId);
 
-        $cart = $this->getCart();
-        if (($orderItem = $cart->getOrderItem($productReference)) === null) {
-            throw new \InvalidArgumentException("The product reference is not in cart");
-        }
+        if ($this->user) { //database
+            $cart = $this->getCart($this->user);
+            if (($orderItem = $cart->getOrderItem($productReference)) === null) {
+                throw new \InvalidArgumentException("The product reference is not in cart");
+            }
 
-        $cart->removeItem($orderItem);
+            $cart->removeItem($orderItem);
 
-        if ($cart->getItemsCount() === 0) {
-            $this->entityManager->remove($cart);
+            if ($cart->getItemsCount() === 0) {
+                $this->entityManager->remove($cart);
+            }
+        } else { //cookie
+
         }
     }
 
@@ -56,9 +57,9 @@ class CartManager
         return $productReference;
     }
 
-    public function getCart (): Cart
+    public function getCart (User $user): Cart
     {
-        $cart = $this->user->getCart();
+        $cart = $user->getCart();
 
         if ($cart !== null) {
             return $cart;
@@ -76,18 +77,22 @@ class CartManager
         $this->checkQuantity($quantity);
         $productReference = $this->getProductReference($productReferenceId);
 
-        $cart = $this->getCart();
-        if (($orderItem = $cart->getOrderItem($productReference)) === null) {
-            throw new \InvalidArgumentException("The product reference is not in cart");
+        if ($this->user) { //database
+            $cart = $this->getCart($this->user);
+            if (($orderItem = $cart->getOrderItem($productReference)) === null) {
+                throw new \InvalidArgumentException("The product reference is not in cart");
+            }
+
+            $oldAmountExcludingTaxes = $orderItem->getAmountExcludingTaxes();
+            $oldAmountIncludingTaxes = $orderItem->getAmountIncludingTaxes();
+
+            return $orderItem
+                ->setQuantity($quantity)
+                ->setAmountExcludingTaxes(($quantity * $productReference->getUnitPriceExcludingTaxes()) - $oldAmountExcludingTaxes)
+                ->setAmountIncludingTaxes(($quantity * $productReference->getUnitPriceIncludingTaxes()) - $oldAmountIncludingTaxes);
+        } else { //cookie
+
         }
-
-        $oldAmountExcludingTaxes = $orderItem->getAmountExcludingTaxes();
-        $oldAmountIncludingTaxes = $orderItem->getAmountIncludingTaxes();
-
-        return $orderItem
-            ->setQuantity($quantity)
-            ->setAmountExcludingTaxes(($quantity * $productReference->getUnitPriceExcludingTaxes()) - $oldAmountExcludingTaxes)
-            ->setAmountIncludingTaxes(($quantity * $productReference->getUnitPriceIncludingTaxes()) - $oldAmountIncludingTaxes);
     }
 
     private function checkQuantity (int $quantity)
@@ -97,26 +102,62 @@ class CartManager
         }
     }
 
-    public function storeItem (int $quantity, int $productReferenceId): OrderItem
+    public function addItem (int $quantity, int $productReferenceId): OrderItem
     {
         $this->checkQuantity($quantity);
         $productReference = $this->getProductReference($productReferenceId);
 
-        $cart = $this->getCart();
-        if ($cart->getOrderItem($productReference)) {
-            throw new \InvalidArgumentException("The product reference is already in cart");
+        if ($this->user) { //database
+            $cart = $this->getCart($this->user);
+            if ($cart->getOrderItem($productReference)) {
+                throw new \InvalidArgumentException("The product reference is already in cart");
+            }
+
+            $orderItem = (new OrderItem)
+                ->setQuantity($quantity)
+                ->setAmountExcludingTaxes($quantity * $productReference->getUnitPriceExcludingTaxes())
+                ->setAmountIncludingTaxes($quantity * $productReference->getUnitPriceIncludingTaxes())
+                ->setProductReference($productReference);
+
+            $this->entityManager->persist($orderItem);
+
+            $cart->addItem($orderItem);
+
+            return $orderItem;
+        } else { //cookie
+            $items = $this->getItems();
+
+            $orderItem = (new OrderItem)
+                ->setQuantity($quantity)
+                ->setAmountExcludingTaxes($quantity * $productReference->getUnitPriceExcludingTaxes())
+                ->setAmountIncludingTaxes($quantity * $productReference->getUnitPriceIncludingTaxes())
+                ->setProductReference($productReference);
+
+            $items->add($orderItem);
+
+            $this->setCookieItems();
+
+            return $orderItem;
+        }
+    }
+
+    /**
+     * @return OrderItem[]|Collection
+     */
+    public function getItems (): array
+    {
+        if ($this->request->getUser()) {
+            return $this->getCart()->getItems();
         }
 
-        $orderItem = (new OrderItem)
-            ->setQuantity($quantity)
-            ->setAmountExcludingTaxes($quantity * $productReference->getUnitPriceExcludingTaxes())
-            ->setAmountIncludingTaxes($quantity * $productReference->getUnitPriceIncludingTaxes())
-            ->setProductReference($productReference);
+        return $this->request->cookies->get(self::COOKIE_KEY, []);
+    }
 
-        $this->entityManager->persist($orderItem);
-
-        $cart->addItem($orderItem);
-
-        return $orderItem;
+    /**
+     * @param OrderItem[] $items
+     */
+    private function setCookieItems (array $items)
+    {
+        $this->request->cookies->set(self::COOKIE_KEY, $items);
     }
 }

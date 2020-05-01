@@ -9,6 +9,23 @@ class ProductReferenceComponent extends React.Component {
         super(props)
     }
 
+    updateQuantity(reference, event) {
+        this.props.updateQuantity(reference, event.target.value)
+    }
+
+    addInCart(reference) {
+        this.props.addInCart(reference, this.getQuantity(reference))
+    }
+
+    getQuantity(reference) {
+        return this.props.quantities[reference.id] || 1
+    }
+
+    getCartItem(reference) {
+        return this.props.cartItems[reference.id]
+    }
+
+
     render() {
         return (
             <article className="row">
@@ -22,10 +39,31 @@ class ProductReferenceComponent extends React.Component {
                 <div className="col-md">
                     <ul className="list-unstyled">
                         <li className="mb-5">
-                            {Str.toLocaleCurrency(this.props.currentReference.unitPriceIncludingTaxes, this.props.currency)}
+                            {
+                                Str.toLocaleCurrency(this.props.currentReference.unitPriceIncludingTaxes, this.props.currency)
+                            }
                         </li>
                         <li>
-                            Quantity of {this.props.currentReference.label}
+                            {
+                                !this.getCartItem(this.props.currentReference) &&
+                                <div>
+                                    Quantity of &nbsp;
+                                    <input type="number" style={{maxWidth: 75}} min={1}
+                                           value={this.getQuantity(this.props.currentReference)}
+                                           onChange={this.updateQuantity.bind(this, this.props.currentReference)}/>
+
+                                    <button className="btn btn-primary btn-sm ml-3"
+                                            onClick={this.addInCart.bind(this, this.props.currentReference)}>
+                                        <i className="fa fa-shopping-cart"></i> Add in cart
+                                    </button>
+                                </div>
+                            }
+                            {
+                                this.getCartItem(this.props.currentReference) &&
+                                <div>
+                                    Already in cart, quantity : {this.getCartItem(this.props.currentReference).quantity}
+                                </div>
+                            }
                         </li>
                     </ul>
                 </div>
@@ -45,17 +83,27 @@ ProductReferenceComponent.propTypes = {
         unitPriceIncludingTaxes: PropTypes.number.isRequired
     }),
     currency:                        PropTypes.string.isRequired,
-    activatedSliderIndexByReference: PropTypes.object.isRequired
+    activatedSliderIndexByReference: PropTypes.object.isRequired,
+    quantities:                      PropTypes.object.isRequired,
+    cartItems:                       PropTypes.object.isRequired,
+
+    updateQuantity: PropTypes.func.isRequired,
+    addInCart:      PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
     return {
-        activatedSliderIndexByReference: state.productReducer.activatedSliderIndexByReference
+        activatedSliderIndexByReference: state.productReducer.activatedSliderIndexByReference,
+        quantities:                      state.cartReducer.quantities,
+        cartItems:                       state.cartReducer.cartItems
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {}
+    return {
+        updateQuantity: (reference, quantity) => dispatch({type: 'UPDATE_QUANTITY', reference, quantity}),
+        addInCart:      (reference, quantity) => dispatch({type: 'ADD_IN_CART', reference, quantity})
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductReferenceComponent)

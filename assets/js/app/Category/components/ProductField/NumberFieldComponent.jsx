@@ -5,7 +5,6 @@ import {connect} from "react-redux"
 class NumberFieldComponent extends React.Component {
     constructor(props) {
         super(props)
-        this.changeValue = this.changeValue.bind(this)
     }
 
     changeValue(suffix, event) {

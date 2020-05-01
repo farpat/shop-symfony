@@ -5,3 +5,4 @@ twig:
         NavigationService: '@App\Services\NavigationService'
         ProductRepository: '@App\Repository\ProductRepository'
         CategoryRepository: '@App\Repository\CategoryRepository'
+        CartManager: '@App\Services\Shop\CartManager'
