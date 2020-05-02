@@ -2,8 +2,8 @@ import React from "react"
 import PropTypes from "prop-types"
 import {hot} from "react-hot-loader/root"
 import {connect} from "react-redux"
-import ProductComponent from "./ProductComponent"
-import ProductsNavigation from "./ProductsNavigation"
+import ProductComponent from "./Product/ProductComponent"
+import ProductsNavigation from "./Product/ProductsNavigation"
 
 class ProductsComponent extends React.Component {
     constructor(props) {

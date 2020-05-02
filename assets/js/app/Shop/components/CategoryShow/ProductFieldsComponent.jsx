@@ -2,8 +2,8 @@ import React from "react"
 import {hot} from "react-hot-loader/root"
 import PropTypes from "prop-types"
 import {connect} from "react-redux"
-import NumberFieldComponent from "./NumberFieldComponent"
-import StringFieldComponent from "./StringFieldComponent"
+import NumberFieldComponent from "./ProductField/NumberFieldComponent"
+import StringFieldComponent from "./ProductField/StringFieldComponent"
 
 class ProductFieldsComponent extends React.Component {
     constructor(props) {

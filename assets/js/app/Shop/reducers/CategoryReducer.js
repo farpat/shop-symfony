@@ -1,4 +1,4 @@
-import categoryService from "../CategoryService"
+import categoryService from "../services/CategoryService"
 
 export default (state = {}, action) => {
     switch (action.type) {

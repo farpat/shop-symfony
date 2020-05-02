@@ -64,7 +64,7 @@ ReferenceNavItemComponent.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        currentReference: state.productReducer.currentReference
+        currentReference: state.product.currentReference
     }
 }
 

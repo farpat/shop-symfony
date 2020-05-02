@@ -7,7 +7,7 @@ class CartService {
      *
      * @param {HTMLElement} headCartElement
      */
-    loadData(headCartElement) {
+    createInitialData(headCartElement) {
         this.data = {
             quantities: {},
             items:      JSON.parse(headCartElement.dataset.items)
@@ -39,7 +39,6 @@ class CartService {
     }
 
     getData() {
-        console.log(this.data)
         return this.data
     }
 }

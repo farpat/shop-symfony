@@ -1,4 +1,4 @@
-import cartService from "../CartService"
+import cartService from "../services/CartService"
 
 export default (state = {}, action) => {
     switch (action.type) {

@@ -1,17 +1,23 @@
+import React from "react"
 import {render} from "react-dom"
 import {Provider} from "react-redux"
-import {createStore} from "redux"
-import cartService from "./Cart/CartService"
-import cartReducer from "./Cart/reducer/cartReducer"
-import HeadCartComponent from "./Cart/HeadCartComponent"
-import React from "react"
-
-const headCartElement = document.querySelector('#cart-nav')
-cartService.loadData(headCartElement)
+import HeadCartComponent from "./Shop/components/HeadCart/CartComponent"
+import ProductComponent from "./Shop/components/ProductShow/ProductComponent"
+import productAndCartStore from "./Shop/services/ProductAndCartStore"
+import Arr from "../src/Array/Arr"
 
 render(
-    <Provider store={createStore(cartReducer, cartService.getData())}>
+    <Provider store={productAndCartStore}>
         <HeadCartComponent/>
     </Provider>,
-    headCartElement
+    document.querySelector('#cart-nav')
 )
+
+if (!Arr.isEmpty(productAndCartStore.getState().product)) {
+    render(
+        <Provider store={productAndCartStore}>
+            <ProductComponent/>
+        </Provider>,
+        document.querySelector('#product-component')
+    )
+}

@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from 'prop-types'
 import ReferenceSliderComponent from "./ReferenceSliderComponent"
-import Str from "../../../src/String/Str"
+import Str from "../../../../../src/String/Str"
 import {connect} from "react-redux"
 
 class ProductReferenceComponent extends React.Component {
@@ -85,7 +85,7 @@ ProductReferenceComponent.propTypes = {
     currency:                        PropTypes.string.isRequired,
     activatedSliderIndexByReference: PropTypes.object.isRequired,
     quantities:                      PropTypes.object.isRequired,
-    items:                       PropTypes.object.isRequired,
+    items:                           PropTypes.object.isRequired,
 
     updateQuantity: PropTypes.func.isRequired,
     addInCart:      PropTypes.func.isRequired
@@ -93,9 +93,9 @@ ProductReferenceComponent.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        activatedSliderIndexByReference: state.productReducer.activatedSliderIndexByReference,
-        quantities:                      state.cartReducer.quantities,
-        items: state.cartReducer.items
+        activatedSliderIndexByReference: state.product.activatedSliderIndexByReference,
+        quantities:                      state.cart.quantities,
+        items:                           state.cart.items
     }
 }
 

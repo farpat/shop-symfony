@@ -2,8 +2,8 @@ import React from "react"
 import {hot} from "react-hot-loader/root"
 import {connect} from "react-redux"
 import PropTypes from 'prop-types'
-import ReferenceNavComponent from "./ReferenceNavComponent"
-import ProductReferenceComponent from "./ProductReferenceComponent"
+import ReferenceNavComponent from "./Product/ReferenceNavComponent"
+import ProductReferenceComponent from "./Product/ProductReferenceComponent"
 
 class ProductComponent extends React.Component {
     constructor(props) {
@@ -37,8 +37,8 @@ ProductComponent.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        currentReference: state.productReducer.currentReference,
-        currency:         state.productReducer.currency
+        currentReference: state.product.currentReference,
+        currency:         state.product.currency
     }
 }
 

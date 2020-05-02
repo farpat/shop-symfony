@@ -29,7 +29,7 @@ ReferenceNavComponent.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        references: state.productReducer.productReferences
+        references: state.product.productReferences
     }
 }
 

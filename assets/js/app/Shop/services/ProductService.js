@@ -2,7 +2,7 @@
  * @property {string} baseUrl
  * @property {data} Object
  */
-class ProductService {
+class ProdutAndCartService {
     constructor() {
         this.baseUrl = window.location.origin + window.location.pathname
         this.data = {}
@@ -37,9 +37,15 @@ class ProductService {
 
     /**
      *
-     * @param {HTMLDivElement} productElement
+     * @param {HTMLDivElement|null} productElement
      */
-    loadData(productElement) {
+    createInitialData(productElement) {
+        if (!productElement) {
+            this.data = {}
+
+            return
+        }
+
         const {productReferences: productReferencesInString, currency} = productElement.dataset
         const productReferences = JSON.parse(productReferencesInString)
         const currentReference = this.getCurrentReferenceFromHash(window.location.hash, productReferences)
@@ -78,4 +84,4 @@ class ProductService {
     }
 }
 
-export default new ProductService()
+export default new ProdutAndCartService()

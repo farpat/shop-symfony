@@ -1,7 +1,7 @@
 import React from "react"
 import {connect} from "react-redux"
 import PropTypes from "prop-types"
-import Str from "../../../../src/String/Str"
+import Str from "../../../../../src/String/Str"
 
 class ProductComponent extends React.Component {
     constructor(props) {

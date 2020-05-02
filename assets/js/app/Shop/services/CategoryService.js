@@ -1,16 +1,24 @@
-import Arr from "../../src/Array/Arr"
+import Arr from "../../../src/Array/Arr"
 
 class CategoryService {
     constructor() {
         this.baseUrl = window.location.origin + window.location.pathname
         this.data = {}
         this.currentQueryString = ''
+        this.categoryStore = null
     }
 
     getData() {
         return this.data
     }
 
+    /**
+     *
+     * @param allProducts
+     * @param currentFilters
+     * @returns {Array}
+     * @private
+     */
     getFilteredProducts(allProducts, currentFilters) {
         return allProducts.filter(product => this.filterProduct(product, currentFilters))
     }
@@ -20,7 +28,7 @@ class CategoryService {
      * @param {HTMLElement} productsElement
      * @param {HTMLElement} productFieldsElement
      */
-    loadData(productsElement, productFieldsElement) {
+    createInitialData(productsElement, productFieldsElement) {
         let {products, currentPage, perPage, currency} = productsElement.dataset
         currentPage = Number.parseInt(currentPage)
         products = JSON.parse(products)
@@ -30,13 +38,13 @@ class CategoryService {
         const currentProducts = this.getFilteredProducts(products, currentFilters)
 
         this.data = {
-            allProducts: products,
+            allProducts:      products,
             allProductFields: productFieldsElement ? JSON.parse(productFieldsElement.dataset.productFields) : null,
             perPage,
             currency,
             currentFilters,
             currentProducts,
-            currentPage: this.ensureCurrentPage(currentPage, currentProducts)
+            currentPage:      this.ensureCurrentPage(currentPage, currentProducts)
         }
 
         if (this.data.currentPage !== currentPage) {
@@ -44,17 +52,20 @@ class CategoryService {
         }
     }
 
-
     /**
      *
      * @param {string} key
      * @param {string} value
+     * @private
      */
     addQueryString(key, value) {
         const prefix = this.currentQueryString.length === 0 ? '?' : '&'
         this.currentQueryString += `${prefix + key}=${value}`
     }
 
+    /**
+     * @private
+     */
     refreshUrl() {
         this.currentQueryString = ''
 
@@ -82,6 +93,12 @@ class CategoryService {
         return this
     }
 
+    /**
+     * @param currentPage
+     * @param currentProducts
+     * @returns {number}
+     * @private
+     */
     ensureCurrentPage(currentPage, currentProducts) {
         let newCurrentPage = currentPage
 
@@ -96,6 +113,12 @@ class CategoryService {
         return newCurrentPage
     }
 
+    /**
+     *
+     * @param {string} filterKey
+     * @param {string} newValue
+     * @returns {CategoryService}
+     */
     updateFilter(filterKey, newValue) {
         let currentFilters
 
@@ -120,6 +143,12 @@ class CategoryService {
         return this
     }
 
+    /**
+     *
+     * @param {Object} product
+     * @param {Object} currentFilters
+     * @returns {boolean}
+     */
     filterProduct(product, currentFilters) {
         if (Arr.isEmpty(currentFilters)) {
             return true
@@ -149,6 +178,11 @@ class CategoryService {
         return true
     }
 
+    /**
+     *
+     * @returns {Object}
+     * @private
+     */
     getCurrentFiltersFromUrl() {
         let currentFilters = {}
 

@@ -1,4 +1,4 @@
-import productService from "../ProductService"
+import productService from "../services/ProductService"
 
 export default (state = {}, action) => {
     switch (action.type) {
