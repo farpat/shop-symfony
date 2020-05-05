@@ -4,8 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Module;
 use App\Entity\Product;
-use App\Entity\ProductField;
-use App\Entity\ProductReference;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -59,31 +57,6 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('label', "%$term%")
             ->getQuery()
             ->getResult();
-    }
-
-    /**
-     * @param Product $product
-     *
-     * @return ProductField[]
-     */
-    public function getProductReferences (Product $product): array
-    {
-        if ($product->getProductReferences()->isEmpty()) {
-            return [];
-        }
-
-        /** @var ProductReference $firstProductReference */
-        $firstProductReference = $product->getProductReferences()->first();
-        $productFieldsIds = array_keys($firstProductReference->getFilledProductFields());
-
-        return $this->getEntityManager()->createQueryBuilder()
-            ->select('pr')
-            ->from(ProductReference::class, 'pr')
-            ->where('pr.id IN (:ids)')
-            ->setParameter('ids', $productFieldsIds)
-            ->getQuery()
-            ->getResult();
-
     }
 
     public function getWithAllRelations (int $productId): ?Product

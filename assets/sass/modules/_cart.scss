@@ -8,8 +8,15 @@
   }
 }
 
-.header-cart-item-quantity {
+.cart-item-quantity {
   width: 4rem;
+}
+
+.header-cart-item-td-label {
+  max-width: 25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .header-cart-item-td-icon {

@@ -10,15 +10,12 @@
         "dev": "NODE_ENV=development webpack-dev-server --inline --quiet --hot --config assets/build/webpack.config.js",
         "update": "npm-check-updates -u"
     },
-    "browserslist": [
-        "defaults"
-    ],
     "dependencies": {
-        "@farpat/api": "^1.0.9",
+        "@farpat/api": "^1.0.10",
         "@hot-loader/react-dom": "^16.13.0",
         "bootstrap": "^4.4.1",
         "core-js": "^3.6.5",
-        "jquery": "^3.5.0",
+        "jquery": "^3.5.1",
         "lodash": "^4.17.15",
         "multiple-select": "^1.5.2",
         "places.js": "^1.18.2",
@@ -45,13 +42,13 @@
         "img-loader": "^3.0.1",
         "imports-loader": "^0.8.0",
         "mini-css-extract-plugin": "^0.9.0",
-        "node-sass": "^4.14.0",
+        "node-sass": "^4.14.1",
         "optimize-css-assets-webpack-plugin": "^5.0.3",
         "postcss-loader": "^3.0.0",
         "react-hot-loader": "^4.12.21",
         "sass-loader": "^8.0.2",
         "style-loader": "^1.2.1",
-        "terser-webpack-plugin": "^2.3.6",
+        "terser-webpack-plugin": "^3.0.0",
         "url-loader": "^4.1.0",
         "webpack": "^4.43.0",
         "webpack-bundle-analyzer": "^3.7.0",

@@ -1,6 +1,7 @@
 class CartService {
     constructor() {
         this.data = {}
+        this.baseUrl = window.location.origin
     }
 
     /**
@@ -9,9 +10,24 @@ class CartService {
      */
     createInitialData(headCartElement) {
         this.data = {
-            quantities: {},
-            items:      JSON.parse(headCartElement.dataset.items)
+            quantities:  {},
+            items:       JSON.parse(headCartElement.dataset.items),
+            purchaseUrl: headCartElement.dataset.purchaseUrl,
+            currency:    document.querySelector('#cart-nav').dataset.currency,
+            isLoading:   {}
         }
+    }
+
+    isLoading(referenceId, isLoading) {
+        this.data = {
+            ...this.data,
+            isLoading: {
+                ...this.data.isLoading,
+                [referenceId]: isLoading
+            }
+        }
+
+        return this
     }
 
     updateQuantity(reference, quantity) {
@@ -26,12 +42,32 @@ class CartService {
         return this
     }
 
+    updateItemQuantity(reference, quantity) {
+        this.data = {
+            ...this.data,
+            items:      {
+                ...this.data.items,
+                [reference.id]: {quantity, reference}
+            },
+            quantities: {
+                ...this.data.quantities,
+                [reference.id]: 1
+            }
+        }
+
+        return this
+    }
+
     addInCart(reference, quantity) {
         this.data = {
             ...this.data,
-            items: {
+            items:      {
                 ...this.data.items,
                 [reference.id]: {quantity, reference}
+            },
+            quantities: {
+                ...this.data.quantities,
+                [reference.id]: 1
             }
         }
 
@@ -40,6 +76,18 @@ class CartService {
 
     getData() {
         return this.data
+    }
+
+    deleteItem(reference) {
+        const items = {...this.data.items}
+        delete items[reference.id]
+
+        this.data = {
+            ...this.data,
+            items
+        }
+
+        return this
     }
 }
 

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import ReferenceSliderComponent from "./ReferenceSliderComponent"
 import Str from "../../../../../src/String/Str"
 import {connect} from "react-redux"
+import Requestor from "@farpat/api"
 
 class ProductReferenceComponent extends React.Component {
     constructor(props) {
@@ -47,8 +48,8 @@ class ProductReferenceComponent extends React.Component {
                             {
                                 !this.getCartItem(this.props.currentReference) &&
                                 <div>
-                                    Quantity of &nbsp;
-                                    <input type="number" style={{maxWidth: 75}} min={1}
+                                    Quantity: &nbsp;
+                                    <input type="number" min="1" className="cart-item-quantity"
                                            value={this.getQuantity(this.props.currentReference)}
                                            onChange={this.updateQuantity.bind(this, this.props.currentReference)}/>
 
@@ -102,7 +103,15 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         updateQuantity: (reference, quantity) => dispatch({type: 'UPDATE_QUANTITY', reference, quantity}),
-        addInCart:      (reference, quantity) => dispatch({type: 'ADD_IN_CART', reference, quantity})
+        addInCart:      (reference, quantity) => {
+            Requestor.newRequest()
+                .post('/cart-items', {
+                    productReferenceId: reference.id,
+                    quantity
+                })
+                .then(() => dispatch({type: 'ADD_IN_CART', reference, quantity}))
+                .catch(error => console.error(error))
+        }
     }
 }
 

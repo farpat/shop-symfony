@@ -2,7 +2,7 @@
  * @property {string} baseUrl
  * @property {data} Object
  */
-class ProdutAndCartService {
+class ProductService {
     constructor() {
         this.baseUrl = window.location.origin + window.location.pathname
         this.data = {}
@@ -80,8 +80,12 @@ class ProdutAndCartService {
             }
         }
 
+        if (window.location.href.includes('?r=1')) { //forcing remove ?r=1 in url
+            this.changeHash(currentReference)
+        }
+
         return currentReference
     }
 }
 
-export default new ProdutAndCartService()
+export default new ProductService()

@@ -4,6 +4,8 @@ namespace App\Controller\Front;
 
 use App\Entity\Product;
 use App\Repository\ProductRepository;
+use App\Services\Shop\CartManagement\CartManagerInterface;
+use App\Services\Shop\CartManagerInDatabase;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,7 +24,7 @@ class ProductController extends AbstractController
      *     )
      * @Entity("product", expr="repository.getWithAllRelations(productId)")
      */
-    public function show (Product $product, string $categorySlug, int $categoryId, string $productSlug, ProductRepository $productRepository, SerializerInterface $serializer)
+    public function show (Product $product, string $categorySlug, int $categoryId, string $productSlug, ProductRepository $productRepository, SerializerInterface $serializer, CartManagerInterface $cartManager)
     {
         if ($categorySlug !== $product->getCategory()->getSlug() || $productSlug !== $product->getSlug() || $categoryId !== $product->getCategory()->getId()) {
             return $this->redirect($this->generateUrl('app_product_show', [

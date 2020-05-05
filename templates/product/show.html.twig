@@ -11,8 +11,7 @@
         </section>
 
         <section id="product-show">
-            <div id="product-component" data-product-references="{{ productReferencesInJson }}"
-                 data-currency="{{ parameter('billing', 'currency').code }}"></div>
+            <div id="product-component" data-product-references="{{ productReferencesInJson }}"></div>
 
             <section class="mt-2 text-justify">
                 {{ product.description | raw }}

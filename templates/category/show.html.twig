@@ -30,8 +30,7 @@
             {% if (productFieldsInJson is not empty) and (productsInJson is not empty) %}
                 <div class="col-lg">
                     <section id="products-component" data-products="{{ productsInJson }}"
-                             data-current-page="{{ currentPage }}" data-per-page="{{ perPage }}"
-                             data-currency="{{ parameter('billing', 'currency').code }}">
+                             data-current-page="{{ currentPage }}" data-per-page="{{ perPage }}">
                     </section>
                 </div>
             {% endif %}

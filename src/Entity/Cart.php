@@ -31,15 +31,4 @@ class Cart extends Orderable
 
         return $this;
     }
-
-    public function getOrderItem (ProductReference $productReference): ?OrderItem
-    {
-        foreach ($this->items as $item) {
-            if ($item->getProductReference()->getId() === $productReference->getId()) {
-                return $item;
-            }
-        }
-
-        return null;
-    }
 }

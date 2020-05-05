@@ -5,6 +5,7 @@ namespace App\Controller\Front;
 use App\Repository\CategoryRepository;
 use App\Repository\ModuleRepository;
 use App\Repository\ProductRepository;
+use App\Services\Shop\CartManagerInDatabase;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -40,7 +40,9 @@
                 {% endif %}
 
                 <li id="cart-nav" class="nav-item"
-                    data-items="{{ CartManager.items | json_encode(constant('JSON_FORCE_OBJECT')) }}"></li>
+                    data-items="{{ CartManager.items | json_encode(constant('JSON_FORCE_OBJECT')) }}"
+                    data-purchase-url="{{ path('app_cart_purchase') }}"
+                    data-currency="{{ parameter('billing', 'currency').code }}"></li>
             </ul>
         </section>
     </div>

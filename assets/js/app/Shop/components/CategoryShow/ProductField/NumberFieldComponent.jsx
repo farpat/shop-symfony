@@ -53,8 +53,6 @@ NumberFieldComponent.propTypes = {
 
 
 const mapStateToProps = (state) => {
-    console.log(state.currentFilters)
-
     return {
         filters: state.currentFilters
     }

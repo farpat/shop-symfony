@@ -38,12 +38,14 @@ class CartComponent extends React.Component {
                                 <tbody>
                                 {
                                     referenceIds.map(referenceId =>
-                                        <ItemComponent item={this.getItem(referenceId)} key={referenceId}/>
+                                        <ItemComponent item={this.getItem(referenceId)} key={referenceId}
+                                                       currency={this.props.currency}/>
                                     )
                                 }
                                 </tbody>
 
-                                <TotalComponent items={this.props.items}/>
+                                <TotalComponent items={this.props.items} currency={this.props.currency}
+                                                purchaseUrl={this.props.purchaseUrl}/>
                             </table>
                         </div>
                     </div>
@@ -54,12 +56,29 @@ class CartComponent extends React.Component {
 }
 
 CartComponent.propTypes = {
-    items: PropTypes.object.isRequired
+    items:       PropTypes.objectOf(PropTypes.shape({
+        quantity: PropTypes.number.isRequired,
+
+        reference: PropTypes.shape({
+            url:                     PropTypes.string.isRequired,
+            label:                   PropTypes.string.isRequired,
+            unitPriceIncludingTaxes: PropTypes.number.isRequired,
+            unitPriceExcludingTaxes: PropTypes.number.isRequired,
+            mainImage:               PropTypes.shape({
+                urlThumbnail: PropTypes.string.isRequired,
+                altThumbnail: PropTypes.string.isRequired
+            })
+        })
+    })).isRequired,
+    purchaseUrl: PropTypes.string.isRequired,
+    currency:    PropTypes.string.isRequired
 }
 
 const mapStateToProps = (state) => {
     return {
-        items: state.cart.items
+        items:       state.cart.items,
+        purchaseUrl: state.cart.purchaseUrl,
+        currency:    state.cart.currency
     }
 }
 

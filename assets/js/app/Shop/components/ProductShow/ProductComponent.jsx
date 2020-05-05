@@ -38,7 +38,7 @@ ProductComponent.propTypes = {
 const mapStateToProps = (state) => {
     return {
         currentReference: state.product.currentReference,
-        currency:         state.product.currency
+        currency:         state.cart.currency
     }
 }
 

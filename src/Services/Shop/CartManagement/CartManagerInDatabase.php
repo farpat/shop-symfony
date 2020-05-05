@@ -1,0 +1,154 @@
+<?php
+
+namespace App\Services\Shop\CartManagement;
+
+
+use App\Entity\{Cart, OrderItem, ProductReference, User};
+use App\Repository\ProductReferenceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class CartManagerInDatabase implements CartManagerInterface
+{
+    private ProductReferenceRepository $productReferenceRepository;
+    private EntityManagerInterface $entityManager;
+    private User $user;
+    private Cart $cart;
+    private SerializerInterface $serializer;
+    private ArrayCollection $items;
+
+    public function __construct (EntityManagerInterface $entityManager, ProductReferenceRepository $productReferenceRepository, User $user, SerializerInterface $serializer)
+    {
+        $this->productReferenceRepository = $productReferenceRepository;
+        $this->entityManager = $entityManager;
+        $this->user = $user;
+        $this->cart = $this->getCart();
+        $this->items = $this->cart->getItems();
+        $this->serializer = $serializer;
+    }
+
+    public function getCart (): Cart
+    {
+        if (($cart = $this->user->getCart()) !== null) {
+            return $cart;
+        }
+
+        $this->entityManager->persist($cart = (new Cart)->setUser($this->user));
+
+        return $cart;
+    }
+
+    public function deleteItem (int $productReferenceId): array
+    {
+        $productReference = $this->getProductReference($productReferenceId);
+        if (($orderItem = $this->getOrderItem($productReference)) === null) {
+            throw new \InvalidArgumentException("The product reference is not in cart");
+        }
+
+        $this->cart->removeItem($orderItem);
+
+        if ($this->cart->getItemsCount() === 0) {
+            $this->entityManager->remove($this->cart);
+        }
+
+        return [
+            'quantity'           => $orderItem->getQuantity(),
+            'productReferenceId' => $orderItem->getProductReference()->getId()
+        ];
+    }
+
+    private function getProductReference (int $productReferenceId): ProductReference
+    {
+        $productReference = $this->productReferenceRepository->find($productReferenceId);
+        if ($productReference === null) {
+            throw new \InvalidArgumentException("The product reference doesn't exist!");
+        }
+
+        return $productReference;
+    }
+
+    private function getOrderItem (ProductReference $productReference): ?OrderItem
+    {
+        foreach ($this->items as $item) {
+            if ($item->getProductReference()->getId() === $productReference->getId()) {
+                return $item;
+            }
+        }
+
+        return null;
+    }
+
+    public function patchItem (int $quantity, int $productReferenceId): array
+    {
+        $this->checkQuantity($quantity);
+        $productReference = $this->getProductReference($productReferenceId);
+        if (($orderItem = $this->getOrderItem($productReference)) === null) {
+            throw new \InvalidArgumentException("The product reference is not in cart");
+        }
+
+        $oldAmountExcludingTaxes = $orderItem->getAmountExcludingTaxes();
+        $oldAmountIncludingTaxes = $orderItem->getAmountIncludingTaxes();
+
+        $orderItem
+            ->setQuantity($quantity)
+            ->setAmountExcludingTaxes(($quantity * $productReference->getUnitPriceExcludingTaxes()) - $oldAmountExcludingTaxes)
+            ->setAmountIncludingTaxes(($quantity * $productReference->getUnitPriceIncludingTaxes()) - $oldAmountIncludingTaxes);
+
+        $this->entityManager->persist($orderItem);
+
+        return [
+            'quantity'           => $orderItem->getQuantity(),
+            'productReferenceId' => $orderItem->getProductReference()->getId()
+        ];
+    }
+
+    private function checkQuantity (int $quantity)
+    {
+        if ($quantity < 1) {
+            throw new \InvalidArgumentException("The quantity ($quantity) must be greather than 1");
+        }
+    }
+
+    public function addItem (int $quantity, int $productReferenceId): array
+    {
+        $this->checkQuantity($quantity);
+        $productReference = $this->getProductReference($productReferenceId);
+        if ($this->getOrderItem($productReference) !== null) {
+            throw new \Exception("The product reference is already in cart");
+        }
+
+        $orderItem = (new OrderItem)
+            ->setQuantity($quantity)
+            ->setAmountExcludingTaxes($quantity * $productReference->getUnitPriceExcludingTaxes())
+            ->setAmountIncludingTaxes($quantity * $productReference->getUnitPriceIncludingTaxes())
+            ->setProductReference($productReference);
+
+        $this->entityManager->persist($orderItem);
+        $this->cart->addItem($orderItem);
+
+        return [
+            'quantity'           => $orderItem->getQuantity(),
+            'productReferenceId' => $orderItem->getProductReference()->getId()
+        ];;
+    }
+
+    public function getPureItems (): array
+    {
+        return $this->items;
+    }
+
+    public function getItems (): array
+    {
+        $items = [];
+
+        if (empty($this->items)) {
+            return $items;
+        }
+
+        return $this->serializer->normalize(array_map(fn(OrderItem $orderItem) => [
+            'quantity'  => $orderItem->getQuantity(),
+            'reference' => $orderItem->getProductReference()
+        ], $this->items), 'json');
+    }
+}

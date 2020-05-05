@@ -29,7 +29,7 @@ class CategoryService {
      * @param {HTMLElement} productFieldsElement
      */
     createInitialData(productsElement, productFieldsElement) {
-        let {products, currentPage, perPage, currency} = productsElement.dataset
+        let {products, currentPage, perPage} = productsElement.dataset
         currentPage = Number.parseInt(currentPage)
         products = JSON.parse(products)
         perPage = Number.parseInt(perPage)
@@ -41,7 +41,7 @@ class CategoryService {
             allProducts:      products,
             allProductFields: productFieldsElement ? JSON.parse(productFieldsElement.dataset.productFields) : null,
             perPage,
-            currency,
+            currency:         document.querySelector('#cart-nav').dataset.currency,
             currentFilters,
             currentProducts,
             currentPage:      this.ensureCurrentPage(currentPage, currentProducts)

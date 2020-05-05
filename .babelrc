@@ -3,7 +3,15 @@
         "react-hot-loader/babel"
     ],
     "presets": [
-        "@babel/preset-env",
+        [
+            "@babel/preset-env",
+            {
+                "targets": "last 2 versions, not dead, not ie 6-11",
+                "modules": false,
+                "useBuiltIns": false,
+                "corejs": null
+            }
+        ],
         "@babel/preset-react"
     ]
 }

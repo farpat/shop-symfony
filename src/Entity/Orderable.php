@@ -142,7 +142,7 @@ abstract class Orderable
     /**
      * @return Collection|OrderItem[]
      */
-    public function getItems (): Collection
+    public function getItems (): array
     {
         return $this->items;
     }
