@@ -18,15 +18,15 @@ class CartService {
         }
     }
 
-    isLoading(referenceId, isLoading) {
+    isLoading(reference, isLoading) {
         this.data = {
             ...this.data,
             isLoading: {
                 ...this.data.isLoading,
-                [referenceId]: isLoading
+                [reference.id]: isLoading
             }
         }
-
+        
         return this
     }
 
