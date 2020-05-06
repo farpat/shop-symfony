@@ -9,7 +9,9 @@ import Arr from "../src/Array/Arr"
 //---- DON'T CLOSE HEADER CART -----\\
 const cartNavElement = document.querySelector('#cart-nav')
 cartNavElement.addEventListener('click', event => {
-    if (event.target.id !== 'button-cart') {
+    console.log(event)
+
+    if (event.target.id !== 'button-cart' && (event.target.tagName !== 'I' && event.target.tagName !== 'BUTTON')) {
         event.stopPropagation()
     }
 })

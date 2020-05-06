@@ -188,10 +188,11 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
     private function makeCart (User $user, array $addresses, array $allProductReferences, ObjectManager $manager)
     {
         $cart = (new Cart)
-            ->setUser($user)
             ->setUpdatedAt(new \DateTime())
             ->setComment($this->faker->boolean(25) ? $this->faker->sentence : null)
             ->setDeliveredAddress($addresses[random_int(0, count($addresses) - 1)]);
+
+        $user->setCart($cart);
 
         $items = $this->makeOrderItems(random_int(1, 5), $cart, $allProductReferences, $manager);
 

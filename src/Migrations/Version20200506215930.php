@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200325115553 extends AbstractMigration
+final class Version20200506215930 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -33,16 +33,16 @@ final class Version20200325115553 extends AbstractMigration
         $this->addSql('CREATE TABLE module (id INT AUTO_INCREMENT NOT NULL, label VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, is_active TINYINT(1) DEFAULT \'0\' NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE module_parameter (id INT AUTO_INCREMENT NOT NULL, module_id INT NOT NULL, label LONGTEXT NOT NULL, description LONGTEXT DEFAULT NULL, value LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\', INDEX IDX_70F68ED8AFC2B591 (module_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE order_item (id INT AUTO_INCREMENT NOT NULL, product_reference_id INT NOT NULL, orderable_id INT NOT NULL, quantity INT NOT NULL, amount_excluding_taxes NUMERIC(10, 2) NOT NULL, amount_including_taxes NUMERIC(10, 2) NOT NULL, INDEX IDX_52EA1F099BE1FCC2 (product_reference_id), INDEX IDX_52EA1F096174077 (orderable_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE password_reset (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(255) NOT NULL, token VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE product (id INT AUTO_INCREMENT NOT NULL, main_image_id INT DEFAULT NULL, category_id INT DEFAULT NULL, label VARCHAR(255) NOT NULL, slug VARCHAR(255) NOT NULL, excerpt LONGTEXT DEFAULT NULL, description LONGTEXT DEFAULT NULL, INDEX IDX_D34A04ADE4873418 (main_image_id), INDEX IDX_D34A04AD12469DE2 (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE product_tag (product_id INT NOT NULL, tag_id INT NOT NULL, INDEX IDX_E3A6E39C4584665A (product_id), INDEX IDX_E3A6E39CBAD26311 (tag_id), PRIMARY KEY(product_id, tag_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE product_tax (product_id INT NOT NULL, tax_id INT NOT NULL, INDEX IDX_6EAEEE694584665A (product_id), INDEX IDX_6EAEEE69B2A824D8 (tax_id), PRIMARY KEY(product_id, tax_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE product_field (id INT AUTO_INCREMENT NOT NULL, type LONGTEXT NOT NULL, label VARCHAR(255) NOT NULL, is_required TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE product_reference (id INT AUTO_INCREMENT NOT NULL, product_id INT NOT NULL, main_image_id INT DEFAULT NULL, label VARCHAR(255) NOT NULL, unit_price_excluding_taxes NUMERIC(10, 2) NOT NULL, unit_price_including_taxes NUMERIC(10, 2) NOT NULL, filled_product_fields JSON NOT NULL, INDEX IDX_C003FF9E4584665A (product_id), INDEX IDX_C003FF9EE4873418 (main_image_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE product_reference_image (product_reference_id INT NOT NULL, image_id INT NOT NULL, INDEX IDX_211761D29BE1FCC2 (product_reference_id), INDEX IDX_211761D23DA5256D (image_id), PRIMARY KEY(product_reference_id, image_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE reset_password_request (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, selector VARCHAR(20) NOT NULL, hashed_token VARCHAR(100) NOT NULL, requested_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', expires_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', INDEX IDX_7CE748AA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, cart_id INT DEFAULT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, email_verified_at DATETIME DEFAULT NULL, stripe_id VARCHAR(255) DEFAULT NULL, remember_token VARCHAR(100) DEFAULT NULL, updated_at DATETIME DEFAULT NULL, created_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), UNIQUE INDEX UNIQ_8D93D6491AD5CDBF (cart_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE tag (id INT AUTO_INCREMENT NOT NULL, label VARCHAR(255) NOT NULL, type ENUM(\'COMPLEMENTARITY\', \'SIMILARITY\'), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE tax (id INT AUTO_INCREMENT NOT NULL, label VARCHAR(255) NOT NULL, type ENUM(\'PERCENTAGE\', \'UNITY\'), value NUMERIC(10, 2) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, cart_id INT DEFAULT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, email_verified_at DATETIME DEFAULT NULL, stripe_id VARCHAR(255) DEFAULT NULL, remember_token VARCHAR(100) DEFAULT NULL, updated_at DATETIME DEFAULT NULL, created_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), UNIQUE INDEX UNIQ_8D93D6491AD5CDBF (cart_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE address ADD CONSTRAINT FK_D4E6F81A76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE billing ADD CONSTRAINT FK_EC224CAAA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE billing ADD CONSTRAINT FK_EC224CAABF396750 FOREIGN KEY (id) REFERENCES orderable (id) ON DELETE CASCADE');
@@ -67,6 +67,7 @@ final class Version20200325115553 extends AbstractMigration
         $this->addSql('ALTER TABLE product_reference ADD CONSTRAINT FK_C003FF9EE4873418 FOREIGN KEY (main_image_id) REFERENCES image (id)');
         $this->addSql('ALTER TABLE product_reference_image ADD CONSTRAINT FK_211761D29BE1FCC2 FOREIGN KEY (product_reference_id) REFERENCES product_reference (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE product_reference_image ADD CONSTRAINT FK_211761D23DA5256D FOREIGN KEY (image_id) REFERENCES image (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE reset_password_request ADD CONSTRAINT FK_7CE748AA76ED395 FOREIGN KEY (user_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D6491AD5CDBF FOREIGN KEY (cart_id) REFERENCES cart (id)');
     }
 
@@ -95,11 +96,12 @@ final class Version20200325115553 extends AbstractMigration
         $this->addSql('ALTER TABLE category_product_field DROP FOREIGN KEY FK_E4721B4F8F876D27');
         $this->addSql('ALTER TABLE order_item DROP FOREIGN KEY FK_52EA1F099BE1FCC2');
         $this->addSql('ALTER TABLE product_reference_image DROP FOREIGN KEY FK_211761D29BE1FCC2');
-        $this->addSql('ALTER TABLE product_tag DROP FOREIGN KEY FK_E3A6E39CBAD26311');
-        $this->addSql('ALTER TABLE product_tax DROP FOREIGN KEY FK_6EAEEE69B2A824D8');
         $this->addSql('ALTER TABLE address DROP FOREIGN KEY FK_D4E6F81A76ED395');
         $this->addSql('ALTER TABLE billing DROP FOREIGN KEY FK_EC224CAAA76ED395');
         $this->addSql('ALTER TABLE visit DROP FOREIGN KEY FK_437EE939A76ED395');
+        $this->addSql('ALTER TABLE reset_password_request DROP FOREIGN KEY FK_7CE748AA76ED395');
+        $this->addSql('ALTER TABLE product_tag DROP FOREIGN KEY FK_E3A6E39CBAD26311');
+        $this->addSql('ALTER TABLE product_tax DROP FOREIGN KEY FK_6EAEEE69B2A824D8');
         $this->addSql('DROP TABLE address');
         $this->addSql('DROP TABLE billing');
         $this->addSql('DROP TABLE orderable');
@@ -111,15 +113,15 @@ final class Version20200325115553 extends AbstractMigration
         $this->addSql('DROP TABLE module');
         $this->addSql('DROP TABLE module_parameter');
         $this->addSql('DROP TABLE order_item');
-        $this->addSql('DROP TABLE password_reset');
         $this->addSql('DROP TABLE product');
         $this->addSql('DROP TABLE product_tag');
         $this->addSql('DROP TABLE product_tax');
         $this->addSql('DROP TABLE product_field');
         $this->addSql('DROP TABLE product_reference');
         $this->addSql('DROP TABLE product_reference_image');
+        $this->addSql('DROP TABLE reset_password_request');
+        $this->addSql('DROP TABLE user');
         $this->addSql('DROP TABLE tag');
         $this->addSql('DROP TABLE tax');
-        $this->addSql('DROP TABLE user');
     }
 }

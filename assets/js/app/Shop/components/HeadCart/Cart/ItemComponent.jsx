@@ -27,7 +27,6 @@ class ItemComponent extends React.Component {
     }
 
     deleteItem() {
-        console.log('delete')
         this.props.deleteItem(this.props.item.reference)
     }
 

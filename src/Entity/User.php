@@ -73,7 +73,7 @@ class User implements UserInterface
     private $billings;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Cart", inversedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Cart::class, cascade={"persist", "remove"})
      */
     private $cart;
 
@@ -273,12 +273,12 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getCart (): ?Cart
+    public function getCart(): ?Cart
     {
         return $this->cart;
     }
 
-    public function setCart (?Cart $cart): self
+    public function setCart(?Cart $cart): self
     {
         $this->cart = $cart;
 
