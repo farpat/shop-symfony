@@ -5,6 +5,7 @@ namespace App\Controller\Front;
 use App\Repository\CategoryRepository;
 use App\Repository\ModuleRepository;
 use App\Repository\ProductRepository;
+use App\Services\Shop\CartManagement\CartManagerInterface;
 use App\Services\Shop\CartManagerInDatabase;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,8 +25,10 @@ class HomeController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      */
-    public function index (ModuleRepository $moduleRepository, ProductRepository $productRepository, CategoryRepository $categoryRepository)
+    public function index (ModuleRepository $moduleRepository, ProductRepository $productRepository, CategoryRepository $categoryRepository, CartManagerInterface $cartManager)
     {
+        $cartManager->getItems();
+
         $elementsToDisplayInHomepageParameter = $moduleRepository->getParameter('home', 'display');
 
         $elementsToDisplayInHomepage = $elementsToDisplayInHomepageParameter !== null ?

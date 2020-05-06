@@ -1,10 +1,10 @@
-import Input from "./Input";
-import Str from "../String/Str";
+import Input from "./Input"
+import Str from "../String/Str"
 
 export default class Autocomplete {
     constructor(options) {
-        this.setOptions(options);
-        this.init();
+        this.setOptions(options)
+        this.init()
     }
 
     setOptions(options) {
@@ -19,28 +19,28 @@ export default class Autocomplete {
             menuClass:  undefined,
             renderItem: function (item, search) {
                 if (!item.label) {
-                    return '';
+                    return ''
                 }
 
-                return `<div class="autocomplete-suggestion" data-val="${item}">${Str.markValueIntoText(search, item.label)}</div>`;
+                return `<div class="autocomplete-suggestion" data-val="${item}">${Str.markValueIntoText(search, item.label)}</div>`
             },
             onSelect:   function (e, term, item) {
             }
-        };
-        this.options = {...defaultOptions, ...options};
+        }
+        this.options = {...defaultOptions, ...options}
     }
 
     init() {
-        this.inputElements = this.options.selector instanceof HTMLElement ? [this.options.selector] : document.querySelectorAll(this.options.selector);
-        this.inputs = [];
+        this.inputElements = this.options.selector instanceof HTMLElement ? [this.options.selector] : document.querySelectorAll(this.options.selector)
+        this.inputs = []
         this.inputElements.forEach((inputElement) => {
-            this.inputs.push(new Input(inputElement, this.options));
-        });
+            this.inputs.push(new Input(inputElement, this.options))
+        })
     }
 
     destroy() {
         this.inputs.forEach(function (input) {
-            input.destroy();
-        });
+            input.destroy()
+        })
     }
 }

@@ -52,13 +52,11 @@ class CartController extends AbstractController
 
     private function returnJsonResponseFromCartManager (int $productReferenceId): JsonResponse
     {
-        $pureItems = $this->cartManager->getPureItems();
-
-        $response = new JsonResponse($pureItems[$productReferenceId] ?? 'OK');
+        $response = new JsonResponse('OK'); //TODO renvoyer ['quantity' => (int)$quantity, 'reference' => (object)$reference]
 
         if ($this->cartManager instanceof CartManagerInCookie) {
             $response->headers->setCookie(
-                new Cookie($this->cartManager::COOKIE_KEY, serialize($pureItems))
+                new Cookie($this->cartManager::COOKIE_KEY, serialize($this->cartManager->getPureItems()))
             );
         }
 

@@ -245,12 +245,12 @@ class User implements UserInterface
     /**
      * @return Collection|Billing[]
      */
-    public function getBillings(): Collection
+    public function getBillings (): Collection
     {
         return $this->billings;
     }
 
-    public function addBilling(Billing $billing): self
+    public function addBilling (Billing $billing): self
     {
         if (!$this->billings->contains($billing)) {
             $this->billings[] = $billing;
@@ -260,7 +260,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function removeBilling(Billing $billing): self
+    public function removeBilling (Billing $billing): self
     {
         if ($this->billings->contains($billing)) {
             $this->billings->removeElement($billing);
@@ -273,12 +273,12 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getCart(): ?Cart
+    public function getCart (): ?Cart
     {
         return $this->cart;
     }
 
-    public function setCart(?Cart $cart): self
+    public function setCart (?Cart $cart): self
     {
         $this->cart = $cart;
 

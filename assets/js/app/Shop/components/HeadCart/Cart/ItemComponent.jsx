@@ -27,6 +27,7 @@ class ItemComponent extends React.Component {
     }
 
     deleteItem() {
+        console.log('delete')
         this.props.deleteItem(this.props.item.reference)
     }
 
@@ -60,13 +61,13 @@ class ItemComponent extends React.Component {
                 <td className="header-cart-item-td-icon">
                     {
                         !this.isLoading() &&
-                        <button className="btn btn-sm btn-link p-0" type="button" onClick={this.deleteItem.bind(this)}>
-                            <i className="fas fa-times"></i>
+                        <button className="btn btn-sm p-0" type="button" onClick={this.deleteItem.bind(this)}>
+                            <i className="fas fa-times"/>
                         </button>
                     }
                     {
                         this.isLoading() &&
-                        <span><i className="fas fa-spinner spinner"></i></span>
+                        <span><i className="fas fa-spinner spinner"/></span>
                     }
                 </td>
             </tr>
@@ -97,7 +98,7 @@ ItemComponent.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        isLoading: state.cart.isLoading
+        isLoading: state.cart.itemInLoading
     }
 }
 const mapStateToDispatch = (dispatch) => {

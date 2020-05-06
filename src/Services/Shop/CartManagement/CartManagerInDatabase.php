@@ -4,8 +4,8 @@ namespace App\Services\Shop\CartManagement;
 
 
 use App\Entity\{Cart, OrderItem, ProductReference, User};
+use App\Repository\CartRepository;
 use App\Repository\ProductReferenceRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -16,26 +16,22 @@ class CartManagerInDatabase implements CartManagerInterface
     private User $user;
     private Cart $cart;
     private SerializerInterface $serializer;
-    private ArrayCollection $items;
+    /** @var OrderItem[] $items */
+    private array $items;
 
-    public function __construct (EntityManagerInterface $entityManager, ProductReferenceRepository $productReferenceRepository, User $user, SerializerInterface $serializer)
+    public function __construct (EntityManagerInterface $entityManager, ProductReferenceRepository $productReferenceRepository, CartRepository $cartRepository, User $user, SerializerInterface $serializer)
     {
         $this->productReferenceRepository = $productReferenceRepository;
         $this->entityManager = $entityManager;
         $this->user = $user;
-        $this->cart = $this->getCart();
-        $this->items = $this->cart->getItems();
+        $this->cart = $cartRepository->getCart($user) ?: $this->createCart();
+        $this->items = $this->cart->getItems()->toArray();
         $this->serializer = $serializer;
     }
 
-    public function getCart (): Cart
+    public function createCart (): Cart
     {
-        if (($cart = $this->user->getCart()) !== null) {
-            return $cart;
-        }
-
         $this->entityManager->persist($cart = (new Cart)->setUser($this->user));
-
         return $cart;
     }
 
@@ -79,6 +75,51 @@ class CartManagerInDatabase implements CartManagerInterface
         return null;
     }
 
+    /**
+     *
+     * @return bool true if items in database is updated, otherwise false
+     * @throws \Exception
+     */
+    public function merge (array $cookieItems): bool
+    {
+        if (empty($cookieItems)) {
+            return false;
+        }
+
+        $databaseItems = [];
+        foreach ($this->items as $productReferenceId => $item) {
+            $databaseItems[$item->getProductReference()->getId()] = $item;
+        }
+
+        $updates = [];
+        $additions = [];
+        foreach ($cookieItems as $productReferenceId => $cookieItem) {
+            $databaseItem = $databaseItems[$productReferenceId] ?? null;
+
+            if ($databaseItem !== null && $cookieItem['quantity'] > $databaseItem->getQuantity()) {
+                $updates[$productReferenceId] = $cookieItem['quantity'];
+            }
+
+            if ($databaseItem === null) {
+                $additions[$productReferenceId] = $cookieItem['quantity'];
+            }
+        }
+
+        if (empty($updates) && empty($additions)) {
+            return false;
+        }
+
+        foreach ($updates as $productReferenceId => $quantity) {
+            $this->patchItem($quantity, $productReferenceId);
+        }
+
+        foreach ($additions as $productReferenceId => $quantity) {
+            $this->addItem($quantity, $productReferenceId);
+        }
+
+        return true;
+    }
+
     public function patchItem (int $quantity, int $productReferenceId): array
     {
         $this->checkQuantity($quantity);
@@ -87,13 +128,10 @@ class CartManagerInDatabase implements CartManagerInterface
             throw new \InvalidArgumentException("The product reference is not in cart");
         }
 
-        $oldAmountExcludingTaxes = $orderItem->getAmountExcludingTaxes();
-        $oldAmountIncludingTaxes = $orderItem->getAmountIncludingTaxes();
-
         $orderItem
             ->setQuantity($quantity)
-            ->setAmountExcludingTaxes(($quantity * $productReference->getUnitPriceExcludingTaxes()) - $oldAmountExcludingTaxes)
-            ->setAmountIncludingTaxes(($quantity * $productReference->getUnitPriceIncludingTaxes()) - $oldAmountIncludingTaxes);
+            ->setAmountExcludingTaxes($quantity * $productReference->getUnitPriceExcludingTaxes())
+            ->setAmountIncludingTaxes($quantity * $productReference->getUnitPriceIncludingTaxes());
 
         $this->entityManager->persist($orderItem);
 
@@ -146,9 +184,13 @@ class CartManagerInDatabase implements CartManagerInterface
             return $items;
         }
 
-        return $this->serializer->normalize(array_map(fn(OrderItem $orderItem) => [
-            'quantity'  => $orderItem->getQuantity(),
-            'reference' => $orderItem->getProductReference()
-        ], $this->items), 'json');
+        foreach ($this->items as $item) {
+            $items[$item->getProductReference()->getId()] = [
+                'quantity'  => $item->getQuantity(),
+                'reference' => $this->serializer->normalize($item->getProductReference(), 'json')
+            ];
+        }
+
+        return $items;
     }
 }

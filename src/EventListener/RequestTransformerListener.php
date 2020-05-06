@@ -1,15 +1,12 @@
 <?php
 
-namespace SymfonyBundles\JsonRequestBundle\EventListener;
+namespace App\EventListener;
 
 use Symfony\Component\HttpFoundation\{Request, Response};
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class RequestTransformerListener
 {
-    /**
-     * {@inheritdoc}
-     */
     public function onKernelRequest (RequestEvent $event): void
     {
         $request = $event->getRequest();

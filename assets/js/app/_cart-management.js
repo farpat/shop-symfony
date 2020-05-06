@@ -6,11 +6,19 @@ import ProductComponent from "./Shop/components/ProductShow/ProductComponent"
 import productAndCartStore from "./Shop/services/ProductAndCartStore"
 import Arr from "../src/Array/Arr"
 
+//---- DON'T CLOSE HEADER CART -----\\
+const cartNavElement = document.querySelector('#cart-nav')
+cartNavElement.addEventListener('click', event => {
+    if (event.target.id !== 'button-cart') {
+        event.stopPropagation()
+    }
+})
+
 render(
     <Provider store={productAndCartStore}>
         <HeadCartComponent/>
     </Provider>,
-    document.querySelector('#cart-nav')
+    cartNavElement
 )
 
 if (!Arr.isEmpty(productAndCartStore.getState().product)) {

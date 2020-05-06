@@ -10,23 +10,23 @@ class CartService {
      */
     createInitialData(headCartElement) {
         this.data = {
-            quantities:  {},
-            items:       JSON.parse(headCartElement.dataset.items),
-            purchaseUrl: headCartElement.dataset.purchaseUrl,
-            currency:    document.querySelector('#cart-nav').dataset.currency,
-            isLoading:   {}
+            quantities:    {},
+            items:         JSON.parse(headCartElement.dataset.items),
+            purchaseUrl:   headCartElement.dataset.purchaseUrl,
+            currency:      document.querySelector('#cart-nav').dataset.currency,
+            itemInLoading: {}
         }
     }
 
-    isLoading(reference, isLoading) {
+    itemInLoading(reference, isLoading) {
         this.data = {
             ...this.data,
-            isLoading: {
-                ...this.data.isLoading,
+            itemInLoading: {
+                ...this.data.itemInLoading,
                 [reference.id]: isLoading
             }
         }
-        
+
         return this
     }
 

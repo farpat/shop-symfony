@@ -21,12 +21,13 @@ security:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
             logout:
-                path: security.logout
+                path: app_auth_security_logout
+                target: /
                 # where to redirect after logout
                 # target: app_any_route
             remember_me:
                 secret: '%kernel.secret%'
-                lifetime: 604800
+                lifetime: 604800 # 1 week in seconds
                 path: /
 
             # activate different ways to authenticate
