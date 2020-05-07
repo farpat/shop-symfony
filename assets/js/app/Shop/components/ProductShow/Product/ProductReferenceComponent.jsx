@@ -109,7 +109,7 @@ const mapDispatchToProps = (dispatch) => {
                     productReferenceId: reference.id,
                     quantity
                 })
-                .then(() => dispatch({type: 'ADD_IN_CART', reference, quantity}))
+                .then(response => dispatch({type: 'ADD_IN_CART', reference: response.reference, quantity}))
                 .catch(error => console.error(error))
         }
     }

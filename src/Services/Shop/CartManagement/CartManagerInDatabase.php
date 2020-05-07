@@ -49,8 +49,8 @@ class CartManagerInDatabase implements CartManagerInterface
         }
 
         return [
-            'quantity'           => $orderItem->getQuantity(),
-            'productReferenceId' => $orderItem->getProductReference()->getId()
+            'quantity'  => 0,
+            'reference' => $this->serializer->normalize($orderItem->getProductReference())
         ];
     }
 
@@ -136,8 +136,8 @@ class CartManagerInDatabase implements CartManagerInterface
         $this->entityManager->persist($orderItem);
 
         return [
-            'quantity'           => $orderItem->getQuantity(),
-            'productReferenceId' => $orderItem->getProductReference()->getId()
+            'quantity'  => $orderItem->getQuantity(),
+            'reference' => $this->serializer->normalize($orderItem->getProductReference())
         ];
     }
 
@@ -166,9 +166,9 @@ class CartManagerInDatabase implements CartManagerInterface
         $this->cart->addItem($orderItem);
 
         return [
-            'quantity'           => $orderItem->getQuantity(),
-            'productReferenceId' => $orderItem->getProductReference()->getId()
-        ];;
+            'quantity'  => $orderItem->getQuantity(),
+            'reference' => $this->serializer->normalize($orderItem->getProductReference())
+        ];
     }
 
     public function getPureItems (): array

@@ -109,8 +109,8 @@ const mapStateToDispatch = (dispatch) => {
                 .patch(`/cart-items/${reference.id}`, {
                     quantity
                 })
-                .then(() => {
-                    dispatch({type: 'UPDATE_ITEM_QUANTITY', reference, quantity})
+                .then(response => {
+                    dispatch({type: 'UPDATE_ITEM_QUANTITY', reference: response.reference, quantity})
                     dispatch({type: 'IS_LOADING', reference, isLoading: false})
                 })
                 .catch(error => console.error(error))

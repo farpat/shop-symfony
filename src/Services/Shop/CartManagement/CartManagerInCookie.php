@@ -36,11 +36,14 @@ class CartManagerInCookie implements CartManagerInterface
         if (!isset($this->items[$productReferenceId])) {
             throw new \InvalidArgumentException("The product reference is not in cart");
         }
-        $this->getProductReference($productReferenceId);
+        $productReference = $this->getProductReference($productReferenceId);
 
-        $item = $this->items[$productReferenceId];
         unset($this->items[$productReferenceId]);
-        return $item;
+
+        return [
+            'quantity'  => 0,
+            'reference' => $this->serializer->normalize($productReference)
+        ];
     }
 
     private function getProductReference (int $productReferenceId): ProductReference
@@ -83,11 +86,14 @@ class CartManagerInCookie implements CartManagerInterface
         if (!isset($this->items[$productReferenceId])) {
             throw new \InvalidArgumentException("The product reference is not in cart");
         }
-        $this->getProductReference($productReferenceId);
+        $productReference = $this->getProductReference($productReferenceId);
 
         $this->items[$productReferenceId]['quantity'] = $quantity;
 
-        return $this->items[$productReferenceId];
+        return [
+            'quantity'  => $quantity,
+            'reference' => $this->serializer->normalize($productReference)
+        ];
     }
 
     private function checkQuantity (int $quantity)
@@ -103,13 +109,16 @@ class CartManagerInCookie implements CartManagerInterface
         if (isset($this->items[$productReferenceId])) {
             throw new \InvalidArgumentException("The product reference is already in cart");
         }
-        $this->getProductReference($productReferenceId);
+        $productReference = $this->getProductReference($productReferenceId);
 
         $this->items[$productReferenceId] = [
             'quantity'    => $quantity,
             'referenceId' => $productReferenceId
         ];
 
-        return $this->items[$productReferenceId];
+        return [
+            'quantity'  => $quantity,
+            'reference' => $this->serializer->normalize($productReference)
+        ];
     }
 }

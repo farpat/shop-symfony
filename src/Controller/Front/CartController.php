@@ -38,7 +38,7 @@ class CartController extends AbstractController
      */
     public function storeItem (Request $request)
     {
-        $this->cartManager->addItem(
+        $orderItem = $this->cartManager->addItem(
             $request->request->getInt('quantity'),
             $productReferenceId = $request->request->getInt('productReferenceId')
         );
@@ -47,12 +47,12 @@ class CartController extends AbstractController
             $this->entityManager->flush();
         }
 
-        return $this->returnJsonResponseFromCartManager($productReferenceId);
+        return $this->returnJsonResponseFromCartManager($orderItem);
     }
 
-    private function returnJsonResponseFromCartManager (int $productReferenceId): JsonResponse
+    private function returnJsonResponseFromCartManager (array $orderItem): JsonResponse
     {
-        $response = new JsonResponse('OK'); //TODO renvoyer ['quantity' => (int)$quantity, 'reference' => (object)$reference]
+        $response = new JsonResponse($orderItem); //TODO renvoyer ['quantity' => (int)$quantity, 'reference' => (object)$reference]
 
         if ($this->cartManager instanceof CartManagerInCookie) {
             $response->headers->setCookie(
@@ -68,7 +68,7 @@ class CartController extends AbstractController
      */
     public function patchItem (int $productReferenceId, Request $request)
     {
-        $this->cartManager->patchItem(
+        $orderItem = $this->cartManager->patchItem(
             $request->request->getInt('quantity'),
             $productReferenceId
         );
@@ -77,7 +77,7 @@ class CartController extends AbstractController
             $this->entityManager->flush();
         }
 
-        return $this->returnJsonResponseFromCartManager($productReferenceId);
+        return $this->returnJsonResponseFromCartManager($orderItem);
     }
 
     /**
@@ -85,13 +85,13 @@ class CartController extends AbstractController
      */
     public function deleteItem (int $productReferenceId)
     {
-        $this->cartManager->deleteItem($productReferenceId);
+        $orderItem = $this->cartManager->deleteItem($productReferenceId);
 
         if ($this->cartManager instanceof CartManagerInDatabase) {
             $this->entityManager->flush();
         }
 
-        return $this->returnJsonResponseFromCartManager($productReferenceId);
+        return $this->returnJsonResponseFromCartManager($orderItem);
     }
 
     /**
