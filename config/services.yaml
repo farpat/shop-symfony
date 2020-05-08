@@ -32,8 +32,5 @@ services:
         tags:
             - {name: kernel.event_listener, event: kernel.request}
 
-    App\Services\Shop\CartManagement\CartManagerFactory:
-        arguments: ['@security.helper', '@doctrine.orm.default_entity_manager', '@App\Repository\ProductReferenceRepository', '@request_stack', '@Symfony\Component\Serializer\Normalizer\NormalizerInterface', '@App\Repository\CartRepository']
-
     App\Services\Shop\CartManagement\CartManagerInterface:
         factory: ['@App\Services\Shop\CartManagement\CartManagerFactory', 'createCartManagerInterface']

@@ -2,6 +2,7 @@
 
 namespace App\Controller\Front;
 
+use App\Services\Shop\CartManagement\CartManagerInterface;
 use App\Repository\{CategoryRepository, ModuleRepository, ProductRepository};
 use App\Services\ModuleService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +23,7 @@ class HomeController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      */
-    public function index (ModuleService $moduleService, CacheInterface $cache)
+    public function index (ModuleService $moduleService, CartManagerInterface $cartManager)
     {
         $elementsToDisplayInHomepageParameter = $moduleService->getParameter('home', 'display');
 

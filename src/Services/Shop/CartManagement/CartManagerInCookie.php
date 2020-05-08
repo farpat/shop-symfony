@@ -40,7 +40,7 @@ class CartManagerInCookie implements CartManagerInterface
 
         return [
             'quantity'  => 0,
-            'reference' => $this->normalizer->normalize($productReference)
+            'reference' => $this->normalizer->normalize($productReference, 'json')
         ];
     }
 
@@ -90,7 +90,7 @@ class CartManagerInCookie implements CartManagerInterface
 
         return [
             'quantity'  => $quantity,
-            'reference' => $this->normalizer->normalize($productReference)
+            'reference' => $this->normalizer->normalize($productReference, 'json')
         ];
     }
 
@@ -116,7 +116,7 @@ class CartManagerInCookie implements CartManagerInterface
 
         return [
             'quantity'  => $quantity,
-            'reference' => $this->normalizer->normalize($productReference)
+            'reference' => $this->normalizer->normalize($productReference, 'json')
         ];
     }
 }
