@@ -46,8 +46,27 @@ class CategoryService
         });
     }
 
-    public function generateHtml (array $parentCategories): string
+    public function getRootCategories (): array
     {
+        return $this->cache->get('category#getRootCategories', function (ItemInterface $item) {
+            return $this->categoryRepository->getRootCategories();
+        });
+    }
+
+    public function getProducts (Category $category): array
+    {
+        return $this->categoryRepository->getProducts($category);
+    }
+
+    public function generateHtml (array $parentCategories, bool $isRootCall = true): string
+    {
+        $cacheKey = 'category#generateHtml';
+        $cacheItem = $this->cache->getItem($cacheKey);
+
+        if ($isRootCall && $this->cache->hasItem($cacheKey)) {
+            return $cacheItem->get();
+        }
+
         if (empty($parentCategories)) {
             return '';
         }
@@ -66,10 +85,14 @@ class CategoryService
                     </a>
                     <div class="media-body">
                         <h2><a href="{$this->getShowUrl($parentCategory)}">{$parentCategory->getLabel()}</a></h2>
-                        {$this->generateHtml($children)}
+                        {$this->generateHtml($children, false)}
                     </div>
                 </div>
                 HTML;
+        }
+
+        if ($isRootCall) {
+            $this->cache->save($cacheItem->set($string));
         }
 
         return $string;

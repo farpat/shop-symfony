@@ -93,7 +93,8 @@ class CategoryRepository extends ServiceEntityRepository
                 'nomenclature'           => $category->getNomenclature(),
                 'nomenclatureExpression' => "{$category->getNomenclature()}.%"
             ])
-            ->getQuery()->getResult();
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -105,7 +106,8 @@ class CategoryRepository extends ServiceEntityRepository
             ->select('c', 'i')
             ->leftJoin('c.image', 'i')
             ->where('(LENGTH(c.nomenclature) - LENGTH(REPLACE(c.nomenclature, \'.\', \'\'))) + 1 = 1')
-            ->getQuery()->getResult();
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -126,7 +128,8 @@ class CategoryRepository extends ServiceEntityRepository
                 'nomenclatureExpression' => "{$parentCategory->getNomenclature()}.%",
                 'level'                  => $parentCategory->getLevel() + 1
             ])
-            ->getQuery()->getResult();
+            ->getQuery()
+            ->getResult();
     }
 
     public function getCategoriesForMenu (array $ids): array
