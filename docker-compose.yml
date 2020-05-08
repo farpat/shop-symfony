@@ -3,7 +3,7 @@ version: '3'
 services:
     chrome:
         build: ./docker/chrome
-    nginx_dev:
+    nginx:
         build: ./docker/nginx
         ports:
             - ${APP_PORT}:80
@@ -13,42 +13,18 @@ services:
             - ./docker/nginx/sites-enabled:/var/sites-enabled
             - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
         depends_on:
-            - php_dev
+            - php
         environment:
             - PROJECT_PATH=${PROJECT_PATH}
-            - PHP_SERVICE=php_dev
+            - PHP_SERVICE=php
         command: ./var/nginx.sh
-    nginx_dusk:
-        build: ./docker/nginx
-        volumes:
-            - .:${PROJECT_PATH}
-            - ./docker/nginx/nginx.sh:/var/nginx.sh
-            - ./docker/nginx/sites-enabled:/var/sites-enabled
-            - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-        depends_on:
-            - php_dusk
-        environment:
-            - PROJECT_PATH=${PROJECT_PATH}
-            - PHP_SERVICE=php_dusk
-        command: ./var/nginx.sh
-    php_dev:
+    php:
         build: ./docker/php
         volumes:
             - .:${PROJECT_PATH}
             - ~/.cache/composer:/.cache/composer
         working_dir: ${PROJECT_PATH}
         depends_on:
-            - mariadb
-            - maildev
-            - redis
-    php_dusk:
-        build: ./docker/php
-        volumes:
-            - .:${PROJECT_PATH}
-            - ~/.cache/composer:/.cache/composer
-        working_dir: ${PROJECT_PATH}
-        depends_on:
-            - chrome
             - mariadb
             - maildev
             - redis

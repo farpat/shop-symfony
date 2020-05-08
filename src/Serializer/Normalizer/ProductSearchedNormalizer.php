@@ -3,17 +3,17 @@
 namespace App\Serializer\Normalizer;
 
 use App\Entity\Product;
-use App\Services\Shop\ProductService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ProductSearchedNormalizer implements NormalizerInterface, CacheableSupportsMethodInterface
 {
-    private ProductService $productService;
+    private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct (ProductService $productService)
+    public function __construct (UrlGeneratorInterface $urlGenerator)
     {
-        $this->productService = $productService;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -25,11 +25,18 @@ class ProductSearchedNormalizer implements NormalizerInterface, CacheableSupport
      */
     public function normalize ($object, $format = null, array $context = []): array
     {
+        $url = $this->urlGenerator->generate('app_product_show', [
+            'categorySlug' => $object->getCategory()->getSlug(),
+            'categoryId'   => $object->getCategory()->getId(),
+            'productSlug'  => $object->getSlug(),
+            'productId'    => $object->getId()
+        ]);
+
         return [
-            'id'                             => $object->getId(),
-            'label'                          => $object->getLabel(),
-            'image'                          => $object->getMainImage() ? $object->getMainImage()->getUrlThumbnail() : null,
-            'url'                            => $this->productService->getShowUrl($object),
+            'id'                         => $object->getId(),
+            'label'                      => $object->getLabel(),
+            'image'                      => $object->getMainImage() ? $object->getMainImage()->getUrlThumbnail() : null,
+            'url'                        => $url,
             'minUnitPriceIncludingTaxes' => $object->getMinUnitPriceIncludingTaxes()
         ];
     }

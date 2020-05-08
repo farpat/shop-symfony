@@ -3,19 +3,17 @@
 namespace App\Twig;
 
 use App\Repository\ModuleRepository;
+use App\Services\ModuleService;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class ModuleExtension extends AbstractExtension
 {
-    /**
-     * @var ModuleRepository
-     */
-    private $moduleRepository;
+    private ModuleService $moduleService;
 
-    public function __construct (ModuleRepository $moduleRepository)
+    public function __construct (ModuleService $moduleService)
     {
-        $this->moduleRepository = $moduleRepository;
+        $this->moduleService = $moduleService;
     }
 
     public function getFunctions (): array
@@ -34,7 +32,7 @@ class ModuleExtension extends AbstractExtension
      */
     public function getParameter (string $moduleLabel, string $parameterLabel)
     {
-        $value = $this->moduleRepository->getParameter($moduleLabel, $parameterLabel)->getValue();
+        $value = $this->moduleService->getParameter($moduleLabel, $parameterLabel)->getValue();
         return array_key_exists('_value', $value) ? $value['_value'] : $value;
     }
 }

@@ -7,6 +7,7 @@ use App\Entity\{ProductReference};
 use App\Repository\ProductReferenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class CartManagerInCookie implements CartManagerInterface
@@ -17,18 +18,15 @@ class CartManagerInCookie implements CartManagerInterface
     private EntityManagerInterface $entityManager;
     private array $items;
     private ?Request $request;
-    /**
-     * @var SerializerInterface
-     */
-    private SerializerInterface $serializer;
+    private NormalizerInterface $normalizer;
 
-    public function __construct (EntityManagerInterface $entityManager, ProductReferenceRepository $productReferenceRepository, ?Request $request, SerializerInterface $serializer)
+    public function __construct (EntityManagerInterface $entityManager, ProductReferenceRepository $productReferenceRepository, ?Request $request, NormalizerInterface $normalizer)
     {
         $this->productReferenceRepository = $productReferenceRepository;
         $this->entityManager = $entityManager;
         $this->request = $request;
         $this->items = ($request && $request->cookies->has(self::COOKIE_KEY)) ? unserialize($request->cookies->get(self::COOKIE_KEY)) : [];
-        $this->serializer = $serializer;
+        $this->normalizer = $normalizer;
     }
 
     public function deleteItem (int $productReferenceId): array
@@ -42,7 +40,7 @@ class CartManagerInCookie implements CartManagerInterface
 
         return [
             'quantity'  => 0,
-            'reference' => $this->serializer->normalize($productReference)
+            'reference' => $this->normalizer->normalize($productReference)
         ];
     }
 
@@ -74,7 +72,7 @@ class CartManagerInCookie implements CartManagerInterface
             $references[$reference->getId()] = $reference;
         }
 
-        return $this->serializer->normalize(array_map(fn($item) => [
+        return $this->normalizer->normalize(array_map(fn($item) => [
             'quantity'  => $item['quantity'],
             'reference' => $references[$item['referenceId']]
         ], $this->items), 'json');
@@ -92,7 +90,7 @@ class CartManagerInCookie implements CartManagerInterface
 
         return [
             'quantity'  => $quantity,
-            'reference' => $this->serializer->normalize($productReference)
+            'reference' => $this->normalizer->normalize($productReference)
         ];
     }
 
@@ -118,7 +116,7 @@ class CartManagerInCookie implements CartManagerInterface
 
         return [
             'quantity'  => $quantity,
-            'reference' => $this->serializer->normalize($productReference)
+            'reference' => $this->normalizer->normalize($productReference)
         ];
     }
 }

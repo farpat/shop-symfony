@@ -7,7 +7,7 @@ use App\Entity\{Cart, OrderItem, ProductReference, User};
 use App\Repository\CartRepository;
 use App\Repository\ProductReferenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class CartManagerInDatabase implements CartManagerInterface
 {
@@ -15,18 +15,18 @@ class CartManagerInDatabase implements CartManagerInterface
     private EntityManagerInterface $entityManager;
     private User $user;
     private Cart $cart;
-    private SerializerInterface $serializer;
+    private NormalizerInterface $normalizer;
     /** @var OrderItem[] $items */
     private array $items;
 
-    public function __construct (EntityManagerInterface $entityManager, ProductReferenceRepository $productReferenceRepository, CartRepository $cartRepository, User $user, SerializerInterface $serializer)
+    public function __construct (EntityManagerInterface $entityManager, ProductReferenceRepository $productReferenceRepository, CartRepository $cartRepository, User $user, NormalizerInterface $normalizer)
     {
         $this->productReferenceRepository = $productReferenceRepository;
         $this->entityManager = $entityManager;
         $this->user = $user;
         $this->cart = $cartRepository->getCart($user) ?: $this->createCart();
         $this->items = $this->cart->getItems()->toArray();
-        $this->serializer = $serializer;
+        $this->normalizer = $normalizer;
     }
 
     public function createCart (): Cart
@@ -50,7 +50,7 @@ class CartManagerInDatabase implements CartManagerInterface
 
         return [
             'quantity'  => 0,
-            'reference' => $this->serializer->normalize($orderItem->getProductReference())
+            'reference' => $this->normalizer->normalize($orderItem->getProductReference())
         ];
     }
 
@@ -137,7 +137,7 @@ class CartManagerInDatabase implements CartManagerInterface
 
         return [
             'quantity'  => $orderItem->getQuantity(),
-            'reference' => $this->serializer->normalize($orderItem->getProductReference())
+            'reference' => $this->normalizer->normalize($orderItem->getProductReference())
         ];
     }
 
@@ -167,7 +167,7 @@ class CartManagerInDatabase implements CartManagerInterface
 
         return [
             'quantity'  => $orderItem->getQuantity(),
-            'reference' => $this->serializer->normalize($orderItem->getProductReference())
+            'reference' => $this->normalizer->normalize($orderItem->getProductReference())
         ];
     }
 
@@ -187,7 +187,7 @@ class CartManagerInDatabase implements CartManagerInterface
         foreach ($this->items as $item) {
             $items[$item->getProductReference()->getId()] = [
                 'quantity'  => $item->getQuantity(),
-                'reference' => $this->serializer->normalize($item->getProductReference(), 'json')
+                'reference' => $this->normalizer->normalize($item->getProductReference(), 'json')
             ];
         }
 

@@ -2,16 +2,13 @@
 
 namespace App\Controller\Front;
 
-use App\Repository\CategoryRepository;
-use App\Repository\ModuleRepository;
-use App\Repository\ProductRepository;
-use App\Services\Shop\CartManagement\CartManagerInterface;
-use App\Services\Shop\CartManagerInDatabase;
+use App\Repository\{CategoryRepository, ModuleRepository, ProductRepository};
+use App\Services\ModuleService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{Request, Response};
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * @Route(name="app_home_")
@@ -25,11 +22,9 @@ class HomeController extends AbstractController
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      */
-    public function index (ModuleRepository $moduleRepository, ProductRepository $productRepository, CategoryRepository $categoryRepository, CartManagerInterface $cartManager)
+    public function index (ModuleService $moduleService, CacheInterface $cache)
     {
-        $cartManager->getItems();
-
-        $elementsToDisplayInHomepageParameter = $moduleRepository->getParameter('home', 'display');
+        $elementsToDisplayInHomepageParameter = $moduleService->getParameter('home', 'display');
 
         $elementsToDisplayInHomepage = $elementsToDisplayInHomepageParameter !== null ?
             $elementsToDisplayInHomepageParameter->getValue() :

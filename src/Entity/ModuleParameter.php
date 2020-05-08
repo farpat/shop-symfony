@@ -66,24 +66,24 @@ class ModuleParameter
         return $this;
     }
 
-    public function getValue(): ?array
+    public function getValue (): array
     {
         return $this->value;
     }
 
-    public function setValue(array $value): self
+    public function setValue (array $value): self
     {
         $this->value = $value;
 
         return $this;
     }
 
-    public function getModule(): ?Module
+    public function getModule (): ?Module
     {
         return $this->module;
     }
 
-    public function setModule(?Module $module): self
+    public function setModule (?Module $module): self
     {
         $this->module = $module;
 

@@ -1,4 +1,4 @@
-{% set categories = CategoryRepository.categoriesInHome() %}
+{% set categories = CategoryService.categoriesInHome() %}
 
 {% if categories is not empty %}
     <section class="home-section categories">

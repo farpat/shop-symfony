@@ -5,84 +5,55 @@ namespace App\Services;
 
 use App\Entity\Category;
 use App\Entity\Product;
-use App\Repository\CategoryRepository;
-use App\Repository\ModuleRepository;
-use App\Repository\ProductRepository;
 use App\Services\Shop\CategoryService;
 use App\Services\Shop\ProductService;
 use Exception;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 
 class NavigationService
 {
-    /**
-     * @var array
-     */
-    private $resources = [];
-
-    /**
-     * @var ModuleRepository
-     */
-    private $moduleRepository;
-    /**
-     * @var string
-     */
-    private $currentUrl;
-    /**
-     * @var ProductRepository
-     */
-    private $productRepository;
-    /**
-     * @var CategoryRepository
-     */
-    private $categoryRepository;
-    /**
-     * @var CategoryService
-     */
-    private $categoryService;
-    /**
-     * @var ProductService
-     */
-    private $productService;
-    /**
-     * @var UrlGeneratorInterface
-     */
+    private array $resources = [];
+    private ?string $currentUrl;
+    private CategoryService $categoryService;
     private UrlGeneratorInterface $urlGenerator;
+    private ModuleService $moduleService;
+    private ProductService $productService;
+    /**
+     * @var CacheItemPoolInterface|CacheInterface
+     */
+    private CacheInterface $cache;
 
     public function __construct (
-        ModuleRepository $moduleRepository,
-        RequestStack $request,
+        ModuleService $moduleService,
+        RequestStack $requestStack,
         UrlGeneratorInterface $urlGenerator,
-        ProductRepository $productRepository, ProductService $productService,
-        CategoryRepository $categoryRepository, CategoryService $categoryService)
+        ProductService $productService, CategoryService $categoryService, CacheInterface $cache)
     {
-        $this->moduleRepository = $moduleRepository;
-        $this->currentUrl = $request->getCurrentRequest() ? $request->getCurrentRequest()->getPathInfo() : null;
-        $this->productRepository = $productRepository;
+        $this->currentUrl = $requestStack->getCurrentRequest() ? $requestStack->getCurrentRequest()->getPathInfo() : null;
         $this->productService = $productService;
-        $this->categoryRepository = $categoryRepository;
         $this->categoryService = $categoryService;
         $this->urlGenerator = $urlGenerator;
+        $this->moduleService = $moduleService;
+        $this->cache = $cache;
     }
 
     public function generateHtml (): string
     {
-        if (($navigation = $this->moduleRepository->getParameter('home', 'navigation')) === null) {
-            return '';
-        }
+        return $this->cache->get('navigation#generateHtml', function () {
+            $navigation = $this->moduleService->getParameter('home', 'navigation');
+            $this->setResources($links = $navigation->getValue());
 
-        $this->setResources($links = $navigation->getValue());
+            $html = '';
+            foreach ($links as $key => $link1) {
+                $html .= is_int($key) ? $this->renderLink1($link1) : $this->renderLinks2($key, $link1);
+            }
+            return $html;
+        });
 
-        $html = '';
 
-        foreach ($links as $key => $link1) {
-            $html = is_int($key) ?
-                $html . $this->renderLink1($link1) :
-                $html . $this->renderLinks2($key, $link1);
-        }
-
-        return $html;
     }
 
     private function setResources (array $links)
@@ -91,32 +62,32 @@ class NavigationService
 
         foreach ($links as $key => $link1) {
             if (is_int($key)) {
-                [$model, $id] = explode(':', $link1);
-                $resources[$model][$id] = true;
+                [$entityClass, $id] = explode(':', $link1);
+                $resources[$entityClass][$id] = true;
             } else {
-                [$model, $id] = explode(':', $key);
-                $resources[$model][$id] = true;
+                [$entityClass, $id] = explode(':', $key);
+                $resources[$entityClass][$id] = true;
 
                 foreach ($link1 as $link2) {
-                    [$model, $id] = explode(':', $link2);
-                    $resources[$model][$id] = true;
+                    [$entityClass, $id] = explode(':', $link2);
+                    $resources[$entityClass][$id] = true;
                 }
             }
         }
 
-        foreach ($resources as $model => $ids) {
+        foreach ($resources as $entityClass => $ids) {
             $ids = array_keys($ids);
             $items = [];
-            switch ($model) {
+            switch ($entityClass) {
                 case Product::class:
-                    $items = $this->productRepository->createQueryBuilder('p')->where('p.id IN (:ids)')->setParameter('ids', $ids)->getQuery()->getResult();
+                    $items = $this->productService->getProductsForMenu($ids);
                     break;
                 case Category::class:
-                    $items = $this->categoryRepository->createQueryBuilder('c')->where('c.id IN (:ids)')->setParameter('ids', $ids)->getQuery()->getResult();
+                    $items = $this->categoryService->getCategoriesForMenu($ids);
                     break;
             }
 
-            $resources[$model] = $this->getById($items);
+            $resources[$entityClass] = $this->getById($items);
         }
 
         $this->resources = $resources;
@@ -135,8 +106,7 @@ class NavigationService
         return $newArray;
     }
 
-    private
-    function renderLink1 (string $link1): string
+    private function renderLink1 (string $link1): string
     {
         $resource = $this->getResource($link1);
         $url = $this->getUrl($resource);
@@ -152,8 +122,7 @@ class NavigationService
      * @return Product|Category
      * @throws Exception
      */
-    private
-    function getResource (string $link1)
+    private function getResource (string $link1)
     {
         [$model, $id] = explode(':', $link1);
 
@@ -185,8 +154,7 @@ class NavigationService
         return '';
     }
 
-    private
-    function renderLinks2 (string $link, array $links): string
+    private function renderLinks2 (string $link, array $links): string
     {
         $resource = $this->getResource($link);
 
@@ -208,8 +176,7 @@ class NavigationService
 HTML;
     }
 
-    private
-    function renderLink2 (string $link): string
+    private function renderLink2 (string $link): string
     {
         $resource = $this->getResource($link);
         $url = $this->getUrl($resource);

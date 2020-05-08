@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class CartManagerFactory
@@ -18,13 +19,7 @@ class CartManagerFactory
     private EntityManagerInterface $entityManager;
     private ProductReferenceRepository $productReferenceRepository;
     private RequestStack $requestStack;
-    /**
-     * @var SerializerInterface
-     */
-    private SerializerInterface $serializer;
-    /**
-     * @var CartRepository
-     */
+    private NormalizerInterface $normalizer;
     private CartRepository $cartRepository;
 
     public function __construct (
@@ -32,7 +27,7 @@ class CartManagerFactory
         EntityManagerInterface $entityManager,
         ProductReferenceRepository $productReferenceRepository,
         RequestStack $requestStack,
-        SerializerInterface $serializer,
+        NormalizerInterface $normalizer,
         CartRepository $cartRepository
     )
     {
@@ -40,7 +35,7 @@ class CartManagerFactory
         $this->entityManager = $entityManager;
         $this->productReferenceRepository = $productReferenceRepository;
         $this->requestStack = $requestStack;
-        $this->serializer = $serializer;
+        $this->normalizer = $normalizer;
         $this->cartRepository = $cartRepository;
     }
 
@@ -52,7 +47,7 @@ class CartManagerFactory
                 $this->productReferenceRepository,
                 $this->cartRepository,
                 $this->user,
-                $this->serializer
+                $this->normalizer
             );
         }
 
@@ -60,7 +55,7 @@ class CartManagerFactory
             $this->entityManager,
             $this->productReferenceRepository,
             $this->requestStack->getCurrentRequest(),
-            $this->serializer
+            $this->normalizer
         );
     }
 }

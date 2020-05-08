@@ -1,4 +1,4 @@
-{% set products = ProductRepository.productsInHome() %}
+{% set products = ProductService.productsInHome() %}
 
 {% if products is not empty %}
     <section class="home-section products">

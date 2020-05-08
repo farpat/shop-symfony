@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Category;
-use App\Entity\Module;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -25,18 +24,13 @@ class CategoryRepository extends ServiceEntityRepository
      * @return Category[]
      * @throws \Exception
      */
-    public function getCategoriesInHome (): array
+    public function getCategoriesInHome (array $ids): array
     {
-        $categoryIdsInHomeParameter = $this->_em->getRepository(Module::class)->getParameter('home', 'categories');
-        if ($categoryIdsInHomeParameter === null) {
-            return [];
-        }
-
         return $this->createQueryBuilder('c')
             ->select('c', 'i')
             ->leftJoin('c.image', 'i')
             ->where('c.id IN (:ids)')
-            ->setParameter('ids', $categoryIdsInHomeParameter->getValue())
+            ->setParameter('ids', $ids)
             ->getQuery()
             ->getResult();
     }
@@ -133,5 +127,14 @@ class CategoryRepository extends ServiceEntityRepository
                 'level'                  => $parentCategory->getLevel() + 1
             ])
             ->getQuery()->getResult();
+    }
+
+    public function getCategoriesForMenu (array $ids): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
     }
 }

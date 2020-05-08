@@ -5,17 +5,45 @@ namespace App\Services\Shop;
 
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
+use App\Services\CacheWrapper;
+use App\Services\ModuleService;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class CategoryService
 {
     private CategoryRepository $categoryRepository;
     private UrlGeneratorInterface $urlGenerator;
+    private ModuleService $moduleService;
+    /**
+     * @var CacheInterface|CacheItemPoolInterface
+     */
+    private CacheInterface $cache;
 
-    public function __construct (CategoryRepository $categoryRepository, UrlGeneratorInterface $urlGenerator)
+    public function __construct (CategoryRepository $categoryRepository, UrlGeneratorInterface $urlGenerator, ModuleService $moduleService, CacheInterface $cache)
     {
         $this->categoryRepository = $categoryRepository;
         $this->urlGenerator = $urlGenerator;
+        $this->moduleService = $moduleService;
+        $this->cache = $cache;
+    }
+
+    public function getCategoriesForMenu (array $ids): array
+    {
+        return $this->categoryRepository->getCategoriesForMenu($ids);
+    }
+
+    public function getCategoriesInHome (): array
+    {
+        return $this->cache->get('category#getCategoriesInHome', function (ItemInterface $item) {
+            $categoryIds = $this->moduleService->getParameter('home', 'categories')->getValue();
+            if (empty($categoryIds)) {
+                return [];
+            }
+            return $this->categoryRepository->getCategoriesInHome($categoryIds);
+        });
     }
 
     public function generateHtml (array $parentCategories): string

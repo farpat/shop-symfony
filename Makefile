@@ -21,10 +21,9 @@ NO_COLOR      			= \033[m
 filter      ?= tests
 dir         ?=
 
-php := docker-compose run --rm php_dev php
-php_dusk := docker-compose run --rm php_dusk php
-bash := docker-compose run --rm php_dev bash
-composer := docker-compose run --rm php_dev composer
+php := docker-compose run --rm php php
+bash := docker-compose run --rm php bash
+composer := docker-compose run --rm php composer
 mariadb := docker-compose exec mariadb mysql -uroot -proot -e
 npm := npm
 
@@ -32,7 +31,7 @@ node_modules: package.json
 	@$(npm) install
 
 vendor: composer.json
-	@$(composer) install
+	@COMPOSER_MEMORY_LIMIT=-1 $(composer) install
 
 install: vendor node_modules ## Install the composer dependencies and npm dependencies
 
@@ -41,9 +40,10 @@ update: ## Update the composer dependencies and npm dependencies
 	@$(npm) run update
 	@$(npm) install
 
-clean: ## Remove composer dependencies (vendor folder) and npm dependencies (node_modules folder)
-	@echo "$(DANGER_COLOR_BOLD) Deleting composer and npm files/directories$(NO_COLOR)"
-	rm -rf vendor node_modules package-lock.json composer.lock
+clean: ## Remove cache
+	@echo "$(DANGER_COLOR_BOLD) Removing Symfony cache$(NO_COLOR)"
+	@$(php) bin/console cache:pool:clear -q cache.app
+	@$(php) bin/console cache:clear -q
 
 help: ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "$(PRIMARY_COLOR_BOLD)%-10s$(NO_COLOR) %s\n", $$1, $$2 }' $(MAKEFILE_LIST) | sort
@@ -54,7 +54,7 @@ test: dev ## Run unit tests (parameters : dir=tests/Feature/LoginTest.php || fil
 	@$(php) bin/phpunit $(dir) --filter $(filter) --stop-on-failure
 
 dev: install ## Run development servers
-	@docker-compose up -d nginx_dev webpack_dev_server #laravel_echo_server
+	@docker-compose up -d nginx webpack_dev_server #laravel_echo_server
 	@echo "Dev server launched on http://localhost:$(APP_PORT)"
 	@echo "Mail server launched on http://localhost:1080"
 	@echo "Webpack dev server launched on http://localhost:3000"

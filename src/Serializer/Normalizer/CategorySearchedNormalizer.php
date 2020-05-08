@@ -30,12 +30,16 @@ class CategorySearchedNormalizer implements NormalizerInterface, CacheableSuppor
      */
     public function normalize ($object, $format = null, array $context = []): array
     {
+        $url = $this->urlGenerator->generate('app_category_show', [
+            'categoryId'   => $object->getId(),
+            'categorySlug' => $object->getSlug()
+        ]);
+
         return [
             'id'    => $object->getId(),
             'label' => $object->getLabel(),
             'image' => $object->getImage() ? $object->getImage()->getUrlThumbnail() : null,
-            'url'   => $this->urlGenerator->generate('app_category_show', ['categoryId'   => $object->getId(),
-                                                                           'categorySlug' => $object->getSlug()])
+            'url'   => $url
         ];
     }
 

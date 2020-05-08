@@ -3,28 +3,41 @@
 namespace App\Services\Shop;
 
 
-use App\Entity\Product;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use App\Repository\ProductRepository;
+use App\Services\ModuleService;
+use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class ProductService
 {
+    private ProductRepository $productRepository;
+    private ModuleService $moduleService;
     /**
-     * @var UrlGeneratorInterface
+     * @var CacheInterface|CacheItemPoolInterface
      */
-    private $urlGenerator;
+    private CacheInterface $cache;
 
-    public function __construct (UrlGeneratorInterface $urlGenerator)
+    public function __construct (ProductRepository $productRepository, ModuleService $moduleService, CacheInterface $cache)
     {
-        $this->urlGenerator = $urlGenerator;
+        $this->productRepository = $productRepository;
+        $this->moduleService = $moduleService;
+        $this->cache = $cache;
     }
 
-    public function getShowUrl (Product $product)
+    public function getProductsForMenu (array $ids): array
     {
-        return $this->urlGenerator->generate('app_product_show', [
-            'categorySlug' => $product->getCategory()->getSlug(),
-            'categoryId'   => $product->getCategory()->getId(),
-            'productSlug'  => $product->getSlug(),
-            'productId'    => $product->getId()
-        ]);
+        return $this->productRepository->getProductsForMenu($ids);
+    }
+
+    public function getProductsInHome (): array
+    {
+        return $this->cache->get('product#getProductsInHome', function (ItemInterface $item) {
+            $productIds = $this->moduleService->getParameter('home', 'products')->getValue();
+            if (empty($productIds)) {
+                return [];
+            }
+            return $this->productRepository->getProductsInHome($productIds);
+        });
     }
 }

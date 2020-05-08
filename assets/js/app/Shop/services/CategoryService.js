@@ -5,7 +5,6 @@ class CategoryService {
         this.baseUrl = window.location.origin + window.location.pathname
         this.data = {}
         this.currentQueryString = ''
-        this.categoryStore = null
     }
 
     getData() {
@@ -50,6 +49,8 @@ class CategoryService {
         if (this.data.currentPage !== currentPage) {
             this.refreshUrl()
         }
+
+        return this
     }
 
     /**

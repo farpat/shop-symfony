@@ -3,6 +3,6 @@ twig:
     form_themes: ['_layouts/form.html.twig']
     globals:
         NavigationService: '@App\Services\NavigationService'
-        ProductRepository: '@App\Repository\ProductRepository'
-        CategoryRepository: '@App\Repository\CategoryRepository'
+        ProductService: '@App\Services\Shop\ProductService'
+        CategoryService: '@App\Services\Shop\CategoryService'
         CartManager: '@App\Services\Shop\CartManagement\CartManagerInterface'

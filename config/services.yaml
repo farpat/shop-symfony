@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     WEBPACK_DEV_SERVER_PORT: '%env(resolve:WEBPACK_DEV_SERVER_PORT)%'
+    REDIS_CACHE: '%env(REDIS_CACHE)%'
 
 services:
     # default configuration for services in *this* file
@@ -32,7 +33,7 @@ services:
             - {name: kernel.event_listener, event: kernel.request}
 
     App\Services\Shop\CartManagement\CartManagerFactory:
-        arguments: ['@security.helper', '@doctrine.orm.default_entity_manager', '@App\Repository\ProductReferenceRepository', '@request_stack', '@serializer', '@App\Repository\CartRepository']
+        arguments: ['@security.helper', '@doctrine.orm.default_entity_manager', '@App\Repository\ProductReferenceRepository', '@request_stack', '@Symfony\Component\Serializer\Normalizer\NormalizerInterface', '@App\Repository\CartRepository']
 
     App\Services\Shop\CartManagement\CartManagerInterface:
         factory: ['@App\Services\Shop\CartManagement\CartManagerFactory', 'createCartManagerInterface']

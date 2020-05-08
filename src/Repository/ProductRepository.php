@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Module;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -24,17 +23,14 @@ class ProductRepository extends ServiceEntityRepository
      * @return Product[]
      * @throws \Exception
      */
-    public function getProductsInHome (): array
+    public function getProductsInHome ($ids): array
     {
-        $productIdsInHomepageParameter = $this->_em->getRepository(Module::class)->getParameter('home', 'products');
-        if ($productIdsInHomepageParameter === null) {
-            return [];
-        }
-
         return $this->createQueryBuilder('p')
+            ->select('p', 'i', 'c')
+            ->leftJoin('p.category', 'c')
             ->leftJoin('p.mainImage', 'i')
             ->where('p.id IN (:ids)')
-            ->setParameter('ids', $productIdsInHomepageParameter->getValue())
+            ->setParameter('ids', $ids)
             ->getQuery()
             ->getResult();
     }
@@ -69,5 +65,16 @@ class ProductRepository extends ServiceEntityRepository
             ->setParameter('id', $productId)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function getProductsForMenu (array $ids): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p', 'c')
+            ->leftJoin('p.category', 'c')
+            ->where('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
     }
 }
