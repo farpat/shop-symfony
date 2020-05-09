@@ -4,9 +4,7 @@ namespace App\Services\DataFixtures;
 
 use App\Entity\Image;
 use Doctrine\Bundle\FixturesBundle\Fixture as FixturesBundleFixture;
-use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Faker\Generator;
 
 abstract class Fixture extends FixturesBundleFixture
@@ -16,12 +14,12 @@ abstract class Fixture extends FixturesBundleFixture
      */
     protected $faker;
 
-    public function __construct()
+    public function __construct ()
     {
         $this->faker = Factory::create('fr_FR');
     }
 
-    protected function makeImage (ObjectManager $manager): Image
+    protected function makeImage (): Image
     {
         $id = random_int(1, 100);
         $normalSize = [1000, 400];
@@ -37,7 +35,7 @@ abstract class Fixture extends FixturesBundleFixture
             ->setUrlThumbnail($urlThumbnail)
             ->setAltThumbnail($alt);
 
-        $manager->persist($image);
+        $this->entityManager->persist($image);
 
         return $image;
     }

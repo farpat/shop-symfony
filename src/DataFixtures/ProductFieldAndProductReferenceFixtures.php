@@ -24,33 +24,41 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
         'width in cm'   => [4, 16, 32, 64],
     ];
 
+    protected ?ObjectManager $entityManager = null;
+
     public function load (ObjectManager $manager)
     {
+        $this->entityManager = $manager;
+
         /** @var CategoryRepository $categoryRepository */
         $categoryRepository = $manager->getRepository(Category::class);
         /** @var Category[] $categoriesFirstLevel */
         $categoriesFirstLevel = $categoryRepository
             ->createQueryBuilder('c')
-            ->leftJoin('c.products', 'p')
+            ->select('c', 'products')
+            ->leftJoin('c.products', 'products')
             ->where('c.isLast = 0')
             ->getQuery()
             ->getResult();
 
         foreach ($categoriesFirstLevel as $category) {
             /** @var Category[] $subCategories */
-            $subCategories = $categoryRepository->createQueryBuilder('c')
+            $subCategories = $categoryRepository
+                ->createQueryBuilder('c')
+                ->select('c')
                 ->where('c.nomenclature LIKE :nomenclature')
                 ->setParameter('nomenclature', $category->getNomenclature() . '.%')
-                ->getQuery()->getResult();
+                ->getQuery()
+                ->getResult();
 
-            $productFields = $this->makeProductFields($category, $manager, $subCategories);
+            $productFields = $this->makeProductFields($category, $subCategories);
             //Forced to flush because we need product field ids to create consistent product references
             $manager->flush();
 
             foreach ($subCategories as $subCategory) {
                 foreach ($subCategory->getProducts() as $product) {
-                    $productReferences = $this->makeProductReferences($product, $productFields, $manager);
-                    $this->attachImages($product, $productReferences, $manager);
+                    $productReferences = $this->makeProductReferences($product, $productFields);
+                    $this->attachImages($product, $productReferences);
                 }
             }
         }
@@ -60,13 +68,12 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
 
     /**
      * @param Category $category
-     * @param ObjectManager $manager
      * @param Category[] $subCategories
      *
      * @return ProductField[]
      * @throws \Exception
      */
-    private function makeProductFields (Category $category, ObjectManager $manager, $subCategories): array
+    private function makeProductFields (Category $category, $subCategories): array
     {
         $numbers = self::NUMBER_PRODUCT_FIELDS;
         $strings = self::STRING_PRODUCT_FIELDS;
@@ -94,7 +101,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
                 $subCategory->addProductField($productField);
             }
 
-            $manager->persist($productField);
+            $this->entityManager->persist($productField);
 
             $productFields[] = $productField;
         }
@@ -109,7 +116,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
      *
      * @return ProductReference[]
      */
-    private function makeProductReferences (Product $product, array $productFields, ObjectManager $manager): array
+    private function makeProductReferences (Product $product, array $productFields): array
     {
         [$unitPriceExcludingTaxes, $unitPriceIncludingTaxes] = $this->computePricesOfProduct($product);
 
@@ -141,7 +148,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
                 ->setFilledProductFields($filledProductfields);
 
 
-            $manager->persist($productReference);
+            $this->entityManager->persist($productReference);
 
             $productReferences[] = $productReference;
         }
@@ -180,7 +187,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
      *
      * @throws \Exception
      */
-    private function attachImages (Product $product, array $productReferences, ObjectManager $manager)
+    private function attachImages (Product $product, array $productReferences)
     {
         $imagesCount = random_int(0, 5);
         if ($imagesCount === 0) {
@@ -191,7 +198,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
 
         foreach ($productReferences as $productReference) {
             for ($i = 0; $i < $imagesCount; $i++) {
-                $image = $this->makeImage($manager);
+                $image = $this->makeImage();
                 if ($mainImage === null) {
                     $mainImage = $image;
                 }

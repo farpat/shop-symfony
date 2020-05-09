@@ -41,7 +41,7 @@ class ModuleService
 
     public function createParameter (string $moduleLabel, string $parameterLabel, array $value, string $description = null): ModuleParameter
     {
-        $module = $this->findOneBy(['label' => $moduleLabel]);
+        $module = $this->moduleRepository->findOneBy(['label' => $moduleLabel]);
 
 
         if ($module === null) {

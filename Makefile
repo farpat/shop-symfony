@@ -41,7 +41,7 @@ update: ## Update the composer dependencies and npm dependencies
 	@$(npm) install
 
 clean: ## Remove cache
-	@echo "$(DANGER_COLOR_BOLD) Removing Symfony cache$(NO_COLOR)"
+	@echo "$(DANGER_COLOR)Removing Symfony cache...$(NO_COLOR)"
 	@$(php) bin/console cache:pool:clear -q cache.app
 	@$(php) bin/console cache:clear -q
 
@@ -49,7 +49,7 @@ help: ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "$(PRIMARY_COLOR_BOLD)%-10s$(NO_COLOR) %s\n", $$1, $$2 }' $(MAKEFILE_LIST) | sort
 
 test: dev ## Run unit tests (parameters : dir=tests/Feature/LoginTest.php || filter=get)
-	@echo "Creating database: $(PRIMARY_COLOR_BOLD)$(APP_NAME)_test$(NO_COLOR) ..."
+	@echo "Creating database: $(PRIMARY_COLOR_BOLD)$(APP_NAME)_test$(NO_COLOR)..."
 	@$(mariadb) "drop database if exists $(APP_NAME)_test; create database $(APP_NAME)_test;"
 	@$(php) bin/phpunit $(dir) --filter $(filter) --stop-on-failure
 
@@ -69,7 +69,7 @@ build: install ## Build assets projects for production
 	@rm -rf ./public/assets/*
 	@$(npm) run build
 
-migrate: install ## Refresh database by running new migrations
+migrate: install clean ## Refresh database by running new migrations
 	@$(php) bin/console doctrine:database:drop --force
 	@$(php) bin/console doctrine:database:create
 	@$(php) bin/console doctrine:migrations:migrate -n

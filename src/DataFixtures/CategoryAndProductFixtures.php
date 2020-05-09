@@ -10,16 +10,20 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterface
 {
+    protected ?ObjectManager $entityManager = null;
+
     public function load (ObjectManager $manager)
     {
+        $this->entityManager = $manager;
+
         $categoriesCount = random_int(10, 15);
-        [$vatTax, $ecoTax] = $this->makeTaxes($manager);
+        [$vatTax, $ecoTax] = $this->makeTaxes();
 
         for ($i = 0; $i < $categoriesCount; $i++) {
-            $category = $this->makeCategory($manager);
+            $category = $this->makeCategory();
 
-            foreach ($this->makeSubCategories($category, $manager) as $subCategory) {
-                foreach ($this->makeProducts($subCategory, $manager) as $product) {
+            foreach ($this->makeSubCategories($category) as $subCategory) {
+                foreach ($this->makeProducts($subCategory) as $product) {
                     $this->attachTaxes($product, $vatTax, $ecoTax);
                 }
             }
@@ -31,20 +35,20 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
     /**
      * @return Tax[]
      */
-    private function makeTaxes (ObjectManager $manager): array
+    private function makeTaxes (): array
     {
         $vatTax = (new Tax)->setLabel('VAT tax')->setType('PERCENTAGE')->setValue(20);
         $ecoTax = (new Tax)->setLabel('Eco tax')->setType('UNITY')->setValue(0.05);
 
-        $manager->persist($vatTax);
-        $manager->persist($ecoTax);
+        $this->entityManager->persist($vatTax);
+        $this->entityManager->persist($ecoTax);
 
         return [$vatTax, $ecoTax];
     }
 
-    private function makeCategory (ObjectManager $manager): Category
+    private function makeCategory (): Category
     {
-        $label = $this->faker->word;
+        $label = $this->faker->unique()->word;
         $slug = $this->slugify($label);
 
         $category = (new Category)
@@ -53,10 +57,10 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
             ->setSlug($slug)
             ->setDescription($this->faker->paragraphs(3, true))
             ->setIsLast(false)
-            ->setImage($this->faker->boolean(75) ? $this->makeImage($manager) : null);
+            ->setImage($this->faker->boolean(75) ? $this->makeImage() : null);
 
 
-        $manager->persist($category);
+        $this->entityManager->persist($category);
 
         return $category;
     }
@@ -66,7 +70,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
         return (new AsciiSlugger())->slug(strtolower($string));
     }
 
-    private function makeSubCategories (Category $parentCategory, ObjectManager $manager): array
+    private function makeSubCategories (Category $parentCategory): array
     {
         $subCategories = [];
 
@@ -80,10 +84,10 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
                 ->setSlug($slug)
                 ->setNomenclature($nomenclature)
                 ->setDescription($this->faker->paragraphs(3, true))
-                ->setImage($this->faker->boolean(75) ? $this->makeImage($manager) : null)
+                ->setImage($this->faker->boolean(75) ? $this->makeImage() : null)
                 ->setIsLast(true);
 
-            $manager->persist($subCategory);
+            $this->entityManager->persist($subCategory);
             $subCategories[] = $subCategory;
         }
 
@@ -93,7 +97,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
     /**
      * @return Product[]
      */
-    private function makeProducts (Category $category, ObjectManager $manager): array
+    private function makeProducts (Category $category): array
     {
         $productsCount = random_int(10, 20);
         $products = [];
@@ -115,7 +119,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
                 ->setDescription($description)
                 ->setCategory($category);
 
-            $manager->persist($product);
+            $this->entityManager->persist($product);
 
             $products[] = $product;
         }

@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Product;
 use App\Entity\ProductReference;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -15,8 +14,22 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class ProductReferenceRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct (ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductReference::class);
+    }
+
+    public function getWithAllRelations (array $ids)
+    {
+        return $this->createQueryBuilder('pr')
+            ->select('pr', 'product', 'category', 'mainImage', 'images')
+            ->leftJoin('pr.images', 'images')
+            ->leftJoin('pr.mainImage', 'mainImage')
+            ->leftJoin('pr.product', 'product')
+            ->leftJoin('product.category', 'category')
+            ->where('pr.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
     }
 }

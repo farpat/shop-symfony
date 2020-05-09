@@ -3,13 +3,11 @@
 namespace App\Controller\Front;
 
 use App\Entity\Product;
-use App\Repository\ProductRepository;
-use App\Services\Shop\CartManagement\CartManagerInterface;
 use App\Services\Shop\CartManagerInDatabase;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * @Route(name="app_product_")
@@ -24,7 +22,7 @@ class ProductController extends AbstractController
      *     )
      * @Entity("product", expr="repository.getWithAllRelations(productId)")
      */
-    public function show (Product $product, string $categorySlug, int $categoryId, string $productSlug, ProductRepository $productRepository, SerializerInterface $serializer, CartManagerInterface $cartManager)
+    public function show (Product $product, string $categorySlug, int $categoryId, string $productSlug, NormalizerInterface $normalizer)
     {
         if ($categorySlug !== $product->getCategory()->getSlug() || $productSlug !== $product->getSlug() || $categoryId !== $product->getCategory()->getId()) {
             return $this->redirect($this->generateUrl('app_product_show', [
@@ -48,9 +46,9 @@ class ProductController extends AbstractController
         ];
 
         return $this->render('product/show.html.twig', [
-            'product'                 => $product,
-            'productReferencesInJson' => $serializer->serialize($product->getProductReferences(), 'json'),
-            'breadcrumb'              => $breadcrumb,
+            'product'                     => $product,
+            'normalizedProductReferences' => $normalizer->normalize($product->getProductReferences(), 'json'),
+            'breadcrumb'                  => $breadcrumb,
         ]);
     }
 }

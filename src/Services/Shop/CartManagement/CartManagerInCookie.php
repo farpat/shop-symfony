@@ -8,7 +8,6 @@ use App\Repository\ProductReferenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class CartManagerInCookie implements CartManagerInterface
 {
@@ -68,7 +67,7 @@ class CartManagerInCookie implements CartManagerInterface
 
         $references = [];
 
-        foreach ($this->productReferenceRepository->findBy(['id' => array_keys($this->items)]) as $reference) {
+        foreach ($this->productReferenceRepository->getWithAllRelations(array_keys($this->items)) as $reference) {
             $references[$reference->getId()] = $reference;
         }
 

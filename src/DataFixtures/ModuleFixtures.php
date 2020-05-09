@@ -11,10 +11,11 @@ use Doctrine\Persistence\ObjectManager;
 class ModuleFixtures extends Fixture implements OrderedFixtureInterface
 {
     private ?ModuleService $moduleService;
-    private ?ObjectManager $entityManager = null;
+    protected ?ObjectManager $entityManager = null;
 
     public function __construct (ModuleService $moduleService)
     {
+        parent::__construct();
         $this->moduleService = $moduleService;
     }
 

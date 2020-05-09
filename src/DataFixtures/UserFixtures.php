@@ -10,8 +10,8 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserFixtures extends Fixture implements OrderedFixtureInterface
 {
-    /** @var UserPasswordEncoderInterface $encoder */
-    private $encoder;
+    protected ?ObjectManager $entityManager = null;
+    private UserPasswordEncoderInterface $encoder;
 
     public function __construct (UserPasswordEncoderInterface $encoder)
     {
@@ -21,15 +21,17 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
 
     public function load (ObjectManager $manager)
     {
+        $this->entityManager = $manager;
+
         $usersCount = 10;
         $allProductReferences = $manager->getRepository(ProductReference::class)->findAll();
 
         for ($i = 0; $i < $usersCount; $i++) {
             $manager->persist($user = $this->makeUser($i));
 
-            $addresses = $this->makeAddresses($user, $manager);
-            $this->makeBillings($user, $addresses, $allProductReferences, $manager);
-            $this->makeCart($user, $addresses, $allProductReferences, $manager);
+            $addresses = $this->makeAddresses($user);
+            $this->makeBillings($user, $addresses, $allProductReferences);
+            $this->makeCart($user, $addresses, $allProductReferences);
 
         }
 
@@ -55,7 +57,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
     /**
      * @return Address[]
      */
-    private function makeAddresses (User $user, ObjectManager $manager): array
+    private function makeAddresses (User $user): array
     {
         $addresses = [];
 
@@ -81,7 +83,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
                 ->setLongitude($longitude)
                 ->setText($text);
 
-            $manager->persist($address);
+            $this->entityManager->persist($address);
 
             $addresses[] = $address;
         }
@@ -93,12 +95,11 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
      * @param User $user
      * @param array $addresses
      * @param array $allProductReferences
-     * @param ObjectManager $manager
      *
      * @return Billing[]
      * @throws \Exception
      */
-    private function makeBillings (User $user, array $addresses, array $allProductReferences, ObjectManager $manager): array
+    private function makeBillings (User $user, array $addresses, array $allProductReferences): array
     {
         static $currentBillingNumber = 0;
         $billings = [];
@@ -115,7 +116,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
                 ->setNumber($now->format('Y-m') . '-' . (++$currentBillingNumber))
                 ->setStatus(Billing::DELIVRED_STATUS);
 
-            $items = $this->makeOrderItems(random_int(1, 5), $billing, $allProductReferences, $manager);
+            $items = $this->makeOrderItems(random_int(1, 5), $billing, $allProductReferences);
 
             $billing
                 ->setItemsCount(count($items))
@@ -128,7 +129,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
                     return $acc;
                 }, 0));
 
-            $manager->persist($billing);
+            $this->entityManager->persist($billing);
 
             $billings[] = $billing;
         }
@@ -140,12 +141,11 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
      * @param int $itemsCount
      * @param Orderable $orderable
      * @param ProductReference[] $productReferences
-     * @param ObjectManager $manager
      *
      * @return array
      * @throws \Exception
      */
-    private function makeOrderItems (int $itemsCount, Orderable $orderable, array $productReferences, ObjectManager $manager): array
+    private function makeOrderItems (int $itemsCount, Orderable $orderable, array $productReferences): array
     {
         $orderItems = [];
         shuffle($productReferences);
@@ -168,7 +168,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
                 ->setAmountExcludingTaxes($amountExcludingTaxes)
                 ->setAmountIncludingTaxes($amountIncludingTaxes);
 
-            $manager->persist($orderItem);
+            $this->entityManager->persist($orderItem);
 
             $orderItems[] = $orderItem;
         }
@@ -180,12 +180,11 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
      * @param User $user
      * @param array $addresses
      * @param array $allProductReferences
-     * @param ObjectManager $manager
      *
      * @return Cart
      * @throws \Exception
      */
-    private function makeCart (User $user, array $addresses, array $allProductReferences, ObjectManager $manager)
+    private function makeCart (User $user, array $addresses, array $allProductReferences)
     {
         $cart = (new Cart)
             ->setUpdatedAt(new \DateTime())
@@ -194,7 +193,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
 
         $user->setCart($cart);
 
-        $items = $this->makeOrderItems(random_int(1, 5), $cart, $allProductReferences, $manager);
+        $items = $this->makeOrderItems(random_int(1, 5), $cart, $allProductReferences);
 
         $cart
             ->setItemsCount(count($items))
@@ -207,7 +206,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
                 return $acc;
             }, 0));
 
-        $manager->persist($cart);
+        $this->entityManager->persist($cart);
 
         return $cart;
     }

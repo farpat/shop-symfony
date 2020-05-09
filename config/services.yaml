@@ -4,8 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    WEBPACK_DEV_SERVER_PORT: '%env(resolve:WEBPACK_DEV_SERVER_PORT)%'
-    REDIS_CACHE: '%env(REDIS_CACHE)%'
+    WEBPACK_DEV_SERVER_PORT: '%env(WEBPACK_DEV_SERVER_PORT)%'
 
 services:
     # default configuration for services in *this* file

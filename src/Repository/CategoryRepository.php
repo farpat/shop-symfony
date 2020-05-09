@@ -27,8 +27,8 @@ class CategoryRepository extends ServiceEntityRepository
     public function getCategoriesInHome (array $ids): array
     {
         return $this->createQueryBuilder('c')
-            ->select('c', 'i')
-            ->leftJoin('c.image', 'i')
+            ->select('c', 'image')
+            ->leftJoin('c.image', 'image')
             ->where('c.id IN (:ids)')
             ->setParameter('ids', $ids)
             ->getQuery()
@@ -38,8 +38,8 @@ class CategoryRepository extends ServiceEntityRepository
     public function search (string $term): array
     {
         return $this->createQueryBuilder('c')
-            ->select('c', 'i')
-            ->leftJoin('c.image', 'i')
+            ->select('c', 'image')
+            ->leftJoin('c.image', 'image')
             ->where('c.label LIKE :label')
             ->setMaxResults(2)
             ->setParameter('label', "%$term%")
@@ -56,13 +56,11 @@ class CategoryRepository extends ServiceEntityRepository
     public function getWithAllRelations (int $categoryId): ?Category
     {
         return $this->createQueryBuilder('c')
-            ->select('c', 'i', 'pf')
-            ->leftJoin('c.image', 'i')
-            ->leftJoin('c.productFields', 'pf')
+            ->select('c', 'image', 'productFields')
+            ->leftJoin('c.image', 'image')
+            ->leftJoin('c.productFields', 'productFields')
             ->where('c.id = :id')
-            ->setParameters([
-                'id' => $categoryId
-            ])
+            ->setParameter('id', $categoryId)
             ->getQuery()
             ->getOneOrNullResult();
     }
@@ -75,17 +73,17 @@ class CategoryRepository extends ServiceEntityRepository
     public function getProducts (Category $category): array
     {
         return $this->getEntityManager()->createQueryBuilder()
-            ->select('p', 'c', 'i', 'pr')
-            ->from(Product::class, 'p')
-            ->leftJoin('p.category', 'c')
-            ->leftJoin('p.mainImage', 'i')
-            ->leftJoin('p.productReferences', 'pr')
+            ->select('product', 'category', 'mainImage', 'productReferences')
+            ->from(Product::class, 'product')
+            ->leftJoin('product.category', 'category')
+            ->leftJoin('product.mainImage', 'mainImage')
+            ->leftJoin('product.productReferences', 'productReferences')
             ->where(
-                $this->getEntityManager()->getExpressionBuilder()->in('p.category',
+                $this->getEntityManager()->getExpressionBuilder()->in('product.category',
                     $this->getEntityManager()->createQueryBuilder()
-                        ->select('c2.id')
-                        ->from(Category::class, 'c2')
-                        ->where('c2.nomenclature = :nomenclature OR c2.nomenclature LIKE :nomenclatureExpression')
+                        ->select('category2.id')
+                        ->from(Category::class, 'category2')
+                        ->where('category2.nomenclature = :nomenclature OR category2.nomenclature LIKE :nomenclatureExpression')
                         ->getDQL()
                 )
             )
@@ -103,8 +101,8 @@ class CategoryRepository extends ServiceEntityRepository
     public function getRootCategories (): array
     {
         return $this->createQueryBuilder('c')
-            ->select('c', 'i')
-            ->leftJoin('c.image', 'i')
+            ->select('c', 'image')
+            ->leftJoin('c.image', 'image')
             ->where('(LENGTH(c.nomenclature) - LENGTH(REPLACE(c.nomenclature, \'.\', \'\'))) + 1 = 1')
             ->getQuery()
             ->getResult();
