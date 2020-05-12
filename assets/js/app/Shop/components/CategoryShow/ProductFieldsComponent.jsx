@@ -1,49 +1,48 @@
-import React from "react"
-import {hot} from "react-hot-loader/root"
-import PropTypes from "prop-types"
-import {connect} from "react-redux"
-import NumberFieldComponent from "./ProductField/NumberFieldComponent"
-import StringFieldComponent from "./ProductField/StringFieldComponent"
+import React from 'react'
+import { hot } from 'react-hot-loader/root'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import NumberFieldComponent from './ProductField/NumberFieldComponent'
+import StringFieldComponent from './ProductField/StringFieldComponent'
 
 class ProductFieldsComponent extends React.Component {
-    constructor(props) {
-        super(props)
-    }
+  constructor (props) {
+    super(props)
+  }
 
-    render() {
-        return (
-            <div className="filter-component">
-                {
-                    this.props.productFields.map(productField => {
-                        if (productField.type === 'number') {
-                            return <NumberFieldComponent key={productField.key} productField={productField}/>
-                        } else if (productField.type === 'string') {
-                            return <StringFieldComponent key={productField.key} productField={productField}/>
-                        }
-                    })
-                }
-            </div>
-        )
-    }
+  render () {
+    return (
+      <div className='filter-component'>
+        {
+          this.props.productFields.map(productField => {
+            if (productField.type === 'number') {
+              return <NumberFieldComponent key={productField.key} productField={productField} />
+            } else if (productField.type === 'string') {
+              return <StringFieldComponent key={productField.key} productField={productField} />
+            }
+          })
+        }
+      </div>
+    )
+  }
 }
 
 ProductFieldsComponent.propTypes = {
-    productFields: PropTypes.arrayOf(PropTypes.shape({
-        key:   PropTypes.string.isRequired,
-        type:  PropTypes.string.isRequired,
-        label: PropTypes.string.isRequired
-    }))
+  productFields: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired
+  }))
 }
 
-
 const mapStateToProps = (state) => {
-    return {
-        productFields: state.allProductFields
-    }
+  return {
+    productFields: state.allProductFields
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {}
+  return {}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(hot(ProductFieldsComponent))

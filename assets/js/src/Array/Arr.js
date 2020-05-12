@@ -1,120 +1,120 @@
-import Str from "../String/Str"
+import Str from '../String/Str'
 
 class Arr {
-    /**
-     *
-     * @param {Object} object
-     * @param {Array} keys
-     * @returns {undefined|*}
-     */
-    getNestedProperty(object, keys) {
-        for (let i = 0; i < keys.length; i++) {
-            let key = keys[i]
+  /**
+   *
+   * @param {Object} object
+   * @param {Array} keys
+   * @returns {undefined|*}
+   */
+  getNestedProperty (object, keys) {
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
 
-            if (!object || !object.hasOwnProperty(key)) {
-                return undefined
-            }
+      if (!object || !object.hasOwnProperty(key)) {
+        return undefined
+      }
 
-            object = object[key]
-        }
-
-        return object
+      object = object[key]
     }
 
-    /**
-     *
-     * @param {Object} obj
-     * @return {Boolean}
-     */
-    isAssociative(obj) {
-        const keys = Object.keys(obj)
+    return object
+  }
 
-        if (keys.length === 0) {
-            return false
-        }
+  /**
+   *
+   * @param {Object} obj
+   * @return {Boolean}
+   */
+  isAssociative (obj) {
+    const keys = Object.keys(obj)
 
-        return !!!keys.find(key => !Str.isNumeric(key))
+    if (keys.length === 0) {
+      return false
     }
 
-    /**
-     *
-     * @param {Object} object
-     * @returns {undefined|*}
-     */
-    getFirstValue(object) {
-        const keys = Object.keys(object)
+    return !keys.find(key => !Str.isNumeric(key))
+  }
 
-        if (keys.length === 0) {
-            return undefined
-        }
+  /**
+   *
+   * @param {Object} object
+   * @returns {undefined|*}
+   */
+  getFirstValue (object) {
+    const keys = Object.keys(object)
 
-        return object[keys[0]]
+    if (keys.length === 0) {
+      return undefined
     }
 
-    /**
-     *
-     * @param {Object} obj
-     * @returns {undefined|*}
-     */
-    last(obj) {
-        const keys = Object.keys(obj)
+    return object[keys[0]]
+  }
 
-        if (keys.length === 0) {
-            return null
-        }
+  /**
+   *
+   * @param {Object} obj
+   * @returns {undefined|*}
+   */
+  last (obj) {
+    const keys = Object.keys(obj)
 
-        return obj[keys[keys.length - 1]]
+    if (keys.length === 0) {
+      return null
     }
 
-    /**
-     *
-     * @param {Object|Array} arr
-     * @returns {boolean}
-     */
-    isEmpty(arr) {
-        if (arr.length !== undefined && arr.length === 0) {
-            return true
-        }
+    return obj[keys[keys.length - 1]]
+  }
 
-        if (typeof arr === 'object' && Object.keys(arr).length === 0) {
-            return true
-        }
-
-        return false
+  /**
+   *
+   * @param {Object|Array} arr
+   * @returns {boolean}
+   */
+  isEmpty (arr) {
+    if (arr.length !== undefined && arr.length === 0) {
+      return true
     }
 
-    /**
-     *
-     * @param {Object} object
-     * @param {String} string
-     * @param {*} value
-     */
-    returnNestedObject(object, string, value) {
-        let nestedObject = {...object} //To ensure don't reset object's reference
-        let nextObject = {}
-
-        const matches = Array.from(string.matchAll(/\[?([\w_-]+)\]?/g))
-
-        for (let i = 0; i < matches.length; i++) {
-            let key = matches[i][1]
-
-            if (i === 0) { //start
-                if (nestedObject[key] === undefined) {
-                    nestedObject[key] = {}
-                }
-                nextObject = nestedObject[key]
-            } else if (i === matches.length - 1) { //end
-                nextObject[key] = value
-            } else { //middle
-                if (nextObject[key] === undefined) {
-                    nextObject[key] = {}
-                }
-                nextObject = nextObject[key]
-            }
-        }
-
-        return nestedObject
+    if (typeof arr === 'object' && Object.keys(arr).length === 0) {
+      return true
     }
+
+    return false
+  }
+
+  /**
+   *
+   * @param {Object} object
+   * @param {String} string
+   * @param {*} value
+   */
+  returnNestedObject (object, string, value) {
+    const nestedObject = { ...object } // To ensure don't reset object's reference
+    let nextObject = {}
+
+    const matches = Array.from(string.matchAll(/\[?([\w_-]+)\]?/g))
+
+    for (let i = 0; i < matches.length; i++) {
+      const key = matches[i][1]
+
+      if (i === 0) { // start
+        if (nestedObject[key] === undefined) {
+          nestedObject[key] = {}
+        }
+        nextObject = nestedObject[key]
+      } else if (i === matches.length - 1) { // end
+        nextObject[key] = value
+      } else { // middle
+        if (nextObject[key] === undefined) {
+          nextObject[key] = {}
+        }
+        nextObject = nextObject[key]
+      }
+    }
+
+    return nestedObject
+  }
 }
 
 export default new Arr()

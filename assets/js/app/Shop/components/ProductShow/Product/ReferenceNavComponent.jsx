@@ -1,40 +1,40 @@
-import React from "react"
-import {connect} from "react-redux"
+import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import ReferenceNavItemComponent from "./ReferenceNavItemComponent"
+import ReferenceNavItemComponent from './ReferenceNavItemComponent'
 
 class ReferenceNavComponent extends React.Component {
-    constructor(props) {
-        super(props)
-    }
+  constructor (props) {
+    super(props)
+  }
 
-    render() {
-        return (
-            <nav className="nav-product-reference">
-                {
-                    this.props.references.map(reference =>
-                        <ReferenceNavItemComponent reference={reference} key={reference.id}/>
-                    )
-                }
-            </nav>
-        )
-    }
+  render () {
+    return (
+      <nav className='nav-product-reference'>
+        {
+          this.props.references.map(reference =>
+            <ReferenceNavItemComponent reference={reference} key={reference.id} />
+          )
+        }
+      </nav>
+    )
+  }
 }
 
 ReferenceNavComponent.propTypes = {
-    references: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired
-    }))
+  references: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired
+  }))
 }
 
 const mapStateToProps = (state) => {
-    return {
-        references: state.product.productReferences
-    }
+  return {
+    references: state.product.productReferences
+  }
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return {}
+  return {}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReferenceNavComponent)

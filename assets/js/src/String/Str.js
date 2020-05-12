@@ -1,4 +1,4 @@
-import Arr from "../Array/Arr"
+import Arr from '../Array/Arr'
 
 const units = ['o', 'Ko', 'Mo', 'Go', 'To', 'Po', 'Eo', 'Zo', 'Yo']
 
@@ -6,106 +6,106 @@ const units = ['o', 'Ko', 'Mo', 'Go', 'To', 'Po', 'Eo', 'Zo', 'Yo']
  * @static {Object} parseKeysCache
  */
 class Str {
-    constructor() {
-        Str.parseKeysCache = {}
+  constructor () {
+    Str.parseKeysCache = {}
+  }
+
+  isNumeric (number) {
+    return !isNaN(number)
+  }
+
+  transformKeysToStar (str) {
+    const keys = this.parseKeysInString(str)
+
+    if (typeof keys === 'string') {
+      return str
     }
 
-    isNumeric(number) {
-        return !isNaN(number)
+    let transformedKey = keys[0]
+    for (let i = 1; i + 1 < keys.length; i++) {
+      transformedKey += '.*'
     }
 
-    transformKeysToStar(str) {
-        const keys = this.parseKeysInString(str)
+    const lastKey = Arr.last(keys)
+    transformedKey += (this.isNumeric(lastKey)) ? '.*' : `.${lastKey}`
 
-        if (typeof keys === 'string') {
-            return str
-        }
+    return transformedKey
+  }
 
-        let transformedKey = keys[0]
-        for (let i = 1; i + 1 < keys.length; i++) {
-            transformedKey += '.*'
-        }
+  parseKeysInString (str) {
+    if (!Str.parseKeysCache.hasOwnProperty(str)) {
+      const keys = Array.from(str.matchAll(/\[?([\w_-]+)\]?/g))
 
-        const lastKey = Arr.last(keys)
-        transformedKey += (this.isNumeric(lastKey)) ? '.*' : `.${lastKey}`
-
-        return transformedKey
+      Str.parseKeysCache[str] = keys.length === 1
+        ? keys[0][1]
+        : keys.map(key => key[1])
     }
 
-    parseKeysInString(str) {
-        if (!Str.parseKeysCache.hasOwnProperty(str)) {
-            const keys = Array.from(str.matchAll(/\[?([\w_-]+)\]?/g))
+    return Str.parseKeysCache[str]
+  }
 
-            Str.parseKeysCache[str] = keys.length === 1 ?
-                keys[0][1] :
-                keys.map(key => key[1])
-        }
+  formatCardNumber (text) {
+    text = text.replace(/\s+/g, '').replace(/[^0-9]/gi, '')
 
-        return Str.parseKeysCache[str]
+    const matches = text.match(/\d{4,16}/g)
+    const match = matches && matches[0] || ''
+    const parts = []
+    for (let i = 0, len = match.length; i < len; i += 4) {
+      parts.push(match.substring(i, i + 4))
     }
 
-    formatCardNumber(text) {
-        text = text.replace(/\s+/g, '').replace(/[^0-9]/gi, '')
-
-        const matches = text.match(/\d{4,16}/g)
-        const match = matches && matches[0] || ''
-        let parts = []
-        for (let i = 0, len = match.length; i < len; i += 4) {
-            parts.push(match.substring(i, i + 4))
-        }
-
-        if (parts.length > 0) {
-            text = parts.join(' ')
-        }
-
-        return text
+    if (parts.length > 0) {
+      text = parts.join(' ')
     }
 
-    toLocaleCurrency(amount, currency) {
-        if (typeof amount === 'string') {
-            amount = parseFloat(amount)
-        }
+    return text
+  }
 
-        return amount.toLocaleString(undefined, {style: 'currency', currency})
+  toLocaleCurrency (amount, currency) {
+    if (typeof amount === 'string') {
+      amount = parseFloat(amount)
     }
 
-    toLocaleNumber(value) {
-        if (value === null) {
-            return ''
-        }
+    return amount.toLocaleString(undefined, { style: 'currency', currency })
+  }
 
-        return parseFloat(value).toLocaleString(undefined, {
-            maximumFractionDigits: 2
-        })
+  toLocaleNumber (value) {
+    if (value === null) {
+      return ''
     }
 
-    bytesToSize(bytes) {
-        let i = 0
-        while (bytes >= 1024) {
-            bytes /= 1024
-            ++i
-        }
+    return parseFloat(value).toLocaleString(undefined, {
+      maximumFractionDigits: 2
+    })
+  }
 
-        return `${bytes.toFixed(2)} ${units[i]}`
+  bytesToSize (bytes) {
+    let i = 0
+    while (bytes >= 1024) {
+      bytes /= 1024
+      ++i
     }
 
-    sizeToBytes(size) {
-        let sizes = size.split(' ')
-        let bytes = sizes[0]
-        let i = 0
-        while (units[i] && units[i] !== sizes[1]) {
-            bytes *= 1024
-            ++i
-        }
+    return `${bytes.toFixed(2)} ${units[i]}`
+  }
 
-        return bytes
+  sizeToBytes (size) {
+    const sizes = size.split(' ')
+    let bytes = sizes[0]
+    let i = 0
+    while (units[i] && units[i] !== sizes[1]) {
+      bytes *= 1024
+      ++i
     }
 
-    markValueIntoText(neddle, haystack) {
-        neddle = neddle.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
-        let regex = new RegExp(`(${neddle.split(' ').join('|')})`, "gi")
-        return haystack.replace(regex, "<mark>$1</mark>")
-    }
+    return bytes
+  }
+
+  markValueIntoText (neddle, haystack) {
+    neddle = neddle.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
+    const regex = new RegExp(`(${neddle.split(' ').join('|')})`, 'gi')
+    return haystack.replace(regex, '<mark>$1</mark>')
+  }
 }
 
 export default new Str()
