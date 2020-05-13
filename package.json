@@ -13,7 +13,7 @@
     "dependencies": {
         "@farpat/api": "^1.0.10",
         "@hot-loader/react-dom": "^16.13.0",
-        "bootstrap": "^4.4.1",
+        "bootstrap": "^4.5.0",
         "core-js": "^3.6.5",
         "jquery": "^3.5.1",
         "lodash": "^4.17.15",
