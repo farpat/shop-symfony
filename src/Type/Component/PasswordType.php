@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PasswordType extends ComponentType
 {
-    public function configureOptions (OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults([
@@ -18,19 +18,19 @@ class PasswordType extends ComponentType
         ]);
     }
 
-    public function buildView (FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['row_attr']['data-component'] = 'PasswordComponent';
 
         parent::buildView($view, $form, $options);
     }
 
-    protected function getProps (FormInterface $form, array $options): array
+    protected function getProps(FormInterface $form, array $options): array
     {
         $props = parent::getProps($form, $options);
         return array_merge($props, [
             'withKey' => $options['with-key'] ?? true,
-            'value'   => ''
+            'value' => ''
         ]);
     }
 }

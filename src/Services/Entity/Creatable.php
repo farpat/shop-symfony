@@ -2,6 +2,8 @@
 
 namespace App\Services\Entity;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 trait Creatable
@@ -14,25 +16,25 @@ trait Creatable
     /**
      * @ORM\PrePersist()
      */
-    public function updateCreatedAt ()
+    public function updateCreatedAt()
     {
-        $this->created_at = new \DateTime();
+        $this->created_at = new DateTime();
     }
 
     /**
-     * @return \DateTimeInterface|null
+     * @return DateTimeInterface|null
      */
-    public function getCreatedAt (): ?\DateTimeInterface
+    public function getCreatedAt(): ?DateTimeInterface
     {
         return $this->created_at;
     }
 
     /**
-     * @param \DateTimeInterface $created_at
+     * @param DateTimeInterface $created_at
      *
      * @return self
      */
-    public function setCreatedAt (\DateTimeInterface $created_at): self
+    public function setCreatedAt(DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
         return $this;

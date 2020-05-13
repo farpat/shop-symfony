@@ -4,6 +4,7 @@ namespace App\Serializer\Normalizer;
 
 use App\Entity\ProductField;
 use App\Services\Support\Str;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -15,23 +16,23 @@ class ProductFieldNormalizer implements NormalizerInterface, CacheableSupportsMe
      * @param array $context
      *
      * @return array
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
-    public function normalize ($object, $format = null, array $context = []): array
+    public function normalize($object, $format = null, array $context = []): array
     {
         return [
             'label' => $object->getLabel(),
-            'key'   => Str::getSnakeCase($object->getLabel()) . '-' . $object->getId(),
-            'type'  => $object->getType(),
+            'key' => Str::getSnakeCase($object->getLabel()) . '-' . $object->getId(),
+            'type' => $object->getType(),
         ];
     }
 
-    public function supportsNormalization ($data, $format = null): bool
+    public function supportsNormalization($data, $format = null): bool
     {
         return $data instanceof ProductField;
     }
 
-    public function hasCacheableSupportsMethod (): bool
+    public function hasCacheableSupportsMethod(): bool
     {
         return true;
     }

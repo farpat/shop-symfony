@@ -16,7 +16,7 @@ class CategorySearchedNormalizer implements NormalizerInterface, CacheableSuppor
      */
     private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct (UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
     }
@@ -28,27 +28,27 @@ class CategorySearchedNormalizer implements NormalizerInterface, CacheableSuppor
      *
      * @return array
      */
-    public function normalize ($object, $format = null, array $context = []): array
+    public function normalize($object, $format = null, array $context = []): array
     {
         $url = $this->urlGenerator->generate('app_category_show', [
-            'categoryId'   => $object->getId(),
+            'categoryId' => $object->getId(),
             'categorySlug' => $object->getSlug()
         ]);
 
         return [
-            'id'    => $object->getId(),
+            'id' => $object->getId(),
             'label' => $object->getLabel(),
             'image' => $object->getImage() ? $object->getImage()->getUrlThumbnail() : null,
-            'url'   => $url
+            'url' => $url
         ];
     }
 
-    public function supportsNormalization ($data, $format = null): bool
+    public function supportsNormalization($data, $format = null): bool
     {
         return $data instanceof Category && $format === 'search';
     }
 
-    public function hasCacheableSupportsMethod (): bool
+    public function hasCacheableSupportsMethod(): bool
     {
         return true;
     }

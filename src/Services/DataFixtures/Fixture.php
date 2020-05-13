@@ -14,12 +14,12 @@ abstract class Fixture extends FixturesBundleFixture
      */
     protected $faker;
 
-    public function __construct ()
+    public function __construct()
     {
         $this->faker = Factory::create('fr_FR');
     }
 
-    protected function makeImage (): Image
+    protected function makeImage(): Image
     {
         $id = random_int(1, 100);
         $normalSize = [1000, 400];

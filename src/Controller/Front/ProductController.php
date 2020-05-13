@@ -22,13 +22,18 @@ class ProductController extends AbstractController
      *     )
      * @Entity("product", expr="repository.getWithAllRelations(productId)")
      */
-    public function show (Product $product, string $categorySlug, int $categoryId, string $productSlug, NormalizerInterface $normalizer)
-    {
+    public function show(
+        Product $product,
+        string $categorySlug,
+        int $categoryId,
+        string $productSlug,
+        NormalizerInterface $normalizer
+    ) {
         if ($categorySlug !== $product->getCategory()->getSlug() || $productSlug !== $product->getSlug() || $categoryId !== $product->getCategory()->getId()) {
             return $this->redirect($this->generateUrl('app_product_show', [
-                'productId'    => $product->getId(),
-                'productSlug'  => $product->getSlug(),
-                'categoryId'   => $product->getCategory()->getId(),
+                'productId' => $product->getId(),
+                'productSlug' => $product->getSlug(),
+                'categoryId' => $product->getCategory()->getId(),
                 'categorySlug' => $product->getCategory()->getSlug(),
             ]));
         }
@@ -37,8 +42,8 @@ class ProductController extends AbstractController
             ['label' => 'category', 'url' => $this->generateUrl('app_category_index')],
             [
                 'label' => $product->getCategory()->getLabel(),
-                'url'   => $this->generateUrl('app_category_show', [
-                    'categoryId'   => $categoryId,
+                'url' => $this->generateUrl('app_category_show', [
+                    'categoryId' => $categoryId,
                     'categorySlug' => $categorySlug
                 ])
             ],
@@ -46,9 +51,9 @@ class ProductController extends AbstractController
         ];
 
         return $this->render('product/show.html.twig', [
-            'product'                     => $product,
+            'product' => $product,
             'normalizedProductReferences' => $normalizer->normalize($product->getProductReferences(), 'json'),
-            'breadcrumb'                  => $breadcrumb,
+            'breadcrumb' => $breadcrumb,
         ]);
     }
 }

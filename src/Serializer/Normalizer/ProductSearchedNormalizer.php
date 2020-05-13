@@ -11,7 +11,7 @@ class ProductSearchedNormalizer implements NormalizerInterface, CacheableSupport
 {
     private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct (UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
     }
@@ -23,30 +23,30 @@ class ProductSearchedNormalizer implements NormalizerInterface, CacheableSupport
      *
      * @return array
      */
-    public function normalize ($object, $format = null, array $context = []): array
+    public function normalize($object, $format = null, array $context = []): array
     {
         $url = $this->urlGenerator->generate('app_product_show', [
             'categorySlug' => $object->getCategory()->getSlug(),
-            'categoryId'   => $object->getCategory()->getId(),
-            'productSlug'  => $object->getSlug(),
-            'productId'    => $object->getId()
+            'categoryId' => $object->getCategory()->getId(),
+            'productSlug' => $object->getSlug(),
+            'productId' => $object->getId()
         ]);
 
         return [
-            'id'                         => $object->getId(),
-            'label'                      => $object->getLabel(),
-            'image'                      => $object->getMainImage() ? $object->getMainImage()->getUrlThumbnail() : null,
-            'url'                        => $url,
+            'id' => $object->getId(),
+            'label' => $object->getLabel(),
+            'image' => $object->getMainImage() ? $object->getMainImage()->getUrlThumbnail() : null,
+            'url' => $url,
             'minUnitPriceIncludingTaxes' => $object->getMinUnitPriceIncludingTaxes()
         ];
     }
 
-    public function supportsNormalization ($data, $format = null): bool
+    public function supportsNormalization($data, $format = null): bool
     {
         return $data instanceof Product && $format === 'search';
     }
 
-    public function hasCacheableSupportsMethod (): bool
+    public function hasCacheableSupportsMethod(): bool
     {
         return true;
     }

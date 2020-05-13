@@ -24,13 +24,13 @@ class ComponentType extends TextType
      */
     private TranslatorInterface $translator;
 
-    public function __construct (Reader $reader, TranslatorInterface $translator)
+    public function __construct(Reader $reader, TranslatorInterface $translator)
     {
         $this->reader = $reader;
         $this->translator = $translator;
     }
 
-    public function buildView (FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['widget_element'] = true;
         $view->vars['row_attr']['class'] = 'js-form-component';
@@ -39,7 +39,7 @@ class ComponentType extends TextType
         parent::buildView($view, $form, $options);
     }
 
-    protected function getProps (FormInterface $form, array $options): array
+    protected function getProps(FormInterface $form, array $options): array
     {
         $parentForm = $form->getParent();
         $formName = $parentForm->getName();
@@ -48,8 +48,8 @@ class ComponentType extends TextType
         $props = [
             'value' => $form->getViewData(),
             'label' => $this->makeLabelAttribute($options['label'], $form->getName()),
-            'name'  => "{$formName}[{$form->getName()}]",
-            'id'    => "{$formName}_{$form->getName()}",
+            'name' => "{$formName}[{$form->getName()}]",
+            'id' => "{$formName}_{$form->getName()}",
             'error' => !isset($errors[0]) ? '' : $errors[0]->getMessage()
         ];
 
@@ -74,7 +74,7 @@ class ComponentType extends TextType
      *
      * @return string
      */
-    protected function makeLabelAttribute ($label, string $defaultLabel): ?string
+    protected function makeLabelAttribute($label, string $defaultLabel): ?string
     {
         if ($label === false) {
             return '';
@@ -87,7 +87,7 @@ class ComponentType extends TextType
         return (string)$label;
     }
 
-    protected function makeRulesAttribute (string $class, string $field): ?string
+    protected function makeRulesAttribute(string $class, string $field): ?string
     {
         $attributes = [];
 
@@ -114,8 +114,10 @@ class ComponentType extends TextType
                     break;
                 case Length::class:
                     /** @var Length $constraintAnnotation */
-                    $minMessage = $constraintAnnotation->minMessage !== '' ? $constraintAnnotation->minMessage : $this->translator->trans('The string must contain at least %limit% chars', ['%limit%' => $constraintAnnotation->min]);
-                    $maxMessage = $constraintAnnotation->maxMessage !== '' ? $constraintAnnotation->maxMessage : $this->translator->trans('The string must contain at most %limit% chars', ['%limit%' => $constraintAnnotation->max]);
+                    $minMessage = $constraintAnnotation->minMessage !== '' ? $constraintAnnotation->minMessage : $this->translator->trans('The string must contain at least %limit% chars',
+                        ['%limit%' => $constraintAnnotation->min]);
+                    $maxMessage = $constraintAnnotation->maxMessage !== '' ? $constraintAnnotation->maxMessage : $this->translator->trans('The string must contain at most %limit% chars',
+                        ['%limit%' => $constraintAnnotation->max]);
 
                     $attributes[] = "Lengthßmin:{$constraintAnnotation->min}@max:{$constraintAnnotation->max}@minMessage:{$minMessage}@maxMessage:{$maxMessage}";
                     break;

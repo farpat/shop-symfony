@@ -10,17 +10,17 @@ use Doctrine\Persistence\ObjectManager;
 
 class ModuleFixtures extends Fixture implements OrderedFixtureInterface
 {
-    private ?ModuleService $moduleService;
     protected ?ObjectManager $entityManager = null;
+    private ?ModuleService $moduleService;
 
-    public function __construct (ModuleService $moduleService)
+    public function __construct(ModuleService $moduleService)
     {
         parent::__construct();
         $this->moduleService = $moduleService;
     }
 
 
-    public function load (ObjectManager $manager)
+    public function load(ObjectManager $manager)
     {
         $this->createModules();
         //Forced to flush to add the modules because after we get it from database
@@ -32,13 +32,13 @@ class ModuleFixtures extends Fixture implements OrderedFixtureInterface
         $manager->flush();
     }
 
-    private function createModules ()
+    private function createModules()
     {
         $this->moduleService->createModule('home', true, 'Home module');
         $this->moduleService->createModule('billing', true, 'Billing module');
     }
 
-    private function createHomeModuleParameters ()
+    private function createHomeModuleParameters()
     {
         $this->moduleService->createParameter('home', 'navigation', [
             Category::class . ':2' => [Product::class . ':1', Product::class . ':2', Product::class . ':3'],
@@ -60,7 +60,7 @@ class ModuleFixtures extends Fixture implements OrderedFixtureInterface
         ]);
     }
 
-    private function createBillingModuleParameters ()
+    private function createBillingModuleParameters()
     {
         $line1 = $this->faker->streetAddress;
         $line2 = $this->faker->boolean(70) ? ucfirst($this->faker->words(3, true)) : '';
@@ -72,13 +72,17 @@ class ModuleFixtures extends Fixture implements OrderedFixtureInterface
         $text = $line1 . ' ' . $line2 . ' ' . $postal_code . ' ' . $city . ', ' . $country;
 
         $this->moduleService->createParameter('billing', 'next_number', ['_value' => 1]);
-        $this->moduleService->createParameter('billing', 'currency', ['style'  => 'right', 'code' => 'EUR',
-                                                                      'symbol' => '€']);
-        $this->moduleService->createParameter('billing', 'address', compact('line1', 'line2', 'postal_code', 'city', 'country', 'latitude', 'longitude', 'text'));
+        $this->moduleService->createParameter('billing', 'currency', [
+            'style' => 'right',
+            'code' => 'EUR',
+            'symbol' => '€'
+        ]);
+        $this->moduleService->createParameter('billing', 'address',
+            compact('line1', 'line2', 'postal_code', 'city', 'country', 'latitude', 'longitude', 'text'));
         $this->moduleService->createParameter('billing', 'phone_number', ['_value' => $this->faker->phoneNumber]);
     }
 
-    public function getOrder ()
+    public function getOrder()
     {
         return 1;
     }

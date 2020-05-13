@@ -37,53 +37,53 @@ class ModuleParameter
      */
     private $module;
 
-    public function getId (): ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLabel (): ?string
+    public function getLabel(): ?string
     {
         return $this->label;
     }
 
-    public function setLabel (string $label): self
+    public function setLabel(string $label): self
     {
         $this->label = $label;
 
         return $this;
     }
 
-    public function getDescription (): ?string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription (?string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getValue (): array
+    public function getValue(): array
     {
         return $this->value;
     }
 
-    public function setValue (array $value): self
+    public function setValue(array $value): self
     {
         $this->value = $value;
 
         return $this;
     }
 
-    public function getModule (): ?Module
+    public function getModule(): ?Module
     {
         return $this->module;
     }
 
-    public function setModule (?Module $module): self
+    public function setModule(?Module $module): self
     {
         $this->module = $module;
 

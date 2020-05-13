@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\ResetPasswordRequest;
+use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
@@ -26,7 +27,7 @@ class ResetPasswordRequestRepository extends ServiceEntityRepository implements 
 
     public function createResetPasswordRequest(
         object $user,
-        \DateTimeInterface $expiresAt,
+        DateTimeInterface $expiresAt,
         string $selector,
         string $hashedToken
     ): ResetPasswordRequestInterface {

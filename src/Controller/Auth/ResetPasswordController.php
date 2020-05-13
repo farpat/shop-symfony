@@ -27,7 +27,7 @@ class ResetPasswordController extends AbstractController
 
     private $resetPasswordHelper;
 
-    public function __construct (ResetPasswordHelperInterface $resetPasswordHelper)
+    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper)
     {
         $this->resetPasswordHelper = $resetPasswordHelper;
     }
@@ -37,7 +37,7 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("/", name="app_forgot_password_request")
      */
-    public function request (Request $request, MailerInterface $mailer): Response
+    public function request(Request $request, MailerInterface $mailer): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
@@ -54,7 +54,7 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function processSendingPasswordResetEmail (string $emailFormData, MailerInterface $mailer): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
     {
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([
             'email' => $emailFormData,
@@ -85,7 +85,7 @@ class ResetPasswordController extends AbstractController
             ->subject('Your password reset request')
             ->htmlTemplate('_emails/reset_password.html.twig')
             ->context([
-                'resetToken'    => $resetToken,
+                'resetToken' => $resetToken,
                 'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
             ]);
 
@@ -99,7 +99,7 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("/check-email", name="app_check_email")
      */
-    public function checkEmail (): Response
+    public function checkEmail(): Response
     {
         // We prevent users from directly accessing this page
         if (!$this->canCheckEmail()) {
@@ -116,8 +116,11 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("/reset/{token}", name="app_reset_password")
      */
-    public function reset (Request $request, UserPasswordEncoderInterface $passwordEncoder, string $token = null): Response
-    {
+    public function reset(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        string $token = null
+    ): Response {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
             // loaded in a browser and potentially leaking the token to 3rd party JavaScript.

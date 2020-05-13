@@ -36,53 +36,53 @@ class Image
      */
     private $altThumbnail;
 
-    public function getId (): ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUrl (): ?string
+    public function getUrl(): ?string
     {
         return $this->url;
     }
 
-    public function setUrl (string $url): self
+    public function setUrl(string $url): self
     {
         $this->url = $url;
 
         return $this;
     }
 
-    public function getAlt (): ?string
+    public function getAlt(): ?string
     {
         return $this->alt;
     }
 
-    public function setAlt (string $alt): self
+    public function setAlt(string $alt): self
     {
         $this->alt = $alt;
 
         return $this;
     }
 
-    public function getUrlThumbnail (): ?string
+    public function getUrlThumbnail(): ?string
     {
         return $this->urlThumbnail;
     }
 
-    public function setUrlThumbnail (?string $urlThumbnail): self
+    public function setUrlThumbnail(?string $urlThumbnail): self
     {
         $this->urlThumbnail = $urlThumbnail;
 
         return $this;
     }
 
-    public function getAltThumbnail (): ?string
+    public function getAltThumbnail(): ?string
     {
         return $this->altThumbnail;
     }
 
-    public function setAltThumbnail (?string $altThumbnail): self
+    public function setAltThumbnail(?string $altThumbnail): self
     {
         $this->altThumbnail = $altThumbnail;
 

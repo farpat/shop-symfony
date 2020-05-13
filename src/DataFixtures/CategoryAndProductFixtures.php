@@ -12,7 +12,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
 {
     protected ?ObjectManager $entityManager = null;
 
-    public function load (ObjectManager $manager)
+    public function load(ObjectManager $manager)
     {
         $this->entityManager = $manager;
 
@@ -35,7 +35,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
     /**
      * @return Tax[]
      */
-    private function makeTaxes (): array
+    private function makeTaxes(): array
     {
         $vatTax = (new Tax)->setLabel('VAT tax')->setType('PERCENTAGE')->setValue(20);
         $ecoTax = (new Tax)->setLabel('Eco tax')->setType('UNITY')->setValue(0.05);
@@ -46,7 +46,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
         return [$vatTax, $ecoTax];
     }
 
-    private function makeCategory (): Category
+    private function makeCategory(): Category
     {
         $label = $this->faker->unique()->word;
         $slug = $this->slugify($label);
@@ -65,12 +65,12 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
         return $category;
     }
 
-    private function slugify (string $string): string
+    private function slugify(string $string): string
     {
         return (new AsciiSlugger())->slug(strtolower($string));
     }
 
-    private function makeSubCategories (Category $parentCategory): array
+    private function makeSubCategories(Category $parentCategory): array
     {
         $subCategories = [];
 
@@ -97,7 +97,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
     /**
      * @return Product[]
      */
-    private function makeProducts (Category $category): array
+    private function makeProducts(Category $category): array
     {
         $productsCount = random_int(10, 20);
         $products = [];
@@ -130,7 +130,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
     /**
      * @return Tax[]
      */
-    private function attachTaxes (Product $product, Tax $vatTax, Tax $ecoTax)
+    private function attachTaxes(Product $product, Tax $vatTax, Tax $ecoTax)
     {
         $product->addTax($vatTax);
 
@@ -139,7 +139,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
         }
     }
 
-    public function getOrder ()
+    public function getOrder()
     {
         return 2;
     }

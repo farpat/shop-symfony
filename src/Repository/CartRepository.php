@@ -15,12 +15,12 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class CartRepository extends ServiceEntityRepository
 {
-    public function __construct (ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Cart::class);
     }
 
-    public function getCart (User $user): ?Cart
+    public function getCart(User $user): ?Cart
     {
         return $this->createQueryBuilder('cart')
             ->select('cart', 'items', 'productReference', 'mainImage', 'images')

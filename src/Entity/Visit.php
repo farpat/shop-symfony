@@ -35,36 +35,36 @@ abstract class Visit
      */
     protected $user;
 
-    public function getId (): ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getIpAddress (): ?string
+    public function getIpAddress(): ?string
     {
         return $this->ipAddress;
     }
 
-    public function setIpAddress (string $ipAddress): self
+    public function setIpAddress(string $ipAddress): self
     {
         $this->ipAddress = $ipAddress;
 
         return $this;
     }
 
-    public function getUser (): ?User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser (?User $user): self
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getVisitable ()
+    public function getVisitable()
     {
         if ($this->product_id !== null) {
             return $this->getProduct();

@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class CartManagerFactory
 {
@@ -22,15 +21,14 @@ class CartManagerFactory
     private NormalizerInterface $normalizer;
     private CartRepository $cartRepository;
 
-    public function __construct (
+    public function __construct(
         Security $security,
         EntityManagerInterface $entityManager,
         ProductReferenceRepository $productReferenceRepository,
         RequestStack $requestStack,
         NormalizerInterface $normalizer,
         CartRepository $cartRepository
-    )
-    {
+    ) {
         $this->user = $security->getUser();
         $this->entityManager = $entityManager;
         $this->productReferenceRepository = $productReferenceRepository;
@@ -39,7 +37,7 @@ class CartManagerFactory
         $this->cartRepository = $cartRepository;
     }
 
-    public function createCartManagerInterface (): CartManagerInterface
+    public function createCartManagerInterface(): CartManagerInterface
     {
         if ($this->user instanceof User) {
             return new CartManagerInDatabase(

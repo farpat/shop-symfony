@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormView;
 
 class EmailType extends ComponentType
 {
-    public function buildView (FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['row_attr']['data-component'] = 'EmailComponent';
 

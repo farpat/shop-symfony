@@ -7,6 +7,7 @@ use App\Entity\Module;
 use App\Entity\ModuleParameter;
 use App\Repository\ModuleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -20,14 +21,17 @@ class ModuleService
      */
     private CacheInterface $cache;
 
-    public function __construct (ModuleRepository $moduleRepository, CacheInterface $cache, EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        ModuleRepository $moduleRepository,
+        CacheInterface $cache,
+        EntityManagerInterface $entityManager
+    ) {
         $this->moduleRepository = $moduleRepository;
         $this->entityManager = $entityManager;
         $this->cache = $cache;
     }
 
-    public function createModule (string $moduleLabel, bool $isActive = false, string $description = null): Module
+    public function createModule(string $moduleLabel, bool $isActive = false, string $description = null): Module
     {
         $module = (new Module)
             ->setLabel($moduleLabel)
@@ -39,13 +43,17 @@ class ModuleService
         return $module;
     }
 
-    public function createParameter (string $moduleLabel, string $parameterLabel, array $value, string $description = null): ModuleParameter
-    {
+    public function createParameter(
+        string $moduleLabel,
+        string $parameterLabel,
+        array $value,
+        string $description = null
+    ): ModuleParameter {
         $module = $this->moduleRepository->findOneBy(['label' => $moduleLabel]);
 
 
         if ($module === null) {
-            throw new \Exception("The module << $moduleLabel >> doesn't exist!");
+            throw new Exception("The module << $moduleLabel >> doesn't exist!");
         }
 
 
@@ -61,20 +69,21 @@ class ModuleService
         return $this->cache->get($cacheKey, fn(ItemInterface $item) => $moduleParameter);
     }
 
-    private function getCacheKeyFromObject (ModuleParameter $moduleParameter): string
+    private function getCacheKeyFromObject(ModuleParameter $moduleParameter): string
     {
         return $this->getCacheKeyFromString($moduleParameter->getModule()->getLabel(), $moduleParameter->getLabel());
     }
 
-    private function getCacheKeyFromString (string $moduleLabel, string $parameterLabel): string
+    private function getCacheKeyFromString(string $moduleLabel, string $parameterLabel): string
     {
         return "module#getParameter#{$moduleLabel}#{$parameterLabel}";
     }
 
-    public function getParameter (string $moduleLabel, string $parameterLabel): ?ModuleParameter
+    public function getParameter(string $moduleLabel, string $parameterLabel): ?ModuleParameter
     {
         $cacheKey = $this->getCacheKeyFromString($moduleLabel, $parameterLabel);
 
-        return $this->cache->get($cacheKey, fn(ItemInterface $item) => $this->moduleRepository->getParameter($moduleLabel, $parameterLabel));
+        return $this->cache->get($cacheKey,
+            fn(ItemInterface $item) => $this->moduleRepository->getParameter($moduleLabel, $parameterLabel));
     }
 }

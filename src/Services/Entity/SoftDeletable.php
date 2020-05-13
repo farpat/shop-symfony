@@ -2,6 +2,8 @@
 
 namespace App\Services\Entity;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 trait SoftDeletable
@@ -11,17 +13,17 @@ trait SoftDeletable
      */
     protected $deleted_at = null;
 
-    public function getDeletedAt (): ?\DateTimeInterface
+    public function getDeletedAt(): ?DateTimeInterface
     {
         return $this->deleted_at;
     }
 
     /**
-     * @param \DateTimeInterface|null $deleted_at
+     * @param DateTimeInterface|null $deleted_at
      *
      * @return self
      */
-    public function setDeletedAt (?\DateTimeInterface $deleted_at): self
+    public function setDeletedAt(?DateTimeInterface $deleted_at): self
     {
         $this->deleted_at = $deleted_at;
         return $this;
@@ -30,8 +32,8 @@ trait SoftDeletable
     /**
      * @ORM\PreRemove()
      */
-    public function deleteEntity ()
+    public function deleteEntity()
     {
-        $this->setDeletedAt(new \DateTime);
+        $this->setDeletedAt(new DateTime);
     }
 }

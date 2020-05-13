@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Exception;
 
 /**
  * @method Product|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,16 +15,16 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class ProductRepository extends ServiceEntityRepository
 {
-    public function __construct (ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Product::class);
     }
 
     /**
      * @return Product[]
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getProductsInHome ($ids): array
+    public function getProductsInHome($ids): array
     {
         return $this->createQueryBuilder('p')
             ->select('p', 'mainImage', 'category')
@@ -40,7 +41,7 @@ class ProductRepository extends ServiceEntityRepository
      *
      * @return Product[]
      */
-    public function search (string $term): array
+    public function search(string $term): array
     {
         return $this->createQueryBuilder('p')
             ->select('p', 'mainImage', 'category', 'productReferences')
@@ -55,7 +56,7 @@ class ProductRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getWithAllRelations (int $productId): ?Product
+    public function getWithAllRelations(int $productId): ?Product
     {
         return $this->createQueryBuilder('p')
             ->select('p', 'category', 'productReferences', 'images', 'mainImage')
@@ -69,7 +70,7 @@ class ProductRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function getProductsForMenu (array $ids): array
+    public function getProductsForMenu(array $ids): array
     {
         return $this->createQueryBuilder('p')
             ->select('p', 'category')

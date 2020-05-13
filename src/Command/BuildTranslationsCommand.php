@@ -27,7 +27,7 @@ class BuildTranslationsCommand extends Command
      */
     private Filesystem $filesystem;
 
-    public function __construct (string $name = null, ParameterBagInterface $parameterBag, Filesystem $filesystem)
+    public function __construct(string $name = null, ParameterBagInterface $parameterBag, Filesystem $filesystem)
     {
         $this->parameterBag = $parameterBag;
         $this->filesystem = $filesystem;
@@ -35,13 +35,13 @@ class BuildTranslationsCommand extends Command
         parent::__construct($name);
     }
 
-    protected function configure ()
+    protected function configure()
     {
         $this
             ->setDescription('Build translations in assets/' . self::JS_LANG);
     }
 
-    protected function execute (InputInterface $input, OutputInterface $output): int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
@@ -74,20 +74,20 @@ class BuildTranslationsCommand extends Command
      *
      * @return int Command exit code
      */
-    private function generateJson (TranslationUpdateCommand $command, OutputInterface $output, string $locale): int
+    private function generateJson(TranslationUpdateCommand $command, OutputInterface $output, string $locale): int
     {
         $arguments = [
-            'command'         => 'translation:update',
-            '--force'         => true,
+            'command' => 'translation:update',
+            '--force' => true,
             '--output-format' => 'json',
-            'locale'          => $locale
+            'locale' => $locale
         ];
 
         $updateTranslationInput = new ArrayInput($arguments);
         return $command->run($updateTranslationInput, $output);
     }
 
-    private function getFiles (): array
+    private function getFiles(): array
     {
         $files = [];
         $scandirFiles = array_slice(scandir($this->parameterBag->get('kernel.project_dir') . '/translations'), 2);
@@ -101,7 +101,7 @@ class BuildTranslationsCommand extends Command
         return $files;
     }
 
-    private function compileTranslation (string $file)
+    private function compileTranslation(string $file)
     {
         preg_match_all('/([a-z\+\-]+)\.([a-z]{1,3})\.json$/', $file, $matches);
         $lang = $matches[2][0];

@@ -22,7 +22,7 @@ class BillingController extends AbstractController
      * @Entity("billing", expr="repository.getWithAllRelations(billingNumber)")
      * @IsGranted(App\Security\Voter\BillingVoter::EXPORT, subject="billing")
      */
-    public function export (Billing $billing, Request $request, FilesystemInterface $billingStorage)
+    public function export(Billing $billing, Request $request, FilesystemInterface $billingStorage)
     {
         $completePath = $billingStorage->getAdapter()->getPathPrefix() . $billing->getBillingPath();
 
@@ -40,7 +40,7 @@ class BillingController extends AbstractController
      * @Entity("billing", expr="repository.getWithAllRelations(billingNumber)")
      * @IsGranted(App\Security\Voter\BillingVoter::VIEW, subject="billing")
      */
-    public function view (Billing $billing)
+    public function view(Billing $billing)
     {
         $areAssetsAbsolute = false;
         return $this->render('billing/show.html.twig', compact('billing', 'areAssetsAbsolute'));

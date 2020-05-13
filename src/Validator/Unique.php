@@ -27,12 +27,12 @@ class Unique extends Constraint
      */
     public $field;
 
-    public function getRequiredOptions ()
+    public function getRequiredOptions()
     {
         return ['field', 'entity'];
     }
 
-    public function getTargets ()
+    public function getTargets()
     {
         return self::CLASS_CONSTRAINT;
     }

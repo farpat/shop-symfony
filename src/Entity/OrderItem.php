@@ -44,53 +44,53 @@ class OrderItem
      */
     private $orderable;
 
-    public function getId (): ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getQuantity (): ?int
+    public function getQuantity(): ?int
     {
         return $this->quantity;
     }
 
-    public function setQuantity (int $quantity): self
+    public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
 
         return $this;
     }
 
-    public function getAmountExcludingTaxes (): ?string
+    public function getAmountExcludingTaxes(): ?string
     {
         return $this->amountExcludingTaxes;
     }
 
-    public function setAmountExcludingTaxes (string $amountExcludingTaxes): self
+    public function setAmountExcludingTaxes(string $amountExcludingTaxes): self
     {
         $this->amountExcludingTaxes = $amountExcludingTaxes;
 
         return $this;
     }
 
-    public function getAmountIncludingTaxes (): ?string
+    public function getAmountIncludingTaxes(): ?string
     {
         return $this->amountIncludingTaxes;
     }
 
-    public function setAmountIncludingTaxes (string $amountIncludingTaxes): self
+    public function setAmountIncludingTaxes(string $amountIncludingTaxes): self
     {
         $this->amountIncludingTaxes = $amountIncludingTaxes;
 
         return $this;
     }
 
-    public function getProductReference (): ?ProductReference
+    public function getProductReference(): ?ProductReference
     {
         return $this->productReference;
     }
 
-    public function setProductReference (?ProductReference $productReference): self
+    public function setProductReference(?ProductReference $productReference): self
     {
         $this->productReference = $productReference;
 

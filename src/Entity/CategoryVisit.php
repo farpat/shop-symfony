@@ -15,12 +15,12 @@ class CategoryVisit extends Visit
      */
     private $category;
 
-    public function getCategory (): ?Product
+    public function getCategory(): ?Product
     {
         return $this->category;
     }
 
-    public function setCategory (?Product $category): self
+    public function setCategory(?Product $category): self
     {
         $this->category = $category;
 

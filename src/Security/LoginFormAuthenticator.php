@@ -45,8 +45,15 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
      */
     private SerializerInterface $serializer;
 
-    public function __construct (EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder, CartRepository $cartRepository, ProductReferenceRepository $productReferenceRepository, SerializerInterface $serializer)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        UrlGeneratorInterface $urlGenerator,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        UserPasswordEncoderInterface $passwordEncoder,
+        CartRepository $cartRepository,
+        ProductReferenceRepository $productReferenceRepository,
+        SerializerInterface $serializer
+    ) {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
@@ -56,18 +63,18 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $this->serializer = $serializer;
     }
 
-    public function supports (Request $request)
+    public function supports(Request $request)
     {
         return
             'app_auth_security_login' === $request->attributes->get('_route') &&
             $request->isMethod('POST');
     }
 
-    public function getCredentials (Request $request)
+    public function getCredentials(Request $request)
     {
         $credentials = [
-            'email'      => $request->request->get('email'),
-            'password'   => $request->request->get('password'),
+            'email' => $request->request->get('email'),
+            'password' => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
 
@@ -79,7 +86,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         return $credentials;
     }
 
-    public function getUser ($credentials, UserProviderInterface $userProvider)
+    public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
         if (!$this->csrfTokenManager->isTokenValid($token)) {
@@ -96,7 +103,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         return $user;
     }
 
-    public function checkCredentials ($credentials, UserInterface $user)
+    public function checkCredentials($credentials, UserInterface $user)
     {
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
@@ -104,14 +111,15 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
-    public function getPassword ($credentials): ?string
+    public function getPassword($credentials): ?string
     {
         return $credentials['password'];
     }
 
-    public function onAuthenticationSuccess (Request $request, TokenInterface $token, $providerKey)
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        $cartManager = new CartManagerInDatabase($this->entityManager, $this->productReferenceRepository, $this->cartRepository, $token->getUser(), $this->serializer);
+        $cartManager = new CartManagerInDatabase($this->entityManager, $this->productReferenceRepository,
+            $this->cartRepository, $token->getUser(), $this->serializer);
         if ($cartManager->merge(
             $request->cookies->has(CartManagerInCookie::COOKIE_KEY) ?
                 unserialize($request->cookies->get(CartManagerInCookie::COOKIE_KEY)) : []
@@ -126,7 +134,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         return new RedirectResponse($this->urlGenerator->generate('app_home_index'));
     }
 
-    protected function getLoginUrl ()
+    protected function getLoginUrl()
     {
         return $this->urlGenerator->generate('app_auth_security_login');
     }

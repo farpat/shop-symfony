@@ -14,7 +14,7 @@ class AssertExpression extends Expression
 {
     public $checkFunctionInFrontend;
 
-    public function __construct ($options = null)
+    public function __construct($options = null)
     {
         parent::__construct($options);
     }
@@ -22,7 +22,7 @@ class AssertExpression extends Expression
     /**
      * {@inheritDoc}
      */
-    public function getRequiredOptions ()
+    public function getRequiredOptions()
     {
         return array_merge(parent::getRequiredOptions(), ["checkFunctionInFrontend"]);
     }
@@ -30,7 +30,7 @@ class AssertExpression extends Expression
     /**
      * {@inheritdoc}
      */
-    public function getTargets ()
+    public function getTargets()
     {
         return [self::PROPERTY_CONSTRAINT];
     }

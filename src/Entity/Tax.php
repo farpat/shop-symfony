@@ -34,29 +34,29 @@ class Tax
      */
     private $value;
 
-    public function getId (): ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLabel (): ?string
+    public function getLabel(): ?string
     {
         return $this->label;
     }
 
-    public function setLabel (string $label): self
+    public function setLabel(string $label): self
     {
         $this->label = $label;
 
         return $this;
     }
 
-    public function getType (): ?string
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function setType (string $type): self
+    public function setType(string $type): self
     {
         $this->type = $type;
 

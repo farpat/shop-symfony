@@ -4,10 +4,14 @@ namespace App\EventListener;
 
 use Symfony\Component\HttpFoundation\{Request, Response};
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use function is_array;
+use function json_decode;
+use function json_last_error;
+use const JSON_ERROR_NONE;
 
 class RequestTransformerListener
 {
-    public function onKernelRequest (RequestEvent $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
 
@@ -27,7 +31,7 @@ class RequestTransformerListener
      *
      * @return bool
      */
-    private function isAvailable (Request $request): bool
+    private function isAvailable(Request $request): bool
     {
         return 'json' === $request->getContentType() && $request->getContent();
     }
@@ -37,15 +41,15 @@ class RequestTransformerListener
      *
      * @return bool
      */
-    private function transform (Request $request): bool
+    private function transform(Request $request): bool
     {
-        $data = \json_decode($request->getContent(), true);
+        $data = json_decode($request->getContent(), true);
 
-        if (\json_last_error() !== \JSON_ERROR_NONE) {
+        if (json_last_error() !== JSON_ERROR_NONE) {
             return false;
         }
 
-        if (\is_array($data)) {
+        if (is_array($data)) {
             $request->request->replace($data);
         }
 

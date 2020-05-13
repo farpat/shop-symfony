@@ -55,92 +55,92 @@ class ProductReference
      */
     private $images;
 
-    public function __construct ()
+    public function __construct()
     {
         $this->images = new ArrayCollection();
     }
 
-    public function getId (): ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLabel (): ?string
+    public function getLabel(): ?string
     {
         return $this->label;
     }
 
-    public function setLabel (string $label): self
+    public function setLabel(string $label): self
     {
         $this->label = $label;
 
         return $this;
     }
 
-    public function getUnitPriceExcludingTaxes (): float
+    public function getUnitPriceExcludingTaxes(): float
     {
         return $this->unitPriceExcludingTaxes;
     }
 
-    public function getFormattedUnitPriceExcludingTaxes (array $currencyParameter): string
-    {
-        return Str::getFormattedPrice($currencyParameter, $this->unitPriceExcludingTaxes);
-    }
-
-    public function setUnitPriceExcludingTaxes (float $unitPriceExcludingTaxes): self
+    public function setUnitPriceExcludingTaxes(float $unitPriceExcludingTaxes): self
     {
         $this->unitPriceExcludingTaxes = $unitPriceExcludingTaxes;
 
         return $this;
     }
 
-    public function getUnitPriceIncludingTaxes (): float
+    public function getFormattedUnitPriceExcludingTaxes(array $currencyParameter): string
+    {
+        return Str::getFormattedPrice($currencyParameter, $this->unitPriceExcludingTaxes);
+    }
+
+    public function getUnitPriceIncludingTaxes(): float
     {
         return $this->unitPriceIncludingTaxes;
     }
 
-    public function getFormattedUnitPriceIncludingTaxes (array $currencyParameter): string
-    {
-        return Str::getFormattedPrice($currencyParameter, $this->unitPriceIncludingTaxes);
-    }
-
-    public function setUnitPriceIncludingTaxes (float $unitPriceIncludingTaxes): self
+    public function setUnitPriceIncludingTaxes(float $unitPriceIncludingTaxes): self
     {
         $this->unitPriceIncludingTaxes = $unitPriceIncludingTaxes;
 
         return $this;
     }
 
-    public function getFilledProductFields (): ?array
+    public function getFormattedUnitPriceIncludingTaxes(array $currencyParameter): string
+    {
+        return Str::getFormattedPrice($currencyParameter, $this->unitPriceIncludingTaxes);
+    }
+
+    public function getFilledProductFields(): ?array
     {
         return $this->filledProductFields;
     }
 
-    public function setFilledProductFields (array $filledProductFields): self
+    public function setFilledProductFields(array $filledProductFields): self
     {
         $this->filledProductFields = $filledProductFields;
 
         return $this;
     }
 
-    public function getProduct (): ?Product
+    public function getProduct(): ?Product
     {
         return $this->product;
     }
 
-    public function setProduct (?Product $product): self
+    public function setProduct(?Product $product): self
     {
         $this->product = $product;
 
         return $this;
     }
 
-    public function getMainImage (): ?Image
+    public function getMainImage(): ?Image
     {
         return $this->mainImage;
     }
 
-    public function setMainImage (?Image $mainImage): self
+    public function setMainImage(?Image $mainImage): self
     {
         $this->mainImage = $mainImage;
 
@@ -150,12 +150,12 @@ class ProductReference
     /**
      * @return Collection|Image[]
      */
-    public function getImages (): Collection
+    public function getImages(): Collection
     {
         return $this->images;
     }
 
-    public function addImage (Image $image): self
+    public function addImage(Image $image): self
     {
         if (!$this->images->contains($image)) {
             $this->images[] = $image;
@@ -164,7 +164,7 @@ class ProductReference
         return $this;
     }
 
-    public function removeImage (Image $image): self
+    public function removeImage(Image $image): self
     {
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);

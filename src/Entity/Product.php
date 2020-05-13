@@ -71,7 +71,7 @@ class Product
      */
     private $visits;
 
-    public function __construct ()
+    public function __construct()
     {
         $this->tags = new ArrayCollection();
         $this->taxes = new ArrayCollection();
@@ -79,7 +79,7 @@ class Product
         $this->visits = new ArrayCollection();
     }
 
-    public function getMinUnitPriceIncludingTaxes (): float
+    public function getMinUnitPriceIncludingTaxes(): float
     {
         $references = $this->getProductReferences();
         $min = $references[0]->getUnitPriceIncludingTaxes();
@@ -95,82 +95,82 @@ class Product
     /**
      * @return Collection|ProductReference[]
      */
-    public function getProductReferences (): Collection
+    public function getProductReferences(): Collection
     {
         return $this->productReferences;
     }
 
-    public function getId (): ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLabel (): ?string
+    public function getLabel(): ?string
     {
         return $this->label;
     }
 
-    public function setLabel (?string $label): self
+    public function setLabel(?string $label): self
     {
         $this->label = $label;
 
         return $this;
     }
 
-    public function getSlug (): ?string
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
 
-    public function setSlug (string $slug): self
+    public function setSlug(string $slug): self
     {
         $this->slug = $slug;
 
         return $this;
     }
 
-    public function getExcerpt (): ?string
+    public function getExcerpt(): ?string
     {
         return $this->excerpt;
     }
 
-    public function setExcerpt (?string $excerpt): self
+    public function setExcerpt(?string $excerpt): self
     {
         $this->excerpt = $excerpt;
 
         return $this;
     }
 
-    public function getDescription (): ?string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription (?string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getMainImage (): ?Image
+    public function getMainImage(): ?Image
     {
         return $this->mainImage;
     }
 
-    public function setMainImage (?Image $mainImage): self
+    public function setMainImage(?Image $mainImage): self
     {
         $this->mainImage = $mainImage;
 
         return $this;
     }
 
-    public function getCategory (): ?Category
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    public function setCategory (?Category $category): self
+    public function setCategory(?Category $category): self
     {
         $this->category = $category;
 
@@ -180,12 +180,12 @@ class Product
     /**
      * @return Collection|Tag[]
      */
-    public function getTags (): Collection
+    public function getTags(): Collection
     {
         return $this->tags;
     }
 
-    public function addTag (Tag $tag): self
+    public function addTag(Tag $tag): self
     {
         if (!$this->tags->contains($tag)) {
             $this->tags[] = $tag;
@@ -194,7 +194,7 @@ class Product
         return $this;
     }
 
-    public function removeTag (Tag $tag): self
+    public function removeTag(Tag $tag): self
     {
         if ($this->tags->contains($tag)) {
             $this->tags->removeElement($tag);
@@ -206,12 +206,12 @@ class Product
     /**
      * @return Collection|Tax[]
      */
-    public function getTaxes (): Collection
+    public function getTaxes(): Collection
     {
         return $this->taxes;
     }
 
-    public function addTax (Tax $tax): self
+    public function addTax(Tax $tax): self
     {
         if (!$this->taxes->contains($tax)) {
             $this->taxes[] = $tax;
@@ -220,7 +220,7 @@ class Product
         return $this;
     }
 
-    public function removeTax (Tax $tax): self
+    public function removeTax(Tax $tax): self
     {
         if ($this->taxes->contains($tax)) {
             $this->taxes->removeElement($tax);
@@ -229,7 +229,7 @@ class Product
         return $this;
     }
 
-    public function addProductReference (ProductReference $productReference): self
+    public function addProductReference(ProductReference $productReference): self
     {
         if (!$this->productReferences->contains($productReference)) {
             $this->productReferences[] = $productReference;
@@ -239,7 +239,7 @@ class Product
         return $this;
     }
 
-    public function removeProductReference (ProductReference $productReference): self
+    public function removeProductReference(ProductReference $productReference): self
     {
         if ($this->productReferences->contains($productReference)) {
             $this->productReferences->removeElement($productReference);
@@ -255,12 +255,12 @@ class Product
     /**
      * @return Collection|ProductVisit[]
      */
-    public function getVisits (): Collection
+    public function getVisits(): Collection
     {
         return $this->visits;
     }
 
-    public function addVisit (ProductVisit $visit): self
+    public function addVisit(ProductVisit $visit): self
     {
         if (!$this->visits->contains($visit)) {
             $this->visits[] = $visit;
@@ -270,7 +270,7 @@ class Product
         return $this;
     }
 
-    public function removeVisit (ProductVisit $visit): self
+    public function removeVisit(ProductVisit $visit): self
     {
         if ($this->visits->contains($visit)) {
             $this->visits->removeElement($visit);

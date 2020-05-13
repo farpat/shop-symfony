@@ -14,12 +14,12 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class BillingRepository extends ServiceEntityRepository
 {
-    public function __construct (ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Billing::class);
     }
 
-    public function getWithAllRelations (string $billingNumber): ?Billing
+    public function getWithAllRelations(string $billingNumber): ?Billing
     {
         return $this->createQueryBuilder('b')
             ->select('b', 'user', 'deliveredAddress', 'items', 'productReference')

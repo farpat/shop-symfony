@@ -6,6 +6,8 @@ use App\Entity\Category;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
+use Exception;
 
 /**
  * @method Category|null find($id, $lockMode = null, $lockVersion = null)
@@ -15,16 +17,16 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class CategoryRepository extends ServiceEntityRepository
 {
-    public function __construct (ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Category::class);
     }
 
     /**
      * @return Category[]
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getCategoriesInHome (array $ids): array
+    public function getCategoriesInHome(array $ids): array
     {
         return $this->createQueryBuilder('c')
             ->select('c', 'image')
@@ -35,7 +37,7 @@ class CategoryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function search (string $term): array
+    public function search(string $term): array
     {
         return $this->createQueryBuilder('c')
             ->select('c', 'image')
@@ -51,9 +53,9 @@ class CategoryRepository extends ServiceEntityRepository
      * @param int $categoryId
      *
      * @return Category|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
-    public function getWithAllRelations (int $categoryId): ?Category
+    public function getWithAllRelations(int $categoryId): ?Category
     {
         return $this->createQueryBuilder('c')
             ->select('c', 'image', 'productFields')
@@ -70,7 +72,7 @@ class CategoryRepository extends ServiceEntityRepository
      *
      * @return array
      */
-    public function getProducts (Category $category): array
+    public function getProducts(Category $category): array
     {
         return $this->getEntityManager()->createQueryBuilder()
             ->select('product', 'category', 'mainImage', 'productReferences')
@@ -88,7 +90,7 @@ class CategoryRepository extends ServiceEntityRepository
                 )
             )
             ->setParameters([
-                'nomenclature'           => $category->getNomenclature(),
+                'nomenclature' => $category->getNomenclature(),
                 'nomenclatureExpression' => "{$category->getNomenclature()}.%"
             ])
             ->getQuery()
@@ -98,7 +100,7 @@ class CategoryRepository extends ServiceEntityRepository
     /**
      * @return Category[]
      */
-    public function getRootCategories (): array
+    public function getRootCategories(): array
     {
         return $this->createQueryBuilder('c')
             ->select('c', 'image')
@@ -113,7 +115,7 @@ class CategoryRepository extends ServiceEntityRepository
      *
      * @return Category[]
      */
-    public function getChildren (Category $parentCategory): array
+    public function getChildren(Category $parentCategory): array
     {
         if ($parentCategory->getIsLast()) {
             return [];
@@ -124,13 +126,13 @@ class CategoryRepository extends ServiceEntityRepository
             ->andWhere('LENGTH(c.nomenclature) - LENGTH(REPLACE(c.nomenclature,\'.\',\'\')) + 1 = :level')
             ->setParameters([
                 'nomenclatureExpression' => "{$parentCategory->getNomenclature()}.%",
-                'level'                  => $parentCategory->getLevel() + 1
+                'level' => $parentCategory->getLevel() + 1
             ])
             ->getQuery()
             ->getResult();
     }
 
-    public function getCategoriesForMenu (array $ids): array
+    public function getCategoriesForMenu(array $ids): array
     {
         return $this->createQueryBuilder('c')
             ->where('c.id IN (:ids)')

@@ -26,14 +26,17 @@ class AppExtension extends AbstractExtension
      */
     private $navigationService;
 
-    public function __construct (ContainerInterface $container, UrlGeneratorInterface $urlGenerator, NavigationService $navigationService)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        UrlGeneratorInterface $urlGenerator,
+        NavigationService $navigationService
+    ) {
         $this->container = $container;
         $this->urlGenerator = $urlGenerator;
         $this->navigationService = $navigationService;
     }
 
-    public function getFunctions (): array
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('get_asset', [$this, 'getAsset']),
@@ -42,13 +45,13 @@ class AppExtension extends AbstractExtension
         ];
     }
 
-    public function isActive (string $route): string
+    public function isActive(string $route): string
     {
         $request = $this->container->get('request_stack')->getCurrentRequest();
         return $request->getPathInfo() === $this->urlGenerator->generate($route) ? 'active' : '';
     }
 
-    public function getAsset (string $asset, bool $isAbsolute = false): string
+    public function getAsset(string $asset, bool $isAbsolute = false): string
     {
         static $json;
 
@@ -66,7 +69,7 @@ class AppExtension extends AbstractExtension
         }
     }
 
-    public function getBreadcrumb (array $links): string
+    public function getBreadcrumb(array $links): string
     {
         $linksCount = count($links);
 

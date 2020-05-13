@@ -14,12 +14,12 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class ProductReferenceRepository extends ServiceEntityRepository
 {
-    public function __construct (ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductReference::class);
     }
 
-    public function getWithAllRelations (array $ids)
+    public function getWithAllRelations(array $ids)
     {
         return $this->createQueryBuilder('pr')
             ->select('pr', 'product', 'category', 'mainImage', 'images')

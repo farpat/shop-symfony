@@ -18,19 +18,22 @@ class ProductService
      */
     private CacheInterface $cache;
 
-    public function __construct (ProductRepository $productRepository, ModuleService $moduleService, CacheInterface $cache)
-    {
+    public function __construct(
+        ProductRepository $productRepository,
+        ModuleService $moduleService,
+        CacheInterface $cache
+    ) {
         $this->productRepository = $productRepository;
         $this->moduleService = $moduleService;
         $this->cache = $cache;
     }
 
-    public function getProductsForMenu (array $ids): array
+    public function getProductsForMenu(array $ids): array
     {
         return $this->productRepository->getProductsForMenu($ids);
     }
 
-    public function getProductsInHome (): array
+    public function getProductsInHome(): array
     {
         return $this->cache->get('product#getProductsInHome', function (ItemInterface $item) {
             $productIds = $this->moduleService->getParameter('home', 'products')->getValue();

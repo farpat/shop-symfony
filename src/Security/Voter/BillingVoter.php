@@ -12,7 +12,7 @@ class BillingVoter extends Voter
     public const EXPORT = 'BILLING_EXPORT';
     public const VIEW = 'BILLING_VIEW';
 
-    protected function supports ($attribute, $subject)
+    protected function supports($attribute, $subject)
     {
         return
             in_array($attribute, [self::EXPORT, self::VIEW]) &&
@@ -26,7 +26,7 @@ class BillingVoter extends Voter
      *
      * @return bool
      */
-    protected function voteOnAttribute ($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         $user = $token->getUser();
 

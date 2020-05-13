@@ -22,7 +22,7 @@ class CategoryController extends AbstractController
      */
     private CategoryService $categoryService;
 
-    public function __construct (CategoryService $categoryService)
+    public function __construct(CategoryService $categoryService)
     {
         $this->categoryService = $categoryService;
     }
@@ -30,7 +30,7 @@ class CategoryController extends AbstractController
     /**
      * @Route("/categories", name="index", methods={"GET"})
      */
-    public function index ()
+    public function index()
     {
         $breadcrumb = [
             ['label' => 'Category']
@@ -38,7 +38,7 @@ class CategoryController extends AbstractController
 
         return $this->render('category/index.html.twig', [
             'breadcrumb' => $breadcrumb,
-            'html'       => $this->categoryService->generateHtml($this->categoryService->getRootCategories())
+            'html' => $this->categoryService->generateHtml($this->categoryService->getRootCategories())
         ]);
     }
 
@@ -46,13 +46,14 @@ class CategoryController extends AbstractController
      * @Route("/categories/{categorySlug}-{categoryId}", name="show", methods={"GET"}, requirements={"categorySlug":"[a-z\d\-]+", "categoryId":"\d+"})g
      * @Entity("category", expr="repository.getWithAllRelations(categoryId)")
      */
-    public function show (Category $category, string $categorySlug, Request $request, SerializerInterface $serializer)
+    public function show(Category $category, string $categorySlug, Request $request, SerializerInterface $serializer)
     {
         $currentPage = $request->query->get('page');
 
-        if (($currentPage !== null && filter_var($currentPage, FILTER_VALIDATE_INT) === false) || $currentPage === '1' || $categorySlug !== $category->getSlug()) {
+        if (($currentPage !== null && filter_var($currentPage,
+                    FILTER_VALIDATE_INT) === false) || $currentPage === '1' || $categorySlug !== $category->getSlug()) {
             return $this->redirect($this->generateUrl('app_category_show', [
-                'categoryId'   => $category->getId(),
+                'categoryId' => $category->getId(),
                 'categorySlug' => $category->getSlug(),
             ]));
         }
@@ -63,12 +64,12 @@ class CategoryController extends AbstractController
         ];
 
         return $this->render('category/show.html.twig', [
-            'category'            => $category,
-            'currentPage'         => $currentPage > 0 ? $currentPage : 1,
-            'perPage'             => Product::PER_PAGE,
+            'category' => $category,
+            'currentPage' => $currentPage > 0 ? $currentPage : 1,
+            'perPage' => Product::PER_PAGE,
             'productFieldsInJson' => $serializer->serialize($category->getProductFields(), 'json'),
-            'productsInJson'      => $serializer->serialize($this->categoryService->getProducts($category), 'json'),
-            'breadcrumb'          => $breadcrumb
+            'productsInJson' => $serializer->serialize($this->categoryService->getProducts($category), 'json'),
+            'breadcrumb' => $breadcrumb
         ]);
     }
 }

@@ -30,31 +30,19 @@ class Billing extends Orderable
      */
     private $user;
 
-    public function getNumber (): ?string
-    {
-        return $this->number;
-    }
-
-    public function setNumber (string $number): self
-    {
-        $this->number = $number;
-
-        return $this;
-    }
-
-    public function getStatus (): ?string
+    public function getStatus(): ?string
     {
         return $this->status;
     }
 
-    public function setStatus (string $status): self
+    public function setStatus(string $status): self
     {
         $this->status = $status;
 
         return $this;
     }
 
-    public function getBillingPath (): string
+    public function getBillingPath(): string
     {
         return "{$this->getUser()->getId()}/{$this->getNumber()}.pdf";
     }
@@ -67,6 +55,18 @@ class Billing extends Orderable
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getNumber(): ?string
+    {
+        return $this->number;
+    }
+
+    public function setNumber(string $number): self
+    {
+        $this->number = $number;
 
         return $this;
     }

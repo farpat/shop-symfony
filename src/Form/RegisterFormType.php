@@ -16,12 +16,12 @@ class RegisterFormType extends AbstractType
      */
     private $translator;
 
-    public function __construct (TranslatorInterface $translator)
+    public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
     }
 
-    public function buildForm (FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name', TextType::class, [
@@ -35,17 +35,17 @@ class RegisterFormType extends AbstractType
             ])
             ->add('password', PasswordType::class, [
                 'label' => false,
-                'attr'  => ['placeholder' => $this->translator->trans('Password')],
-                'help'  => $this->translator->trans('The password must contain at least %limit% chars', ['%limit%' => 6])
+                'attr' => ['placeholder' => $this->translator->trans('Password')],
+                'help' => $this->translator->trans('The password must contain at least %limit% chars', ['%limit%' => 6])
             ])
             ->add('password_confirmation', PasswordType::class, [
-                'label'    => false,
-                'attr'     => ['placeholder' => $this->translator->trans('Confirm your password')],
+                'label' => false,
+                'attr' => ['placeholder' => $this->translator->trans('Confirm your password')],
                 'with-key' => false,
             ]);
     }
 
-    public function configureOptions (OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => RegisterFormData::class,

@@ -9,6 +9,7 @@ use App\Repository\UserRepository;
 use App\Services\Shop\CartManagement\CartManagerInCookie;
 use App\Services\Shop\CartManagement\CartManagerInDatabase;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +27,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", name="login", methods={"GET", "POST"})
      */
-    public function login (AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home_index');
@@ -41,25 +42,25 @@ class SecurityController extends AbstractController
     /**
      * @Route("/logout", name="logout", methods={"GET"})
      */
-    public function logout ()
+    public function logout()
     {
-        throw new \Exception('Don\'t forget to activate logout in security.yaml');
+        throw new Exception('Don\'t forget to activate logout in security.yaml');
     }
 
     /**
      * @Route("/usurp/{user}", name="usurp_show", requirements={"user":"\d+"}, methods={"GET"})
      * @param User $user
      */
-    public function usurp (
+    public function usurp(
         User $user,
         Request $request,
         EntityManagerInterface $entityManager,
         ProductReferenceRepository $productReferenceRepository,
         CartRepository $cartRepository,
         SerializerInterface $serializer
-    )
-    {
-        $cartManager = new CartManagerInDatabase($entityManager, $productReferenceRepository, $cartRepository, $user, $serializer);
+    ) {
+        $cartManager = new CartManagerInDatabase($entityManager, $productReferenceRepository, $cartRepository, $user,
+            $serializer);
         if ($cartManager->merge(
             $request->cookies->has(CartManagerInCookie::COOKIE_KEY) ?
                 unserialize($request->cookies->get(CartManagerInCookie::COOKIE_KEY)) : []
@@ -79,7 +80,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/usurp", name="usurp_index", methods={"GET"})
      */
-    public function usurpList (UserRepository $userRepository)
+    public function usurpList(UserRepository $userRepository)
     {
         $users = $userRepository->findAll();
         return $this->render('auth/security/usurp.html.twig', compact('users'));

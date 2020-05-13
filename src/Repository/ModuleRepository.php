@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use Exception;
 use App\Entity\{Module, ModuleParameter};
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -14,12 +15,12 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class ModuleRepository extends ServiceEntityRepository
 {
-    public function __construct (ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Module::class);
     }
 
-    public function getParameter (string $moduleLabel, string $parameterLabel): ModuleParameter
+    public function getParameter(string $moduleLabel, string $parameterLabel): ModuleParameter
     {
         /** @var Module $module */
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
@@ -30,14 +31,14 @@ class ModuleRepository extends ServiceEntityRepository
             ->where('p.label = :parameterLabel')
             ->andWhere('m.label = :moduleLabel')
             ->setParameters([
-                'moduleLabel'    => $moduleLabel,
+                'moduleLabel' => $moduleLabel,
                 'parameterLabel' => $parameterLabel
             ])
             ->getQuery()
             ->getOneOrNullResult();
 
         if ($moduleParameter === null) {
-            throw new \Exception("The module parameter << $moduleLabel.$parameterLabel >> doesn't exist!");
+            throw new Exception("The module parameter << $moduleLabel.$parameterLabel >> doesn't exist!");
         }
 
         return $moduleParameter;

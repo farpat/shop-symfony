@@ -2,14 +2,15 @@
 
 namespace App\Controller\Front;
 
-use App\Services\Shop\CartManagement\CartManagerInterface;
 use App\Repository\{CategoryRepository, ModuleRepository, ProductRepository};
 use App\Services\ModuleService;
+use App\Services\Shop\CartManagement\CartManagerInterface;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\{Request, Response};
+use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * @Route(name="app_home_")
@@ -20,10 +21,10 @@ class HomeController extends AbstractController
      * @Route("/", name="index", methods={"GET"})
      * @param ModuleRepository $moduleRepository
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Exception
+     * @return Response
+     * @throws Exception
      */
-    public function index (ModuleService $moduleService, CartManagerInterface $cartManager)
+    public function index(ModuleService $moduleService, CartManagerInterface $cartManager)
     {
         $elementsToDisplayInHomepageParameter = $moduleService->getParameter('home', 'display');
 
@@ -40,11 +41,15 @@ class HomeController extends AbstractController
      * @param CategoryRepository $categoryRepository
      * @param ProductRepository $productRepository
      *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @return JsonResponse
+     * @throws ExceptionInterface
      */
-    public function search (Request $request, CategoryRepository $categoryRepository, ProductRepository $productRepository, NormalizerInterface $normalizer)
-    {
+    public function search(
+        Request $request,
+        CategoryRepository $categoryRepository,
+        ProductRepository $productRepository,
+        NormalizerInterface $normalizer
+    ) {
         $term = $request->query->get('q');
         if ($term === null || strlen((string)$term) === 1) {
             return $this->json([], Response::HTTP_BAD_REQUEST);

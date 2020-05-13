@@ -65,89 +65,89 @@ class Category
      */
     private $productFields;
 
-    public function __construct ()
+    public function __construct()
     {
         $this->products = new ArrayCollection();
         $this->visits = new ArrayCollection();
         $this->productFields = new ArrayCollection();
     }
 
-    public function getLevel (): int
+    public function getLevel(): int
     {
         return substr_count($this->getNomenclature(), '.') + 1;
     }
 
-    public function getId (): ?int
-    {
-        return $this->id;
-    }
-
-    public function getLabel (): ?string
-    {
-        return $this->label;
-    }
-
-    public function setLabel (string $label): self
-    {
-        $this->label = $label;
-
-        return $this;
-    }
-
-    public function getNomenclature (): ?string
+    public function getNomenclature(): ?string
     {
         return $this->nomenclature;
     }
 
-    public function setNomenclature (string $nomenclature): self
+    public function setNomenclature(string $nomenclature): self
     {
         $this->nomenclature = $nomenclature;
 
         return $this;
     }
 
-    public function getSlug (): ?string
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getLabel(): ?string
+    {
+        return $this->label;
+    }
+
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
 
-    public function setSlug (string $slug): self
+    public function setSlug(string $slug): self
     {
         $this->slug = $slug;
 
         return $this;
     }
 
-    public function getDescription (): ?string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription (string $description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getIsLast (): ?bool
+    public function getIsLast(): ?bool
     {
         return $this->isLast;
     }
 
-    public function setIsLast (bool $isLast): self
+    public function setIsLast(bool $isLast): self
     {
         $this->isLast = $isLast;
 
         return $this;
     }
 
-    public function getImage (): ?Image
+    public function getImage(): ?Image
     {
         return $this->image;
     }
 
-    public function setImage (?Image $image): self
+    public function setImage(?Image $image): self
     {
         $this->image = $image;
 
@@ -157,12 +157,12 @@ class Category
     /**
      * @return Collection|Product[]
      */
-    public function getProducts (): Collection
+    public function getProducts(): Collection
     {
         return $this->products;
     }
 
-    public function addProduct (Product $product): self
+    public function addProduct(Product $product): self
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
@@ -172,7 +172,7 @@ class Category
         return $this;
     }
 
-    public function removeProduct (Product $product): self
+    public function removeProduct(Product $product): self
     {
         if ($this->products->contains($product)) {
             $this->products->removeElement($product);
@@ -188,12 +188,12 @@ class Category
     /**
      * @return Collection|ProductVisit[]
      */
-    public function getVisits (): Collection
+    public function getVisits(): Collection
     {
         return $this->visits;
     }
 
-    public function addVisit (ProductVisit $visit): self
+    public function addVisit(ProductVisit $visit): self
     {
         if (!$this->visits->contains($visit)) {
             $this->visits[] = $visit;
@@ -203,7 +203,7 @@ class Category
         return $this;
     }
 
-    public function removeVisit (ProductVisit $visit): self
+    public function removeVisit(ProductVisit $visit): self
     {
         if ($this->visits->contains($visit)) {
             $this->visits->removeElement($visit);
@@ -219,12 +219,12 @@ class Category
     /**
      * @return Collection|ProductField[]
      */
-    public function getProductFields (): Collection
+    public function getProductFields(): Collection
     {
         return $this->productFields;
     }
 
-    public function addProductField (ProductField $productField): self
+    public function addProductField(ProductField $productField): self
     {
         if (!$this->productFields->contains($productField)) {
             $this->productFields[] = $productField;
@@ -233,7 +233,7 @@ class Category
         return $this;
     }
 
-    public function removeProductField (ProductField $productField): self
+    public function removeProductField(ProductField $productField): self
     {
         if ($this->productFields->contains($productField)) {
             $this->productFields->removeElement($productField);

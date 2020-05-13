@@ -62,113 +62,113 @@ class Address
      */
     private $user;
 
-    public function getId (): ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getText (): ?string
+    public function getText(): ?string
     {
         return $this->text;
     }
 
-    public function setText (string $text): self
+    public function setText(string $text): self
     {
         $this->text = $text;
 
         return $this;
     }
 
-    public function getLine1 (): ?string
+    public function getLine1(): ?string
     {
         return $this->line1;
     }
 
-    public function setLine1 (string $line1): self
+    public function setLine1(string $line1): self
     {
         $this->line1 = $line1;
 
         return $this;
     }
 
-    public function getLine2 (): ?string
+    public function getLine2(): ?string
     {
         return $this->line2;
     }
 
-    public function setLine2 (?string $line2): self
+    public function setLine2(?string $line2): self
     {
         $this->line2 = $line2;
 
         return $this;
     }
 
-    public function getPostalCode (): ?string
+    public function getPostalCode(): ?string
     {
         return $this->postalCode;
     }
 
-    public function setPostalCode (string $postalCode): self
+    public function setPostalCode(string $postalCode): self
     {
         $this->postalCode = $postalCode;
 
         return $this;
     }
 
-    public function getCity (): ?string
+    public function getCity(): ?string
     {
         return $this->city;
     }
 
-    public function setCity (string $city): self
+    public function setCity(string $city): self
     {
         $this->city = $city;
 
         return $this;
     }
 
-    public function getCountry (): ?string
+    public function getCountry(): ?string
     {
         return $this->country;
     }
 
-    public function setCountry (string $country): self
+    public function setCountry(string $country): self
     {
         $this->country = $country;
 
         return $this;
     }
 
-    public function getLatitude (): ?string
+    public function getLatitude(): ?string
     {
         return $this->latitude;
     }
 
-    public function setLatitude (string $latitude): self
+    public function setLatitude(string $latitude): self
     {
         $this->latitude = $latitude;
 
         return $this;
     }
 
-    public function getLongitude (): ?string
+    public function getLongitude(): ?string
     {
         return $this->longitude;
     }
 
-    public function setLongitude (string $longitude): self
+    public function setLongitude(string $longitude): self
     {
         $this->longitude = $longitude;
 
         return $this;
     }
 
-    public function getUser (): ?User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser (?User $user): self
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 

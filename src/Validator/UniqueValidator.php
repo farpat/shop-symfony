@@ -14,21 +14,16 @@ class UniqueValidator extends ConstraintValidator
      */
     private $entityManager;
 
-    public function __construct (EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
-    }
-
-    private function getValue ($object, string $field)
-    {
-        return call_user_func([$object, 'get' . Str::getPascalCase($field)]);
     }
 
     /**
      * @param mixed $formData
      * @param Unique $constraint
      */
-    public function validate ($formData, Constraint $constraint)
+    public function validate($formData, Constraint $constraint)
     {
         $repository = $this->entityManager->getRepository($constraint->entity);
 
@@ -44,5 +39,10 @@ class UniqueValidator extends ConstraintValidator
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();
         }
+    }
+
+    private function getValue($object, string $field)
+    {
+        return call_user_func([$object, 'get' . Str::getPascalCase($field)]);
     }
 }

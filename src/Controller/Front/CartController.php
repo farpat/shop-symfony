@@ -26,8 +26,11 @@ class CartController extends AbstractController
      */
     private Request $request;
 
-    public function __construct (CartManagerInterface $cartManager, SerializerInterface $serializer, EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        CartManagerInterface $cartManager,
+        SerializerInterface $serializer,
+        EntityManagerInterface $entityManager
+    ) {
         $this->cartManager = $cartManager;
         $this->serializer = $serializer;
         $this->entityManager = $entityManager;
@@ -36,7 +39,7 @@ class CartController extends AbstractController
     /**
      * @Route("/cart-items", name="store_item", methods={"POST"})
      */
-    public function storeItem (Request $request)
+    public function storeItem(Request $request)
     {
         $orderItem = $this->cartManager->addItem(
             $request->request->getInt('quantity'),
@@ -50,7 +53,7 @@ class CartController extends AbstractController
         return $this->returnJsonResponseFromCartManager($orderItem);
     }
 
-    private function returnJsonResponseFromCartManager (array $orderItem): JsonResponse
+    private function returnJsonResponseFromCartManager(array $orderItem): JsonResponse
     {
         $response = new JsonResponse($orderItem); //TODO renvoyer ['quantity' => (int)$quantity, 'reference' => (object)$reference]
 
@@ -66,7 +69,7 @@ class CartController extends AbstractController
     /**
      * @Route("/cart-items/{productReferenceId}", name="patch_item", methods={"PATCH"})
      */
-    public function patchItem (int $productReferenceId, Request $request)
+    public function patchItem(int $productReferenceId, Request $request)
     {
         $orderItem = $this->cartManager->patchItem(
             $request->request->getInt('quantity'),
@@ -83,7 +86,7 @@ class CartController extends AbstractController
     /**
      * @Route("/cart-items/{productReferenceId}", name="delete_item", methods={"DELETE"})
      */
-    public function deleteItem (int $productReferenceId)
+    public function deleteItem(int $productReferenceId)
     {
         $orderItem = $this->cartManager->deleteItem($productReferenceId);
 
@@ -97,7 +100,7 @@ class CartController extends AbstractController
     /**
      * @Route("/purchase-cart", name="purchase", methods={"POST", "GET"})
      */
-    public function purchase ()
+    public function purchase()
     {
 
     }

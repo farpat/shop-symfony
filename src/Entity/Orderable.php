@@ -61,78 +61,78 @@ abstract class Orderable
      */
     protected $items;
 
-    public function __construct ()
+    public function __construct()
     {
         $this->items = new ArrayCollection();
     }
 
-    public function getId (): ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getComment (): ?string
+    public function getComment(): ?string
     {
         return $this->comment;
     }
 
-    public function setComment (?string $comment): self
+    public function setComment(?string $comment): self
     {
         $this->comment = $comment;
 
         return $this;
     }
 
-    public function getDeliveredAddress (): ?Address
+    public function getDeliveredAddress(): ?Address
     {
         return $this->deliveredAddress;
     }
 
-    public function setDeliveredAddress (?Address $deliveredAddress): self
+    public function setDeliveredAddress(?Address $deliveredAddress): self
     {
         $this->deliveredAddress = $deliveredAddress;
 
         return $this;
     }
 
-    public function getFormattedIncludingTaxes (array $currencyParameter): string
+    public function getFormattedIncludingTaxes(array $currencyParameter): string
     {
         return Str::getFormattedPrice($currencyParameter, $this->getIncludingTaxes());
     }
 
-    public function getIncludingTaxes ()
+    public function getIncludingTaxes()
     {
         return $this->totalAmountIncludingTaxes - $this->totalAmountExcludingTaxes;
     }
 
-    public function getFormattedTotalAmountExcludingTaxes (array $currencyParameter): string
+    public function getFormattedTotalAmountExcludingTaxes(array $currencyParameter): string
     {
         return Str::getFormattedPrice($currencyParameter, $this->getTotalAmountExcludingTaxes());
     }
 
-    public function getTotalAmountExcludingTaxes (): ?string
+    public function getTotalAmountExcludingTaxes(): ?string
     {
         return $this->totalAmountExcludingTaxes;
     }
 
-    public function setTotalAmountExcludingTaxes (string $totalAmountExcludingTaxes): self
+    public function setTotalAmountExcludingTaxes(string $totalAmountExcludingTaxes): self
     {
         $this->totalAmountExcludingTaxes = $totalAmountExcludingTaxes;
 
         return $this;
     }
 
-    public function getFormattedTotalAmountIncludingTaxes (array $currencyParameter): string
+    public function getFormattedTotalAmountIncludingTaxes(array $currencyParameter): string
     {
         return Str::getFormattedPrice($currencyParameter, $this->getTotalAmountIncludingTaxes());
     }
 
-    public function getTotalAmountIncludingTaxes (): ?string
+    public function getTotalAmountIncludingTaxes(): ?string
     {
         return $this->totalAmountIncludingTaxes;
     }
 
-    public function setTotalAmountIncludingTaxes (string $totalAmountIncludingTaxes): self
+    public function setTotalAmountIncludingTaxes(string $totalAmountIncludingTaxes): self
     {
         $this->totalAmountIncludingTaxes = $totalAmountIncludingTaxes;
 
@@ -142,12 +142,12 @@ abstract class Orderable
     /**
      * @return Collection|OrderItem[]
      */
-    public function getItems (): Collection
+    public function getItems(): Collection
     {
         return $this->items;
     }
 
-    public function addItem (OrderItem $item): self
+    public function addItem(OrderItem $item): self
     {
         if (!$this->items->contains($item)) {
             $this->items[] = $item;
@@ -161,19 +161,19 @@ abstract class Orderable
         return $this;
     }
 
-    public function getItemsCount (): ?int
+    public function getItemsCount(): ?int
     {
         return $this->itemsCount;
     }
 
-    public function setItemsCount (int $itemsCount): self
+    public function setItemsCount(int $itemsCount): self
     {
         $this->itemsCount = $itemsCount;
 
         return $this;
     }
 
-    public function removeItem (OrderItem $item): self
+    public function removeItem(OrderItem $item): self
     {
         if ($this->items->contains($item)) {
             $this->items->removeElement($item);

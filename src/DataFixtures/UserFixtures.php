@@ -4,8 +4,10 @@ namespace App\DataFixtures;
 
 use App\Entity\{Address, Billing, Cart, Orderable, OrderItem, ProductReference, User};
 use App\Services\DataFixtures\Fixture;
+use DateTime;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Exception;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserFixtures extends Fixture implements OrderedFixtureInterface
@@ -13,13 +15,13 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
     protected ?ObjectManager $entityManager = null;
     private UserPasswordEncoderInterface $encoder;
 
-    public function __construct (UserPasswordEncoderInterface $encoder)
+    public function __construct(UserPasswordEncoderInterface $encoder)
     {
         parent::__construct();
         $this->encoder = $encoder;
     }
 
-    public function load (ObjectManager $manager)
+    public function load(ObjectManager $manager)
     {
         $this->entityManager = $manager;
 
@@ -38,7 +40,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         $manager->flush();
     }
 
-    private function makeUser (int $i): User
+    private function makeUser(int $i): User
     {
         $i++;
         $user = new User;
@@ -57,7 +59,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
     /**
      * @return Address[]
      */
-    private function makeAddresses (User $user): array
+    private function makeAddresses(User $user): array
     {
         $addresses = [];
 
@@ -97,9 +99,9 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
      * @param array $allProductReferences
      *
      * @return Billing[]
-     * @throws \Exception
+     * @throws Exception
      */
-    private function makeBillings (User $user, array $addresses, array $allProductReferences): array
+    private function makeBillings(User $user, array $addresses, array $allProductReferences): array
     {
         static $currentBillingNumber = 0;
         $billings = [];
@@ -107,7 +109,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         $billingsCount = random_int(1, 4);
 
         for ($i = 0; $i < $billingsCount; $i++) {
-            $now = new \DateTime;
+            $now = new DateTime;
 
             $billing = (new Billing)
                 ->setUser($user)
@@ -143,9 +145,9 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
      * @param ProductReference[] $productReferences
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
-    private function makeOrderItems (int $itemsCount, Orderable $orderable, array $productReferences): array
+    private function makeOrderItems(int $itemsCount, Orderable $orderable, array $productReferences): array
     {
         $orderItems = [];
         shuffle($productReferences);
@@ -182,12 +184,12 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
      * @param array $allProductReferences
      *
      * @return Cart
-     * @throws \Exception
+     * @throws Exception
      */
-    private function makeCart (User $user, array $addresses, array $allProductReferences)
+    private function makeCart(User $user, array $addresses, array $allProductReferences)
     {
         $cart = (new Cart)
-            ->setUpdatedAt(new \DateTime())
+            ->setUpdatedAt(new DateTime())
             ->setComment($this->faker->boolean(25) ? $this->faker->sentence : null)
             ->setDeliveredAddress($addresses[random_int(0, count($addresses) - 1)]);
 
@@ -211,7 +213,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         return $cart;
     }
 
-    public function getOrder ()
+    public function getOrder()
     {
         return 4;
     }

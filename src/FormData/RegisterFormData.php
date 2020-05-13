@@ -64,7 +64,7 @@ final class RegisterFormData
     /**
      * @return bool
      */
-    public function getIsAgreeWithTerms (): bool
+    public function getIsAgreeWithTerms(): bool
     {
         return $this->is_agree_with_terms;
     }
@@ -74,7 +74,7 @@ final class RegisterFormData
      *
      * @return RegisterFormData
      */
-    public function setIsAgreeWithTerms (?bool $is_agree_with_terms): RegisterFormData
+    public function setIsAgreeWithTerms(?bool $is_agree_with_terms): RegisterFormData
     {
         $this->is_agree_with_terms = $is_agree_with_terms;
         return $this;
@@ -83,7 +83,7 @@ final class RegisterFormData
     /**
      * @return string
      */
-    public function getPasswordConfirmation (): ?string
+    public function getPasswordConfirmation(): ?string
     {
         return $this->password_confirmation;
     }
@@ -93,13 +93,13 @@ final class RegisterFormData
      *
      * @return RegisterFormData
      */
-    public function setPasswordConfirmation (?string $password_confirmation): RegisterFormData
+    public function setPasswordConfirmation(?string $password_confirmation): RegisterFormData
     {
         $this->password_confirmation = $password_confirmation;
         return $this;
     }
 
-    public function makeUser (UserPasswordEncoderInterface $passwordEncoder): User
+    public function makeUser(UserPasswordEncoderInterface $passwordEncoder): User
     {
         $user = new User;
         return $user->setName($this->getName())
@@ -111,7 +111,7 @@ final class RegisterFormData
     /**
      * @return string
      */
-    public function getName (): string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -121,7 +121,7 @@ final class RegisterFormData
      *
      * @return RegisterFormData
      */
-    public function setName (?string $name): RegisterFormData
+    public function setName(?string $name): RegisterFormData
     {
         $this->name = $name;
         return $this;
@@ -130,7 +130,7 @@ final class RegisterFormData
     /**
      * @return string
      */
-    public function getEmail (): ?string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -140,7 +140,7 @@ final class RegisterFormData
      *
      * @return RegisterFormData
      */
-    public function setEmail (?string $email): RegisterFormData
+    public function setEmail(?string $email): RegisterFormData
     {
         $this->email = $email;
         return $this;
@@ -149,7 +149,7 @@ final class RegisterFormData
     /**
      * @return string
      */
-    public function getPassword (): ?string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -159,7 +159,7 @@ final class RegisterFormData
      *
      * @return RegisterFormData
      */
-    public function setPassword (?string $password): RegisterFormData
+    public function setPassword(?string $password): RegisterFormData
     {
         $this->password = $password;
         return $this;

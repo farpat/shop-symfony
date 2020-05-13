@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Services\Entity\Creatable;
 use App\Services\Entity\Updatable;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -77,24 +79,24 @@ class User implements UserInterface
      */
     private $cart;
 
-    public function __construct ()
+    public function __construct()
     {
-        $this->created_at = new \DateTime;
+        $this->created_at = new DateTime;
         $this->addresses = new ArrayCollection();
         $this->billings = new ArrayCollection();
     }
 
-    public function getId (): ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEmail (): ?string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function setEmail (string $email): self
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -106,12 +108,12 @@ class User implements UserInterface
      *
      * @see UserInterface
      */
-    public function getUsername (): string
+    public function getUsername(): string
     {
         return (string)$this->email;
     }
 
-    public function isAdmin (): bool
+    public function isAdmin(): bool
     {
         return in_array('ROLE_ADMIN', $this->roles);
     }
@@ -119,12 +121,12 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getRoles (): array
+    public function getRoles(): array
     {
         return $this->roles;
     }
 
-    public function setRoles (array $roles): self
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 
@@ -134,12 +136,12 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getPassword (): string
+    public function getPassword(): string
     {
         return (string)$this->password;
     }
 
-    public function setPassword (string $password): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
@@ -149,7 +151,7 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getSalt ()
+    public function getSalt()
     {
         // not needed when using the "bcrypt" algorithm in security.yaml
     }
@@ -157,54 +159,54 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function eraseCredentials ()
+    public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
 
-    public function getName (): ?string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName (string $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    public function getEmailVerifiedAt (): ?\DateTimeInterface
+    public function getEmailVerifiedAt(): ?DateTimeInterface
     {
         return $this->emailVerifiedAt;
     }
 
-    public function setEmailVerifiedAt (?\DateTimeInterface $emailVerifiedAt): self
+    public function setEmailVerifiedAt(?DateTimeInterface $emailVerifiedAt): self
     {
         $this->emailVerifiedAt = $emailVerifiedAt;
 
         return $this;
     }
 
-    public function getStripeId (): ?string
+    public function getStripeId(): ?string
     {
         return $this->stripeId;
     }
 
-    public function setStripeId (?string $stripeId): self
+    public function setStripeId(?string $stripeId): self
     {
         $this->stripeId = $stripeId;
 
         return $this;
     }
 
-    public function getRememberToken (): ?string
+    public function getRememberToken(): ?string
     {
         return $this->rememberToken;
     }
 
-    public function setRememberToken (?string $rememberToken): self
+    public function setRememberToken(?string $rememberToken): self
     {
         $this->rememberToken = $rememberToken;
 
@@ -214,12 +216,12 @@ class User implements UserInterface
     /**
      * @return Collection|Address[]
      */
-    public function getAddresses (): Collection
+    public function getAddresses(): Collection
     {
         return $this->addresses;
     }
 
-    public function addAddress (Address $address): self
+    public function addAddress(Address $address): self
     {
         if (!$this->addresses->contains($address)) {
             $this->addresses[] = $address;
@@ -229,7 +231,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function removeAddress (Address $address): self
+    public function removeAddress(Address $address): self
     {
         if ($this->addresses->contains($address)) {
             $this->addresses->removeElement($address);
@@ -245,12 +247,12 @@ class User implements UserInterface
     /**
      * @return Collection|Billing[]
      */
-    public function getBillings (): Collection
+    public function getBillings(): Collection
     {
         return $this->billings;
     }
 
-    public function addBilling (Billing $billing): self
+    public function addBilling(Billing $billing): self
     {
         if (!$this->billings->contains($billing)) {
             $this->billings[] = $billing;
@@ -260,7 +262,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function removeBilling (Billing $billing): self
+    public function removeBilling(Billing $billing): self
     {
         if ($this->billings->contains($billing)) {
             $this->billings->removeElement($billing);

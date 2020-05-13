@@ -26,7 +26,7 @@ class Str
      */
     protected static $pascalCache = [];
 
-    public static function getFormattedPrice (array $currencyParameter, float $price): string
+    public static function getFormattedPrice(array $currencyParameter, float $price): string
     {
         switch ($currencyParameter['style']) {
             case 'left':
@@ -47,7 +47,7 @@ class Str
      *
      * @return string
      */
-    public static function getCamelCase (string $string)
+    public static function getCamelCase(string $string)
     {
         if (isset(static::$camelCache[$string])) {
             return static::$camelCache[$string];
@@ -63,7 +63,7 @@ class Str
      *
      * @return string
      */
-    public static function getPascalCase (string $string)
+    public static function getPascalCase(string $string)
     {
         $key = $string;
 
@@ -84,7 +84,7 @@ class Str
      *
      * @return string
      */
-    public static function getSnakeCase ($string, $delimiter = '_')
+    public static function getSnakeCase($string, $delimiter = '_')
     {
         $key = $string;
 
@@ -108,7 +108,7 @@ class Str
      *
      * @return bool
      */
-    public static function endsWith ($haystack, $needles)
+    public static function endsWith($haystack, $needles)
     {
         foreach ((array)$needles as $needle) {
             if (substr($haystack, -strlen($needle)) === (string)$needle) {

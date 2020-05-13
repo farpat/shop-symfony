@@ -7,26 +7,27 @@ use App\Repository\CategoryRepository;
 use App\Services\DataFixtures\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Exception;
 
 class ProductFieldAndProductReferenceFixtures extends Fixture implements OrderedFixtureInterface
 {
     private const STRING_PRODUCT_FIELDS = [
-        'color'    => ['white', 'red', 'green', 'blue', 'yellow', 'orange'],
-        'size'     => ['s', 'm', 'l', 'xs', 'xl', 'xxl'],
+        'color' => ['white', 'red', 'green', 'blue', 'yellow', 'orange'],
+        'size' => ['s', 'm', 'l', 'xs', 'xl', 'xxl'],
         'material' => ['wood', 'plastic', 'metal'],
-        'form'     => ['square', 'rectangle', 'round', 'diamond'],
+        'form' => ['square', 'rectangle', 'round', 'diamond'],
     ];
 
     private const NUMBER_PRODUCT_FIELDS = [
         'storage space' => [8, 16, 32, 64, 128, 256],
-        'weight in kg'  => [1, 4, 8, 16],
-        'height in cm'  => [4, 16, 32, 64],
-        'width in cm'   => [4, 16, 32, 64],
+        'weight in kg' => [1, 4, 8, 16],
+        'height in cm' => [4, 16, 32, 64],
+        'width in cm' => [4, 16, 32, 64],
     ];
 
     protected ?ObjectManager $entityManager = null;
 
-    public function load (ObjectManager $manager)
+    public function load(ObjectManager $manager)
     {
         $this->entityManager = $manager;
 
@@ -71,9 +72,9 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
      * @param Category[] $subCategories
      *
      * @return ProductField[]
-     * @throws \Exception
+     * @throws Exception
      */
-    private function makeProductFields (Category $category, $subCategories): array
+    private function makeProductFields(Category $category, $subCategories): array
     {
         $numbers = self::NUMBER_PRODUCT_FIELDS;
         $strings = self::STRING_PRODUCT_FIELDS;
@@ -116,7 +117,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
      *
      * @return ProductReference[]
      */
-    private function makeProductReferences (Product $product, array $productFields): array
+    private function makeProductReferences(Product $product, array $productFields): array
     {
         [$unitPriceExcludingTaxes, $unitPriceIncludingTaxes] = $this->computePricesOfProduct($product);
 
@@ -161,19 +162,20 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
      *
      * @return float[]
      */
-    private function computePricesOfProduct (Product $product)
+    private function computePricesOfProduct(Product $product)
     {
         $unitPriceExcludingTaxes = pow(10, random_int(1, 5));
 
-        $totalTaxes = array_reduce($product->getTaxes()->toArray(), function ($acc, Tax $tax) use ($unitPriceExcludingTaxes) {
-            if ($tax->getType() === Tax::UNITY_TYPE) {
-                $acc += $tax->getValue();
-            } elseif ($tax->getType() === Tax::PERCENTAGE_TYPE) {
-                $acc += $unitPriceExcludingTaxes * ($tax->getValue() / 100);
-            }
+        $totalTaxes = array_reduce($product->getTaxes()->toArray(),
+            function ($acc, Tax $tax) use ($unitPriceExcludingTaxes) {
+                if ($tax->getType() === Tax::UNITY_TYPE) {
+                    $acc += $tax->getValue();
+                } elseif ($tax->getType() === Tax::PERCENTAGE_TYPE) {
+                    $acc += $unitPriceExcludingTaxes * ($tax->getValue() / 100);
+                }
 
-            return $acc;
-        }, 0);
+                return $acc;
+            }, 0);
 
         $unitPriceIncludingTaxes = $totalTaxes + $unitPriceExcludingTaxes;
 
@@ -185,9 +187,9 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
      * @param ProductReference[] $productReferences
      * @param ObjectManager $manager
      *
-     * @throws \Exception
+     * @throws Exception
      */
-    private function attachImages (Product $product, array $productReferences)
+    private function attachImages(Product $product, array $productReferences)
     {
         $imagesCount = random_int(0, 5);
         if ($imagesCount === 0) {
@@ -211,7 +213,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
         $product->setMainImage($mainImage);
     }
 
-    public function getOrder ()
+    public function getOrder()
     {
         return 3;
     }

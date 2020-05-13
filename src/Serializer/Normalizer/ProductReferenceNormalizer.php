@@ -5,6 +5,7 @@ namespace App\Serializer\Normalizer;
 use App\Entity\Image;
 use App\Entity\ProductReference;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -16,7 +17,7 @@ class ProductReferenceNormalizer implements NormalizerInterface, CacheableSuppor
      */
     private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct (UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
     }
@@ -27,50 +28,50 @@ class ProductReferenceNormalizer implements NormalizerInterface, CacheableSuppor
      * @param array $context
      *
      * @return array
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
-    public function normalize ($object, $format = null, array $context = []): array
+    public function normalize($object, $format = null, array $context = []): array
     {
         $productUrl = $this->urlGenerator->generate('app_product_show', [
             'categorySlug' => $object->getProduct()->getCategory()->getSlug(),
-            'categoryId'   => $object->getProduct()->getCategory()->getId(),
-            'productSlug'  => $object->getProduct()->getSlug(),
-            'productId'    => $object->getProduct()->getId()
+            'categoryId' => $object->getProduct()->getCategory()->getId(),
+            'productSlug' => $object->getProduct()->getSlug(),
+            'productId' => $object->getProduct()->getId()
         ]);
 
         return [
-            'filledProductFields'     => $object->getFilledProductFields(),
-            'id'                      => $object->getId(),
-            'label'                   => $object->getLabel(),
-            'mainImage'               => $this->getImageInArray($object->getMainImage()),
-            'images'                  => array_map(fn($image) => $this->getImageInArray($image), $object->getImages()->toArray()),
+            'filledProductFields' => $object->getFilledProductFields(),
+            'id' => $object->getId(),
+            'label' => $object->getLabel(),
+            'mainImage' => $this->getImageInArray($object->getMainImage()),
+            'images' => array_map(fn($image) => $this->getImageInArray($image), $object->getImages()->toArray()),
             'unitPriceExcludingTaxes' => $object->getUnitPriceExcludingTaxes(),
             'unitPriceIncludingTaxes' => $object->getUnitPriceIncludingTaxes(),
-            'url'                     => $productUrl . '#' . $object->getId(),
+            'url' => $productUrl . '#' . $object->getId(),
         ];
     }
 
-    private function getImageInArray (?Image $image)
+    private function getImageInArray(?Image $image)
     {
         if ($image === null) {
             return null;
         }
 
         return [
-            'id'           => $image->getId(),
-            'url'          => $image->getUrl(),
-            'alt'          => $image->getAlt(),
+            'id' => $image->getId(),
+            'url' => $image->getUrl(),
+            'alt' => $image->getAlt(),
             'urlThumbnail' => $image->getUrlThumbnail(),
             'altThumbnail' => $image->getAltThumbnail(),
         ];
     }
 
-    public function supportsNormalization ($data, $format = null): bool
+    public function supportsNormalization($data, $format = null): bool
     {
         return $data instanceof ProductReference && $format === 'json';
     }
 
-    public function hasCacheableSupportsMethod (): bool
+    public function hasCacheableSupportsMethod(): bool
     {
         return true;
     }

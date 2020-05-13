@@ -16,16 +16,16 @@ class ResetPasswordRequestFormType extends AbstractType
      */
     private TranslatorInterface $translator;
 
-    public function __construct (TranslatorInterface $translator)
+    public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
     }
 
-    public function buildForm (FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('email', EmailType::class, [
-                'help'        => $this->translator->trans('Enter your email address and we we will send you a link to reset your password'),
+                'help' => $this->translator->trans('Enter your email address and we we will send you a link to reset your password'),
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter your email',
@@ -34,7 +34,7 @@ class ResetPasswordRequestFormType extends AbstractType
             ]);
     }
 
-    public function configureOptions (OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([]);
     }

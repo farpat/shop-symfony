@@ -16,8 +16,11 @@ class RegisterController extends AbstractController
     /**
      * @Route("/register", name="app_auth_register", methods={"GET", "POST"})
      */
-    public function register (Request $request, UserPasswordEncoderInterface $passwordEncoder, TranslatorInterface $translator): Response
-    {
+    public function register(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        TranslatorInterface $translator
+    ): Response {
         $data = new RegisterFormData();
         $form = $this->createForm(RegisterFormType::class, $data);
         $form->handleRequest($request);
@@ -31,7 +34,8 @@ class RegisterController extends AbstractController
             $entityManager->flush();
 
             // do anything else you need here, like send an email
-            $this->addFlash('success', $translator->trans('Your account is created with success! You received an email to confirm it.'));
+            $this->addFlash('success',
+                $translator->trans('Your account is created with success! You received an email to confirm it.'));
 
 
             return $this->redirectToRoute('app_home_index');

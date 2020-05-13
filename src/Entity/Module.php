@@ -43,41 +43,41 @@ class Module
         $this->parameters = new ArrayCollection();
     }
 
-    public function getId (): ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLabel (): ?string
+    public function getLabel(): ?string
     {
         return $this->label;
     }
 
-    public function setLabel (string $label): self
+    public function setLabel(string $label): self
     {
         $this->label = $label;
 
         return $this;
     }
 
-    public function getDescription (): ?string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription (?string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getIsActive (): ?bool
+    public function getIsActive(): ?bool
     {
         return $this->isActive;
     }
 
-    public function setIsActive (bool $isActive): self
+    public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
 

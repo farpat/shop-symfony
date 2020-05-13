@@ -15,12 +15,12 @@ class ProductVisit extends Visit
      */
     private $product;
 
-    public function getProduct (): ?Product
+    public function getProduct(): ?Product
     {
         return $this->product;
     }
 
-    public function setProduct (?Product $product): self
+    public function setProduct(?Product $product): self
     {
         $this->product = $product;
 

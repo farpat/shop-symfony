@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TagRepository")
@@ -36,37 +37,37 @@ class Tag
      */
     private $products;
 
-    public function __construct ()
+    public function __construct()
     {
         $this->products = new ArrayCollection();
     }
 
-    public function getId (): ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLabel (): ?string
+    public function getLabel(): ?string
     {
         return $this->label;
     }
 
-    public function setLabel (string $label): self
+    public function setLabel(string $label): self
     {
         $this->label = $label;
 
         return $this;
     }
 
-    public function getType (): ?string
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function setType (string $type): self
+    public function setType(string $type): self
     {
         if (!in_array($type, [self::COMPLEMENTARITY_TYPE, self::SIMILARITY_TYPE])) {
-            throw new \InvalidArgumentException("The $type << $type >> doesn't exists!");
+            throw new InvalidArgumentException("The $type << $type >> doesn't exists!");
         }
 
         $this->type = $type;
@@ -77,12 +78,12 @@ class Tag
     /**
      * @return Collection|Product[]
      */
-    public function getProducts (): Collection
+    public function getProducts(): Collection
     {
         return $this->products;
     }
 
-    public function addProduct (Product $product): self
+    public function addProduct(Product $product): self
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
@@ -92,7 +93,7 @@ class Tag
         return $this;
     }
 
-    public function removeProduct (Product $product): self
+    public function removeProduct(Product $product): self
     {
         if ($this->products->contains($product)) {
             $this->products->removeElement($product);
