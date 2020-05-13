@@ -13,7 +13,7 @@ class ProductComponent extends React.Component {
   render () {
     return (
       <div>
-        <ReferenceNavComponent />
+        <ReferenceNavComponent/>
 
         <ProductReferenceComponent
           currentReference={this.props.currentReference}

@@ -13,10 +13,10 @@ class TextComponent extends React.Component {
       <div className='form-group'>
         {
           this.props.label !== '' &&
-            <label htmlFor={this.props.id} className={this.getClassName()}>{this.props.label}</label>
+          <label htmlFor={this.props.id} className={this.getClassName()}>{this.props.label}</label>
         }
 
-        <InputComponent {...this.props} type='text' />
+        <InputComponent {...this.props} type='text'/>
       </div>
     )
   }

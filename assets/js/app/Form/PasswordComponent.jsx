@@ -13,18 +13,18 @@ class PasswordComponent extends React.Component {
       <div className='form-group'>
         {
           this.props.label !== '' &&
-            <label htmlFor={this.props.id} className={this.getLabelClassName()}>{this.props.label}</label>
+          <label htmlFor={this.props.id} className={this.getLabelClassName()}>{this.props.label}</label>
         }
 
         <div className='input-group'>
           {
             this.props.withKey &&
-              <div className='input-group-prepend'>
-                <span className='input-group-text'><i className='fas fa-key' /></span>
-              </div>
+            <div className='input-group-prepend'>
+              <span className='input-group-text'><i className='fas fa-key'/></span>
+            </div>
           }
 
-          <InputComponent {...this.props} type='password' />
+          <InputComponent {...this.props} type='password'/>
         </div>
       </div>
     )

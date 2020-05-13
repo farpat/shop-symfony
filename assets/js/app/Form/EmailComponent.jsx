@@ -13,15 +13,15 @@ class EmailComponent extends React.Component {
       <div className='form-group'>
         {
           this.props.label !== '' &&
-            <label htmlFor={this.props.id} className={this.getLabelClassName()}>{this.props.label}</label>
+          <label htmlFor={this.props.id} className={this.getLabelClassName()}>{this.props.label}</label>
         }
 
         <div className='input-group'>
           <div className='input-group-prepend'>
-            <span className='input-group-text'><i className='far fa-envelope-open' /></span>
+            <span className='input-group-text'><i className='far fa-envelope-open'/></span>
           </div>
 
-          <InputComponent {...this.props} type='email' />
+          <InputComponent {...this.props} type='email'/>
         </div>
       </div>
     )

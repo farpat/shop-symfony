@@ -57,7 +57,7 @@ class CartManagerInDatabase implements CartManagerInterface
 
         return [
             'quantity' => 0,
-            'reference' => $this->normalizer->normalize($orderItem->getProductReference())
+            'reference' => $this->normalizer->normalize($orderItem->getProductReference(), 'json')
         ];
     }
 

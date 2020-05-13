@@ -75,7 +75,7 @@ class User implements UserInterface
     private $billings;
 
     /**
-     * @ORM\OneToOne(targetEntity=Cart::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Cart::class, inversedBy="user", cascade={"persist", "remove"})
      */
     private $cart;
 

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route(name="app_cart_")
@@ -98,10 +99,21 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/purchase-cart", name="purchase", methods={"POST", "GET"})
+     * @Route("/purchase", name="purchase", methods={"POST", "GET"})
      */
-    public function purchase()
+    public function purchase(TranslatorInterface $translator)
     {
+        if ($this->getUser() === null) {
+            $this->addFlash('error',
+                $translator->trans('To purchase your cart, you should %loginUrlStart%login%urlEnd% or %registerUrlStart%create an account%urlEnd%',
+                    [
+                        '%loginUrlStart%' => '<a href="' . $this->generateUrl('app_auth_security_login') . '">',
+                        '%registerUrlStart%' => '<a href="' . $this->generateUrl('app_auth_register') . '">',
+                        '%urlEnd%' => '</a>'
+                    ]));
+            return $this->redirectToRoute('app_home_index');
+        }
 
+        return $this->render('cart/purchase.html.twig');
     }
 }

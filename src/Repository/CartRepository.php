@@ -23,12 +23,14 @@ class CartRepository extends ServiceEntityRepository
     public function getCart(User $user): ?Cart
     {
         return $this->createQueryBuilder('cart')
-            ->select('cart', 'items', 'productReference', 'mainImage', 'images')
+            ->select('cart', 'items', 'productReference', 'mainImage', 'images', 'user', 'product', 'category')
             ->leftJoin('cart.user', 'user')
             ->leftJoin('cart.items', 'items')
             ->leftJoin('items.productReference', 'productReference')
-            ->leftJoin('productReference.mainImage', 'mainImage')
             ->leftJoin('productReference.images', 'images')
+            ->leftJoin('productReference.mainImage', 'mainImage')
+            ->leftJoin('productReference.product', 'product')
+            ->leftJoin('product.category', 'category')
             ->where('user = :user')
             ->setParameter('user', $user)
             ->getQuery()

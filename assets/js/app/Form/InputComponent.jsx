@@ -99,20 +99,20 @@ class InputComponent extends React.Component {
 
         {
           this.props.type === 'checkbox' &&
-            <label htmlFor={this.props.id} className={this.getLabelClassName()}>{this.props.label}</label>
+          <label htmlFor={this.props.id} className={this.getLabelClassName()}>{this.props.label}</label>
         }
 
         {
           this.state.error !== '' &&
-            <div className='invalid-feedback'>{this.state.error}</div>
+          <div className='invalid-feedback'>{this.state.error}</div>
         }
         {
           this.props.help &&
-            <small id={this.props.id + '_help'} className='form-text text-muted w-100'>{this.props.help}</small>
+          <small id={this.props.id + '_help'} className='form-text text-muted w-100'>{this.props.help}</small>
         }
         {
           this.props.type === 'checkbox' && !this.state.value &&
-            <input type='hidden' name={this.props.name} value='0' />
+          <input type='hidden' name={this.props.name} value='0'/>
         }
       </>
     )

@@ -42,13 +42,7 @@ class TotalComponent extends React.Component {
         <td className='text-right' colSpan='2'>{Translation.get('Total')}:</td>
         <td colSpan='2'>{Str.toLocaleCurrency(totalPriceIncludingTaxes, this.props.currency)}</td>
       </tr>
-      <tr>
-        <td colSpan='4'>
-          <a className='float-right btn btn-primary' href={this.props.purchaseUrl}>{Translation.get('Purchase')}</a>
-        </td>
-      </tr>
       </tfoot>
-
     )
   }
 }

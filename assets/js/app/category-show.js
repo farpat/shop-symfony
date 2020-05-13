@@ -13,8 +13,8 @@ const productFieldsElement = document.querySelector('#product-fields-component')
 categoryService.createInitialData(productsElement, productFieldsElement)
 const categoryStore = createStore(CategoryReducer, categoryService.getData())
 
-render(<Provider store={categoryStore}><ProductsComponent /></Provider>, productsElement)
+render(<Provider store={categoryStore}><ProductsComponent/></Provider>, productsElement)
 
 if (categoryService.getData().allProductFields.length > 0) {
-  render(<Provider store={categoryStore}><ProductFieldsComponent /></Provider>, productFieldsElement)
+  render(<Provider store={categoryStore}><ProductFieldsComponent/></Provider>, productFieldsElement)
 }

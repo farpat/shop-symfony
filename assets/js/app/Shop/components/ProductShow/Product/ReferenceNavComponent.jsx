@@ -13,7 +13,7 @@ class ReferenceNavComponent extends React.Component {
       <nav className='nav-product-reference'>
         {
           this.props.references.map(reference =>
-            <ReferenceNavItemComponent reference={reference} key={reference.id} />
+            <ReferenceNavItemComponent reference={reference} key={reference.id}/>
           )
         }
       </nav>

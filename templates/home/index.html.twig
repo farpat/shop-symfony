@@ -4,6 +4,15 @@
 
 {% block body %}
     <div class="container">
+        {% for message in app.flashes('success') %}
+            {% include '_partials/alert.html.twig' with {'message': message} %}
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            {% include '_partials/alert.html.twig' with {'type':'danger','message': message} %}
+        {% endfor %}
+
+
         {% for element in elementsToDisplayInHomepage %}
             {% include 'home/index_partials/' ~ element ~'.html.twig' %}
         {% endfor %}

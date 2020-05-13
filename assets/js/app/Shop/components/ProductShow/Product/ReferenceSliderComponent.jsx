@@ -49,7 +49,7 @@ class ReferenceSliderComponent extends React.Component {
           {
             this.props.currentReference.images.map((image, index) =>
               <div key={image.id} className={this.getItemClass(index)}>
-                <img src={image.url} alt={image.alt} />
+                <img src={image.url} alt={image.alt}/>
               </div>
             )
           }
@@ -57,33 +57,33 @@ class ReferenceSliderComponent extends React.Component {
 
         {
           this.props.currentReference.images.length > 1 &&
-            <a href={this.getTarget()} className='carousel-control-prev' data-slide='prev' role='button'>
-              <span aria-hidden='true' className='carousel-control-prev-icon' />
-              <span className='sr-only'>Previous</span>
-            </a>
+          <a href={this.getTarget()} className='carousel-control-prev' data-slide='prev' role='button'>
+            <span aria-hidden='true' className='carousel-control-prev-icon'/>
+            <span className='sr-only'>Previous</span>
+          </a>
         }
 
         {
           this.props.currentReference.images.length > 1 &&
-            <a href={this.getTarget()} className='carousel-control-next' data-slide='next' role='button'>
-              <span aria-hidden='true' className='carousel-control-next-icon' />
-              <span className='sr-only'>Next</span>
-            </a>
+          <a href={this.getTarget()} className='carousel-control-next' data-slide='next' role='button'>
+            <span aria-hidden='true' className='carousel-control-next-icon'/>
+            <span className='sr-only'>Next</span>
+          </a>
         }
         {
           this.props.currentReference.images.length > 1 &&
-            <ol className='carousel-indicators'>
-              {
-                this.props.currentReference.images.map((image, index) =>
-                  <li
-                    className={this.getIndicatorClass(index)} data-slide-to={index}
-                    data-target={this.getTarget()} key={index}
-                  >
-                    <img src={image.urlThumbnail} alt={image.altThumbnail} />
-                  </li>
-                )
-              }
-            </ol>
+          <ol className='carousel-indicators'>
+            {
+              this.props.currentReference.images.map((image, index) =>
+                <li
+                  className={this.getIndicatorClass(index)} data-slide-to={index}
+                  data-target={this.getTarget()} key={index}
+                >
+                  <img src={image.urlThumbnail} alt={image.altThumbnail}/>
+                </li>
+              )
+            }
+          </ol>
         }
       </div>
     )

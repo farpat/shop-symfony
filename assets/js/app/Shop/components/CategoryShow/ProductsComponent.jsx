@@ -20,14 +20,14 @@ class ProductsComponent extends React.Component {
 
     return (
       <div className='products-component'>
-        <ProductsNavigation />
+        <ProductsNavigation/>
         <div className='row'>
           {
-            productsToDisplay.map(product => <ProductComponent key={product.id} product={product} />)
+            productsToDisplay.map(product => <ProductComponent key={product.id} product={product}/>)
           }
           {
             productsToDisplay.length === 0 &&
-              <p>Sorry! There are no products</p>
+            <p>Sorry! There are no products</p>
           }
         </div>
       </div>

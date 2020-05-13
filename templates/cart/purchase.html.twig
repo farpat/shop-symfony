@@ -1,0 +1,22 @@
+{% extends "_layouts/app.html.twig" %}
+
+{% block title %}
+    {% trans %}Purchase{% endtrans %}
+{% endblock %}
+
+{% block script '' %}
+
+{% block body %}
+    <main class="container">
+        <h1>{% trans %}Purchase{% endtrans %}</h1>
+
+        <div class="row">
+            <section id="purchase-cart" class="col-md-9">
+            </section>
+
+            <section class="col-md-3">
+                Paypal section
+            </section>
+        </div>
+    </main>
+{% endblock %}

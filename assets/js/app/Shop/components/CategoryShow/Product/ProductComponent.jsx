@@ -14,13 +14,13 @@ class ProductComponent extends React.Component {
         <article className='card product'>
           {
             this.props.product.image &&
-              <a href={this.props.product.url}>
-                <img
-                  src={this.props.product.image.urlThumbnail}
-                  alt={this.props.product.image.altThumbnail}
-                  className='card-img-top'
-                />
-              </a>
+            <a href={this.props.product.url}>
+              <img
+                src={this.props.product.image.urlThumbnail}
+                alt={this.props.product.image.altThumbnail}
+                className='card-img-top'
+              />
+            </a>
           }
           <div className='card-body'>
             <h3 className='card-title'><a href={this.props.product.url}>{this.props.product.label}</a></h3>
@@ -29,8 +29,8 @@ class ProductComponent extends React.Component {
 
               <p className='mt-2 m-0'>
                 From <span
-                  className='badge badge-secondary'
-                >{Str.toLocaleCurrency(this.props.product.minUnitPriceIncludingTaxes, this.props.currency)}
+                className='badge badge-secondary'
+              >{Str.toLocaleCurrency(this.props.product.minUnitPriceIncludingTaxes, this.props.currency)}
                 </span>
               </p>
             </div>

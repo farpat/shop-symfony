@@ -16,9 +16,9 @@ class ProductFieldsComponent extends React.Component {
         {
           this.props.productFields.map(productField => {
             if (productField.type === 'number') {
-              return <NumberFieldComponent key={productField.key} productField={productField} />
+              return <NumberFieldComponent key={productField.key} productField={productField}/>
             } else if (productField.type === 'string') {
-              return <StringFieldComponent key={productField.key} productField={productField} />
+              return <StringFieldComponent key={productField.key} productField={productField}/>
             }
           })
         }

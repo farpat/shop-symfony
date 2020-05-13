@@ -16,10 +16,10 @@ class ReferenceNavItemComponent extends React.Component {
         >
           {
             this.props.reference.mainImage &&
-              <img
-                src={this.props.reference.mainImage.urlThumbnail}
-                alt={this.props.reference.mainImage.altThumbnail}
-              />
+            <img
+              src={this.props.reference.mainImage.urlThumbnail}
+              alt={this.props.reference.mainImage.altThumbnail}
+            />
           }
           <h2 className={this.getTitleClass()}>{this.props.reference.label}</h2>
         </a>
