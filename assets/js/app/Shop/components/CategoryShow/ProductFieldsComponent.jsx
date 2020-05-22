@@ -6,9 +6,7 @@ import NumberFieldComponent from './ProductField/NumberFieldComponent'
 import StringFieldComponent from './ProductField/StringFieldComponent'
 
 class ProductFieldsComponent extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+
 
   render () {
     return (

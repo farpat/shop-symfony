@@ -3,10 +3,10 @@
 namespace App\Services\Shop\CartManagement;
 
 
-use InvalidArgumentException;
 use App\Entity\{ProductReference};
 use App\Repository\ProductReferenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -15,10 +15,10 @@ class CartManagerInCookie implements CartManagerInterface
     public const COOKIE_KEY = 'cart-items';
 
     private ProductReferenceRepository $productReferenceRepository;
-    private EntityManagerInterface $entityManager;
-    private array $items;
-    private ?Request $request;
-    private NormalizerInterface $normalizer;
+    private EntityManagerInterface     $entityManager;
+    private array                      $items;
+    private ?Request                   $request;
+    private NormalizerInterface        $normalizer;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -43,7 +43,7 @@ class CartManagerInCookie implements CartManagerInterface
         unset($this->items[$productReferenceId]);
 
         return [
-            'quantity' => 0,
+            'quantity'  => 0,
             'reference' => $this->normalizer->normalize($productReference, 'json')
         ];
     }
@@ -77,7 +77,7 @@ class CartManagerInCookie implements CartManagerInterface
         }
 
         return $this->normalizer->normalize(array_map(fn($item) => [
-            'quantity' => $item['quantity'],
+            'quantity'  => $item['quantity'],
             'reference' => $references[$item['referenceId']]
         ], $this->items), 'json');
     }
@@ -93,7 +93,7 @@ class CartManagerInCookie implements CartManagerInterface
         $this->items[$productReferenceId]['quantity'] = $quantity;
 
         return [
-            'quantity' => $quantity,
+            'quantity'  => $quantity,
             'reference' => $this->normalizer->normalize($productReference, 'json')
         ];
     }
@@ -114,12 +114,12 @@ class CartManagerInCookie implements CartManagerInterface
         $productReference = $this->getProductReference($productReferenceId);
 
         $this->items[$productReferenceId] = [
-            'quantity' => $quantity,
+            'quantity'    => $quantity,
             'referenceId' => $productReferenceId
         ];
 
         return [
-            'quantity' => $quantity,
+            'quantity'  => $quantity,
             'reference' => $this->normalizer->normalize($productReference, 'json')
         ];
     }

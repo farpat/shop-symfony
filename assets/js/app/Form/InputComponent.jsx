@@ -12,9 +12,6 @@ class InputComponent extends React.Component {
       value: this.props.type !== 'checkbox' ? this.props.value : this.props.value != 0,
       error: this.props.error || ''
     }
-
-    this.changeValue = this.changeValue.bind(this)
-    this.getError = this.getError.bind(this)
   }
 
   /**
@@ -92,8 +89,8 @@ class InputComponent extends React.Component {
           type={this.props.type} className={this.getInputClassName()} id={this.props.id}
           name={this.props.name} required={this.required}
           aria-describedby={this.props.help ? this.props.id + '_help' : false}
-          value={this.getInputValue()} checked={this.state.value} onChange={this.changeValue}
-          onBlur={this.getError}
+          value={this.getInputValue()} checked={this.state.value} onChange={this.changeValue.bind(this)}
+          onBlur={this.getError.bind(this)}
           {...this.props.attr}
         />
 
@@ -140,16 +137,16 @@ class InputComponent extends React.Component {
 }
 
 InputComponent.propTypes = {
-  id: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  id        : PropTypes.string.isRequired,
+  type      : PropTypes.string.isRequired,
+  name      : PropTypes.string.isRequired,
   parentForm: PropTypes.instanceOf(HTMLFormElement).isRequired,
-  error: PropTypes.string,
-  withKey: PropTypes.bool,
-  attr: PropTypes.object,
-  help: PropTypes.string,
-  label: PropTypes.string,
-  rules: PropTypes.string
+  error     : PropTypes.string,
+  withKey   : PropTypes.bool,
+  attr      : PropTypes.object,
+  help      : PropTypes.string,
+  label     : PropTypes.string,
+  rules     : PropTypes.string
 }
 
 export default InputComponent

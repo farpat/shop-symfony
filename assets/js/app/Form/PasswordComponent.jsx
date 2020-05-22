@@ -4,10 +4,6 @@ import { hot } from 'react-hot-loader/root'
 import InputComponent from './InputComponent'
 
 class PasswordComponent extends React.Component {
-  constructor (props) {
-    super(props)
-  }
-
   render () {
     return (
       <div className='form-group'>
@@ -44,12 +40,12 @@ class PasswordComponent extends React.Component {
 }
 
 PasswordComponent.propTypes = {
-  id: PropTypes.string.isRequired,
-  withKey: PropTypes.bool.isRequired,
+  id        : PropTypes.string.isRequired,
+  withKey   : PropTypes.bool.isRequired,
   parentForm: PropTypes.instanceOf(HTMLFormElement),
-  attr: PropTypes.object,
-  label: PropTypes.string,
-  rules: PropTypes.string
+  attr      : PropTypes.object,
+  label     : PropTypes.string,
+  rules     : PropTypes.string
 }
 
 export default hot(PasswordComponent)

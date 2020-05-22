@@ -6,14 +6,36 @@ class CartService {
 
   /**
    *
+   * @param Object items
+   * @returns {{totalIncludingTaxes: number, totalPriceExcludingTaxes: number, totalPriceIncludingTaxes: number}}
+   */
+  getPrices (items) {
+    let totalPriceExcludingTaxes = 0
+    let totalPriceIncludingTaxes = 0
+
+    Object.keys(items).map(referenceId => {
+      const item = items[referenceId]
+      totalPriceExcludingTaxes += item.quantity * item.reference.unitPriceExcludingTaxes
+      totalPriceIncludingTaxes += item.quantity * item.reference.unitPriceIncludingTaxes
+    })
+
+    return {
+      totalPriceExcludingTaxes,
+      totalPriceIncludingTaxes,
+      totalIncludingTaxes: totalPriceIncludingTaxes - totalPriceExcludingTaxes
+    }
+  }
+
+  /**
+   *
    * @param {HTMLElement} headCartElement
    */
   createInitialData (headCartElement) {
     this.data = {
-      quantities: {},
-      items: JSON.parse(headCartElement.dataset.items),
-      purchaseUrl: headCartElement.dataset.purchaseUrl,
-      currency: document.querySelector('#cart-nav').dataset.currency,
+      quantities   : {},
+      items        : JSON.parse(headCartElement.dataset.items),
+      purchaseUrl  : headCartElement.dataset.purchaseUrl,
+      currency     : document.querySelector('#cart-nav').dataset.currency,
       itemInLoading: {}
     }
   }
@@ -45,7 +67,7 @@ class CartService {
   updateItemQuantity (reference, quantity) {
     this.data = {
       ...this.data,
-      items: {
+      items     : {
         ...this.data.items,
         [reference.id]: { quantity, reference }
       },
@@ -61,7 +83,7 @@ class CartService {
   addInCart (reference, quantity) {
     this.data = {
       ...this.data,
-      items: {
+      items     : {
         ...this.data.items,
         [reference.id]: { quantity, reference }
       },

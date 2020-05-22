@@ -4,18 +4,23 @@
     {% trans %}Purchase{% endtrans %}
 {% endblock %}
 
-{% block script '' %}
+{% block javascripts %}
+    <script src="https://js.stripe.com/v3/"></script>
+    {{ parent() }}
+{% endblock %}
+
 
 {% block body %}
     <main class="container">
         <h1>{% trans %}Purchase{% endtrans %}</h1>
 
-        <div class="row">
-            <section id="purchase-cart" class="col-md-9">
+        <div class="row paypal-row">
+            <section id="purchase-cart" class="col-md">
             </section>
 
-            <section class="col-md-3">
-                Paypal section
+            <section class="col-md-4">
+                <h2>{% trans %}Payment by credit card{% endtrans %}</h2>
+                <div id="stripe-component" data-public-key="{{ stripePublicKey }}" data-success-url="{{ successfulPaymentUrl }}"></div>
             </section>
         </div>
     </main>

@@ -4,9 +4,7 @@ import PropTypes from 'prop-types'
 import Str from '../../../../../src/String/Str'
 
 class ProductComponent extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+
 
   render () {
     return (

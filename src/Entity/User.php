@@ -56,11 +56,6 @@ class User implements UserInterface
     private $emailVerifiedAt;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $stripeId;
-
-    /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private $rememberToken;
@@ -75,15 +70,21 @@ class User implements UserInterface
     private $billings;
 
     /**
-     * @ORM\OneToOne(targetEntity=Cart::class, inversedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist", "remove"})
      */
-    private $cart;
+    private $deliveryAddress;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Cart::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $carts;
 
     public function __construct()
     {
         $this->created_at = new DateTime;
         $this->addresses = new ArrayCollection();
         $this->billings = new ArrayCollection();
+        $this->carts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -189,18 +190,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getStripeId(): ?string
-    {
-        return $this->stripeId;
-    }
-
-    public function setStripeId(?string $stripeId): self
-    {
-        $this->stripeId = $stripeId;
-
-        return $this;
-    }
-
     public function getRememberToken(): ?string
     {
         return $this->rememberToken;
@@ -275,14 +264,45 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getCart(): ?Cart
+    public function getDeliveryAddress(): ?Address
     {
-        return $this->cart;
+        return $this->deliveryAddress;
     }
 
-    public function setCart(?Cart $cart): self
+    public function setDeliveryAddress(?Address $deliveryAddress): self
     {
-        $this->cart = $cart;
+        $this->deliveryAddress = $deliveryAddress;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Cart[]
+     */
+    public function getCarts(): Collection
+    {
+        return $this->carts;
+    }
+
+    public function addCart(Cart $cart): self
+    {
+        if (!$this->carts->contains($cart)) {
+            $this->carts[] = $cart;
+            $cart->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCart(Cart $cart): self
+    {
+        if ($this->carts->contains($cart)) {
+            $this->carts->removeElement($cart);
+            // set the owning side to null (unless already changed)
+            if ($cart->getUser() === $this) {
+                $cart->setUser(null);
+            }
+        }
 
         return $this;
     }

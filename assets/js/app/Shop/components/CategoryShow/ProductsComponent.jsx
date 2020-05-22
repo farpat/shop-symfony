@@ -6,9 +6,7 @@ import ProductComponent from './Product/ProductComponent'
 import ProductsNavigation from './Product/ProductsNavigation'
 
 class ProductsComponent extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+
 
   getProductsToDisplay () {
     const start = (this.props.currentPage - 1) * this.props.perPage

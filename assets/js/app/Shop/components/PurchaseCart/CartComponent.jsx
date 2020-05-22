@@ -6,9 +6,7 @@ import ItemComponent from './Cart/ItemComponent'
 import TotalComponent from './Cart/TotalComponent'
 
 class CartComponent extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+
 
   getItem (referenceId) {
     return this.props.items[referenceId]

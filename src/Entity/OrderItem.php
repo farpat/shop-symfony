@@ -73,6 +73,11 @@ class OrderItem
         return $this;
     }
 
+    public function getPriceOfTaxes(): float
+    {
+        return $this->amountIncludingTaxes - $this->amountExcludingTaxes;
+    }
+
     public function getAmountIncludingTaxes(): ?string
     {
         return $this->amountIncludingTaxes;

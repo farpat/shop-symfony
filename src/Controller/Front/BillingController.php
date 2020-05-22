@@ -3,8 +3,7 @@
 namespace App\Controller\Front;
 
 use App\Entity\Billing;
-use League\Flysystem\FilesystemInterface;
-use mikehaertl\wkhtmlto\Pdf;
+use App\Services\Shop\Bank\BillingService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,17 +21,13 @@ class BillingController extends AbstractController
      * @Entity("billing", expr="repository.getWithAllRelations(billingNumber)")
      * @IsGranted(App\Security\Voter\BillingVoter::EXPORT, subject="billing")
      */
-    public function export(Billing $billing, Request $request, FilesystemInterface $billingStorage)
+    public function export(Billing $billing, Request $request, BillingService $billingService)
     {
-        $completePath = $billingStorage->getAdapter()->getPathPrefix() . $billing->getBillingPath();
-
-        if ($request->query->getInt('force') === 1 || !$billingStorage->has($billing->getBillingPath())) {
-            $billingPdf = new Pdf();
-            $billingPdf->addPage($this->renderView('billing/show.html.twig', compact('billing')));
-            $billingPdf->saveAs($completePath);
+        if ($request->query->getInt('force') === 1 || !$billingService->isPdfExist($billing)) {
+            $billingService->generatePdf($billing);
         }
 
-        return new BinaryFileResponse($completePath);
+        return new BinaryFileResponse($billingService->getPdfPath());
     }
 
     /**
@@ -43,6 +38,10 @@ class BillingController extends AbstractController
     public function view(Billing $billing)
     {
         $areAssetsAbsolute = false;
-        return $this->render('billing/show.html.twig', compact('billing', 'areAssetsAbsolute'));
+
+        return $this->render('billing/show.html.twig', [
+            'billing'           => $billing,
+            'areAssetsAbsolute' => $areAssetsAbsolute
+        ]);
     }
 }

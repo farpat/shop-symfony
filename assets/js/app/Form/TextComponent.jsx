@@ -4,9 +4,6 @@ import PropTypes from 'prop-types'
 import InputComponent from './InputComponent'
 
 class TextComponent extends React.Component {
-  constructor (props) {
-    super(props)
-  }
 
   render () {
     return (
@@ -16,7 +13,7 @@ class TextComponent extends React.Component {
           <label htmlFor={this.props.id} className={this.getClassName()}>{this.props.label}</label>
         }
 
-        <InputComponent {...this.props} type='text'/>
+        <InputComponent type='text' {...this.props} />
       </div>
     )
   }
@@ -35,11 +32,11 @@ class TextComponent extends React.Component {
 }
 
 TextComponent.propTypes = {
-  id: PropTypes.string.isRequired,
+  id        : PropTypes.string.isRequired,
   parentForm: PropTypes.instanceOf(HTMLFormElement).isRequired,
-  attr: PropTypes.object,
-  label: PropTypes.string,
-  rules: PropTypes.string
+  attr      : PropTypes.object,
+  label     : PropTypes.string,
+  rules     : PropTypes.string
 }
 
 export default hot(TextComponent)

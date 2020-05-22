@@ -51,7 +51,7 @@ help: ## Display this help
 test: dev ## Run unit tests (parameters : dir=tests/Feature/LoginTest.php || filter=get)
 	@echo "Creating database: $(PRIMARY_COLOR_BOLD)$(APP_NAME)_test$(NO_COLOR)..."
 	@$(mariadb) "drop database if exists $(APP_NAME)_test; create database $(APP_NAME)_test;"
-	@$(php) bin/phpunit $(dir) --filter $(filter) --stop-on-failure
+	@$(php) bin/phpunit $(dir) --filter $(filter) --testdox
 
 dev: install ## Run development servers
 	@docker-compose up -d nginx webpack_dev_server #laravel_echo_server

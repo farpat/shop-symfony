@@ -34,7 +34,7 @@ class StringFieldComponent extends React.Component {
 
 StringFieldComponent.propTypes = {
   productField: PropTypes.shape({
-    key: PropTypes.string.isRequired,
+    key  : PropTypes.string.isRequired,
     label: PropTypes.string.isRequired
   }),
 

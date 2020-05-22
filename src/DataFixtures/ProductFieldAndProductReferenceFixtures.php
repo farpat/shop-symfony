@@ -12,17 +12,17 @@ use Exception;
 class ProductFieldAndProductReferenceFixtures extends Fixture implements OrderedFixtureInterface
 {
     private const STRING_PRODUCT_FIELDS = [
-        'color' => ['white', 'red', 'green', 'blue', 'yellow', 'orange'],
-        'size' => ['s', 'm', 'l', 'xs', 'xl', 'xxl'],
+        'color'    => ['white', 'red', 'green', 'blue', 'yellow', 'orange'],
+        'size'     => ['s', 'm', 'l', 'xs', 'xl', 'xxl'],
         'material' => ['wood', 'plastic', 'metal'],
-        'form' => ['square', 'rectangle', 'round', 'diamond'],
+        'form'     => ['square', 'rectangle', 'round', 'diamond'],
     ];
 
     private const NUMBER_PRODUCT_FIELDS = [
         'storage space' => [8, 16, 32, 64, 128, 256],
-        'weight in kg' => [1, 4, 8, 16],
-        'height in cm' => [4, 16, 32, 64],
-        'width in cm' => [4, 16, 32, 64],
+        'weight in kg'  => [1, 4, 8, 16],
+        'height in cm'  => [4, 16, 32, 64],
+        'width in cm'   => [4, 16, 32, 64],
     ];
 
     protected ?ObjectManager $entityManager = null;
@@ -164,7 +164,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
      */
     private function computePricesOfProduct(Product $product)
     {
-        $unitPriceExcludingTaxes = pow(10, random_int(1, 5));
+        $unitPriceExcludingTaxes = random_int(1, 9) * pow(10, random_int(1, 3));
 
         $totalTaxes = array_reduce($product->getTaxes()->toArray(),
             function ($acc, Tax $tax) use ($unitPriceExcludingTaxes) {

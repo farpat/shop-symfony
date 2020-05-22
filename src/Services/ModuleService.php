@@ -14,7 +14,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 class ModuleService
 {
-    private ModuleRepository $moduleRepository;
+    private ModuleRepository       $moduleRepository;
     private EntityManagerInterface $entityManager;
     /**
      * @var CacheItemPoolInterface|CacheInterface

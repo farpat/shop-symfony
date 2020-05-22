@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Services\Entity\Creatable;
 use App\Services\Entity\Updatable;
-use App\Services\Support\Str;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -95,48 +94,14 @@ abstract class Orderable
         return $this;
     }
 
-    public function getFormattedIncludingTaxes(array $currencyParameter): string
-    {
-        return Str::getFormattedPrice($currencyParameter, $this->getIncludingTaxes());
-    }
-
     public function getIncludingTaxes()
     {
         return $this->totalAmountIncludingTaxes - $this->totalAmountExcludingTaxes;
     }
 
-    public function getFormattedTotalAmountExcludingTaxes(array $currencyParameter): string
+    public function getPriceOfTaxes()
     {
-        return Str::getFormattedPrice($currencyParameter, $this->getTotalAmountExcludingTaxes());
-    }
-
-    public function getTotalAmountExcludingTaxes(): ?string
-    {
-        return $this->totalAmountExcludingTaxes;
-    }
-
-    public function setTotalAmountExcludingTaxes(string $totalAmountExcludingTaxes): self
-    {
-        $this->totalAmountExcludingTaxes = $totalAmountExcludingTaxes;
-
-        return $this;
-    }
-
-    public function getFormattedTotalAmountIncludingTaxes(array $currencyParameter): string
-    {
-        return Str::getFormattedPrice($currencyParameter, $this->getTotalAmountIncludingTaxes());
-    }
-
-    public function getTotalAmountIncludingTaxes(): ?string
-    {
-        return $this->totalAmountIncludingTaxes;
-    }
-
-    public function setTotalAmountIncludingTaxes(string $totalAmountIncludingTaxes): self
-    {
-        $this->totalAmountIncludingTaxes = $totalAmountIncludingTaxes;
-
-        return $this;
+        return $this->totalAmountIncludingTaxes - $this->totalAmountExcludingTaxes;
     }
 
     /**
@@ -169,6 +134,30 @@ abstract class Orderable
     public function setItemsCount(int $itemsCount): self
     {
         $this->itemsCount = $itemsCount;
+
+        return $this;
+    }
+
+    public function getTotalAmountExcludingTaxes(): ?string
+    {
+        return $this->totalAmountExcludingTaxes;
+    }
+
+    public function setTotalAmountExcludingTaxes(string $totalAmountExcludingTaxes): self
+    {
+        $this->totalAmountExcludingTaxes = $totalAmountExcludingTaxes;
+
+        return $this;
+    }
+
+    public function getTotalAmountIncludingTaxes(): ?string
+    {
+        return $this->totalAmountIncludingTaxes;
+    }
+
+    public function setTotalAmountIncludingTaxes(string $totalAmountIncludingTaxes): self
+    {
+        $this->totalAmountIncludingTaxes = $totalAmountIncludingTaxes;
 
         return $this;
     }

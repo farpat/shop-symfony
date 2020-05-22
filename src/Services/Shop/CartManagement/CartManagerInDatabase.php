@@ -135,11 +135,14 @@ class CartManagerInDatabase implements CartManagerInterface
             throw new InvalidArgumentException("The product reference is not in cart");
         }
 
+        $this->cart->removeItem($orderItem);
+
         $orderItem
             ->setQuantity($quantity)
             ->setAmountExcludingTaxes($quantity * $productReference->getUnitPriceExcludingTaxes())
             ->setAmountIncludingTaxes($quantity * $productReference->getUnitPriceIncludingTaxes());
 
+        $this->cart->addItem($orderItem);
         $this->entityManager->persist($orderItem);
 
         return [
@@ -199,5 +202,13 @@ class CartManagerInDatabase implements CartManagerInterface
         }
 
         return $items;
+    }
+
+    /**
+     * @return Cart|null
+     */
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
     }
 }

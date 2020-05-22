@@ -22,5 +22,9 @@ interface CartManagerInterface
 
     public function getItems(): array;
 
+    /**
+     * Get items without fetching reference via database
+     * @return array
+     */
     public function getPureItems(): array;
 }

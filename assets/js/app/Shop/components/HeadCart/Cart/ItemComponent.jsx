@@ -5,9 +5,7 @@ import { connect } from 'react-redux'
 import Requestor from '@farpat/api'
 
 class ItemComponent extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+
 
   goToReference (url, event) {
     event.preventDefault()
@@ -22,7 +20,10 @@ class ItemComponent extends React.Component {
   }
 
   changeQuantity (event) {
-    this.props.updateItemQuantity(this.props.item.reference, Number.parseInt(event.target.value))
+    const quantity = Number.parseInt(event.target.value)
+    if (quantity > 0) {
+      this.props.updateItemQuantity(this.props.item.reference, Number.parseInt(event.target.value))
+    }
   }
 
   deleteItem () {

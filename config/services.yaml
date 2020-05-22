@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     WEBPACK_DEV_SERVER_PORT: '%env(WEBPACK_DEV_SERVER_PORT)%'
+    STRIPE_PUBLIC_KEY: '%env(STRIPE_PUBLIC_KEY)%'
+    STRIPE_SECRET_KEY: '%env(STRIPE_SECRET_KEY)%'
 
 services:
     # default configuration for services in *this* file
@@ -28,8 +30,10 @@ services:
     # please note that last definitions always *replace* previous ones
 
     App\EventListener\RequestTransformerListener:
-        tags:
-            - {name: kernel.event_listener, event: kernel.request}
+        tags: [{name: kernel.event_listener, event: kernel.request}]
 
     App\Services\Shop\CartManagement\CartManagerInterface:
         factory: ['@App\Services\Shop\CartManagement\CartManagerFactory', 'createCartManagerInterface']
+
+    App\Services\Shop\Bank\StripeService:
+        factory: ['@App\Services\Shop\Bank\StripeServiceFactory', 'createStripeService']

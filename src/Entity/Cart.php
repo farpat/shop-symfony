@@ -10,9 +10,33 @@ use Doctrine\ORM\Mapping as ORM;
 class Cart extends Orderable
 {
     /**
-     * @ORM\OneToOne(targetEntity=User::class, mappedBy="cart", cascade={"persist", "remove"})
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $webhookPaymentId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="carts")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @return mixed
+     */
+    public function getWebhookPaymentId()
+    {
+        return $this->webhookPaymentId;
+    }
+
+    /**
+     * @param mixed $webhookPaymentId
+     * @return Cart
+     */
+    public function setWebhookPaymentId($webhookPaymentId)
+    {
+        $this->webhookPaymentId = $webhookPaymentId;
+        return $this;
+    }
 
     public function getUser(): ?User
     {
@@ -22,12 +46,6 @@ class Cart extends Orderable
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newCart = null === $user ? null : $this;
-        if ($user->getCart() !== $newCart) {
-            $user->setCart($newCart);
-        }
 
         return $this;
     }

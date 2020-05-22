@@ -6,9 +6,7 @@ import ReferenceNavComponent from './Product/ReferenceNavComponent'
 import ProductReferenceComponent from './Product/ProductReferenceComponent'
 
 class ProductComponent extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+
 
   render () {
     return (

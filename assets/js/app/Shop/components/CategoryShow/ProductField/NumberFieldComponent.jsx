@@ -3,10 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 class NumberFieldComponent extends React.Component {
-  constructor (props) {
-    super(props)
-  }
-
   changeValue (suffix, event) {
     this.props.updateFilter(this.getFilterKey(suffix), event.target.value)
   }

@@ -4,10 +4,6 @@ import PropTypes from 'prop-types'
 import ReferenceNavItemComponent from './ReferenceNavItemComponent'
 
 class ReferenceNavComponent extends React.Component {
-  constructor (props) {
-    super(props)
-  }
-
   render () {
     return (
       <nav className='nav-product-reference'>

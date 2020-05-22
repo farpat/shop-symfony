@@ -3,9 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 class ReferenceNavItemComponent extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+
 
   render () {
     return (

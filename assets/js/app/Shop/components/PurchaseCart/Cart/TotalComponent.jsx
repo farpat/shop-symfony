@@ -2,31 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Str from '../../../../../src/String/Str'
 import Translation from '../../../../../src/Translation/Translation'
+import CartService from '../../../services/CartService'
 
 class TotalComponent extends React.Component {
-  constructor (props) {
-    super(props)
-  }
 
-  getPrices () {
-    let totalPriceExcludingTaxes = 0
-    let totalPriceIncludingTaxes = 0
-
-    Object.keys(this.props.items).map(referenceId => {
-      const item = this.props.items[referenceId]
-      totalPriceExcludingTaxes += item.quantity * item.reference.unitPriceExcludingTaxes
-      totalPriceIncludingTaxes += item.quantity * item.reference.unitPriceIncludingTaxes
-    })
-
-    return {
-      totalPriceExcludingTaxes,
-      totalPriceIncludingTaxes,
-      totalIncludingTaxes: totalPriceIncludingTaxes - totalPriceExcludingTaxes
-    }
-  }
 
   render () {
-    const { totalPriceExcludingTaxes, totalPriceIncludingTaxes, totalIncludingTaxes } = this.getPrices()
+    const { totalPriceExcludingTaxes, totalPriceIncludingTaxes, totalIncludingTaxes } = CartService.getPrices(this.props.items)
 
     return (
       <tfoot className='header-cart-total'>
@@ -48,15 +30,15 @@ class TotalComponent extends React.Component {
 }
 
 TotalComponent.propTypes = {
-  items: PropTypes.objectOf(PropTypes.shape({
-    quantity: PropTypes.number.isRequired,
+  items      : PropTypes.objectOf(PropTypes.shape({
+    quantity : PropTypes.number.isRequired,
     reference: PropTypes.shape({
       unitPriceIncludingTaxes: PropTypes.number.isRequired,
       unitPriceExcludingTaxes: PropTypes.number.isRequired
     })
   })).isRequired,
   purchaseUrl: PropTypes.string.isRequired,
-  currency: PropTypes.string.isRequired
+  currency   : PropTypes.string.isRequired
 }
 
 export default TotalComponent

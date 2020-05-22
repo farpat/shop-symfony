@@ -1,4 +1,3 @@
-import 'react-hot-loader/patch'
 import 'bootstrap'
 import './app/_search-form'
 import './app/_cart-management'

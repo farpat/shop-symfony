@@ -32,6 +32,7 @@ class CartRepository extends ServiceEntityRepository
             ->leftJoin('productReference.product', 'product')
             ->leftJoin('product.category', 'category')
             ->where('user = :user')
+            ->andWhere('cart.webhookPaymentId is NULL')
             ->setParameter('user', $user)
             ->getQuery()
             ->getOneOrNullResult();

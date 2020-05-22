@@ -89,9 +89,9 @@ class ProductReference
         return $this;
     }
 
-    public function getFormattedUnitPriceExcludingTaxes(array $currencyParameter): string
+    public function getPriceOfTaxes(): float
     {
-        return Str::getFormattedPrice($currencyParameter, $this->unitPriceExcludingTaxes);
+        return $this->unitPriceIncludingTaxes - $this->unitPriceExcludingTaxes;
     }
 
     public function getUnitPriceIncludingTaxes(): float
@@ -104,11 +104,6 @@ class ProductReference
         $this->unitPriceIncludingTaxes = $unitPriceIncludingTaxes;
 
         return $this;
-    }
-
-    public function getFormattedUnitPriceIncludingTaxes(array $currencyParameter): string
-    {
-        return Str::getFormattedPrice($currencyParameter, $this->unitPriceIncludingTaxes);
     }
 
     public function getFilledProductFields(): ?array

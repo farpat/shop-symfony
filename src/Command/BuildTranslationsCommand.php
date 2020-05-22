@@ -18,16 +18,10 @@ class BuildTranslationsCommand extends Command
     private const LOCALES = ['fr'];
 
     protected static $defaultName = 'app:build-translations';
-    /**
-     * @var ParameterBagInterface
-     */
     private ParameterBagInterface $parameterBag;
-    /**
-     * @var Filesystem
-     */
     private Filesystem $filesystem;
 
-    public function __construct(string $name = null, ParameterBagInterface $parameterBag, Filesystem $filesystem)
+    public function __construct(ParameterBagInterface $parameterBag, Filesystem $filesystem, string $name = null)
     {
         $this->parameterBag = $parameterBag;
         $this->filesystem = $filesystem;

@@ -1,0 +1,38 @@
+.paypal-or {
+  text-align: center;
+  position: relative;
+
+  &::after, &::before {
+    content: '';
+    display: block;
+    border-bottom: 1px solid black;
+    width: 40%;
+    position: absolute;
+    bottom: 0.75rem;
+  }
+
+  &::before {
+    left: 0;
+  }
+
+  &::after {
+    right: 0;
+  }
+}
+
+.paypal-row section:nth-child(2) {
+  border-left: 1px solid rgba($black, 0.2);
+}
+
+.btn {
+  &.paying {
+    &::before {
+      font-weight: 900;
+      font-family: "Font Awesome 5 Free";
+      content: '\f110';
+      animation: spinner 1s infinite linear;
+      margin-right: 0.75rem;
+      display: inline-block;
+    }
+  }
+}

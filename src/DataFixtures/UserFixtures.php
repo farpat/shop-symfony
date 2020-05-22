@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserFixtures extends Fixture implements OrderedFixtureInterface
 {
-    protected ?ObjectManager $entityManager = null;
+    protected ?ObjectManager             $entityManager = null;
     private UserPasswordEncoderInterface $encoder;
 
     public function __construct(UserPasswordEncoderInterface $encoder)
@@ -32,6 +32,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
             $manager->persist($user = $this->makeUser($i));
 
             $addresses = $this->makeAddresses($user);
+            $user->setDeliveryAddress($addresses[0]);
             $this->makeBillings($user, $addresses, $allProductReferences);
             $this->makeCart($user, $addresses, $allProductReferences);
 
@@ -69,6 +70,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
             $postalCode = $this->faker->postcode;
             $city = $this->faker->city;
             $country = $this->faker->country;
+            $countryCode = $this->faker->countryCode;
             $latitude = $this->faker->latitude;
             $longitude = $this->faker->longitude;
             $text = $line1 . ' ' . $line2 . ' ' . $postalCode . ' ' . $city . ', ' . $country;
@@ -81,6 +83,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
                 ->setPostalCode($postalCode)
                 ->setCity($city)
                 ->setCountry($country)
+                ->setCountryCode($countryCode)
                 ->setLatitude($latitude)
                 ->setLongitude($longitude)
                 ->setText($text);
@@ -156,10 +159,6 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         for ($i = 0; $i < $itemsCount; $i++) {
             $quantity = random_int(1, 10);
 
-            if (!isset($productReferencesToUse[$i])) {
-                dd($i, $productReferencesToUse, $productReferences);
-            }
-
             $amountExcludingTaxes = $quantity * $productReferencesToUse[$i]->getUnitPriceExcludingTaxes();
             $amountIncludingTaxes = $quantity * $productReferencesToUse[$i]->getUnitPriceIncludingTaxes();
 
@@ -193,7 +192,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
             ->setComment($this->faker->boolean(25) ? $this->faker->sentence : null)
             ->setDeliveredAddress($addresses[random_int(0, count($addresses) - 1)]);
 
-        $user->setCart($cart);
+        $user->addCart($cart);
 
         $items = $this->makeOrderItems(random_int(1, 5), $cart, $allProductReferences);
 

@@ -4,9 +4,7 @@ import { connect } from 'react-redux'
 import range from 'lodash/range'
 
 class ProductsNavigation extends React.Component {
-  constructor (props) {
-    super(props)
-  }
+
 
   render () {
     const pages = this.getPages()

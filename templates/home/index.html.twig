@@ -3,6 +3,8 @@
 {% block title %}Shop{% endblock %}
 
 {% block body %}
+    <div id="test"></div>
+
     <div class="container">
         {% for message in app.flashes('success') %}
             {% include '_partials/alert.html.twig' with {'message': message} %}

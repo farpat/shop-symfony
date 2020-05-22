@@ -11,7 +11,7 @@ use Doctrine\Persistence\ObjectManager;
 class ModuleFixtures extends Fixture implements OrderedFixtureInterface
 {
     protected ?ObjectManager $entityManager = null;
-    private ?ModuleService $moduleService;
+    private ?ModuleService   $moduleService;
 
     public function __construct(ModuleService $moduleService)
     {
@@ -71,10 +71,10 @@ class ModuleFixtures extends Fixture implements OrderedFixtureInterface
         $longitude = $this->faker->longitude;
         $text = $line1 . ' ' . $line2 . ' ' . $postal_code . ' ' . $city . ', ' . $country;
 
-        $this->moduleService->createParameter('billing', 'next_number', ['_value' => 1]);
+        $this->moduleService->createParameter('billing', 'last_number', ['_value' => 1]);
         $this->moduleService->createParameter('billing', 'currency', [
-            'style' => 'right',
-            'code' => 'EUR',
+            'style'  => 'right',
+            'code'   => 'EUR',
             'symbol' => '€'
         ]);
         $this->moduleService->createParameter('billing', 'address',

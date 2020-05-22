@@ -15,12 +15,12 @@ use Symfony\Contracts\Cache\CacheInterface;
 
 class NavigationService
 {
-    private array $resources = [];
-    private ?string $currentUrl;
-    private CategoryService $categoryService;
+    private array                 $resources = [];
+    private ?string               $currentUrl;
+    private CategoryService       $categoryService;
     private UrlGeneratorInterface $urlGenerator;
-    private ModuleService $moduleService;
-    private ProductService $productService;
+    private ModuleService         $moduleService;
+    private ProductService        $productService;
     /**
      * @var CacheItemPoolInterface|CacheInterface
      */
@@ -44,21 +44,20 @@ class NavigationService
 
     public function generateHtml(): string
     {
-        return $this->cache->get('navigation#generateHtml', function () {
-            $navigation = $this->moduleService->getParameter('home', 'navigation');
-            $this->setResources($links = $navigation->getValue());
+        $navigation = $this->moduleService->getParameter('home', 'navigation');
+        $links = $navigation->getValue();
 
-            $html = '';
-            foreach ($links as $key => $link1) {
-                $html .= is_int($key) ? $this->renderLink1($link1) : $this->renderLinks2($key, $link1);
-            }
-            return $html;
-        });
+        $this->resources = $this->cache->get('navigation#resources',
+            fn() => $this->getResources($links));
 
-
+        $html = '';
+        foreach ($links as $key => $link1) {
+            $html .= is_int($key) ? $this->renderLink1($link1) : $this->renderLinks2($key, $link1);
+        }
+        return $html;
     }
 
-    private function setResources(array $links)
+    private function getResources(array $links)
     {
         $resources = [];
 
@@ -92,7 +91,7 @@ class NavigationService
             $resources[$entityClass] = $this->getById($items);
         }
 
-        $this->resources = $resources;
+        return $resources;
     }
 
     /**
@@ -139,16 +138,16 @@ class NavigationService
     {
         if ($entity instanceof Product) {
             return $this->urlGenerator->generate('app_product_show', [
-                'productId' => $entity->getId(),
-                'productSlug' => $entity->getSlug(),
-                'categoryId' => $entity->getCategory()->getId(),
+                'productId'    => $entity->getId(),
+                'productSlug'  => $entity->getSlug(),
+                'categoryId'   => $entity->getCategory()->getId(),
                 'categorySlug' => $entity->getCategory()->getSlug()
             ]);
         }
 
         if ($entity instanceof Category) {
             return $this->urlGenerator->generate('app_category_show', [
-                'categoryId' => $entity->getId(),
+                'categoryId'   => $entity->getId(),
                 'categorySlug' => $entity->getSlug()
             ]);
         }

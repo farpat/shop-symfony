@@ -4,10 +4,6 @@ import { hot } from 'react-hot-loader/root'
 import InputComponent from './InputComponent'
 
 class EmailComponent extends React.Component {
-  constructor (props) {
-    super(props)
-  }
-
   render () {
     return (
       <div className='form-group'>
@@ -41,11 +37,11 @@ class EmailComponent extends React.Component {
 }
 
 EmailComponent.propTypes = {
-  id: PropTypes.string.isRequired,
+  id        : PropTypes.string.isRequired,
   parentForm: PropTypes.instanceOf(HTMLFormElement),
-  attr: PropTypes.object,
-  label: PropTypes.string,
-  rules: PropTypes.string
+  attr      : PropTypes.object,
+  label     : PropTypes.string,
+  rules     : PropTypes.string
 }
 
 export default hot(EmailComponent)
