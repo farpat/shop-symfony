@@ -4,9 +4,9 @@ namespace App\Services\Shop\Bank;
 
 
 use App\Entity\Cart;
-use Stripe\Event;
-use Stripe\PaymentIntent;
-use Stripe\Stripe;
+use Stripe\{Event, PaymentIntent, Stripe};
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class StripeService
 {
@@ -52,12 +52,18 @@ class StripeService
         return $this->publicKey;
     }
 
-    public function handleRequest(\Symfony\Component\HttpFoundation\Request $request)
+    public function handleRequest(Request $request)
     {
         $this->setApiKey();
 
+        $content = $request->getContent();
+
+        if ($content === '') {
+            throw new BadRequestHttpException('Content is empty');
+        }
+
         return Event::constructFrom(
-            json_decode($request->getContent(), true)
+            json_decode($content, true)
         );
     }
 

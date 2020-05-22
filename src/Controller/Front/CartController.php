@@ -4,7 +4,6 @@ namespace App\Controller\Front;
 
 use App\Entity\Cart;
 use App\Entity\User;
-use App\Repository\CartRepository;
 use App\Services\ModuleService;
 use App\Services\Shop\Bank\BillingService;
 use App\Services\Shop\Bank\StripeService;
@@ -12,9 +11,9 @@ use App\Services\Shop\CartManagement\{CartManagerInCookie, CartManagerInDatabase
 use App\Services\Support\Str;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Stripe\PaymentIntent;
+use Stripe\Event;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\{Cookie, JsonResponse, Request};
+use Symfony\Component\HttpFoundation\{Cookie, JsonResponse, Request, Response};
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
@@ -165,7 +164,7 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/purchase/webhook-succesful-payment", name="purchase_webhook_successful_payment")
+     * @Route("/purchase/webhook-stripe", name="purchase_webhook_stripe")
      */
     public function webhookSuccessfulPayment(
         StripeService $stripeService,
@@ -175,24 +174,32 @@ class CartController extends AbstractController
     ) {
         $event = $stripeService->handleRequest($request);
 
-        /** @var PaymentIntent $paymentIntent */
-        $paymentIntent = $event->data->object;
-        /** @var Cart $cart */
-        $cart = $entityManager->getRepository(CartRepository::class)->findOneBy(['webhookPaymentId' => $paymentIntent->id]);
+        switch ($event->type) {
+            case Event::PAYMENT_INTENT_SUCCEEDED:
+                $paymentIntent = $event->data->object;
 
-        if ($cart === null) {
-            throw new NotFoundHttpException("Payment not found!");
+                /** @var Cart $cart */
+                $cart = $entityManager->getRepository(Cart::class)->findOneBy(['webhookPaymentId' => $paymentIntent->id]);
+
+                if ($cart === null) {
+                    throw new NotFoundHttpException("Cart corresponding to paymentId not found!");
+                }
+
+                $entityManager->persist($billing = $billingService->createBillingFromCart($cart));
+                $entityManager->remove($cart);
+                $entityManager->flush();
+
+                $billingService->generatePdf($billing);
+                break;
+            default:
+                return new Response('', 404);
         }
 
-        $entityManager->persist($billing = $billingService->createBillingFromCart($cart));
-        $entityManager->remove($cart);
-        $entityManager->flush();
-
-        $billingService->generatePdf($billing);
+        return new Response();
     }
 
     /**
-     * @Route("/purchase/successful-payment/{paymentId}", name="purchase_successful_payment", methods={"POST"})
+     * @Route("/purchase/successful-payment/{paymentId?}", name="purchase_successful_payment", methods={"POST"})
      * @IsGranted("ROLE_USER")
      */
     public function redirectSuccessfulPayment(

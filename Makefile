@@ -44,6 +44,8 @@ clean: ## Remove cache
 	@echo "$(DANGER_COLOR)Removing Symfony cache...$(NO_COLOR)"
 	@$(php) bin/console cache:pool:clear -q cache.app
 	@$(php) bin/console cache:clear -q
+	@echo "$(DANGER_COLOR)Removing billings PDF$(NO_COLOR)"
+	@rm -rf ./var/storage/billings
 
 help: ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "$(PRIMARY_COLOR_BOLD)%-10s$(NO_COLOR) %s\n", $$1, $$2 }' $(MAKEFILE_LIST) | sort
