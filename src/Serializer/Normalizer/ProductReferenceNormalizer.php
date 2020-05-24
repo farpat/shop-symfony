@@ -32,7 +32,7 @@ class ProductReferenceNormalizer implements NormalizerInterface, CacheableSuppor
      */
     public function normalize($object, $format = null, array $context = []): array
     {
-        $productUrl = $this->urlGenerator->generate('app_product_show', [
+        $productUrl = $this->urlGenerator->generate('app_front_product_show', [
             'categorySlug' => $object->getProduct()->getCategory()->getSlug(),
             'categoryId' => $object->getProduct()->getCategory()->getId(),
             'productSlug' => $object->getProduct()->getSlug(),

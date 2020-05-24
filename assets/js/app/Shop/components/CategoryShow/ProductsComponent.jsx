@@ -4,56 +4,51 @@ import { hot } from 'react-hot-loader/root'
 import { connect } from 'react-redux'
 import ProductComponent from './Product/ProductComponent'
 import ProductsNavigation from './Product/ProductsNavigation'
+import Translation from '../../../../src/Translation/Translation'
 
-class ProductsComponent extends React.Component {
-
-
-  getProductsToDisplay () {
-    const start = (this.props.currentPage - 1) * this.props.perPage
-    return this.props.products.slice(start, start + this.props.perPage)
+function ProductsComponent ({ products, currentPage, perPage }) {
+  const getProductsToDisplay = function () {
+    const start = (currentPage - 1) * perPage
+    return products.slice(start, start + perPage)
   }
 
-  render () {
-    const productsToDisplay = this.getProductsToDisplay()
+  const productsToDisplay = getProductsToDisplay()
 
-    return (
-      <div className='products-component'>
-        <ProductsNavigation/>
-        <div className='row'>
-          {
+  return (
+    <div className="products-components">
+      <ProductsNavigation/>
+      <div className="row">
+        {
+          productsToDisplay.length === 0 ?
+            <p>{Translation.get('Sorry! There are no products')}</p> :
             productsToDisplay.map(product => <ProductComponent key={product.id} product={product}/>)
-          }
-          {
-            productsToDisplay.length === 0 &&
-            <p>Sorry! There are no products</p>
-          }
-        </div>
+        }
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 ProductsComponent.propTypes = {
-  products: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    url: PropTypes.string.isRequired,
-    excerpt: PropTypes.string,
-    label: PropTypes.string.isRequired,
+  products   : PropTypes.arrayOf(PropTypes.shape({
+    id                        : PropTypes.number.isRequired,
+    url                       : PropTypes.string.isRequired,
+    excerpt                   : PropTypes.string,
+    label                     : PropTypes.string.isRequired,
     minUnitPriceIncludingTaxes: PropTypes.number.isRequired,
-    image: PropTypes.shape({
+    image                     : PropTypes.shape({
       urlThumbnail: PropTypes.string.isRequired,
       altThumbnail: PropTypes.string
     })
   })),
   currentPage: PropTypes.number.isRequired,
-  perPage: PropTypes.number.isRequired
+  perPage    : PropTypes.number.isRequired,
 }
 
 const mapStateToProps = (state) => {
   return {
-    products: state.currentProducts,
+    products   : state.currentProducts,
     currentPage: state.currentPage,
-    perPage: state.perPage
+    perPage    : state.perPage
   }
 }
 

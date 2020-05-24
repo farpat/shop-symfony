@@ -5,8 +5,9 @@
         {% for element in elements %}
             <div class="col">
                 <div class="element">
-                    <i class="{{ element.icon }}"></i> <br>
+                    <i class="element-icon {{ element.icon }}"></i>
                     <h3>{{ element.title }}</h3>
+                    <p>{{ element.paragraph ?? '' }}</p>
                 </div>
             </div>
         {% endfor %}

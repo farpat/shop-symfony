@@ -69,8 +69,8 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
             $line2 = $this->faker->boolean(70) ? ucfirst($this->faker->words(3, true)) : '';
             $postalCode = $this->faker->postcode;
             $city = $this->faker->city;
-            $country = $this->faker->country;
-            $countryCode = $this->faker->countryCode;
+            $country = 'France';
+            $countryCode = 'FR';
             $latitude = $this->faker->latitude;
             $longitude = $this->faker->longitude;
             $text = $line1 . ' ' . $line2 . ' ' . $postalCode . ' ' . $city . ', ' . $country;

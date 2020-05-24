@@ -25,7 +25,7 @@ class ProductSearchedNormalizer implements NormalizerInterface, CacheableSupport
      */
     public function normalize($object, $format = null, array $context = []): array
     {
-        $url = $this->urlGenerator->generate('app_product_show', [
+        $url = $this->urlGenerator->generate('app_front_product_show', [
             'categorySlug' => $object->getCategory()->getSlug(),
             'categoryId' => $object->getCategory()->getId(),
             'productSlug' => $object->getSlug(),

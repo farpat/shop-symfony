@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
- * @Route(name="app_home_")
+ * @Route(name="app_front_home_")
  */
 class HomeController extends AbstractController
 {

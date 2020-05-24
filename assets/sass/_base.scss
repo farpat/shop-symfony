@@ -18,3 +18,11 @@ label.required:after {
 input[type=checkbox] + label.required:after {
   content: '';
 }
+
+.pagination {
+  user-select: none;
+}
+
+.invalid-feedback {
+  display: block;
+}

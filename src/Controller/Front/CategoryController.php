@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * @Route(name="app_category_")
+ * @Route(name="app_front_category_")
  */
 class CategoryController extends AbstractController
 {
@@ -52,14 +52,14 @@ class CategoryController extends AbstractController
 
         if (($currentPage !== null && filter_var($currentPage,
                     FILTER_VALIDATE_INT) === false) || $currentPage === '1' || $categorySlug !== $category->getSlug()) {
-            return $this->redirect($this->generateUrl('app_category_show', [
+            return $this->redirect($this->generateUrl('app_front_category_show', [
                 'categoryId' => $category->getId(),
                 'categorySlug' => $category->getSlug(),
             ]));
         }
 
         $breadcrumb = [
-            ['label' => 'Category', 'url' => $this->generateUrl('app_category_index')],
+            ['label' => 'Category', 'url' => $this->generateUrl('app_front_category_index')],
             ['label' => $category->getLabel()]
         ];
 

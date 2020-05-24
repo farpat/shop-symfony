@@ -3,3 +3,7 @@
     transform: rotate(360deg);
   }
 }
+
+.spinner {
+  animation: spinner 1s linear infinite;
+}

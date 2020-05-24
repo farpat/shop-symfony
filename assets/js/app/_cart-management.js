@@ -10,7 +10,7 @@ import StripeComponent from './Shop/components/PurchaseCart/StripeComponent'
 //Don't close header cart when we click inside it
 const cartNavElement = document.querySelector('#cart-nav')
 cartNavElement.addEventListener('click', event => {
-  if (event.target.id !== 'button-cart' && (event.target.tagName !== 'I' && event.target.tagName !== 'BUTTON')) {
+  if (event.target.tagName !== 'I' && event.target.tagName !== 'BUTTON') {
     event.stopPropagation()
   }
 })

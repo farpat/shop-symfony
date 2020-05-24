@@ -49,14 +49,20 @@ class ModuleFixtures extends Fixture implements OrderedFixtureInterface
         $this->moduleService->createParameter('home', 'products', [1, 2]);
         $this->moduleService->createParameter('home', 'categories', [1, 2]);
         $this->moduleService->createParameter('home', 'elements', [
-            ['icon' => 'fas fa-book', 'title' => 'Book 1'],
-            ['icon' => 'fas fa-book', 'title' => 'Book 2'],
-            ['icon' => 'fas fa-book', 'title' => 'Book 3'],
+            ['icon'      => 'fas fa-phone',
+             'title'     => 'After-sales service is very professional',
+             'paragraph' => $this->faker->paragraph
+            ],
+            ['icon' => 'fas fa-truck', 'title' => 'Quick delivery', 'paragraph' => $this->faker->paragraph],
+            ['icon'      => 'fas fa-hand-holding-usd',
+             'title'     => 'Our prices are honest',
+             'paragraph' => $this->faker->paragraph
+            ],
         ]);
         $this->moduleService->createParameter('home', 'carousel', [
-            ['title' => 'Slide 1', 'description' => 'Slide 1', 'img' => 'https://picsum.photos/id/1/1000/400'],
-            ['title' => 'Slide 2', 'description' => 'Slide 2', 'img' => 'https://picsum.photos/id/2/1000/400'],
-            ['title' => 'Slide 3', 'description' => 'Slide 3', 'img' => 'https://picsum.photos/id/3/1000/400'],
+            ['title' => 'Slide 1', 'description' => 'Slide 1', 'img' => 'https://picsum.photos/id/1/1000/400?blur=8'],
+            ['title' => 'Slide 2', 'description' => 'Slide 2', 'img' => 'https://picsum.photos/id/2/1000/400?blur=8'],
+            ['title' => 'Slide 3', 'description' => 'Slide 3', 'img' => 'https://picsum.photos/id/3/1000/400?blur=8'],
         ]);
     }
 

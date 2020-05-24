@@ -38,7 +38,7 @@ class RegisterController extends AbstractController
                 $translator->trans('Your account is created with success! You received an email to confirm it.'));
 
 
-            return $this->redirectToRoute('app_home_index');
+            return $this->redirectToRoute('app_front_home_index');
         }
 
         return $this->render('auth/register.html.twig', [

@@ -14,9 +14,9 @@ use Symfony\Contracts\Cache\ItemInterface;
 
 class CategoryService
 {
-    private CategoryRepository $categoryRepository;
+    private CategoryRepository    $categoryRepository;
     private UrlGeneratorInterface $urlGenerator;
-    private ModuleService $moduleService;
+    private ModuleService         $moduleService;
     /**
      * @var CacheInterface|CacheItemPoolInterface
      */
@@ -62,6 +62,10 @@ class CategoryService
         return $this->categoryRepository->getProducts($category);
     }
 
+    /**
+     * @param Category[] $parentCategories
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
     public function generateHtml(array $parentCategories, bool $isRootCall = true): string
     {
         $cacheKey = 'category#generateHtml';
@@ -77,7 +81,7 @@ class CategoryService
 
         $string = '';
         foreach ($parentCategories as $parentCategory) {
-            $sourceAttribute = $parentCategory->getImage() ? $parentCategory->getImage()->getUrl() : 'https://via.placeholder.com/80x32';
+            $sourceAttribute = $parentCategory->getImage() ? $parentCategory->getImage()->getUrlThumbnail() : 'https://via.placeholder.com/80x32';
             $altAttribute = $parentCategory->getImage() ? $parentCategory->getImage()->getAltThumbnail() : $parentCategory->getLabel();
             $imageElement = "<img src='$sourceAttribute' alt='$altAttribute'>";
 
@@ -104,9 +108,9 @@ class CategoryService
 
     private function getShowUrl(Category $category)
     {
-        return $this->urlGenerator->generate('app_category_show', [
+        return $this->urlGenerator->generate('app_front_category_show', [
             'categorySlug' => $category->getSlug(),
-            'categoryId' => $category->getId(),
+            'categoryId'   => $category->getId(),
         ]);
     }
 }

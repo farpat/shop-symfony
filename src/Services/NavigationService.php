@@ -137,7 +137,7 @@ class NavigationService
     private function getUrl($entity): string
     {
         if ($entity instanceof Product) {
-            return $this->urlGenerator->generate('app_product_show', [
+            return $this->urlGenerator->generate('app_front_product_show', [
                 'productId'    => $entity->getId(),
                 'productSlug'  => $entity->getSlug(),
                 'categoryId'   => $entity->getCategory()->getId(),
@@ -146,7 +146,7 @@ class NavigationService
         }
 
         if ($entity instanceof Category) {
-            return $this->urlGenerator->generate('app_category_show', [
+            return $this->urlGenerator->generate('app_front_category_show', [
                 'categoryId'   => $entity->getId(),
                 'categorySlug' => $entity->getSlug()
             ]);

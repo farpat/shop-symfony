@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
-    <a class="navbar-brand" href="{{ path('app_home_index') }}">Shop</a>
+    <a class="navbar-brand" href="{{ path('app_front_home_index') }}">Shop</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
             aria-controls="navbar" aria-expanded="false" aria-label="{% trans %}Toggle navigation{% endtrans %}">
         <span class="navbar-toggler-icon"></span>
@@ -8,21 +8,22 @@
     <div id="navbar" class="collapse navbar-collapse hide">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a href="{{ path('app_category_index') }}"
-                   class="nav-link {{ active('app_category_index') }}">{% trans %}All categories{% endtrans %}</a>
+                <a href="{{ path('app_front_category_index') }}"
+                   class="nav-link {{ active('app_front_category_index') }}">{% trans %}All categories{% endtrans %}</a>
             </li>
             {{ NavigationService.generateHtml() | raw }}
         </ul>
         <ul class="navbar-nav">
             <li class="nav-item form-search" id="form-search">
-                <input type="search" data-url="{{ path('app_home_search') }}" class="form-control form-search-input">
+                <input type="search" data-url="{{ path('app_front_home_search') }}"
+                       class="form-control form-search-input">
             </li>
         </ul>
         <section class="navbar-nav ml-auto mt-3 mt-xl-0">
             <ul class="navbar-nav">
                 {% if app.user %}
                     <li class="nav-item">
-                        <a href="#" class="nav-link">{{ app.user.name }}</a>
+                        <a href="{{ path('app_front_user_profile') }}" class="nav-link">{{ app.user.name }}</a>
                     </li>
                     <li class="nav-item mr-2">
                         <a class="nav-link text-danger"
@@ -41,8 +42,9 @@
 
                 <li id="cart-nav" class="nav-item"
                     data-items="{{ CartManager.items | json_encode(constant('JSON_FORCE_OBJECT')) }}"
-                    data-purchase-url="{{ path('app_cart_purchase') }}"
-                    data-currency="{{ parameter('billing', 'currency').code }}"></li>
+                    data-purchase-url="{{ path('app_front_purchase_purchase') }}"
+                    data-currency="{{ parameter('billing', 'currency').code }}">
+                </li>
             </ul>
         </section>
     </div>

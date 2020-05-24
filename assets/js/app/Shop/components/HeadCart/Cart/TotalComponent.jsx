@@ -4,33 +4,30 @@ import Str from '../../../../../src/String/Str'
 import Translation from '../../../../../src/Translation/Translation'
 import CartService from '../../../services/CartService'
 
-class TotalComponent extends React.Component {
-  render () {
-    const { totalPriceExcludingTaxes, totalPriceIncludingTaxes, totalIncludingTaxes } = CartService.getPrices(this.props.items)
+function TotalComponent ({ items, purchaseUrl, currency }) {
+  const { totalPriceExcludingTaxes, totalPriceIncludingTaxes, totalIncludingTaxes } = CartService.getPrices(items)
 
-    return (
-      <tfoot className='header-cart-total'>
-      <tr>
-        <td colSpan='2'>{Translation.get('Subtotal')}:</td>
-        <td colSpan='2'>{Str.toLocaleCurrency(totalPriceExcludingTaxes, this.props.currency)}</td>
-      </tr>
-      <tr className='header-cart-total-vat'>
-        <td className='text-right' colSpan='2'>{Translation.get('Tax total')}:</td>
-        <td colSpan='2'>+ {Str.toLocaleCurrency(totalIncludingTaxes, this.props.currency)}</td>
-      </tr>
-      <tr className='header-cart-total'>
-        <td className='text-right' colSpan='2'>{Translation.get('Total')}:</td>
-        <td colSpan='2'>{Str.toLocaleCurrency(totalPriceIncludingTaxes, this.props.currency)}</td>
-      </tr>
-      <tr>
-        <td colSpan='4'>
-          <a className='float-right btn btn-primary' href={this.props.purchaseUrl}>{Translation.get('Purchase')}</a>
-        </td>
-      </tr>
-      </tfoot>
-
-    )
-  }
+  return (
+    <tfoot className='header-cart-total'>
+    <tr>
+      <td colSpan='2'>{Translation.get('Subtotal')}:</td>
+      <td colSpan='2'>{Str.toLocaleCurrency(totalPriceExcludingTaxes, currency)}</td>
+    </tr>
+    <tr className='header-cart-total-vat'>
+      <td className='text-right' colSpan='2'>{Translation.get('Tax total')}:</td>
+      <td colSpan='2'>+ {Str.toLocaleCurrency(totalIncludingTaxes, currency)}</td>
+    </tr>
+    <tr className='header-cart-total'>
+      <td className='text-right' colSpan='2'>{Translation.get('Total')}:</td>
+      <td colSpan='2'>{Str.toLocaleCurrency(totalPriceIncludingTaxes, currency)}</td>
+    </tr>
+    <tr>
+      <td colSpan='4'>
+        <a className='float-right btn btn-primary' href={purchaseUrl}>{Translation.get('Purchase')}</a>
+      </td>
+    </tr>
+    </tfoot>
+  )
 }
 
 TotalComponent.propTypes = {

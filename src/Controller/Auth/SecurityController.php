@@ -30,7 +30,7 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-            return $this->redirectToRoute('app_home_index');
+            return $this->redirectToRoute('app_front_home_index');
         }
 
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -72,7 +72,7 @@ class SecurityController extends AbstractController
         $this->get('security.token_storage')->setToken($token);
         $this->get('session')->set('_security_main', serialize($token));
 
-        $response = new RedirectResponse($this->generateUrl('app_home_index'));
+        $response = new RedirectResponse($this->generateUrl('app_front_home_index'));
         $response->headers->clearCookie(CartManagerInCookie::COOKIE_KEY);
         return $response;
     }

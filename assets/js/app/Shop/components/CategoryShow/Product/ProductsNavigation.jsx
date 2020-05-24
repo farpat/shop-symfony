@@ -2,46 +2,20 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import range from 'lodash/range'
+import Translation from '../../../../../src/Translation/Translation'
 
-class ProductsNavigation extends React.Component {
-
-
-  render () {
-    const pages = this.getPages()
-
-    return (
-      <nav aria-label='Product pagination' className={this.getNavClass(pages)}>
-        <ul className='pagination'>
-          <li className={this.getPreviousItemClass()}>
-            <a
-              href='#' onClick={this.goTo.bind(this, this.props.currentPage - 1)}
-              className='page-link'
-            >&larr; Previous
-            </a>
-          </li>
-          {
-            pages.map(page =>
-              <li className={this.getItemClass(page)} key={page}>
-                <a
-                  href='#' onClick={this.goTo.bind(this, page)}
-                  className='page-link'
-                >{page}
-                </a>
-              </li>)
-          }
-          <li className={this.getNextItemClass()}>
-            <a
-              href='#' onClick={this.goTo.bind(this, this.props.currentPage + 1)}
-              className='page-link'
-            >Next &rarr;
-            </a>
-          </li>
-        </ul>
-      </nav>
-    )
+function ProductsNavigation ({ goTo, products, perPage, currentPage }) {
+  const getPages = function () {
+    const pagesCount = Math.ceil(products.length / perPage)
+    if (pagesCount === 0) {
+      return []
+    }
+    return range(1, pagesCount + 1)
   }
 
-  getNavClass (pages) {
+  const pages = getPages()
+
+  const getNavClass = function (pages) {
     if (pages.length === 0) {
       return 'd-none'
     }
@@ -49,58 +23,70 @@ class ProductsNavigation extends React.Component {
     return 'mt-2'
   }
 
-  getPages () {
-    const pagesCount = Math.ceil(this.props.products.length / this.props.perPage)
-    if (pagesCount === 0) {
-      return []
+  const getPreviousItemClass = function () {
+    let className = 'page-item'
+    if (currentPage === 1) {
+      className += ' disabled'
     }
-    return range(1, pagesCount + 1)
+
+    return className
   }
 
-  getItemClass (page) {
+  const getNextItemClass = function () {
     let className = 'page-item'
-    if (this.props.currentPage === page) {
+    if (currentPage === pages.length) {
+      className += ' disabled'
+    }
+
+    return className
+  }
+
+  const getItemClass = function (page) {
+    let className = 'page-item'
+    if (currentPage === page) {
       className += ' active'
     }
 
     return className
   }
 
-  getPreviousItemClass () {
-    let className = 'page-item'
-    if (this.props.currentPage === 1) {
-      className += ' disabled'
-    }
-
-    return className
-  }
-
-  getNextItemClass () {
-    let className = 'page-item'
-    if (this.props.currentPage === this.getPages().length) {
-      className += ' disabled'
-    }
-
-    return className
-  }
-
-  goTo (pageToSet, event) {
-    event.preventDefault()
-    this.props.goTo(pageToSet)
-  }
+  return (
+    <nav aria-label="Product pagination" className={getNavClass(pages)}>
+      <ul className="pagination">
+        <li className={getPreviousItemClass()}>
+          <a href="#" onClick={() => goTo(currentPage - 1)} className='page-link'>
+            &larr; {Translation.get('previous')}
+          </a>
+        </li>
+        {
+          pages.map(page =>
+            <li className={getItemClass(page)} key={page}>
+              <a href='#' onClick={() => goTo(page)} className='page-link'>
+                {page}
+              </a>
+            </li>)
+        }
+        <li className={getNextItemClass()}>
+          <a href="#" onClick={() => goTo(currentPage + 1)} className='page-link'>
+            {Translation.get('next')} &rarr;
+          </a>
+        </li>
+      </ul>
+    </nav>
+  )
 }
 
 ProductsNavigation.propTypes = {
-  products: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    url: PropTypes.string.isRequired,
+  products   : PropTypes.arrayOf(PropTypes.shape({
+    id     : PropTypes.number.isRequired,
+    url    : PropTypes.string.isRequired,
     excerpt: PropTypes.string,
-    label: PropTypes.string.isRequired,
-    image: PropTypes.shape({
+    label  : PropTypes.string.isRequired,
+    image  : PropTypes.shape({
       urlThumbnail: PropTypes.string.isRequired
     })
   })),
-  perPage: PropTypes.number.isRequired,
+  perPage    : PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
 
   goTo: PropTypes.func.isRequired
@@ -108,8 +94,8 @@ ProductsNavigation.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    products: state.currentProducts,
-    perPage: state.perPage,
+    products   : state.currentProducts,
+    perPage    : state.perPage,
     currentPage: state.currentPage
   }
 }

@@ -29,8 +29,8 @@ class PasswordType extends ComponentType
     {
         $props = parent::getProps($form, $options);
         return array_merge($props, [
-            'withKey' => $options['with-key'] ?? true,
-            'value' => ''
+            'withKey'      => $options['with-key'] ?? true,
+            'initialValue' => ''
         ]);
     }
 }

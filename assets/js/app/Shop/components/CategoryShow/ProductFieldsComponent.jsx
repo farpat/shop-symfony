@@ -5,30 +5,26 @@ import { connect } from 'react-redux'
 import NumberFieldComponent from './ProductField/NumberFieldComponent'
 import StringFieldComponent from './ProductField/StringFieldComponent'
 
-class ProductFieldsComponent extends React.Component {
-
-
-  render () {
-    return (
-      <div className='filter-component'>
-        {
-          this.props.productFields.map(productField => {
-            if (productField.type === 'number') {
-              return <NumberFieldComponent key={productField.key} productField={productField}/>
-            } else if (productField.type === 'string') {
-              return <StringFieldComponent key={productField.key} productField={productField}/>
-            }
-          })
-        }
-      </div>
-    )
-  }
+function ProductFieldsComponent ({ productFields }) {
+  return (
+    <div className='filter-component'>
+      {
+        productFields.map(productField => {
+          if (productField.type === 'number') {
+            return <NumberFieldComponent key={productField.key} productField={productField}/>
+          } else if (productField.type === 'string') {
+            return <StringFieldComponent key={productField.key} productField={productField}/>
+          }
+        })
+      }
+    </div>
+  )
 }
 
 ProductFieldsComponent.propTypes = {
   productFields: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
+    key  : PropTypes.string.isRequired,
+    type : PropTypes.string.isRequired,
     label: PropTypes.string.isRequired
   }))
 }

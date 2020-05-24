@@ -2,61 +2,59 @@ import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Str from '../../../../../src/String/Str'
+import Translation from '../../../../../src/Translation/Translation'
 
-class ProductComponent extends React.Component {
-
-
-  render () {
-    return (
-      <div className='col-md-4 mb-3'>
-        <article className='card product'>
-          {
-            this.props.product.image &&
-            <a href={this.props.product.url}>
-              <img
-                src={this.props.product.image.urlThumbnail}
-                alt={this.props.product.image.altThumbnail}
-                className='card-img-top'
-              />
-            </a>
-          }
-          <div className='card-body'>
-            <h3 className='card-title'><a href={this.props.product.url}>{this.props.product.label}</a></h3>
-            <div className='card-text'>
-              {this.props.product.excerpt}
-
-              <p className='mt-2 m-0'>
-                From <span
-                className='badge badge-secondary'
-              >{Str.toLocaleCurrency(this.props.product.minUnitPriceIncludingTaxes, this.props.currency)}
-                </span>
-              </p>
-            </div>
-          </div>
-        </article>
-      </div>
-    )
+function ProductComponent ({ product, currency, columns }) {
+  const getWrapperClassName = function () {
+    return `col-md-${columns} mb-3`
   }
+
+  return (
+    <div className={getWrapperClassName()}>
+      <article className='card product'>
+        {
+          product.image &&
+          <a href={product.url}>
+            <img src={product.image.urlThumbnail} alt={product.image.altThumbnail} className='card-img-top'/>
+          </a>
+        }
+        <div className='card-body'>
+          <h3 className='card-title'><a href={product.url}>{product.label}</a></h3>
+          <div className='card-text'>
+            {product.excerpt}
+
+            <p className='mt-2 m-0'>
+              {Translation.get('From')} <span className='badge badge-secondary'>
+                {Str.toLocaleCurrency(product.minUnitPriceIncludingTaxes, currency)}
+              </span>
+            </p>
+          </div>
+        </div>
+      </article>
+    </div>
+  )
 }
 
 ProductComponent.propTypes = {
-  product: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    url: PropTypes.string.isRequired,
-    excerpt: PropTypes.string,
-    label: PropTypes.string.isRequired,
+  product : PropTypes.shape({
+    id                        : PropTypes.number.isRequired,
+    url                       : PropTypes.string.isRequired,
+    excerpt                   : PropTypes.string,
+    label                     : PropTypes.string.isRequired,
     minUnitPriceIncludingTaxes: PropTypes.number.isRequired,
-    image: PropTypes.shape({
+    image                     : PropTypes.shape({
       urlThumbnail: PropTypes.string.isRequired,
       altThumbnail: PropTypes.string
     })
   }),
-  currency: PropTypes.string.isRequired
+  currency: PropTypes.string.isRequired,
+  columns : PropTypes.number.isRequired,
 }
 
 const mapStateToProps = (state) => {
   return {
-    currency: state.currency
+    currency: state.currency,
+    columns : state.columns
   }
 }
 

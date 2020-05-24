@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { hot } from 'react-hot-loader/root'
 import { connect } from 'react-redux'
 import CartService from '../../services/CartService'
@@ -7,104 +7,86 @@ import Translation from '../../../../src/Translation/Translation'
 import PropTypes from 'prop-types'
 import Requestor from '@farpat/api'
 
-class StripeComponent extends React.Component {
-  constructor (props) {
-    super(props)
+function StripeComponent ({ items, currency, publicKey, successUrl }) {
+  const [isPaying, setIsPaying] = useState(false)
+  const [error, setError] = useState('')
 
-    this.state = {
-      isPaying: false,
-      error   : ''
-    }
+  const stripe = window.Stripe(publicKey)
+  const stripeElements = stripe.elements()
+  const stripeCard = stripeElements.create('card', {
+    style: { base: { color: '#32325d' } }
+  })
 
-    this.stripe = window.Stripe(this.props.publicKey)
-    this.elements = this.stripe.elements()
-    this.card = this.elements.create('card', {
-      style: {
-        base: { color: '#32325d' }
-      }
-    })
-  }
+  useEffect(() => {
+    stripeCard.mount('#card-element')
+    stripeCard.on('change', ({ error }) => setError(error ? error.message : ''))
+  })
 
-  async onPay (event) {
-    if (this.state.isPaying) {
+  const onPay = async function (event) {
+    if (isPaying) {
       return
     }
 
     event.preventDefault()
 
-    this.setState({ isPaying: true })
-
+    setIsPaying(true)
     const response = await Requestor.newRequest().post('/purchase/create-intent')
-
-    const result = await this.stripe.confirmCardPayment(response.client_secret, {
+    const result = await stripe.confirmCardPayment(response.client_secret, {
       payment_method: {
-        card           : this.card,
-        billing_details: {
-          name   : response.customer_name,
-          address: response.customer_billing_address,
-        }
+        card           : stripeCard,
+        billing_details: { name: response.customer_name, address: response.customer_billing_address }
       }
     })
 
-    this.setState({ isPaying: false })
+    setIsPaying(false)
 
     if (result.error) {
-      this.setState({ error: result.error.message })
+      setError(result.error.message)
     } else {
       if (result.paymentIntent.status === 'succeeded') {
-        window.location.href = `${this.props.successUrl}/${result.paymentIntent.id}`
+        window.location.href = `${successUrl}/${result.paymentIntent.id}`
       }
     }
   }
 
-  componentDidMount () {
-    this.card.mount('#card-element')
-
-    this.card.on('change', ({ error }) => {
-      this.setState({ error: error ? error.message : '' })
-    })
-  }
-
-  getButtonClassname () {
+  const getButtonClassname = function () {
     let className = 'btn btn-primary'
 
-    if (this.state.isPaying) {
+    if (isPaying) {
       className += ' paying'
     }
 
     return className
   }
 
-  getErrorClassName () {
+  const getErrorClassName = function () {
     let className = 'invalid-feedback'
 
-    if (this.state.error) {
+    if (error) {
       className += ' d-block'
     }
 
     return className
   }
 
-  render () {
-    const { totalPriceIncludingTaxes } = CartService.getPrices(this.props.items)
+  const { totalPriceIncludingTaxes } = CartService.getPrices(items)
 
-    return (
-      <div>
-        <form id="payment-form" onSubmit={this.onPay.bind(this)}>
-          <div className="form-group">
-            <div id="card-element"></div>
+  return (
+    <div>
+      <form id="payment-form" onSubmit={onPay}>
+        <div className="form-group">
+          <div id="card-element"></div>
 
-            <div className={this.getErrorClassName()} role="alert">{this.state.error}</div>
-          </div>
+          <div className={getErrorClassName()} role="alert">{error}</div>
+        </div>
 
 
-          <button className={this.getButtonClassname()} disabled={this.state.isPaying}>
-            {Translation.get('Pay')} {Str.toLocaleCurrency(totalPriceIncludingTaxes, this.props.currency)}
-          </button>
-        </form>
-      </div>
-    )
-  }
+        <button className={getButtonClassname()} disabled={isPaying}>
+          {Translation.get('Pay')} {Str.toLocaleCurrency(totalPriceIncludingTaxes, currency)}
+        </button>
+      </form>
+    </div>
+  )
 }
 
 StripeComponent.propTypes = {

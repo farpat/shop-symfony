@@ -17,22 +17,21 @@
         </section>
 
         <section id="category-show" class="row">
-            {% if productsInJson is not empty %}
+            {% if productFieldsInJson != '[]' %}
                 <div class="col-lg-3">
                     <section id="product-fields-component" data-product-fields="{{ productFieldsInJson }}"></section>
                 </div>
-            {% else %}
-                <p>
-                    {% trans %}Sorry! No products found.{% endtrans %}
-                </p>
             {% endif %}
 
-            {% if (productFieldsInJson is not empty) and (productsInJson is not empty) %}
+            {% if productsInJson != '[]' %}
                 <div class="col-lg">
                     <section id="products-component" data-products="{{ productsInJson }}"
-                             data-current-page="{{ currentPage }}" data-per-page="{{ perPage }}">
+                             data-current-page="{{ currentPage }}" data-per-page="{{ perPage }}"
+                             data-columns="{{ productFieldsInJson != '[]' ? 4 : 3 }}">
                     </section>
                 </div>
+            {% else %}
+                <p>{% trans %}Sorry! No products found{% endtrans %}</p>
             {% endif %}
         </section>
     </main>

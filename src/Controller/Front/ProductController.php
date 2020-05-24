@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
- * @Route(name="app_product_")
+ * @Route(name="app_front_product_")
  */
 class ProductController extends AbstractController
 {
@@ -30,7 +30,7 @@ class ProductController extends AbstractController
         NormalizerInterface $normalizer
     ) {
         if ($categorySlug !== $product->getCategory()->getSlug() || $productSlug !== $product->getSlug() || $categoryId !== $product->getCategory()->getId()) {
-            return $this->redirect($this->generateUrl('app_product_show', [
+            return $this->redirect($this->generateUrl('app_front_product_show', [
                 'productId' => $product->getId(),
                 'productSlug' => $product->getSlug(),
                 'categoryId' => $product->getCategory()->getId(),
@@ -39,10 +39,10 @@ class ProductController extends AbstractController
         }
 
         $breadcrumb = [
-            ['label' => 'category', 'url' => $this->generateUrl('app_category_index')],
+            ['label' => 'category', 'url' => $this->generateUrl('app_front_category_index')],
             [
                 'label' => $product->getCategory()->getLabel(),
-                'url' => $this->generateUrl('app_category_show', [
+                'url' => $this->generateUrl('app_front_category_show', [
                     'categoryId' => $categoryId,
                     'categorySlug' => $categorySlug
                 ])

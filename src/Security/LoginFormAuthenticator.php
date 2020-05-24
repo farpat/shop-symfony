@@ -130,7 +130,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 //            return new RedirectResponse($targetPath);
 //        }
 
-        $response = new RedirectResponse($this->urlGenerator->generate('app_home_index'));
+        $response = new RedirectResponse($this->urlGenerator->generate('app_front_home_index'));
         $response->headers->clearCookie(CartManagerInCookie::COOKIE_KEY);
         return $response;
     }

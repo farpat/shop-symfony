@@ -4,41 +4,36 @@ import Str from '../../../../../src/String/Str'
 import Translation from '../../../../../src/Translation/Translation'
 import CartService from '../../../services/CartService'
 
-class TotalComponent extends React.Component {
+function TotalComponent ({ items, currency }) {
+  const { totalPriceExcludingTaxes, totalPriceIncludingTaxes, totalIncludingTaxes } = CartService.getPrices(items)
 
-
-  render () {
-    const { totalPriceExcludingTaxes, totalPriceIncludingTaxes, totalIncludingTaxes } = CartService.getPrices(this.props.items)
-
-    return (
-      <tfoot className='header-cart-total'>
-      <tr>
-        <td colSpan='2'>{Translation.get('Subtotal')}:</td>
-        <td colSpan='2'>{Str.toLocaleCurrency(totalPriceExcludingTaxes, this.props.currency)}</td>
-      </tr>
-      <tr className='header-cart-total-vat'>
-        <td className='text-right' colSpan='2'>{Translation.get('Tax total')}:</td>
-        <td colSpan='2'>+ {Str.toLocaleCurrency(totalIncludingTaxes, this.props.currency)}</td>
-      </tr>
-      <tr className='header-cart-total'>
-        <td className='text-right' colSpan='2'>{Translation.get('Total')}:</td>
-        <td colSpan='2'>{Str.toLocaleCurrency(totalPriceIncludingTaxes, this.props.currency)}</td>
-      </tr>
-      </tfoot>
-    )
-  }
+  return (
+    <tfoot className='header-cart-total'>
+    <tr>
+      <td colSpan='2'>{Translation.get('Subtotal')}:</td>
+      <td colSpan='2'>{Str.toLocaleCurrency(totalPriceExcludingTaxes, currency)}</td>
+    </tr>
+    <tr className='header-cart-total-vat'>
+      <td className='text-right' colSpan='2'>{Translation.get('Tax total')}:</td>
+      <td colSpan='2'>+ {Str.toLocaleCurrency(totalIncludingTaxes, currency)}</td>
+    </tr>
+    <tr className='header-cart-total'>
+      <td className='text-right' colSpan='2'>{Translation.get('Total')}:</td>
+      <td colSpan='2'>{Str.toLocaleCurrency(totalPriceIncludingTaxes, currency)}</td>
+    </tr>
+    </tfoot>
+  )
 }
 
 TotalComponent.propTypes = {
-  items      : PropTypes.objectOf(PropTypes.shape({
+  items   : PropTypes.objectOf(PropTypes.shape({
     quantity : PropTypes.number.isRequired,
     reference: PropTypes.shape({
       unitPriceIncludingTaxes: PropTypes.number.isRequired,
       unitPriceExcludingTaxes: PropTypes.number.isRequired
     })
   })).isRequired,
-  purchaseUrl: PropTypes.string.isRequired,
-  currency   : PropTypes.string.isRequired
+  currency: PropTypes.string.isRequired
 }
 
 export default TotalComponent

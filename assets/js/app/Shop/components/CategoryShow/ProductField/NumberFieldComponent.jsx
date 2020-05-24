@@ -1,54 +1,49 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { changeValue, getValue } from './ProductField'
 
-class NumberFieldComponent extends React.Component {
-  changeValue (suffix, event) {
-    this.props.updateFilter(this.getFilterKey(suffix), event.target.value)
+function NumberFieldComponent ({ productField, updateFilter, filters }) {
+  const getFilterKey = function (suffix) {
+    return `${productField.key}-${suffix}`
   }
 
-  getValue (key) {
-    return this.props.filters[key] || ''
-  }
+  const filterKeyMin = getFilterKey('min')
+  const filterKeyMax = getFilterKey('max')
 
-  getFilterKey (suffix) {
-    return `${this.props.productField.key}-${suffix}`
-  }
-
-  render () {
-    return (
-      <div className='form-group'>
-        <p className='mb-1'>{this.props.productField.label}</p>
-        <div className='row no-gutters'>
-          <div className='col'>
-            <input
-              name={this.getFilterKey('min')} value={this.getValue(this.getFilterKey('min'))}
-              onChange={this.changeValue.bind(this, 'min')}
-              className='form-control'
-              placeholder='min' type='number'
-            />
-          </div>
-          <div className='col'>
-            <input
-              name={this.getFilterKey('max')} value={this.getValue(this.getFilterKey('max'))}
-              onChange={this.changeValue.bind(this, 'max')}
-              className='form-control'
-              placeholder='max' type='number'
-            />
-          </div>
+  return (
+    <div className='form-group'>
+      <p className='mb-1'>{productField.label}</p>
+      <div className='row no-gutters'>
+        <div className='col'>
+          <input
+            name={getFilterKey('min')} value={getValue(filterKeyMin)}
+            onChange={event => changeValue(filterKeyMin, updateFilter, event)}
+            className='form-control'
+            placeholder='min' type='number'
+          />
+        </div>
+        <div className='col'>
+          <input
+            name={getFilterKey('max')} value={getValue(filterKeyMax)}
+            onChange={event => changeValue(filterKeyMax, updateFilter, event)}
+            className='form-control'
+            placeholder='max' type='number'
+          />
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 NumberFieldComponent.propTypes = {
   productField: PropTypes.shape({
-    key: PropTypes.string.isRequired,
+    key  : PropTypes.string.isRequired,
     label: PropTypes.string.isRequired
   }),
 
-  updateFilter: PropTypes.func.isRequired
+  updateFilter: PropTypes.func.isRequired,
+  filters     : PropTypes.object.isRequired,
 }
 
 const mapStateToProps = (state) => {

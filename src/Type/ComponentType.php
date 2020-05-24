@@ -46,15 +46,15 @@ class ComponentType extends TextType
         $errors = $form->getErrors();
 
         $props = [
-            'value' => $form->getViewData(),
-            'label' => $this->makeLabelAttribute($options['label'], $form->getName()),
-            'name' => "{$formName}[{$form->getName()}]",
-            'id' => "{$formName}_{$form->getName()}",
-            'error' => !isset($errors[0]) ? '' : $errors[0]->getMessage()
+            'initialValue' => $form->getViewData(),
+            'label'        => $this->makeLabelAttribute($options['label'], $form->getName()),
+            'name'         => "{$formName}[{$form->getName()}]",
+            'id'           => "{$formName}_{$form->getName()}",
+            'initialError' => !isset($errors[0]) ? '' : $errors[0]->getMessage()
         ];
 
         if ($rules = $this->makeRulesAttribute(get_class($parentForm->getViewData()), $form->getName())) {
-            $props['rules'] = $rules;
+            $props['rulesInString'] = $rules;
         }
 
         if ($attr = $options['attr']) {

@@ -21,7 +21,7 @@ NO_COLOR      			= \033[m
 filter      ?= tests
 dir         ?=
 
-php := docker-compose run --rm php php
+php := docker-compose exec php php
 bash := docker-compose run --rm php bash
 composer := docker-compose run --rm php composer
 mariadb := docker-compose exec mariadb mysql -uroot -proot -e
@@ -44,7 +44,7 @@ clean: ## Remove cache
 	@echo "$(DANGER_COLOR)Removing Symfony cache...$(NO_COLOR)"
 	@$(php) bin/console cache:pool:clear -q cache.app
 	@$(php) bin/console cache:clear -q
-	@echo "$(DANGER_COLOR)Removing billings PDF$(NO_COLOR)"
+	@echo "$(DANGER_COLOR)Removing billings PDF...$(NO_COLOR)"
 	@rm -rf ./var/storage/billings
 
 help: ## Display this help
@@ -71,10 +71,11 @@ build: install ## Build assets projects for production
 	@rm -rf ./public/assets/*
 	@$(npm) run build
 
-migrate: install clean ## Refresh database by running new migrations
-	@$(php) bin/console doctrine:database:drop --force
-	@$(php) bin/console doctrine:database:create
-	@$(php) bin/console doctrine:migrations:migrate -n
+migrate: dev clean ## Refresh database by running new migrations
+	@echo "$(PRIMARY_COLOR)Migrating database...$(NO_COLOR)"
+	@$(php) bin/console doctrine:database:drop --force -q
+	@$(php) bin/console doctrine:database:create -q
+	@$(php) bin/console doctrine:migrations:migrate -n -q
 	@$(php) bin/console doctrine:fixtures:load -n
 
 bash: install ## Run bash in PHP container

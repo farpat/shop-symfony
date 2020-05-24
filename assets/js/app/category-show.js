@@ -15,6 +15,6 @@ const categoryStore = createStore(CategoryReducer, categoryService.getData())
 
 render(<Provider store={categoryStore}><ProductsComponent/></Provider>, productsElement)
 
-if (categoryService.getData().allProductFields.length > 0) {
+if (productFieldsElement) {
   render(<Provider store={categoryStore}><ProductFieldsComponent/></Provider>, productFieldsElement)
 }

@@ -6,26 +6,20 @@ const inputContainer = document.querySelector('#form-search')
 const input = inputContainer.querySelector('input')
 
 const renderProduct = function (item, searchValue) {
-  const text = Str.markValueIntoText(searchValue, item.label)
-  const autocompleteImgString = item.image ? `<div class="autocomplete-img"><img src="${item.image}" alt="${item.label}"></div>` : ''
-
   return `
-<div data-url="${item.url}" class="autocomplete-suggestion" data-val="${searchValue}">${autocompleteImgString}
+<div data-url="${item.url}" class="autocomplete-suggestion" data-val="${searchValue}">${(item.image ? `<div class="autocomplete-img"><img src="${item.image}" alt="${item.label}"></div>` : '')}
     <div class="autocomplete-description">
-        <p class="autocomplete-description-label">${text}</p>
+        <p class="autocomplete-description-label">${(Str.markValueIntoText(searchValue, item.label))}</p>
         <p class="autocomplete-description-price">From ${Str.toLocaleCurrency(item.minUnitPriceIncludingTaxes, 'EUR')}</p>
     </div>
 </div>
 `
 }
 const renderCategory = function (item, searchValue) {
-  const text = Str.markValueIntoText(searchValue, item.label)
-  const autocompleteImgString = item.image ? `<div class="autocomplete-img"><img src="${item.image}" alt="${item.label}"></div>` : ''
-
   return `
-<div data-url="${item.url}" class="autocomplete-suggestion" data-val="${searchValue}">${autocompleteImgString}
+<div data-url="${item.url}" class="autocomplete-suggestion" data-val="${searchValue}">${(item.image ? `<div class="autocomplete-img"><img src="${item.image}" alt="${item.label}"></div>` : '')}
     <div class="autocomplete-description">
-        <p class="autocomplete-description-label">${text}</p>
+        <p class="autocomplete-description-label">${(Str.markValueIntoText(searchValue, item.label))}</p>
     </div>
 </div>
 `
@@ -41,10 +35,10 @@ const renderNotItems = function () {
 }
 
 new AutoComplete({
-  selector: input,
-  minChars: 2,
-  cache: true,
-  source: function (q, suggest) {
+  selector  : input,
+  minChars  : 2,
+  cache     : true,
+  source    : function (q, suggest) {
     inputContainer.classList.add('searching')
 
     Requestor.newRequest()
@@ -65,7 +59,7 @@ new AutoComplete({
       return renderCategory(item, q)
     }
   },
-  onSelect: function (e, term, item) {
+  onSelect  : function (e, term, item) {
     if (item.dataset.url !== undefined) {
       window.location.href = item.dataset.url
     }

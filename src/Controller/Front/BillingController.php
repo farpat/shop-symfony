@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/billings", name="app_billing_")
+ * @Route("/billings", name="app_front_billing_")
  */
 class BillingController extends AbstractController
 {

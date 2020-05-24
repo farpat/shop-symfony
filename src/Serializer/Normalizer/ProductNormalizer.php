@@ -33,7 +33,7 @@ class ProductNormalizer implements NormalizerInterface, CacheableSupportsMethodI
     {
         return [
             'id' => $object->getId(),
-            'url' => $this->urlGenerator->generate('app_product_show', [
+            'url' => $this->urlGenerator->generate('app_front_product_show', [
                 'productId' => $object->getId(),
                 'productSlug' => $object->getSlug(),
                 'categoryId' => $object->getCategory()->getId(),

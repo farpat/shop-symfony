@@ -26,10 +26,7 @@ const configWebpack = {
     overlay       : true,
     clientLogLevel: 'warning',
     host          : '0.0.0.0',
-    stats         : {
-      colors: true,
-      chunks: false
-    }
+    stats         : { colors: true, chunks: false }
   },
   mode        : isDebug ? 'development' : 'production',
   devtool     : isDebug ? 'cheap-module-source-map' : false,
@@ -128,9 +125,7 @@ if (!isDebug) {
     new ManifestPlugin(),
 
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"'
-      }
+      'process.env': { NODE_ENV: '"production"' }
     })
   )
 }
