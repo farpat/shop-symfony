@@ -7,12 +7,11 @@ import ProductComponent from './Shop/components/ProductShow/ProductComponent'
 import productAndCartStore from './Shop/services/ProductAndCartStore'
 import StripeComponent from './Shop/components/PurchaseCart/StripeComponent'
 
-//Don't close header cart when we click inside it
 const cartNavElement = document.querySelector('#cart-nav')
-cartNavElement.addEventListener('click', event => {
-  if (event.target.tagName !== 'I' && event.target.tagName !== 'BUTTON') {
-    event.stopPropagation()
-  }
+
+//Don't close header cart when we click inside it
+$('#cart-nav').on('hide.bs.dropdown', function (event) {
+  event.preventDefault()
 })
 
 //Header cart component (in navbar)

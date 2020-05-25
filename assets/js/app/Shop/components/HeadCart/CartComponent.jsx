@@ -15,9 +15,9 @@ function CartComponent ({ items, purchaseUrl, currency }) {
           <div className="nav-link"><i className="fas fa-shopping-cart"></i></div> :
           <div>
             <button
-              aria-expanded='false' aria-haspopup='true'
-              className='nav-link btn btn-link dropdown-toggle mr-md-2'
-              data-toggle='dropdown' id='button-cart'
+              aria-expanded="false" aria-haspopup="true"
+              className="nav-link btn btn-link dropdown-toggle mr-md-2"
+              data-toggle="dropdown" id="button-cart"
             >
               <i className="fas fa-shopping-cart"/> - {referenceIds.length}
             </button>
