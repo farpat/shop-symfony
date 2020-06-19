@@ -1,9 +1,9 @@
 {% set categories = CategoryService.categoriesInHome() %}
 
 {% if categories is not empty %}
-    <section class="home-section categories">
-        <h2>{% trans %}Categories in the spotlight{% endtrans %}</h2>
-        <div class="card-deck">
+    <section class="home-section home-category">
+        <h2 class="home-category-title">{% trans %}Categories in the spotlight{% endtrans %}</h2>
+        <div class="categories">
             {% for category in categories %}
                 {% include '_partials/category.html.twig' %}
             {% endfor %}

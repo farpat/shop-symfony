@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/purchase", name="app_front_purchase_")
@@ -25,15 +26,21 @@ class PurchaseController extends AbstractController
     private StripeService          $stripeService;
     private CartManagerInterface   $cartManager;
     private EntityManagerInterface $entityManager;
+    /**
+     * @var TranslatorInterface
+     */
+    private TranslatorInterface $translator;
 
     public function __construct(
         StripeService $stripeService,
         CartManagerInterface $cartManager,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        TranslatorInterface $translator
     ) {
         $this->stripeService = $stripeService;
         $this->cartManager = $cartManager;
         $this->entityManager = $entityManager;
+        $this->translator = $translator;
     }
 
     /**

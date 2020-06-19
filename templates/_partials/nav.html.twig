@@ -9,7 +9,7 @@
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a href="{{ path('app_front_category_index') }}"
-                   class="nav-link {{ active('app_front_category_index') }}">{% trans %}All categories{% endtrans %}</a>
+                   class="nav-link {{ active(app.request, 'app_front_category_index') }}">{% trans %}All categories{% endtrans %}</a>
             </li>
             {{ NavigationService.generateHtml() | raw }}
         </ul>

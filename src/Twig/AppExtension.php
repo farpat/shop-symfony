@@ -6,6 +6,8 @@ use App\Services\NavigationService;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -13,27 +15,18 @@ use Twig\TwigFunction;
 class AppExtension extends AbstractExtension
 {
 
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-    /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
-    /**
-     * @var NavigationService
-     */
-    private $navigationService;
+    private UrlGeneratorInterface $urlGenerator;
+    private NavigationService     $navigationService;
+    private ParameterBagInterface $parameterBag;
 
     public function __construct(
-        ContainerInterface $container,
+        ParameterBagInterface $parameterBag,
         UrlGeneratorInterface $urlGenerator,
         NavigationService $navigationService
     ) {
-        $this->container = $container;
         $this->urlGenerator = $urlGenerator;
         $this->navigationService = $navigationService;
+        $this->parameterBag = $parameterBag;
     }
 
     public function getFunctions(): array
@@ -45,9 +38,8 @@ class AppExtension extends AbstractExtension
         ];
     }
 
-    public function isActive(string $route): string
+    public function isActive(Request $request, string $route): string
     {
-        $request = $this->container->get('request_stack')->getCurrentRequest();
         return $request->getPathInfo() === $this->urlGenerator->generate($route) ? 'active' : '';
     }
 
@@ -55,10 +47,10 @@ class AppExtension extends AbstractExtension
     {
         static $json;
 
-        if (!$isAbsolute && $webpackDevServerPort = $this->container->getParameter('WEBPACK_DEV_SERVER_PORT')) {
+        if (!$isAbsolute && $webpackDevServerPort = $this->parameterBag->get('WEBPACK_DEV_SERVER_PORT')) {
             return substr($asset, -4) !== '.css' ? "http://localhost:$webpackDevServerPort/assets/$asset" : '';
         } else {
-            $publicPath = $this->container->getParameter('kernel.project_dir') . '/public';
+            $publicPath = $this->parameterBag->get('kernel.project_dir') . '/public';
             $assetPath = $publicPath . '/assets';
 
             if (!$json) {

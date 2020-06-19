@@ -11,7 +11,10 @@ const cartNavElement = document.querySelector('#cart-nav')
 
 //Don't close header cart when we click inside it
 $('#cart-nav').on('hide.bs.dropdown', function (event) {
-  event.preventDefault()
+  const target = event.clickEvent.originalEvent.target
+  if (target.tagName === 'I' || target.tagName === 'BUTTON' || target.tagName === 'A') {
+    return false
+  }
 })
 
 //Header cart component (in navbar)

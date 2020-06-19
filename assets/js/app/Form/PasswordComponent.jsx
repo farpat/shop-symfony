@@ -8,8 +8,8 @@ import {
   getRules,
   isRequired,
   updateError,
-  updateValue,
-  useValueAndError
+  getValueFromEvent,
+  useValueAndError, getError
 } from './Form'
 
 function PasswordComponent ({ label, name, attr, id, help, initialValue, initialError, rulesInString, withKey }) {
@@ -18,8 +18,8 @@ function PasswordComponent ({ label, name, attr, id, help, initialValue, initial
   const { value, error, setError, setValue } = useValueAndError(initialValue, initialError)
   const inputElement = <input type="password" className={getInputClassName(error)} id={id} name={name}
                               required={required} aria-describedby={getHelpId(help, id)} value={value}
-                              onChange={event => updateValue(setValue, event)}
-                              onBlur={() => updateError(setError, rules, error, value)} {...attr}/>
+                              onChange={event => setValue(getValueFromEvent(event))}
+                              onBlur={() => setError(getError(rules, value))} {...attr}/>
 
   return (
     <div className="form-group">

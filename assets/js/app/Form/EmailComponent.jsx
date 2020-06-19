@@ -8,8 +8,8 @@ import {
   getRules,
   isRequired,
   updateError,
-  updateValue,
-  useValueAndError
+  getValueFromEvent,
+  useValueAndError, getError
 } from './Form'
 
 function EmailComponent ({ label, name, attr, id, help, initialValue, initialError, rulesInString }) {
@@ -29,8 +29,8 @@ function EmailComponent ({ label, name, attr, id, help, initialValue, initialErr
 
         <input type="text" className={getInputClassName(error)} id={id} name={name}
                required={required} aria-describedby={getHelpId(help, id)} value={value}
-               onChange={event => updateValue(setValue, event)}
-               onBlur={() => updateError(setError, rules, error, value)} {...attr}/>
+               onChange={event => setValue(getValueFromEvent(event))}
+               onBlur={() => setError(getError(rules, value))} {...attr}/>
       </div>
 
       {

@@ -3,15 +3,9 @@
     categorySlug: category.slug,
 }) %}
 
-<article class="card category">
-    {% if category.image %}
-        <a href="{{ url }}">
-            <img src="{{ category.image.urlThumbnail }}" class="card-img-top" alt="{{ category.label }}">
-        </a>
-    {% endif %}
-    <div class="card-body">
-        <h3 class="card-title">
-            <a href="{{ url }}">{{ category.label }}</a>
-        </h3>
-    </div>
+<article class="category">
+    <a href="{{ url }}">
+        <img src="{{ category.image.urlThumbnail }}" class="category-image" alt="{{ category.label }}">
+        <h3 class="category-title">{{ category.label }}</h3>
+    </a>
 </article>

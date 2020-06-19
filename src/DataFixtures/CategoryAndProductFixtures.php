@@ -57,7 +57,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
             ->setSlug($slug)
             ->setDescription($this->faker->paragraphs(3, true))
             ->setIsLast(false)
-            ->setImage($this->faker->boolean(75) ? $this->makeImage() : null);
+            ->setImage($this->makeImage());
 
 
         $this->entityManager->persist($category);
@@ -84,7 +84,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
                 ->setSlug($slug)
                 ->setNomenclature($nomenclature)
                 ->setDescription($this->faker->paragraphs(3, true))
-                ->setImage($this->faker->boolean(75) ? $this->makeImage() : null)
+                ->setImage($this->makeImage())
                 ->setIsLast(true);
 
             $this->entityManager->persist($subCategory);

@@ -7,40 +7,33 @@
         <div class="row">
             <div class="offset-md-3 col-md-6">
                 <form method="post">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
                     {% if error %}
-                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                    {% endif %}
-
-                    {% if app.user %}
-                        <div class="mb-3">
-                            {% trans with {'%username%' : app.user.username } %}You are logged in as %username%{% endtrans %}
-                            ,
-                            <a href="{{ path('app_auth_security_logout') }}">{% trans %}Logout{% endtrans %}</a>
+                        <div class="alert alert-danger" role="alert">
+                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                     {% endif %}
 
                     <h1>{% trans %}Log in{% endtrans %}</h1>
 
                     <div class="form-group">
-                        <label for="login_form_email" class="required">{% trans %}E-mail{% endtrans %}</label>
+                        <label for="login_form_email">{% trans %}E-mail{% endtrans %}</label>
                         <div class="input-group">
-                            <div class="input-group-prepend"><span class="input-group-text"><i
-                                            class="far fa-envelope-open"></i></span>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-envelope-open"></i></span>
                             </div>
-                            <input type="email" class="form-control" id="login_form_email"
-                                   name="email" required
+                            <input type="email" class="form-control" name="email" required
                                    placeholder="Enter your e-mail" value="{{ last_username }}" autofocus>
-                            <div class="invalid-feedback">This value should not be blank.</div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="login_form_password" class="required">{% trans %}Password{% endtrans %}</label>
-                        <input type="password" class="form-control" id="login_form_password"
-                               name="password" required>
+                        <label for="login_form_password">{% trans %}Password{% endtrans %}</label>
+                        <input type="password" class="form-control" name="password" required>
                     </div>
-
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
                     <div class="form-group row">
                         <div class="col-md-6">

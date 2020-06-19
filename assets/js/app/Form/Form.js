@@ -23,7 +23,7 @@ export function getRules (rulesInString) {
 }
 
 export function isRequired (rules) {
-  return rules.find(rule => rule.name === 'NotBlank' || rule.name === 'IsTrue') !== undefined
+  return rules.find(rule => rule.name === 'not-blank' || rule.name === 'is-true') !== undefined
 }
 
 export function useValueAndError (initialValue, initialError) {
@@ -75,11 +75,11 @@ export function getError (rules, value) {
   return ''
 }
 
-export function updateValue (setValue, event) {
+export function getValueFromEvent (event) {
   if (event.target.tagName === 'INPUT' && event.target.type === 'checkbox') {
-    setValue(event.target.checked)
+    return event.target.checked
   } else {
-    setValue(event.target.value)
+    return event.target.value
   }
 }
 

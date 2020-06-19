@@ -57,16 +57,16 @@
         ]
     },
     "doctrine/doctrine-migrations-bundle": {
-        "version": "1.2",
+        "version": "2.2",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "1.2",
-            "ref": "c1431086fec31f17fbcfe6d6d7e92059458facc1"
+            "version": "2.2",
+            "ref": "baaa439e3e3179e69e3da84b671f0a3e4a2f56ad"
         },
         "files": [
             "config/packages/doctrine_migrations.yaml",
-            "src/Migrations/.gitignore"
+            "migrations/.gitignore"
         ]
     },
     "doctrine/event-manager": {
@@ -82,7 +82,7 @@
         "version": "1.2.0"
     },
     "doctrine/migrations": {
-        "version": "2.2.1"
+        "version": "3.0.0"
     },
     "doctrine/orm": {
         "version": "v2.7.2"
@@ -93,6 +93,9 @@
     "doctrine/reflection": {
         "version": "1.2.1"
     },
+    "doctrine/sql-formatter": {
+        "version": "1.0.1"
+    },
     "egulias/email-validator": {
         "version": "2.1.17"
     },
@@ -102,9 +105,6 @@
     "fzaninotto/faker": {
         "version": "v1.9.1"
     },
-    "jdorn/sql-formatter": {
-        "version": "v1.2.17"
-    },
     "laminas/laminas-code": {
         "version": "3.4.1"
     },
@@ -112,7 +112,7 @@
         "version": "3.2.1"
     },
     "laminas/laminas-zendframework-bridge": {
-        "version": "1.0.3"
+        "version": "1.0.4"
     },
     "league/flysystem": {
         "version": "1.0.68"
@@ -241,6 +241,9 @@
     },
     "symfony/dependency-injection": {
         "version": "v5.0.8"
+    },
+    "symfony/deprecation-contracts": {
+        "version": "v2.1.2"
     },
     "symfony/doctrine-bridge": {
         "version": "v5.0.8"
@@ -412,6 +415,9 @@
         "version": "v1.17.0"
     },
     "symfony/polyfill-php73": {
+        "version": "v1.17.0"
+    },
+    "symfony/polyfill-php80": {
         "version": "v1.17.0"
     },
     "symfony/process": {

@@ -6,8 +6,8 @@ import {
   getRules,
   isRequired,
   updateError,
-  updateValue,
-  useValueAndError
+  getValueFromEvent,
+  useValueAndError, getError
 } from './Form'
 import { hot } from 'react-hot-loader/root'
 import PropTypes from 'prop-types'
@@ -24,8 +24,8 @@ function TextComponent ({ label, name, attr, id, help, initialValue, initialErro
       }
       <input type="text" className={getInputClassName(error)} id={id} name={name}
              required={required} aria-describedby={getHelpId(help, id)} value={value}
-             onChange={event => updateValue(setValue, event)}
-             onBlur={() => updateError(setError, rules, error, value)} {...attr}
+             onChange={event => setValue(getValueFromEvent(event))}
+             onBlur={() => setError(getError(rules, value))} {...attr}
       />
       {
         error !== '' && <div className="invalid-feedback">{error}</div>

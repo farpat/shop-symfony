@@ -8,8 +8,8 @@ import {
   getRules,
   isRequired,
   updateError,
-  updateValue,
-  useValueAndError
+  getValueFromEvent,
+  useValueAndError, getError
 } from './Form'
 
 function CheckboxComponent ({ rulesInString, initialValue, initialError, attr, id, name, help, label }) {
@@ -22,8 +22,8 @@ function CheckboxComponent ({ rulesInString, initialValue, initialError, attr, i
       <div className="custom-control custom-switch">
         <input type="checkbox" className={getInputClassName(error, 'custom-control-input')} id={id} name={name}
                required={required} aria-describedby={getHelpId(help, id)} checked={value}
-               onChange={event => updateValue(setValue, event)}
-               onBlur={() => updateError(setError, rules, error, value)} {...attr}
+               onChange={event => setValue(getValueFromEvent(event))}
+               onBlur={() => setError(getError(rules, value))} {...attr}
         />
         {
           label !== '' &&
