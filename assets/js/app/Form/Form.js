@@ -40,8 +40,8 @@ export function getHelpId (help, id) {
   return help !== '' ? `${id}_help` : false
 }
 
-export function getLabelClassName (required, initialClassName) {
-  let className = initialClassName || ''
+export function getLabelClassName (required, initialClassName = '') {
+  let className = initialClassName
 
   if (required) {
     className += ' required'
@@ -50,8 +50,8 @@ export function getLabelClassName (required, initialClassName) {
   return className
 }
 
-export function getInputClassName (error, initialClassName) {
-  let className = initialClassName || 'form-control'
+export function getInputClassName (error, initialClassName = 'form-control') {
+  let className = initialClassName
 
   if (error !== '') {
     className += ' is-invalid'
@@ -67,7 +67,7 @@ export function getError (rules, value) {
 
   for (const rule of rules) {
     let error = rule.check(value)
-    if (error) {
+    if (error !== '') {
       return error
     }
   }
@@ -80,13 +80,5 @@ export function getValueFromEvent (event) {
     return event.target.checked
   } else {
     return event.target.value
-  }
-}
-
-export function updateError (setError, rules, error, value) {
-
-  let currentError = getError(rules, value)
-  if (error !== currentError) {
-    setError(currentError)
   }
 }

@@ -7,7 +7,6 @@ import {
   getLabelClassName,
   getRules,
   isRequired,
-  updateError,
   getValueFromEvent,
   useValueAndError, getError
 } from './Form'
@@ -20,11 +19,13 @@ function CheckboxComponent ({ rulesInString, initialValue, initialError, attr, i
   return (
     <div className="form-group">
       <div className="custom-control custom-switch">
+
         <input type="checkbox" className={getInputClassName(error, 'custom-control-input')} id={id} name={name}
                required={required} aria-describedby={getHelpId(help, id)} checked={value}
                onChange={event => setValue(getValueFromEvent(event))}
                onBlur={() => setError(getError(rules, value))} {...attr}
         />
+
         {
           label !== '' &&
           <label htmlFor={id} className={getLabelClassName(error, 'custom-control-label')}>{label}</label>

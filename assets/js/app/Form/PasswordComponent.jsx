@@ -7,7 +7,6 @@ import {
   getLabelClassName,
   getRules,
   isRequired,
-  updateError,
   getValueFromEvent,
   useValueAndError, getError
 } from './Form'
