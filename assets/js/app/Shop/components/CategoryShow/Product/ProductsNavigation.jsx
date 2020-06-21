@@ -50,24 +50,29 @@ function ProductsNavigation ({ goTo, products, perPage, currentPage }) {
     return className
   }
 
+  const handleGoToPage = function (event, page) {
+    event.preventDefault()
+    goTo(page)
+  }
+
   return (
     <nav aria-label="Product pagination" className={getNavClass(pages)}>
       <ul className="pagination">
         <li className={getPreviousItemClass()}>
-          <a href="#" onClick={() => goTo(currentPage - 1)} className='page-link'>
+          <a href="#" onClick={(event) => handleGoToPage(event, currentPage - 1)} className='page-link'>
             &larr; {Translation.get('previous')}
           </a>
         </li>
         {
           pages.map(page =>
             <li className={getItemClass(page)} key={page}>
-              <a href='#' onClick={() => goTo(page)} className='page-link'>
+              <a href='#' onClick={(event) => handleGoToPage(event, page)} className='page-link'>
                 {page}
               </a>
             </li>)
         }
         <li className={getNextItemClass()}>
-          <a href="#" onClick={() => goTo(currentPage + 1)} className='page-link'>
+          <a href="#" onClick={(event) => handleGoToPage(event, currentPage + 1)} className='page-link'>
             {Translation.get('next')} &rarr;
           </a>
         </li>

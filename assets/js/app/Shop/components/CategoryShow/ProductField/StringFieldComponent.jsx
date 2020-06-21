@@ -24,8 +24,8 @@ StringFieldComponent.propTypes = {
     label: PropTypes.string.isRequired
   }),
 
+  filters     : PropTypes.object.isRequired,
   updateFilter: PropTypes.func.isRequired,
-  filters     : PropTypes.func.isRequired,
 }
 
 const mapStateToProps = (state) => {

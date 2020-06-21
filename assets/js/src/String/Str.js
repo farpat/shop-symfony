@@ -106,6 +106,18 @@ class Str {
     const regex = new RegExp(`(${neddle.split(' ').join('|')})`, 'gi')
     return haystack.replace(regex, '<mark>$1</mark>')
   }
+
+  /**
+   *
+   * @param {string} currentQueryString
+   * @param {string} key
+   * @param {string} value
+   * @private
+   */
+  addQueryString (currentQueryString, key, value) {
+    const prefix = currentQueryString.length === 0 ? '?' : '&'
+    return `${prefix + key}=${value}`
+  }
 }
 
 export default new Str()

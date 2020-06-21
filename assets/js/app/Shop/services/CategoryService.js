@@ -1,10 +1,10 @@
 import Arr from '../../../src/Array/Arr'
+import Str from '../../../src/String/Str'
 
 class CategoryService {
   constructor () {
     this.baseUrl = window.location.origin + window.location.pathname
     this.data = {}
-    this.currentQueryString = ''
   }
 
   getData () {
@@ -12,11 +12,10 @@ class CategoryService {
   }
 
   /**
-   *
+   * @private
    * @param allProducts
    * @param currentFilters
    * @returns {Array}
-   * @private
    */
   getFilteredProducts (allProducts, currentFilters) {
     return allProducts.filter(product => this.filterProduct(product, currentFilters))
@@ -27,7 +26,7 @@ class CategoryService {
    * @param {HTMLElement} productsElement
    * @param {HTMLElement} productFieldsElement
    */
-  createInitialData (productsElement, productFieldsElement) {
+  setInitialData (productsElement, productFieldsElement) {
     let { products, currentPage, perPage, columns } = productsElement.dataset
     currentPage = Number.parseInt(currentPage)
     products = JSON.parse(products)
@@ -49,38 +48,29 @@ class CategoryService {
     }
 
     if (this.data.currentPage !== currentPage) {
-      this.refreshUrl()
+      this.refreshUrl(this.data.currentFilters, this.data.currentPage)
     }
 
     return this
   }
 
   /**
-   *
-   * @param {string} key
-   * @param {string} value
    * @private
+   * @param {object} currentFilters
+   * @param {number} currentPage
    */
-  addQueryString (key, value) {
-    const prefix = this.currentQueryString.length === 0 ? '?' : '&'
-    this.currentQueryString += `${prefix + key}=${value}`
-  }
+  refreshUrl (currentFilters, currentPage) {
+    let currentQueryString = ''
 
-  /**
-   * @private
-   */
-  refreshUrl () {
-    this.currentQueryString = ''
-
-    for (const filterKey in this.data.currentFilters) {
-      this.addQueryString(filterKey, this.data.currentFilters[filterKey])
+    for (const filterKey in currentFilters) {
+      currentQueryString += Str.addQueryString(currentQueryString, filterKey, this.data.currentFilters[filterKey])
     }
 
-    if (this.data.currentPage > 1) {
-      this.addQueryString('page', this.data.currentPage)
+    if (currentPage > 1) {
+      currentQueryString += Str.addQueryString(currentQueryString, 'page', this.data.currentPage)
     }
 
-    window.history.replaceState({}, '', this.baseUrl + this.currentQueryString)
+    window.history.replaceState({}, '', this.baseUrl + currentQueryString)
   }
 
   /**
@@ -91,16 +81,16 @@ class CategoryService {
   updatePage (newCurrentPage) {
     this.data = { ...this.data, currentPage: newCurrentPage }
 
-    this.refreshUrl()
+    this.refreshUrl(this.data.currentFilters, this.data.currentPage)
 
     return this
   }
 
   /**
+   * @private
    * @param currentPage
    * @param currentProducts
    * @returns {number}
-   * @private
    */
   ensureCurrentPage (currentPage, currentProducts) {
     let newCurrentPage = currentPage
@@ -124,7 +114,6 @@ class CategoryService {
    */
   updateFilter (filterKey, newValue) {
     let currentFilters
-
     if (newValue !== '') {
       currentFilters = { ...this.data.currentFilters, [filterKey]: newValue }
     } else {
@@ -133,21 +122,22 @@ class CategoryService {
     }
 
     const currentProducts = this.getFilteredProducts(this.data.allProducts, currentFilters)
+    const currentPage = this.ensureCurrentPage(this.data.currentPage, currentProducts)
 
     this.data = {
       ...this.data,
-      currentPage: this.ensureCurrentPage(this.data.currentPage, currentProducts),
+      currentPage,
       currentProducts,
       currentFilters
     }
 
-    this.refreshUrl()
+    this.refreshUrl(currentFilters, currentPage)
 
     return this
   }
 
   /**
-   *
+   * @private
    * @param {Object} product
    * @param {Object} currentFilters
    * @returns {boolean}
@@ -182,9 +172,8 @@ class CategoryService {
   }
 
   /**
-   *
-   * @returns {Object}
    * @private
+   * @returns {Object}
    */
   getCurrentFiltersFromUrl () {
     const currentFilters = {}

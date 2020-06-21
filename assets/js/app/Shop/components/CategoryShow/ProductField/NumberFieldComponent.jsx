@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { changeValue, getValue } from './ProductField'
 
-function NumberFieldComponent ({ productField, updateFilter, filters }) {
-  const getFilterKey = function (suffix) {
-    return `${productField.key}-${suffix}`
-  }
+const getFilterKey = function (productField, suffix) {
+  return `${productField.key}-${suffix}`
+}
 
-  const filterKeyMin = getFilterKey('min')
-  const filterKeyMax = getFilterKey('max')
+function NumberFieldComponent ({ productField, updateFilter, filters }) {
+  const filterKeyMin = getFilterKey(productField, 'min')
+  const filterKeyMax = getFilterKey(productField, 'max')
 
   return (
     <div className='form-group'>
@@ -17,7 +17,7 @@ function NumberFieldComponent ({ productField, updateFilter, filters }) {
       <div className='row no-gutters'>
         <div className='col'>
           <input
-            name={getFilterKey('min')} value={getValue(filterKeyMin)}
+            name={filterKeyMin} value={getValue(filters, filterKeyMin)}
             onChange={event => changeValue(filterKeyMin, updateFilter, event)}
             className='form-control'
             placeholder='min' type='number'
@@ -25,7 +25,7 @@ function NumberFieldComponent ({ productField, updateFilter, filters }) {
         </div>
         <div className='col'>
           <input
-            name={getFilterKey('max')} value={getValue(filterKeyMax)}
+            name={filterKeyMax} value={getValue(filters, filterKeyMax)}
             onChange={event => changeValue(filterKeyMax, updateFilter, event)}
             className='form-control'
             placeholder='max' type='number'
