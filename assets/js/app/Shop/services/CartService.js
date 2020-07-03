@@ -6,15 +6,15 @@ class CartService {
 
   /**
    *
-   * @param Object items
+   * @param Object cartItems
    * @returns {{totalIncludingTaxes: number, totalPriceExcludingTaxes: number, totalPriceIncludingTaxes: number}}
    */
-  getPrices (items) {
+  getPrices (cartItems) {
     let totalPriceExcludingTaxes = 0
     let totalPriceIncludingTaxes = 0
 
-    Object.keys(items).map(referenceId => {
-      const item = items[referenceId]
+    Object.keys(cartItems).map(referenceId => {
+      const item = cartItems[referenceId]
       totalPriceExcludingTaxes += item.quantity * item.reference.unitPriceExcludingTaxes
       totalPriceIncludingTaxes += item.quantity * item.reference.unitPriceIncludingTaxes
     })
@@ -32,19 +32,34 @@ class CartService {
    */
   createInitialData (headCartElement) {
     this.data = {
-      quantities   : {},
-      items        : JSON.parse(headCartElement.dataset.items),
-      purchaseUrl  : headCartElement.dataset.purchaseUrl,
-      currency     : document.querySelector('#cart-nav').dataset.currency,
-      itemInLoading: {}
+      quantities         : {},
+      quantitiesInLoading: {},
+
+      cartItems         : JSON.parse(headCartElement.dataset.cartItems),
+      cartItemsInLoading: {},
+
+      purchaseUrl: headCartElement.dataset.purchaseUrl,
+      currency   : document.querySelector('#cart-nav').dataset.currency,
     }
   }
 
-  itemInLoading (reference, isLoading) {
+  setCartItemInLoading (reference, isLoading) {
     this.data = {
       ...this.data,
-      itemInLoading: {
-        ...this.data.itemInLoading,
+      cartItemsInLoading: {
+        ...this.data.cartItemsInLoading,
+        [reference.id]: isLoading
+      }
+    }
+
+    return this
+  }
+
+  setQuantityInLoading (reference, isLoading) {
+    this.data = {
+      ...this.data,
+      quantitiesInLoading: {
+        ...this.data.quantitiesInLoading,
         [reference.id]: isLoading
       }
     }
@@ -67,8 +82,8 @@ class CartService {
   updateItemQuantity (reference, quantity) {
     this.data = {
       ...this.data,
-      items     : {
-        ...this.data.items,
+      cartItems : {
+        ...this.data.cartItems,
         [reference.id]: { quantity, reference }
       },
       quantities: {
@@ -83,8 +98,8 @@ class CartService {
   addInCart (reference, quantity) {
     this.data = {
       ...this.data,
-      items     : {
-        ...this.data.items,
+      cartItems : {
+        ...this.data.cartItems,
         [reference.id]: { quantity, reference }
       },
       quantities: {
@@ -101,12 +116,12 @@ class CartService {
   }
 
   deleteItem (reference) {
-    const items = { ...this.data.items }
-    delete items[reference.id]
+    const cartItems = { ...this.data.cartItems }
+    delete cartItems[reference.id]
 
     this.data = {
       ...this.data,
-      items
+      cartItems
     }
 
     return this

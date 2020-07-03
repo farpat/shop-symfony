@@ -1,5 +1,5 @@
-import Arr from '../../../src/Array/Arr'
-import Str from '../../../src/String/Str'
+import Arr from '../../../src/Arr'
+import Str from '../../../src/Str'
 
 class CategoryService {
   constructor () {

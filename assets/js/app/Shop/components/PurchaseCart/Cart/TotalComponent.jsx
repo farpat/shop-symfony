@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Str from '../../../../../src/String/Str'
-import Translation from '../../../../../src/Translation/Translation'
+import Str from '../../../../../src/Str'
+import Translation from '../../../../../src/Translation'
 import CartService from '../../../services/CartService'
 
 function TotalComponent ({ items, currency }) {

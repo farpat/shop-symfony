@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { hot } from 'react-hot-loader/root'
 import { connect } from 'react-redux'
 import CartService from '../../services/CartService'
-import Str from '../../../../src/String/Str'
-import Translation from '../../../../src/Translation/Translation'
+import Str from '../../../../src/Str'
+import Translation from '../../../../src/Translation'
 import PropTypes from 'prop-types'
 import Requestor from '@farpat/api'
 
@@ -105,8 +105,8 @@ StripeComponent.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    items   : state.cart.items,
-    currency: state.cart.currency,
+    cartItems: state.cart.cartItems,
+    currency : state.cart.currency,
   }
 }
 

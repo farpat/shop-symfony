@@ -1,5 +1,5 @@
 import Input from './Input'
-import Str from '../String/Str'
+import Str from '../Str'
 
 export default class Autocomplete {
   constructor (options) {

@@ -1,6 +1,6 @@
 import AutoComplete from '../src/Autocomplete'
 import Requestor from '@farpat/api'
-import Str from '../src/String/Str'
+import Str from '../src/Str'
 
 const inputContainer = document.querySelector('#form-search')
 const input = inputContainer.querySelector('input')

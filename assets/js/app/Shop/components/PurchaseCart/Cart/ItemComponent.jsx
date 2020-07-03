@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Str from '../../../../../src/String/Str'
+import Str from '../../../../../src/Str'
 import { connect } from 'react-redux'
 import Requestor from '@farpat/api'
 
@@ -80,13 +80,13 @@ ItemComponent.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    isLoading: state.cart.itemInLoading
+    isLoading: state.cart.cartItemsInLoading
   }
 }
 const mapStateToDispatch = (dispatch) => {
   return {
     updateItemQuantity: async (reference, quantity) => {
-      dispatch({ type: 'IS_LOADING', reference, isLoading: true })
+      dispatch({ type: 'SET_CART_ITEM_IS_LOADING', reference, isLoading: true })
 
       try {
         const response = await Requestor.newRequest().patch(`/cart-items/${reference.id}`, { quantity })
@@ -94,11 +94,11 @@ const mapStateToDispatch = (dispatch) => {
       } catch (error) {
         console.error(error)
       } finally {
-        dispatch({ type: 'IS_LOADING', reference, isLoading: false })
+        dispatch({ type: 'SET_CART_ITEM_IS_LOADING', reference, isLoading: false })
       }
     },
     deleteItem        : async (reference) => {
-      dispatch({ type: 'IS_LOADING', reference, isLoading: true })
+      dispatch({ type: 'SET_CART_ITEM_IS_LOADING', reference, isLoading: true })
 
       try {
         await Requestor.newRequest().delete(`/cart-items/${reference.id}`)
@@ -106,7 +106,7 @@ const mapStateToDispatch = (dispatch) => {
       } catch (error) {
         console.error(error)
       } finally {
-        dispatch({ type: 'IS_LOADING', reference, isLoading: false })
+        dispatch({ type: 'SET_CART_ITEM_IS_LOADING', reference, isLoading: false })
       }
     }
   }

@@ -3,18 +3,16 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import ReferenceNavItemComponent from './ReferenceNavItemComponent'
 
-class ReferenceNavComponent extends React.Component {
-  render () {
-    return (
-      <nav className='nav-product-reference'>
-        {
-          this.props.references.map(reference =>
-            <ReferenceNavItemComponent reference={reference} key={reference.id}/>
-          )
-        }
-      </nav>
-    )
-  }
+function ReferenceNavComponent ({ references }) {
+  return (
+    <nav className='nav-product-reference'>
+      {
+        references.map(reference =>
+          <ReferenceNavItemComponent reference={reference} key={reference.id}/>
+        )
+      }
+    </nav>
+  )
 }
 
 ReferenceNavComponent.propTypes = {

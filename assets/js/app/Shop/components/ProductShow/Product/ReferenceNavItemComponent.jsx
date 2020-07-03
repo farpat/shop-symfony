@@ -2,62 +2,56 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-class ReferenceNavItemComponent extends React.Component {
-
-
-  render () {
-    return (
-      <div className={this.getLiClass()}>
-        <a
-          className='nav-product-reference-item-container'
-          onClick={this.setCurrentReference.bind(this, this.props.reference)}
-        >
-          {
-            this.props.reference.mainImage &&
-            <img
-              src={this.props.reference.mainImage.urlThumbnail}
-              alt={this.props.reference.mainImage.altThumbnail}
-            />
-          }
-          <h2 className={this.getTitleClass()}>{this.props.reference.label}</h2>
-        </a>
-      </div>
-    )
-  }
-
-  getLiClass () {
+function ReferenceNavItemComponent ({ reference, currentReference, setCurrentReference }) {
+  const getLiClass = function () {
     let className = 'nav-product-reference-item'
-    if (this.props.reference === this.props.currentReference) {
+    if (reference === currentReference) {
       className += ' bg-primary'
     }
     return className
   }
 
-  getTitleClass () {
+  const getTitleClass = function () {
     let className = 'nav-product-reference-item-title'
-    if (this.props.reference === this.props.currentReference) {
+    if (reference === currentReference) {
       className += ' text-white'
     }
     return className
   }
 
-  setCurrentReference (reference, event) {
-    event.preventDefault()
-    this.props.setCurrentReference(reference)
-  }
+  return (
+    <div className={getLiClass()}>
+      <a
+        className='nav-product-reference-item-container'
+        onClick={(event) => {
+          event.preventDefault()
+          setCurrentReference(reference)
+        }}
+      >
+        {
+          reference.mainImage &&
+          <img
+            src={reference.mainImage.urlThumbnail}
+            alt={reference.mainImage.altThumbnail}
+          />
+        }
+        <h2 className={getTitleClass()}>{reference.label}</h2>
+      </a>
+    </div>
+  )
 }
 
 ReferenceNavItemComponent.propTypes = {
-  reference: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    label: PropTypes.string.isRequired,
+  reference       : PropTypes.shape({
+    id       : PropTypes.number.isRequired,
+    label    : PropTypes.string.isRequired,
     mainImage: PropTypes.shape({
       urlThumbnail: PropTypes.string.isRequired,
       altThumbnail: PropTypes.string.isRequired
     })
   }),
   currentReference: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id   : PropTypes.number.isRequired,
     label: PropTypes.string.isRequired
   }),
 

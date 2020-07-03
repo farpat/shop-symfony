@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Str from '../../../../../src/String/Str'
-import Translation from '../../../../../src/Translation/Translation'
+import Str from '../../../../../src/Str'
+import Translation from '../../../../../src/Translation'
 import CartService from '../../../services/CartService'
 
-function TotalComponent ({ items, purchaseUrl, currency }) {
-  const { totalPriceExcludingTaxes, totalPriceIncludingTaxes, totalIncludingTaxes } = CartService.getPrices(items)
+function TotalComponent ({ cartItems, purchaseUrl, currency }) {
+  const { totalPriceExcludingTaxes, totalPriceIncludingTaxes, totalIncludingTaxes } = CartService.getPrices(cartItems)
 
   return (
     <tfoot className='header-cart-total'>
@@ -31,7 +31,7 @@ function TotalComponent ({ items, purchaseUrl, currency }) {
 }
 
 TotalComponent.propTypes = {
-  items      : PropTypes.objectOf(PropTypes.shape({
+  cartItems  : PropTypes.objectOf(PropTypes.shape({
     quantity : PropTypes.number.isRequired,
     reference: PropTypes.shape({
       unitPriceIncludingTaxes: PropTypes.number.isRequired,

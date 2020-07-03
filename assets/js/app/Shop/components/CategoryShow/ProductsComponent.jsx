@@ -4,7 +4,7 @@ import { hot } from 'react-hot-loader/root'
 import { connect } from 'react-redux'
 import ProductComponent from './Product/ProductComponent'
 import ProductsNavigation from './Product/ProductsNavigation'
-import Translation from '../../../../src/Translation/Translation'
+import Translation from '../../../../src/Translation'
 
 function ProductsComponent ({ products, currentPage, perPage }) {
   const getProductsToDisplay = function () {

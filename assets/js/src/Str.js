@@ -1,4 +1,4 @@
-import Arr from '../Array/Arr'
+import Arr from './Arr'
 
 const units = ['o', 'Ko', 'Mo', 'Go', 'To', 'Po', 'Eo', 'Zo', 'Yo']
 

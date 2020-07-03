@@ -1,4 +1,4 @@
-import Arr from '../Array/Arr'
+import Arr from './Arr'
 
 const getMainTranslation = function (key) {
   this.loadMainTranslation()
@@ -27,12 +27,12 @@ class Translation {
 
     if (this.translations[`${this.lang}.json`] === undefined) {
       try {
-        json = require(`../../../js-lang/${this.lang}.json`)
+        json = require(`../../js-lang/${this.lang}.json`)
       } catch (e) {
         this.lang = 'en'
 
         try {
-          json = require(`../../../js-lang/${this.lang}.json`)
+          json = require(`../../js-lang/${this.lang}.json`)
         } catch (e) {
           json = {}
         }
@@ -51,12 +51,12 @@ class Translation {
 
     if (this.translations[this.lang][key] === undefined) {
       try {
-        json = require(`../../../js-lang/${this.lang}/${key}.json`)
+        json = require(`../../js-lang/${this.lang}/${key}.json`)
       } catch (e) {
         this.lang = 'en'
 
         try {
-          json = require(`../../../js-lang/${this.lang}/${key}.json`)
+          json = require(`../../js-lang/${this.lang}/${key}.json`)
         } catch (e) {
           json = {}
         }

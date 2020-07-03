@@ -1,4 +1,4 @@
-import Str from '../String/Str'
+import Str from './Str'
 
 class Arr {
   /**

@@ -5,8 +5,8 @@ import { connect } from 'react-redux'
 import ItemComponent from './Cart/ItemComponent'
 import TotalComponent from './Cart/TotalComponent'
 
-function CartComponent ({ items, purchaseUrl, currency }) {
-  const referenceIds = Object.keys(items)
+function CartComponent ({ cartItems, purchaseUrl, currency }) {
+  const referenceIds = Object.keys(cartItems)
 
   return (
     <div>
@@ -26,12 +26,12 @@ function CartComponent ({ items, purchaseUrl, currency }) {
                 <tbody>
                 {
                   referenceIds.map(referenceId =>
-                    <ItemComponent item={items[referenceId]} key={referenceId} currency={currency}/>
+                    <ItemComponent item={cartItems[referenceId]} key={referenceId} currency={currency}/>
                   )
                 }
                 </tbody>
 
-                <TotalComponent items={items} currency={currency} purchaseUrl={purchaseUrl}/>
+                <TotalComponent cartItems={cartItems} currency={currency} purchaseUrl={purchaseUrl}/>
               </table>
             </div>
           </div>
@@ -41,7 +41,7 @@ function CartComponent ({ items, purchaseUrl, currency }) {
 }
 
 CartComponent.propTypes = {
-  items      : PropTypes.objectOf(PropTypes.shape({
+  cartItems  : PropTypes.objectOf(PropTypes.shape({
     quantity: PropTypes.number.isRequired,
 
     reference: PropTypes.shape({
@@ -61,7 +61,7 @@ CartComponent.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    items      : state.cart.items,
+    cartItems  : state.cart.cartItems,
     purchaseUrl: state.cart.purchaseUrl,
     currency   : state.cart.currency
   }

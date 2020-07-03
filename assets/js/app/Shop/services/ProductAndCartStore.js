@@ -5,6 +5,6 @@ import CartService from './CartService'
 import ProductService from './ProductService'
 
 export default createStore(combineReducers({ cart: CartReducer, product: ProductReducer }, {
-  cart: CartService.createInitialData(document.querySelector('#cart-nav')),
+  cart   : CartService.createInitialData(document.querySelector('#cart-nav')),
   product: ProductService.createInitialData(document.querySelector('#product-component'))
 }))

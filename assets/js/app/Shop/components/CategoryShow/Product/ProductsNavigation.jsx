@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import range from 'lodash/range'
-import Translation from '../../../../../src/Translation/Translation'
+import Translation from '../../../../../src/Translation'
 
 function ProductsNavigation ({ goTo, products, perPage, currentPage }) {
   const getPages = function () {

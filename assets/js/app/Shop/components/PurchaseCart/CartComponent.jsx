@@ -5,8 +5,8 @@ import { connect } from 'react-redux'
 import ItemComponent from './Cart/ItemComponent'
 import TotalComponent from './Cart/TotalComponent'
 
-function CartComponent ({ items, purchaseUrl, currency }) {
-  const referenceIds = Object.keys(items)
+function CartComponent ({ cartItems, purchaseUrl, currency }) {
+  const referenceIds = Object.keys(cartItems)
 
   useEffect(() => {
     if (referenceIds.length === 0) {
@@ -17,16 +17,16 @@ function CartComponent ({ items, purchaseUrl, currency }) {
   return <table className="table table-hover table-borderless">
     <tbody>
     {
-      referenceIds.map(referenceId => <ItemComponent item={items[referenceId]} key={referenceId} currency={currency}/>)
+      referenceIds.map(referenceId => <ItemComponent item={cartItems[referenceId]} key={referenceId} currency={currency}/>)
     }
     </tbody>
 
-    <TotalComponent items={items} purchaseUrl={purchaseUrl} currency={currency}/>
+    <TotalComponent cartItems={cartItems} purchaseUrl={purchaseUrl} currency={currency}/>
   </table>
 }
 
 CartComponent.propTypes = {
-  items      : PropTypes.objectOf(PropTypes.shape({
+  cartItems      : PropTypes.objectOf(PropTypes.shape({
     quantity: PropTypes.number.isRequired,
 
     reference: PropTypes.shape({
@@ -46,7 +46,7 @@ CartComponent.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    items      : state.cart.items,
+    cartItems  : state.cart.cartItems,
     purchaseUrl: state.cart.purchaseUrl,
     currency   : state.cart.currency
   }

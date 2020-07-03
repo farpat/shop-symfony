@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import Str from '../../../../../src/String/Str'
-import Translation from '../../../../../src/Translation/Translation'
+import Str from '../../../../../src/Str'
+import Translation from '../../../../../src/Translation'
 
 function ProductComponent ({ product, currency, columns }) {
   const getWrapperClassName = function () {
