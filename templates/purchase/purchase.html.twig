@@ -4,6 +4,8 @@
     {% trans %}Purchase{% endtrans %}
 {% endblock %}
 
+{% block script 'cart-purchase' %}
+
 {% block javascripts %}
     <script src="https://js.stripe.com/v3"></script>
     {{ parent() }}

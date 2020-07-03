@@ -24,33 +24,3 @@ render(
   </Provider>,
   cartNavElement
 )
-
-//Mount Product component if we are in "product/show.html.twig"
-const productComponentElement = document.querySelector('#product-component')
-if (productComponentElement !== null) {
-  render(
-    <Provider store={productAndCartStore}>
-      <ProductComponent/>
-    </Provider>,
-    productComponentElement
-  )
-}
-
-//Mount PurchaseCart component and Stripe component if we are in "cart/purchase.html.twig"
-const purchaseCartElement = document.querySelector('#purchase-cart')
-if (purchaseCartElement !== null) {
-  render(
-    <Provider store={productAndCartStore}>
-      <PurchaseCartComponent/>
-    </Provider>,
-    purchaseCartElement
-  )
-
-  const stripeElement = document.querySelector('#stripe-component')
-  render(
-    <Provider store={productAndCartStore}>
-      <StripeComponent publicKey={stripeElement.dataset.publicKey} successUrl={stripeElement.dataset.successUrl}/>
-    </Provider>,
-    stripeElement)
-}
-

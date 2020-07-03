@@ -92,7 +92,7 @@ class CategoryService
                         $imageElement
                     </a>
                     <div class="media-body">
-                        <h2><a href="{$this->getShowUrl($parentCategory)}">{$parentCategory->getLabel()}</a></h2>
+                        <h2 class="media-title"><a href="{$this->getShowUrl($parentCategory)}">{$parentCategory->getLabel()}</a></h2>
                         {$this->generateHtml($children, false)}
                     </div>
                 </div>
