@@ -17,7 +17,7 @@ function ProductComponent ({ product, currency, columns }) {
       <div className='product-text'>
         {product.excerpt}
 
-        <p>
+        <p className="product-price">
           {Translation.get('From')} <span className='badge badge-secondary'>
                 {Str.toLocaleCurrency(product.minUnitPriceIncludingTaxes, currency)}
               </span>

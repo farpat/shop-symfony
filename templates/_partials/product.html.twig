@@ -15,7 +15,9 @@
             <a href="{{ url }}">{{ product.label }}</a>
         </h3>
 
-        <p>{% trans %}From{% endtrans %} <span
-                    class="badge badge-secondary">{{ product.minUnitPriceIncludingTaxes | price }}</span></p>
+        <p class="product-price">
+            {% trans %}From{% endtrans %}
+            <span class="badge badge-secondary">{{ product.minUnitPriceIncludingTaxes | price }}</span>
+        </p>
     </div>
 </article>

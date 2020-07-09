@@ -50,7 +50,7 @@ class ModuleFixtures extends Fixture implements OrderedFixtureInterface
         $this->moduleService->createParameter('home', 'categories', [1, 2]);
         $this->moduleService->createParameter('home', 'elements', [
             ['icon'      => 'fas fa-phone',
-             'title'     => 'After-sales service is very professional',
+             'title'     => 'After-sales service',
              'paragraph' => $this->faker->paragraph
             ],
             ['icon' => 'fas fa-truck', 'title' => 'Quick delivery', 'paragraph' => $this->faker->paragraph],

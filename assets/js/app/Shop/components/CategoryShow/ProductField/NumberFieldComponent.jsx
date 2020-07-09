@@ -13,10 +13,11 @@ function NumberFieldComponent ({ productField, updateFilter, filters }) {
 
   return (
     <div className='form-group'>
-      <p className='mb-1'>{productField.label}</p>
+      <label for={filterKeyMin}>{productField.label}</label>
       <div className='row no-gutters'>
         <div className='col'>
           <input
+            id={filterKeyMin}
             name={filterKeyMin} value={getValue(filters, filterKeyMin)}
             onChange={event => changeValue(filterKeyMin, updateFilter, event)}
             className='form-control'
@@ -25,6 +26,7 @@ function NumberFieldComponent ({ productField, updateFilter, filters }) {
         </div>
         <div className='col'>
           <input
+            id={filterKeyMax}
             name={filterKeyMax} value={getValue(filters, filterKeyMax)}
             onChange={event => changeValue(filterKeyMax, updateFilter, event)}
             className='form-control'

@@ -17,16 +17,16 @@
             <div class="container">
                 {{ breadcrumb(breadcrumb) }}
 
-                <div class="row">
+                <div class="category-show-components row">
                     {% if productFieldsInJson is not same as('[]') %}
-                        <div class="col-lg-3">
+                        <div class="product-fields-component-wrapper col-lg-3">
                             <section id="product-fields-component" data-product-fields="{{ productFieldsInJson }}">
                             </section>
                         </div>
                     {% endif %}
 
                     {% if productsInJson is not same as('[]') %}
-                        <div class="col-lg">
+                        <div class="products-component-wrapper col-lg">
                             <section id="products-component" data-products="{{ productsInJson }}"
                                      data-current-page="{{ currentPage }}" data-per-page="{{ perPage }}"
                                      data-columns="{{ productFieldsInJson is not same as('[]') ? 4 : 3 }}">

@@ -6,8 +6,9 @@ import { changeValue, getValue } from './ProductField'
 function StringFieldComponent ({ productField, updateFilter, filters }) {
   return (
     <div className='form-group'>
-      <p className='mb-1'>{productField.label}</p>
+      <label for={productField.key}>{productField.label}</label>
       <input
+        id={productField.key}
         name={productField.key} type='text'
         value={getValue(filters, productField.key)}
         onChange={event => changeValue(productField.key, updateFilter, event)}

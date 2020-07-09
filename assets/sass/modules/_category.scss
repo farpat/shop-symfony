@@ -30,6 +30,7 @@
 
 .header-category-show {
   position: relative;
+  min-height: 7rem;
 
   img {
     width: 100%;
@@ -45,17 +46,27 @@
   }
 }
 
+.category-index {
+  margin-top: 1rem;
+}
+
 .category-show {
   margin: 1rem 0;
 
   .page-link:focus {
     box-shadow: none;
   }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .category-media {
   .media {
     display: flex;
+    margin: 1rem 0;
   }
 
   .media-link {
