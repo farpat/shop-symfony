@@ -5,34 +5,38 @@
 {% block script 'category-show' %}
 
 {% block body %}
-    <main class="container">
-        {{ breadcrumb(breadcrumb) }}
-
+    <main>
         <section class="header-category-show">
             {% if category.image %}
                 <img src="{{ category.image.url }}" alt="{{ category.image.alt }}">
             {% endif %}
-
             <h1>{{ category.label }}</h1>
         </section>
 
-        <section id="category-show" class="row">
-            {% if productFieldsInJson != '[]' %}
-                <div class="col-lg-3">
-                    <section id="product-fields-component" data-product-fields="{{ productFieldsInJson }}"></section>
-                </div>
-            {% endif %}
+        <section class="category-show">
+            <div class="container">
+                {{ breadcrumb(breadcrumb) }}
 
-            {% if productsInJson != '[]' %}
-                <div class="col-lg">
-                    <section id="products-component" data-products="{{ productsInJson }}"
-                             data-current-page="{{ currentPage }}" data-per-page="{{ perPage }}"
-                             data-columns="{{ productFieldsInJson != '[]' ? 4 : 3 }}">
-                    </section>
+                <div class="row">
+                    {% if productFieldsInJson is not same as('[]') %}
+                        <div class="col-lg-3">
+                            <section id="product-fields-component" data-product-fields="{{ productFieldsInJson }}">
+                            </section>
+                        </div>
+                    {% endif %}
+
+                    {% if productsInJson is not same as('[]') %}
+                        <div class="col-lg">
+                            <section id="products-component" data-products="{{ productsInJson }}"
+                                     data-current-page="{{ currentPage }}" data-per-page="{{ perPage }}"
+                                     data-columns="{{ productFieldsInJson is not same as('[]') ? 4 : 3 }}">
+                            </section>
+                        </div>
+                    {% else %}
+                        <p>{% trans %}Sorry! No products found{% endtrans %}</p>
+                    {% endif %}
                 </div>
-            {% else %}
-                <p>{% trans %}Sorry! No products found{% endtrans %}</p>
-            {% endif %}
+            </div>
         </section>
     </main>
 {% endblock %}

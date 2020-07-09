@@ -1,15 +1,15 @@
 {% set elements = parameter('home', 'elements') %}
 
 {% if elements is not empty %}
-    <section class="home-section elements row">
-        {% for element in elements %}
-            <div class="col">
+    <section class="home-section elements">
+        <div class="container">
+            {% for element in elements %}
                 <div class="element">
+                    <h3 class="element-title">{{ element.title }}</h3>
                     <i class="element-icon {{ element.icon }}"></i>
-                    <h3>{{ element.title }}</h3>
-                    <p>{{ element.paragraph ?? '' }}</p>
+                    <p class="element-paragraph">{{ element.paragraph ?? '' }}</p>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </section>
 {% endif %}

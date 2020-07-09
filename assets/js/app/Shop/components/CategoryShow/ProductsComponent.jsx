@@ -17,7 +17,7 @@ function ProductsComponent ({ products, currentPage, perPage }) {
   return (
     <div className="products-components">
       <ProductsNavigation/>
-      <div className="row">
+      <div className="products-category">
         {
           productsToDisplay.length === 0 ?
             <p>{Translation.get('Sorry! There are no products')}</p> :

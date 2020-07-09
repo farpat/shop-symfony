@@ -1,4 +1,15 @@
 .home-section {
-  margin-bottom: 2rem;
-}
+  padding: 5rem 0;
 
+  &.slides {
+    padding: 0;
+  }
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  &:nth-child(odd) {
+    background-color: $light;
+  }
+}

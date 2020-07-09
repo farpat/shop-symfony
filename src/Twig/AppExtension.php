@@ -2,7 +2,9 @@
 
 namespace App\Twig;
 
+use App\Services\ModuleService;
 use App\Services\NavigationService;
+use App\Services\Support\Str;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -10,6 +12,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
@@ -18,15 +21,21 @@ class AppExtension extends AbstractExtension
     private UrlGeneratorInterface $urlGenerator;
     private NavigationService     $navigationService;
     private ParameterBagInterface $parameterBag;
+    /**
+     * @var ModuleService
+     */
+    private ModuleService $moduleService;
 
     public function __construct(
         ParameterBagInterface $parameterBag,
         UrlGeneratorInterface $urlGenerator,
-        NavigationService $navigationService
+        NavigationService $navigationService,
+        ModuleService $moduleService
     ) {
         $this->urlGenerator = $urlGenerator;
         $this->navigationService = $navigationService;
         $this->parameterBag = $parameterBag;
+        $this->moduleService = $moduleService;
     }
 
     public function getFunctions(): array
@@ -36,6 +45,21 @@ class AppExtension extends AbstractExtension
             new TwigFunction('breadcrumb', [$this, 'getBreadcrumb'], ['is_safe' => ['html']]),
             new TwigFunction('active', [$this, 'isActive']),
         ];
+    }
+
+    public function getFilters(): array
+    {
+        return [
+            new TwigFilter('price', [$this, 'getPrice']),
+        ];
+    }
+
+    public function getPrice(float $price)
+    {
+        return Str::getFormattedPrice(
+            $this->moduleService->getParameter('billing', 'currency')->getValue(),
+            $price
+        );
     }
 
     public function isActive(Request $request, string $route): string

@@ -4,24 +4,17 @@ import { connect } from 'react-redux'
 import range from 'lodash/range'
 import Translation from '../../../../../src/Translation'
 
+const getPages = function (products, perPage) {
+  const pagesCount = Math.ceil(products.length / perPage)
+  if (pagesCount === 0) {
+    return []
+  }
+  return range(1, pagesCount + 1)
+}
+
 function ProductsNavigation ({ goTo, products, perPage, currentPage }) {
-  const getPages = function () {
-    const pagesCount = Math.ceil(products.length / perPage)
-    if (pagesCount === 0) {
-      return []
-    }
-    return range(1, pagesCount + 1)
-  }
-
-  const pages = getPages()
-
-  const getNavClass = function (pages) {
-    if (pages.length === 0) {
-      return 'd-none'
-    }
-
-    return 'mt-2'
-  }
+  const pages = getPages(products, perPage)
+  const currentUrl = window.location.href
 
   const getPreviousItemClass = function () {
     let className = 'page-item'
@@ -52,33 +45,50 @@ function ProductsNavigation ({ goTo, products, perPage, currentPage }) {
 
   const handleGoToPage = function (event, page) {
     event.preventDefault()
-    goTo(page)
+    if (page !== currentPage) {
+      goTo(page)
+    }
   }
 
-  return (
-    <nav aria-label="Product pagination" className={getNavClass(pages)}>
-      <ul className="pagination">
-        <li className={getPreviousItemClass()}>
-          <a href="#" onClick={(event) => handleGoToPage(event, currentPage - 1)} className='page-link'>
-            &larr; {Translation.get('previous')}
-          </a>
-        </li>
-        {
-          pages.map(page =>
-            <li className={getItemClass(page)} key={page}>
-              <a href='#' onClick={(event) => handleGoToPage(event, page)} className='page-link'>
-                {page}
-              </a>
-            </li>)
-        }
-        <li className={getNextItemClass()}>
-          <a href="#" onClick={(event) => handleGoToPage(event, currentPage + 1)} className='page-link'>
-            {Translation.get('next')} &rarr;
-          </a>
-        </li>
-      </ul>
-    </nav>
-  )
+  const getHref = function (page) {
+    const regex = /&page=\d+$/
+
+    if (page > 1) {
+      const queryString = `&page=${page}`
+      return regex.test(currentUrl) ? currentUrl.replace(regex, queryString) : `${currentUrl}${queryString}`
+    } else {
+      return currentUrl.replace(regex, '')
+    }
+  }
+
+  if (pages.length === 0) {
+    return null
+  }
+
+  return <nav aria-label="Product pagination">
+    <ul className="pagination">
+      <li className={getPreviousItemClass()}>
+        <a href={getHref(currentPage - 1)} onClick={(event) => handleGoToPage(event, currentPage - 1)}
+           className='page-link'>
+          &larr; {Translation.get('previous')}
+        </a>
+      </li>
+      {
+        pages.map(page =>
+          <li className={getItemClass(page)} key={page}>
+            <a href={getHref(page)} onClick={(event) => handleGoToPage(event, page)} className='page-link'>
+              {page}
+            </a>
+          </li>)
+      }
+      <li className={getNextItemClass()}>
+        <a href={getHref(currentPage + 1)} onClick={(event) => handleGoToPage(event, currentPage + 1)}
+           className='page-link'>
+          {Translation.get('next')} &rarr;
+        </a>
+      </li>
+    </ul>
+  </nav>
 }
 
 ProductsNavigation.propTypes = {

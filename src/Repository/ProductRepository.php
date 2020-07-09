@@ -27,9 +27,10 @@ class ProductRepository extends ServiceEntityRepository
     public function getProductsInHome($ids): array
     {
         return $this->createQueryBuilder('p')
-            ->select('p', 'mainImage', 'category')
+            ->select('p', 'mainImage', 'category', 'productReferences')
             ->leftJoin('p.category', 'category')
             ->leftJoin('p.mainImage', 'mainImage')
+            ->leftJoin('p.productReferences', 'productReferences')
             ->where('p.id IN (:ids)')
             ->setParameter('ids', $ids)
             ->getQuery()

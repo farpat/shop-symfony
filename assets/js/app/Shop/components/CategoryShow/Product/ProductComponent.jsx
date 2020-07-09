@@ -5,34 +5,26 @@ import Str from '../../../../../src/Str'
 import Translation from '../../../../../src/Translation'
 
 function ProductComponent ({ product, currency, columns }) {
-  const getWrapperClassName = function () {
-    return `col-md-${columns} mb-3`
-  }
+  return <article className='product'>
+    {
+      product.image &&
+      <a href={product.url}>
+        <img src={product.image.urlThumbnail} alt={product.image.altThumbnail} className='product-img-top'/>
+      </a>
+    }
+    <div className='product-body'>
+      <h3 className='product-title'><a href={product.url}>{product.label}</a></h3>
+      <div className='product-text'>
+        {product.excerpt}
 
-  return (
-    <div className={getWrapperClassName()}>
-      <article className='card product'>
-        {
-          product.image &&
-          <a href={product.url}>
-            <img src={product.image.urlThumbnail} alt={product.image.altThumbnail} className='card-img-top'/>
-          </a>
-        }
-        <div className='card-body'>
-          <h3 className='card-title'><a href={product.url}>{product.label}</a></h3>
-          <div className='card-text'>
-            {product.excerpt}
-
-            <p className='mt-2 m-0'>
-              {Translation.get('From')} <span className='badge badge-secondary'>
+        <p>
+          {Translation.get('From')} <span className='badge badge-secondary'>
                 {Str.toLocaleCurrency(product.minUnitPriceIncludingTaxes, currency)}
               </span>
-            </p>
-          </div>
-        </div>
-      </article>
+        </p>
+      </div>
     </div>
-  )
+  </article>
 }
 
 ProductComponent.propTypes = {

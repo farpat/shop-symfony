@@ -4,15 +4,18 @@
     categoryId: product.category.id,
     categorySlug: product.category.slug,
 }) %}
-<article class="card product">
+<article class="product">
     {% if product.mainImage %}
         <a href="{{ url }}">
-            <img src="{{ product.mainImage.urlThumbnail }}" class="card-img-top" alt="{{ product.label }}">
+            <img src="{{ product.mainImage.urlThumbnail }}" class="product-img-top" alt="{{ product.label }}">
         </a>
     {% endif %}
-    <div class="card-body">
-        <h3 class="card-title">
+    <div class="product-body">
+        <h3 class="product-title">
             <a href="{{ url }}">{{ product.label }}</a>
         </h3>
+
+        <p>{% trans %}From{% endtrans %} <span
+                    class="badge badge-secondary">{{ product.minUnitPriceIncludingTaxes | price }}</span></p>
     </div>
 </article>

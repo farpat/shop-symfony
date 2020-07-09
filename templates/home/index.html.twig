@@ -3,8 +3,6 @@
 {% block title %}Shop{% endblock %}
 
 {% block body %}
-    <div id="test"></div>
-
     <div class="container">
         {% for message in app.flashes('success') %}
             {% include '_partials/alert.html.twig' with {'message': message} %}
@@ -13,10 +11,10 @@
         {% for message in app.flashes('error') %}
             {% include '_partials/alert.html.twig' with {'type':'danger','message': message} %}
         {% endfor %}
-
-
-        {% for element in elementsToDisplayInHomepage %}
-            {% include 'home/index_partials/' ~ element ~'.html.twig' %}
-        {% endfor %}
     </div>
+
+
+    {% for element in elementsToDisplayInHomepage %}
+        {% include 'home/index_partials/' ~ element ~'.html.twig' %}
+    {% endfor %}
 {% endblock %}

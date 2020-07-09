@@ -1,30 +1,36 @@
+.elements .container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+
+  @media all and (max-width: map-get($grid-breakpoints, "md")) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .element {
-  border: 1px solid rgba($black, 0.1);
-  border-radius: $border-radius;
   text-align: center;
   padding: 1.5rem 1rem;
   height: 100%;
   transition: box-shadow 0.3s;
+}
 
-  &:hover {
-    box-shadow: 0px 10px 8px -4px rgba($black, 0.1);
-  }
+.element-title {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
 
-  h3 {
-    margin-top: 0.5rem;
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-  }
-
-  p {
-    color: rgba($black, 0.4);
-    font-style: italic;
-    margin: 0;
-  }
+.element-paragraph {
+  color: rgba($black, 0.6);
+  font-style: italic;
+  margin: 0;
 }
 
 .element-icon {
   font-size: 3rem;
-  display: block;
-  margin: 0;
+  margin-bottom: 1rem;
+  background: rgba($black, 0.05);
+  padding: 1.5rem;
+  border-radius: 50%;
 }
