@@ -4,65 +4,67 @@ import ReferenceSliderComponent from './ReferenceSliderComponent'
 import Str from '../../../../../src/Str'
 import { connect } from 'react-redux'
 import Requestor from '@farpat/api'
+import Translation from '../../../../../src/Translation'
 
 function ProductReferenceComponent ({ currentReference, currency, isLoading, quantities, cartItems, updateQuantity, addInCart }) {
   const getQuantity = function (reference) {
     return quantities[reference.id] || 1
   }
 
-  const getCartItem = function (reference) {
-    return cartItems[reference.id]
-  }
+  const currentCartItem = cartItems[currentReference.id]
 
   const isCurrentLoading = function (reference) {
     const isCurrentLoading = isLoading[reference.id]
-    return isCurrentLoading !== undefined ? isLoading : false
+    return isCurrentLoading !== undefined ? isCurrentLoading : false
   }
 
   return (
     <article className="row">
       {
         currentReference.mainImage &&
-        <div className="col-md-8">
+        <div className="col-md-8 reference-slider">
           <ReferenceSliderComponent
             currentReference={currentReference}
           />
         </div>
       }
-      <div className="col-md">
-        <ul className="list-unstyled">
-          <li className="mb-5">
-            {
-              Str.toLocaleCurrency(currentReference.unitPriceIncludingTaxes, currency)
-            }
-          </li>
-          <li>
-            {
-              getCartItem(currentReference) ?
-                <div>Already in cart, quantity : {getCartItem(currentReference).quantity}</div> :
-                <div>
-                  Quantity: &nbsp;
-                  <input
-                    type="number" min="1" className="cart-item-quantity"
-                    value={getQuantity(currentReference)}
-                    onChange={event => updateQuantity(currentReference, Number.parseInt(event.target.value))}
-                  />
-
-
-                  {
-                    isCurrentLoading(currentReference) ?
-                      <button className="btn btn-primary btn-sm ml-3" disabled>
-                        <i className="fa fa-shopping-cart"/> Loading ...
-                      </button> :
-                      <button className="btn btn-primary btn-sm ml-3"
-                              onClick={() => addInCart(currentReference, getQuantity(currentReference))}>
-                        <i className="fa fa-shopping-cart"/> Add in cart
-                      </button>
-                  }
-                </div>
-            }
-          </li>
-        </ul>
+      <div className="col-md reference-details-wrapper">
+        <div className="reference-addtocart">
+          {
+            currentCartItem ?
+              <>
+                <input
+                  type="number" min="1" className="cart-item-quantity"
+                  value={currentCartItem.quantity} readOnly
+                />
+                <button className="btn btn-primary" disabled>
+                  {Translation.get('Added')}
+                </button>
+              </> :
+              <>
+                <input
+                  type="number" min="1" className="cart-item-quantity"
+                  value={getQuantity(currentReference)}
+                  onChange={event => updateQuantity(currentReference, Number.parseInt(event.target.value))}
+                />
+                {
+                  isCurrentLoading(currentReference) ?
+                    <button className="btn btn-primary" disabled>
+                      <i className="fa fa-shopping-cart"/> Loading ...
+                    </button> :
+                    <button className="btn btn-primary"
+                            onClick={() => addInCart(currentReference, getQuantity(currentReference))}>
+                      <i className="fa fa-shopping-cart"/> {Translation.get('Add to cart')}
+                    </button>
+                }
+              </>
+          }
+        </div>
+        <div className="reference-price">
+          {
+            Str.toLocaleCurrency(currentReference.unitPriceIncludingTaxes, currency)
+          }
+        </div>
       </div>
     </article>
   )
@@ -70,18 +72,9 @@ function ProductReferenceComponent ({ currentReference, currency, isLoading, qua
 
 // noinspection JSDeprecatedSymbols
 ProductReferenceComponent.propTypes = {
-  currentReference: PropTypes.shape({
-    id                     : PropTypes.number.isRequired,
-    label                  : PropTypes.string.isRequired,
-    mainImage              : PropTypes.shape({
-      urlThumbnail: PropTypes.string.isRequired,
-      altThumbnail: PropTypes.string.isRequired
-    }),
-    unitPriceIncludingTaxes: PropTypes.number.isRequired
-  }),
-  currency        : PropTypes.string.isRequired,
-  quantities      : PropTypes.object.isRequired,
-  cartItems       : PropTypes.object.isRequired,
+  quantities: PropTypes.object.isRequired,
+  isLoading : PropTypes.object.isRequired,
+  cartItems : PropTypes.object.isRequired,
 
   updateQuantity: PropTypes.func.isRequired,
   addInCart     : PropTypes.func.isRequired

@@ -11,10 +11,7 @@ function ProductComponent ({ currency, currentReference }) {
     <>
       <ReferenceNavComponent/>
 
-      <ProductReferenceComponent
-        currentReference={currentReference}
-        currency={currency}
-      />
+      <ProductReferenceComponent currentReference={currentReference} currency={currency}/>
     </>
   )
 }

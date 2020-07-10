@@ -13,7 +13,7 @@ function NumberFieldComponent ({ productField, updateFilter, filters }) {
 
   return (
     <div className='form-group'>
-      <label for={filterKeyMin}>{productField.label}</label>
+      <label htmlFor={filterKeyMin}>{productField.label}</label>
       <div className='row no-gutters'>
         <div className='col'>
           <input

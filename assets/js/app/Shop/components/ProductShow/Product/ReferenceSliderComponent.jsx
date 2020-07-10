@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
 
 function ReferenceSliderComponent ({ currentReference }) {
   const [activatedIndex, setActivatedIndex] = useState(0)
 
   const getId = function () {
     return `carousel-reference-${currentReference.id}`
-  }
-
-  const getTarget = function () {
-    return '#' + getId()
   }
 
   useEffect(() => {
@@ -21,9 +16,9 @@ function ReferenceSliderComponent ({ currentReference }) {
       setActivatedIndex(event.to)
     }
 
-    $(getTarget()).on('slid.bs.carousel', updateActivatedIndex)
+    $('#' + getId()).on('slid.bs.carousel', updateActivatedIndex)
 
-    return () => $(getTarget()).off('slid.bs.carousel', updateActivatedIndex)
+    return () => $('#' + getId()).off('slid.bs.carousel', updateActivatedIndex)
   }, [currentReference])
 
   return (
@@ -42,11 +37,11 @@ function ReferenceSliderComponent ({ currentReference }) {
         {
           currentReference.images.length > 1 &&
           <>
-            <a href={getTarget()} className='carousel-control-prev' data-slide='prev' role='button'>
+            <a href={'#' + getId()} className='carousel-control-prev' data-slide='prev' role='button'>
               <span aria-hidden='true' className='carousel-control-prev-icon'/>
               <span className='sr-only'>Previous</span>
             </a>
-            <a href={getTarget()} className='carousel-control-next' data-slide='next' role='button'>
+            <a href={'#' + getId()} className='carousel-control-next' data-slide='next' role='button'>
               <span aria-hidden='true' className='carousel-control-next-icon'/>
               <span className='sr-only'>Next</span>
             </a>
@@ -58,7 +53,7 @@ function ReferenceSliderComponent ({ currentReference }) {
         <ol className='carousel-indicators carousel-product-indicators'>
           {
             currentReference.images.map((image, index) =>
-              <li className={activatedIndex === index ? 'active' : ''} data-slide-to={index} data-target={getTarget()}
+              <li className={activatedIndex === index ? 'active' : ''} data-slide-to={index} data-target={'#' + getId()}
                   key={index}>
                 <img src={image.urlThumbnail} alt={image.altThumbnail}/>
               </li>
