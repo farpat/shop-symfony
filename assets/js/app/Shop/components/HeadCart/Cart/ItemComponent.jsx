@@ -46,10 +46,9 @@ function ItemComponent ({ item, currency, updateItemQuantity, isLoading, deleteI
     <td className="header-cart-item-td-icon">
       {
         isCurrentLoading() ?
-          <span><i className="fas fa-spinner spinner"></i></span>
-          :
+          <span><i className="fas fa-spinner spinner"/></span> :
           <button className="btn-link" type="button" onClick={() => deleteItem(item.reference)}>
-            <i className="fas fa-times"></i>
+            <i className="fas fa-times"/>
           </button>
       }
     </td>

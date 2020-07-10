@@ -25,36 +25,34 @@ function ItemComponent ({ item, currency, updateItemQuantity, isLoading, deleteI
 
   const isCurrentLoading = function () {
     const isCurrentLoading = isLoading[item.reference.id]
-    return isCurrentLoading !== undefined ? isLoading : false
+    return isCurrentLoading !== undefined ? isCurrentLoading : false
   }
 
-  return (
-    <tr className="header-cart-item">
-      <td>
-        <input type="number" className="cart-item-quantity" value={item.quantity} onChange={changeQuantity}/>
-      </td>
-      <td className="header-cart-item-td-label">
-        {
-          item.reference.mainImage &&
-          <img src={item.reference.mainImage.urlThumbnail} alt={item.reference.mainImage.altThumbnail} width={72}
-               className='mr-2'/>
-        }
-        <a href={item.reference.url} onClick={goToReference}>{item.reference.label}</a>
-      </td>
-      <td>
-        {Str.toLocaleCurrency(item.reference.unitPriceIncludingTaxes, currency)}
-      </td>
-      <td className="header-cart-item-td-icon">
-        {
-          isCurrentLoading() ?
-            <span><i className="fas fa-spinner spinner"></i></span> :
-            <button className="btn-link" type="button" onClick={() => deleteItem(item.reference)}>
-              <i className="fas fa-times"></i>
-            </button>
-        }
-      </td>
-    </tr>
-  )
+  return <tr className="header-cart-item">
+    <td>
+      <input type="number" className="cart-item-quantity" value={item.quantity} onChange={changeQuantity}/>
+    </td>
+    <td className="header-cart-item-td-label">
+      {
+        item.reference.mainImage &&
+        <img src={item.reference.mainImage.urlThumbnail} alt={item.reference.mainImage.altThumbnail} width={72}
+             className='mr-2'/>
+      }
+      <a href={item.reference.url} onClick={goToReference}>{item.reference.label}</a>
+    </td>
+    <td>
+      {Str.toLocaleCurrency(item.reference.unitPriceIncludingTaxes, currency)}
+    </td>
+    <td className="header-cart-item-td-icon">
+      {
+        isCurrentLoading() ?
+          <span><i className="fas fa-spinner spinner"/></span> :
+          <button className="btn-link" type="button" onClick={() => deleteItem(item.reference)}>
+            <i className="fas fa-times"/>
+          </button>
+      }
+    </td>
+  </tr>
 }
 
 ItemComponent.propTypes = {
