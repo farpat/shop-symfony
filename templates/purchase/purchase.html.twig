@@ -17,10 +17,10 @@
         <h1>{% trans %}Purchase{% endtrans %}</h1>
 
         <div class="row paypal-row">
-            <section id="purchase-cart" class="col-md">
+            <section id="purchase-cart" class="col-lg">
             </section>
 
-            <section class="col-md-4">
+            <section class="col-lg-4">
                 <h2>{% trans %}Payment by credit card{% endtrans %}</h2>
                 <div id="stripe-component" data-public-key="{{ stripePublicKey }}"
                      data-success-url="{{ successfulPaymentUrl }}"></div>

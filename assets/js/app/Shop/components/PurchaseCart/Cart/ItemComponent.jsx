@@ -48,7 +48,7 @@ function ItemComponent ({ item, currency, updateItemQuantity, isLoading, deleteI
         {
           isCurrentLoading() ?
             <span><i className="fas fa-spinner spinner"></i></span> :
-            <button className="btn btn-sm p-0" type="button" onClick={() => deleteItem(item.reference)}>
+            <button className="btn-link" type="button" onClick={() => deleteItem(item.reference)}>
               <i className="fas fa-times"></i>
             </button>
         }

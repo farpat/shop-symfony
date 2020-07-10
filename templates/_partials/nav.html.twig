@@ -32,15 +32,15 @@
                 {% endif %}
 
                 {% if not app.user %}
-                    <li class="nav-item mr-2">
-                        <a class="btn btn-outline-info"
+                    <li class="nav-item nav-item-buttons">
+                        <a class="btn btn-register"
                            href="{{ path('app_auth_register') }}">{% trans %}Register{% endtrans %}</a>
-                        <a class="btn btn-link text-info"
+                        <a class="btn btn-login"
                            href="{{ path('app_auth_security_login') }}">{% trans %}Login{% endtrans %}</a>
                     </li>
                 {% endif %}
 
-                <li id="cart-nav" class="nav-item"
+                <li id="cart-nav" class="nav-item nav-item-cart"
                     data-cart-items="{{ CartManager.items | json_encode(constant('JSON_FORCE_OBJECT')) }}"
                     data-purchase-url="{{ path('app_front_purchase_purchase') }}"
                     data-currency="{{ parameter('billing', 'currency').code }}">

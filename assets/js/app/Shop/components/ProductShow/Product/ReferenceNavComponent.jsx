@@ -4,6 +4,10 @@ import PropTypes from 'prop-types'
 import ReferenceNavItemComponent from './ReferenceNavItemComponent'
 
 function ReferenceNavComponent ({ references }) {
+  if (references.length <= 1) {
+    return null
+  }
+
   return (
     <nav className='nav-product-reference'>
       {

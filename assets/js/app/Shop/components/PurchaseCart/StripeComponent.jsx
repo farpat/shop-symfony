@@ -7,7 +7,7 @@ import Translation from '../../../../src/Translation'
 import PropTypes from 'prop-types'
 import Requestor from '@farpat/api'
 
-function StripeComponent ({ items, currency, publicKey, successUrl }) {
+function StripeComponent ({ cartItems, currency, publicKey, successUrl }) {
   const [isPaying, setIsPaying] = useState(false)
   const [error, setError] = useState('')
 
@@ -69,7 +69,7 @@ function StripeComponent ({ items, currency, publicKey, successUrl }) {
     return className
   }
 
-  const { totalPriceIncludingTaxes } = CartService.getPrices(items)
+  const { totalPriceIncludingTaxes } = CartService.getPrices(cartItems)
 
   return (
     <div>
@@ -90,7 +90,7 @@ function StripeComponent ({ items, currency, publicKey, successUrl }) {
 }
 
 StripeComponent.propTypes = {
-  items     : PropTypes.objectOf(PropTypes.shape({
+  cartItems : PropTypes.objectOf(PropTypes.shape({
     quantity: PropTypes.number.isRequired,
 
     reference: PropTypes.shape({

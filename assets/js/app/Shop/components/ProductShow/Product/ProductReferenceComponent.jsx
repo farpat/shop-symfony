@@ -37,7 +37,7 @@ function ProductReferenceComponent ({ currentReference, currency, isLoading, qua
                   type="number" min="1" className="cart-item-quantity"
                   value={currentCartItem.quantity} readOnly
                 />
-                <button className="btn btn-primary" disabled>
+                <button disabled>
                   {Translation.get('Added')}
                 </button>
               </> :
@@ -49,11 +49,10 @@ function ProductReferenceComponent ({ currentReference, currency, isLoading, qua
                 />
                 {
                   isCurrentLoading(currentReference) ?
-                    <button className="btn btn-primary" disabled>
+                    <button disabled>
                       <i className="fa fa-shopping-cart"/> Loading ...
                     </button> :
-                    <button className="btn btn-primary"
-                            onClick={() => addInCart(currentReference, getQuantity(currentReference))}>
+                    <button onClick={() => addInCart(currentReference, getQuantity(currentReference))}>
                       <i className="fa fa-shopping-cart"/> {Translation.get('Add to cart')}
                     </button>
                 }

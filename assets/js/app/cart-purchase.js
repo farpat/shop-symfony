@@ -1,6 +1,7 @@
 import productAndCartStore from './Shop/services/ProductAndCartStore'
 import PurchaseCartComponent from './Shop/components/PurchaseCart/CartComponent'
 import StripeComponent from './Shop/components/PurchaseCart/StripeComponent'
+import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 
