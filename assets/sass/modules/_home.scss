@@ -10,6 +10,6 @@
   }
 
   &:nth-child(odd) {
-    background-color: $light;
+    background-color: lighten($primary, 45%);
   }
 }

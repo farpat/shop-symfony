@@ -5,7 +5,7 @@ import Str from '../../../../../src/Str'
 import { connect } from 'react-redux'
 import Requestor from '@farpat/api'
 
-function ProductReferenceComponent ({ currentReference, currency, activatedSliderIndexByReference, isLoading, quantities, cartItems, updateQuantity, addInCart }) {
+function ProductReferenceComponent ({ currentReference, currency, isLoading, quantities, cartItems, updateQuantity, addInCart }) {
   const getQuantity = function (reference) {
     return quantities[reference.id] || 1
   }
@@ -26,7 +26,6 @@ function ProductReferenceComponent ({ currentReference, currency, activatedSlide
         <div className="col-md-8">
           <ReferenceSliderComponent
             currentReference={currentReference}
-            activatedIndexByReference={activatedSliderIndexByReference}
           />
         </div>
       }
@@ -71,7 +70,7 @@ function ProductReferenceComponent ({ currentReference, currency, activatedSlide
 
 // noinspection JSDeprecatedSymbols
 ProductReferenceComponent.propTypes = {
-  currentReference               : PropTypes.shape({
+  currentReference: PropTypes.shape({
     id                     : PropTypes.number.isRequired,
     label                  : PropTypes.string.isRequired,
     mainImage              : PropTypes.shape({
@@ -80,10 +79,9 @@ ProductReferenceComponent.propTypes = {
     }),
     unitPriceIncludingTaxes: PropTypes.number.isRequired
   }),
-  currency                       : PropTypes.string.isRequired,
-  activatedSliderIndexByReference: PropTypes.object.isRequired,
-  quantities                     : PropTypes.object.isRequired,
-  cartItems                      : PropTypes.object.isRequired,
+  currency        : PropTypes.string.isRequired,
+  quantities      : PropTypes.object.isRequired,
+  cartItems       : PropTypes.object.isRequired,
 
   updateQuantity: PropTypes.func.isRequired,
   addInCart     : PropTypes.func.isRequired
@@ -91,10 +89,9 @@ ProductReferenceComponent.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    activatedSliderIndexByReference: state.product.activatedSliderIndexByReference,
-    quantities                     : state.cart.quantities,
-    isLoading                      : state.cart.quantitiesInLoading,
-    cartItems                      : state.cart.cartItems
+    quantities: state.cart.quantities,
+    isLoading : state.cart.quantitiesInLoading,
+    cartItems : state.cart.cartItems
   }
 }
 

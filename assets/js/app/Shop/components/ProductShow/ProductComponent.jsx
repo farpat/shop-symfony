@@ -6,15 +6,16 @@ import ReferenceNavComponent from './Product/ReferenceNavComponent'
 import ProductReferenceComponent from './Product/ProductReferenceComponent'
 
 function ProductComponent ({ currency, currentReference }) {
+
   return (
-    <div>
+    <>
       <ReferenceNavComponent/>
 
       <ProductReferenceComponent
         currentReference={currentReference}
         currency={currency}
       />
-    </div>
+    </>
   )
 }
 

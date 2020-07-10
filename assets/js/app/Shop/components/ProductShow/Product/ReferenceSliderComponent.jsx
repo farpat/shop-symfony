@@ -1,31 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-function ReferenceSliderComponent ({ currentReference, activatedIndexByReference, changeActivatedIndex }) {
+function ReferenceSliderComponent ({ currentReference }) {
+  const [activatedIndex, setActivatedIndex] = useState(0)
 
   const getId = function () {
     return `carousel-reference-${currentReference.id}`
-  }
-
-  const getItemClass = function (index) {
-    let className = 'carousel-item'
-
-    if (index === getActivatedIndex()) {
-      className += ' active'
-    }
-    return className
-  }
-
-  const getIndicatorClass = function (index) {
-    if (index === getActivatedIndex()) {
-      return 'active'
-    }
-    return ''
-  }
-
-  const getActivatedIndex = function () {
-    return activatedIndexByReference[currentReference.id] || 0
   }
 
   const getTarget = function () {
@@ -33,57 +14,64 @@ function ReferenceSliderComponent ({ currentReference, activatedIndexByReference
   }
 
   useEffect(() => {
-    $(getTarget()).on('slid.bs.carousel', event => changeActivatedIndex(currentReference, event.to))
-  })
+    setActivatedIndex(0)
+
+    const updateActivatedIndex = function (event) {
+      event.preventDefault()
+      setActivatedIndex(event.to)
+    }
+
+    $(getTarget()).on('slid.bs.carousel', updateActivatedIndex)
+
+    return () => $(getTarget()).off('slid.bs.carousel', updateActivatedIndex)
+  }, [currentReference])
 
   return (
-    <div id={getId()} className='carousel slide carousel-fade carousel-product' data-ride='carousel'>
-      <div className='carousel-inner'>
-        {
-          currentReference.images.map((image, index) =>
-            <div key={image.id} className={getItemClass(index)}>
-              <img src={image.url} alt={image.alt}/>
-            </div>
-          )
-        }
-      </div>
-
-      {
-        currentReference.images.length > 1 &&
-        <a href={getTarget()} className='carousel-control-prev' data-slide='prev' role='button'>
-          <span aria-hidden='true' className='carousel-control-prev-icon'/>
-          <span className='sr-only'>Previous</span>
-        </a>
-      }
-
-      {
-        currentReference.images.length > 1 &&
-        <a href={getTarget()} className='carousel-control-next' data-slide='next' role='button'>
-          <span aria-hidden='true' className='carousel-control-next-icon'/>
-          <span className='sr-only'>Next</span>
-        </a>
-      }
-      {
-        currentReference.images.length > 1 &&
-        <ol className='carousel-indicators'>
+    <>
+      <div id={getId()} className='carousel slide carousel-fade carousel-product' data-ride='carousel'>
+        <div className='carousel-inner'>
           {
             currentReference.images.map((image, index) =>
-              <li
-                className={getIndicatorClass(index)} data-slide-to={index}
-                data-target={getTarget()} key={index}
-              >
+              <div key={image.id} className={'carousel-item' + (index === activatedIndex ? ' active' : '')}>
+                <img src={image.url} alt={image.alt}/>
+              </div>
+            )
+          }
+        </div>
+
+        {
+          currentReference.images.length > 1 &&
+          <>
+            <a href={getTarget()} className='carousel-control-prev' data-slide='prev' role='button'>
+              <span aria-hidden='true' className='carousel-control-prev-icon'/>
+              <span className='sr-only'>Previous</span>
+            </a>
+            <a href={getTarget()} className='carousel-control-next' data-slide='next' role='button'>
+              <span aria-hidden='true' className='carousel-control-next-icon'/>
+              <span className='sr-only'>Next</span>
+            </a>
+          </>
+        }
+      </div>
+      {
+        currentReference.images.length > 1 &&
+        <ol className='carousel-indicators carousel-product-indicators'>
+          {
+            currentReference.images.map((image, index) =>
+              <li className={activatedIndex === index ? 'active' : ''} data-slide-to={index} data-target={getTarget()}
+                  key={index}>
                 <img src={image.urlThumbnail} alt={image.altThumbnail}/>
               </li>
             )
           }
         </ol>
       }
-    </div>
+    </>
   )
 }
 
 ReferenceSliderComponent.propTypes = {
-  currentReference         : PropTypes.shape({
+  currentReference: PropTypes.shape({
     id                     : PropTypes.number.isRequired,
     label                  : PropTypes.string.isRequired,
     images                 : PropTypes.arrayOf(PropTypes.shape({
@@ -95,23 +83,6 @@ ReferenceSliderComponent.propTypes = {
     })),
     unitPriceIncludingTaxes: PropTypes.number.isRequired
   }),
-  activatedIndexByReference: PropTypes.object.isRequired,
-
-  changeActivatedIndex: PropTypes.func.isRequired
 }
 
-const mapStateToProps = (state) => {
-  return {}
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    changeActivatedIndex: (reference, index) => dispatch({
-      type: 'UPDATE_ACTIVATED_SLIDER_INDEX_BY_REFERENCE',
-      reference,
-      index
-    })
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ReferenceSliderComponent)
+export default ReferenceSliderComponent

@@ -8,18 +8,6 @@ class ProductService {
     this.data = {}
   }
 
-  updateActivatedSliderIndexByReference (reference, sliderIndex) {
-    this.data = {
-      ...this.data,
-      activatedSliderIndexByReference: {
-        ...this.data.activatedSliderIndexByReference,
-        [reference.id]: sliderIndex
-      }
-    }
-
-    return this
-  }
-
   updateReference (newCurrentReference) {
     this.changeHash(newCurrentReference)
 
@@ -50,14 +38,10 @@ class ProductService {
     const productReferences = JSON.parse(productReferencesInString)
     const currentReference = this.getCurrentReferenceFromHash(window.location.hash, productReferences)
 
-    const activatedSliderIndexByReference = {}
-    productReferences.map(reference => activatedSliderIndexByReference[reference.id] = 0)
-
     this.data = {
       productReferences,
       currentReference,
-      currency,
-      activatedSliderIndexByReference
+      currency
     }
   }
 

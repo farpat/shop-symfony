@@ -3,41 +3,33 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 function ReferenceNavItemComponent ({ reference, currentReference, setCurrentReference }) {
-  const getLiClass = function () {
+  const getItemClass = function () {
     let className = 'nav-product-reference-item'
     if (reference === currentReference) {
-      className += ' bg-primary'
+      className += ' selected'
     }
     return className
   }
 
-  const getTitleClass = function () {
-    let className = 'nav-product-reference-item-title'
-    if (reference === currentReference) {
-      className += ' text-white'
-    }
-    return className
+  const getHref = function (reference) {
+    return window.location.href.replace(/(#\d+)$/, `#${reference.id}`)
   }
 
   return (
-    <div className={getLiClass()}>
-      <a
-        className='nav-product-reference-item-container'
-        onClick={(event) => {
-          event.preventDefault()
-          setCurrentReference(reference)
-        }}
-      >
-        {
-          reference.mainImage &&
-          <img
-            src={reference.mainImage.urlThumbnail}
-            alt={reference.mainImage.altThumbnail}
-          />
-        }
-        <h2 className={getTitleClass()}>{reference.label}</h2>
-      </a>
-    </div>
+    <a
+      href={getHref(reference)}
+      className={getItemClass()}
+      onClick={(event) => {
+        event.preventDefault()
+        setCurrentReference(reference)
+      }}
+    >
+      {
+        reference.mainImage && <img className="nav-product-reference-image" src={reference.mainImage.urlThumbnail} alt={reference.mainImage.altThumbnail}/>
+      }
+
+      <h2 className="nav-product-reference-title">{reference.label}</h2>
+    </a>
   )
 }
 
