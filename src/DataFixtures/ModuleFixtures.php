@@ -49,20 +49,40 @@ class ModuleFixtures extends Fixture implements OrderedFixtureInterface
         $this->moduleService->createParameter('home', 'products', [1, 2]);
         $this->moduleService->createParameter('home', 'categories', [1, 2]);
         $this->moduleService->createParameter('home', 'elements', [
-            ['icon'      => 'fas fa-phone',
-             'title'     => 'After-sales service',
-             'paragraph' => $this->faker->paragraph
+            [
+                'icon'      => 'fas fa-phone',
+                'title'     => 'After-sales service',
+                'paragraph' => $this->faker->paragraph
             ],
             ['icon' => 'fas fa-truck', 'title' => 'Quick delivery', 'paragraph' => $this->faker->paragraph],
-            ['icon'      => 'fas fa-hand-holding-usd',
-             'title'     => 'Our prices are honest',
-             'paragraph' => $this->faker->paragraph
+            [
+                'icon'      => 'fas fa-hand-holding-usd',
+                'title'     => 'Our prices are honest',
+                'paragraph' => $this->faker->paragraph
             ],
         ]);
+        //<div>
+        //    </div>
+        //    <div>
+        //    </div>
+        //    <div>
+        //    </div>
         $this->moduleService->createParameter('home', 'carousel', [
-            ['title' => 'Slide 1', 'description' => 'Slide 1', 'img' => 'https://picsum.photos/id/1/1000/400?blur=8'],
-            ['title' => 'Slide 2', 'description' => 'Slide 2', 'img' => 'https://picsum.photos/id/2/1000/400?blur=8'],
-            ['title' => 'Slide 3', 'description' => 'Slide 3', 'img' => 'https://picsum.photos/id/3/1000/400?blur=8'],
+            [
+                'title'       => 'Slide 1',
+                'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. A alias autem, eos, eveniet fuga iste magni maxime minima molestias mollitia neque nisi provident quidem, recusandae repellendus sapiente ut velit veniam.',
+                'img'         => 'https://picsum.photos/id/1/1000/400?blur=3'
+            ],
+            [
+                'title'       => 'Slide 2',
+                'description' => 'Consequatur ea eius eveniet excepturi illum laboriosam non officia praesentium vel, vero. Labore laudantium nisi omnis provident quibusdam? Atque consectetur consequuntur deleniti eum fugiat minus nostrum odit quibusdam quo temporibus.',
+                'img'         => 'https://picsum.photos/id/2/1000/400?blur=3'
+            ],
+            [
+                'title'       => 'Slide 3',
+                'description' => 'Accusantium alias animi asperiores aspernatur commodi corporis culpa cum deleniti distinctio dolores error incidunt ipsam, iure magnam minus nemo, praesentium quasi soluta suscipit unde. Aspernatur dolorum minus modineque sapiente!',
+                'img'         => 'https://picsum.photos/id/3/1000/400?blur=3'
+            ],
         ]);
     }
 

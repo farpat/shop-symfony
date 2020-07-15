@@ -1,20 +1,21 @@
 .form-search-input {
-  min-width: 19rem;
-  @include media-breakpoint-down(sm) {
-    min-width: auto;
-  }
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  padding: 0.25rem 0.5rem;
 }
 
-.form-search {
+.nav-item-search {
   position: relative;
 
   &::after {
+    color: $black;
     content: '\f002';
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     position: absolute;
     top: calc(50% - 0.75rem);
-    right: 0.75rem;
+    right: 1rem;
   }
 
   &.searching {
@@ -25,6 +26,78 @@
   }
 }
 
-.nav-item-buttons {
-  margin-right: 2rem;
+
+.nav-item {
+  margin: 0.5rem 1rem;
+}
+
+.nav-brandlink {
+  margin-left: 0;
+}
+
+.navbar-collapse {
+  display: none;
+
+  &.selected {
+    display: block;
+  }
+}
+
+.navbar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+}
+
+.nav-link-dropdown:after {
+  content: "\f078";
+  font-size: 0.55rem;
+  position: relative;
+  top: -2px;
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+}
+
+.navbar {
+  background-color: lighten($dark, 0.1);
+  color: darken($light, 0.1);
+  display: flex;
+  flex-direction: column;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+
+  .dropdown-item {
+    padding: 0.25rem 0;
+  }
+
+  .btn {
+    align-self: flex-start;
+    margin-left: 1rem;
+  }
+
+  .btn-login {
+    padding-left: 0;
+  }
+
+  .dropdown-menu {
+    display: none;
+    margin-top: 0.5rem;
+    flex-direction: column;
+    background-color: darken($light, 0.1);
+    color: lighten($dark, 0.1);
+    padding: 0.5rem 1rem;
+  }
+
+  .dropdown-menu.selected {
+    display: flex;
+  }
+
+  @media screen and (min-width: map-get($grid-breakpoints, "lg")) {
+
+  }
 }

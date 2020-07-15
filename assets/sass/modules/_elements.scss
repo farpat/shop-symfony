@@ -1,10 +1,10 @@
 .elements .container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 
-  @media all and (max-width: map-get($grid-breakpoints, "md")) {
-    grid-template-columns: repeat(2, 1fr);
+  @media all and (min-width: map-get($grid-breakpoints, "md")) {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -30,5 +30,4 @@
 .element-icon {
   font-size: 3rem;
   margin-bottom: 1rem;
-  padding: 1.5rem;
 }

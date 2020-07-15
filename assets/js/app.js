@@ -1,6 +1,7 @@
-import 'bootstrap'
+// import 'bootstrap'
+import './app/_navbar'
 import './app/_search-form'
-import './app/_cart-management'
+import './app/_navbar'
 
 const script = document.body.dataset.script
 if (script !== '') {

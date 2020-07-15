@@ -113,7 +113,7 @@ class NavigationService
         $url = $this->getUrl($resource);
         $activeClass = $url === $this->currentUrl ? ' active' : '';
 
-        return "<li class=\"nav-item\"><a class=\"nav-link{$activeClass}\" href=\"{$url}\">{$resource->getLabel()}</a></li>";
+        return "<a class=\"nav-item nav-link{$activeClass}\" href=\"{$url}\">{$resource->getLabel()}</a>";
 
     }
 
@@ -165,15 +165,15 @@ class NavigationService
         });
 
         return <<<HTML
-<li class="nav-item dropdown">
-    <button class="nav-link btn btn-link dropdown-toggle" id="dropdown-{$resource->getSlug()}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<div class="nav-item dropdown">
+    <a class="nav-link nav-link-dropdown" href="#" id="dropdown-{$resource->getSlug()}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {$resource->getLabel()}
-    </button>
+    </a>
     
     <div class="dropdown-menu" aria-labelledby="dropdown-{$resource->getSlug()}">
         {$itemsHtml}
     </div>
-</li>
+</div>
 HTML;
     }
 

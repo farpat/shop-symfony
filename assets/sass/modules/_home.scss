@@ -1,15 +1,33 @@
 .home-section {
   padding: 5rem 0;
 
-  &.slides {
-    padding: 0;
-  }
-
   h2 {
     margin-bottom: 1rem;
   }
 
   &:nth-child(odd) {
     background-color: lighten($primary, 45%);
+  }
+}
+
+.home-slide {
+  padding: 0;
+
+  img {
+    width: 100%;
+    max-height: 450px;
+  }
+
+  .carousel-caption {
+    position: absolute;
+    bottom: 2rem;
+    right: 15%;
+    left: 15%;
+    z-index: 10;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    color: #fff;
+    text-align: center;
+    background-color: rgba($black, 0.5);
   }
 }

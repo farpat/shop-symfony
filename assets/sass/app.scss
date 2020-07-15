@@ -11,12 +11,12 @@
 @import "~bootstrap/scss/forms";
 //@import "~bootstrap/scss/buttons";
 @import "~bootstrap/scss/transitions";
-@import "~bootstrap/scss/dropdown";
+//@import "~bootstrap/scss/dropdown";
 @import "~bootstrap/scss/button-group";
 @import "~bootstrap/scss/input-group";
 @import "~bootstrap/scss/custom-forms";
-@import "~bootstrap/scss/nav";
-@import "~bootstrap/scss/navbar";
+//@import "~bootstrap/scss/nav";
+//@import "~bootstrap/scss/navbar";
 //@import "~bootstrap/scss/card";
 @import "~bootstrap/scss/breadcrumb";
 @import "~bootstrap/scss/pagination";
@@ -31,12 +31,14 @@
 @import "~bootstrap/scss/modal";
 @import "~bootstrap/scss/tooltip";
 @import "~bootstrap/scss/popover";
-@import "~bootstrap/scss/carousel";
+//@import "~bootstrap/scss/carousel";
 @import "~bootstrap/scss/spinners";
 @import "~bootstrap/scss/utilities";
 @import "~bootstrap/scss/print";
 
 @import "base";
+@import "~@splidejs/splide/dist/css/splide.min.css";
+@import "~@splidejs/splide/dist/css/themes/splide-default.min.css";
 @import "modules/autocomplete";
 @import "modules/number";
 @import "modules/spinner";

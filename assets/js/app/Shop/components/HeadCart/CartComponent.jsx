@@ -8,36 +8,32 @@ import TotalComponent from './Cart/TotalComponent'
 function CartComponent ({ cartItems, purchaseUrl, currency }) {
   const referenceIds = Object.keys(cartItems)
 
-  return (
-    <div>
-      {
-        referenceIds.length === 0 ?
-          <div className="nav-link"><i className="fas fa-shopping-cart"></i></div> :
-          <div>
-            <button
-              aria-expanded="false" aria-haspopup="true"
-              className="nav-link btn btn-link dropdown-toggle mr-md-2"
-              data-toggle="dropdown" id="button-cart"
-            >
-              <i className="fas fa-shopping-cart"/> - {referenceIds.length}
-            </button>
-            <div aria-labelledby='button-cart' className='dropdown-menu dropdown-menu-right header-cart'>
-              <table className='table table-borderless table-hover'>
-                <tbody>
-                {
-                  referenceIds.map(referenceId =>
-                    <ItemComponent item={cartItems[referenceId]} key={referenceId} currency={currency}/>
-                  )
-                }
-                </tbody>
+  if (referenceIds.length === 0) {
+    return <i className="fas fa-shopping-cart"></i>
+  }
 
-                <TotalComponent cartItems={cartItems} currency={currency} purchaseUrl={purchaseUrl}/>
-              </table>
-            </div>
-          </div>
-      }
+  return <div>
+    <button
+      aria-expanded="false" aria-haspopup="true"
+      className="nav-link btn btn-link dropdown-toggle mr-md-2"
+      data-toggle="dropdown" id="button-cart"
+    >
+      <i className="fas fa-shopping-cart"/> - {referenceIds.length}
+    </button>
+    <div aria-labelledby='button-cart' className='dropdown-menu dropdown-menu-right header-cart'>
+      <table className='table table-borderless table-hover'>
+        <tbody>
+        {
+          referenceIds.map(referenceId =>
+            <ItemComponent item={cartItems[referenceId]} key={referenceId} currency={currency}/>
+          )
+        }
+        </tbody>
+
+        <TotalComponent cartItems={cartItems} currency={currency} purchaseUrl={purchaseUrl}/>
+      </table>
     </div>
-  )
+  </div>
 }
 
 CartComponent.propTypes = {

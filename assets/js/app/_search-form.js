@@ -2,7 +2,7 @@ import AutoComplete from '../src/Autocomplete'
 import Requestor from '@farpat/api'
 import Str from '../src/Str'
 
-const inputContainer = document.querySelector('#form-search')
+const inputContainer = document.querySelector('.nav-item-search')
 const input = inputContainer.querySelector('input')
 
 const renderProduct = function (item, searchValue) {
