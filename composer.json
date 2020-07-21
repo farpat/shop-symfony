@@ -47,7 +47,8 @@
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.14",
         "symfony/profiler-pack": "*",
-        "symfony/test-pack": "*"
+        "symfony/test-pack": "*",
+        "theofidry/psysh-bundle": "^4.3"
     },
     "config": {
         "preferred-install": {

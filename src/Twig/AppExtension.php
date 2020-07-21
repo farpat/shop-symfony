@@ -64,7 +64,7 @@ class AppExtension extends AbstractExtension
 
     public function isActive(Request $request, string $route): string
     {
-        return $request->getPathInfo() === $this->urlGenerator->generate($route) ? 'active' : '';
+        return $request->getPathInfo() === $this->urlGenerator->generate($route) ? ' active' : '';
     }
 
     public function getAsset(string $asset, bool $isAbsolute = false): string

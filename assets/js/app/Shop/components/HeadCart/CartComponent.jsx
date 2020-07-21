@@ -9,7 +9,7 @@ function CartComponent ({ cartItems, purchaseUrl, currency }) {
   const referenceIds = Object.keys(cartItems)
 
   if (referenceIds.length === 0) {
-    return <i className="fas fa-shopping-cart"></i>
+    return <i className="fas fa-shopping-cart text-muted"></i>
   }
 
   return <div>

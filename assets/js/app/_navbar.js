@@ -8,7 +8,7 @@ import HeadCartComponent from './Shop/components/HeadCart/CartComponent'
 const cartNavElement = document.querySelector('#cart-nav')
 render(
   <Provider store={productAndCartStore}>
-    <HeadCartComponent />
+    <HeadCartComponent/>
   </Provider>,
   cartNavElement
 )
@@ -18,13 +18,24 @@ toggleButton.addEventListener('click', function () {
   toggleButton.parentElement.nextElementSibling.classList.toggle('selected')
 })
 
-const dropdowns = document.querySelectorAll('.dropdown > a')
-
+const dropdowns = document.querySelectorAll('.nav-dropdown > button')
+let selectedDropdown = null
 dropdowns.forEach(dropdown => {
   dropdown.addEventListener('click', function (event) {
-    // if (window.innerWidth < 576) {
     event.preventDefault()
-    dropdown.nextElementSibling.classList.toggle('selected')
-    // }
+    const dropdownMenuElement = dropdown.nextElementSibling
+    const isSelected = dropdownMenuElement.classList.contains('selected')
+
+    if (selectedDropdown) {
+      selectedDropdown.nextElementSibling.classList.remove('selected')
+      selectedDropdown = null
+    }
+
+    if (isSelected) {
+      dropdownMenuElement.classList.remove('selected')
+    } else {
+      selectedDropdown = dropdown
+      dropdownMenuElement.classList.add('selected')
+    }
   })
 })

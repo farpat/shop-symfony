@@ -41,9 +41,16 @@ class ModuleFixtures extends Fixture implements OrderedFixtureInterface
     private function createHomeModuleParameters()
     {
         $this->moduleService->createParameter('home', 'navigation', [
-            Category::class . ':2' => [Product::class . ':1', Product::class . ':2', Product::class . ':3'],
-            Category::class . ':5' => [Product::class . ':4', Product::class . ':6', Product::class . ':5'],
-            Product::class . ':10'
+            '1[TEXT]SubMenu 1@',
+            '2[ENTITY]' . Product::class . '@1',
+            '2[ENTITY]' . Product::class . '@2',
+            '2[LINK]https://qwant.com@Qwant',
+            '1[TEXT]SubMenu 2@',
+            '2[ENTITY]' . Product::class . '@4',
+            '3[ENTITY]' . Product::class . '@5',
+            '3[ENTITY]' . Product::class . '@6',
+            '1[ENTITY]' . Product::class . '@10',
+            '1[LINK]https://github.com@Github',
         ]);
         $this->moduleService->createParameter('home', 'display', ['carousel', 'categories', 'products', 'elements']);
         $this->moduleService->createParameter('home', 'products', [1, 2]);

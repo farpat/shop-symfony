@@ -3,7 +3,7 @@
   font-weight: 400;
   user-select: none;
   background-color: $secondary;
-  color: $white;
+  color: inherit;
   border: 1px solid transparent;
   padding: 0.25rem 0.5rem;
   font-size: 1rem;
@@ -13,26 +13,19 @@
 
 .btn-register {
   background-color: $primary;
-  color: $white;
+  color: $white !important;
   text-decoration: none !important;
+  transition: background-color 0.3s !important;
 
   &:hover {
     background-color: darken($primary, 10%);
-    color: $white;
   }
-}
-
-.btn-link {
-  background: transparent;
-  border: none;
 }
 
 .btn-login {
   color: $white !important;
-  text-decoration: none !important;
-
   background: linear-gradient(to top, rgba($primary, 0.5) 0%, rgba($primary, 0.5) 15%, transparent 15.01%) no-repeat left bottom / 0 100%;
-  transition: background-size .1s;
+  transition: background-size 0.1s !important;
 
   &:hover {
     background-size: 100% 100%;

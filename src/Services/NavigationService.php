@@ -7,6 +7,7 @@ use App\Entity\Category;
 use App\Entity\Product;
 use App\Services\Shop\CategoryService;
 use App\Services\Shop\ProductService;
+use App\Services\Support\Str;
 use Exception;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -44,16 +45,44 @@ class NavigationService
 
     public function generateHtml(): string
     {
-        $navigation = $this->moduleService->getParameter('home', 'navigation');
-        $links = $navigation->getValue();
+        $links = $this->moduleService->getParameter('home', 'navigation')->getValue();
 
-        $this->resources = $this->cache->get('navigation#resources',
-            fn() => $this->getResources($links));
+        $this->resources = $this->cache->get('navigation#resources', fn() => $this->getResources($links));
+
+        $informations = array_map(fn($link) => $this->getInformation($link), $links);
 
         $html = '';
-        foreach ($links as $key => $link1) {
-            $html .= is_int($key) ? $this->renderLink1($link1) : $this->renderLinks2($key, $link1);
+
+        foreach ($informations as $key => $information) {
+            $nextInformation = $informations[$key + 1] ?? null;
+
+            switch ($information['level']) {
+                case 1:
+                    $hasLevel3 = null;
+                    if (!$nextInformation || $nextInformation['level'] === 1) {
+                        $html .= $this->renderLink($information);
+                    } else {
+                        $html .= $this->renderStartDropdownButton($information);
+                    }
+                    break;
+                case 2:
+                    $hasLevel3 = $hasLevel3 ?? $this->hasLevel3($key + 1, $informations);
+                    $html .= $this->renderDropdownItem2($information, $hasLevel3);
+
+                    if (!$nextInformation || $nextInformation['level'] === 1) {
+                        $html .= $this->renderEndDropdownButton();
+                    }
+                    break;
+                case 3:
+                    $html .= $this->renderDropdownItem3($information);
+
+                    if (!$nextInformation || $nextInformation['level'] === 1) {
+                        $html .= $this->renderEndDropdownButton();
+                    }
+                    break;
+            }
         }
+
         return $html;
     }
 
@@ -61,18 +90,10 @@ class NavigationService
     {
         $resources = [];
 
-        foreach ($links as $key => $link1) {
-            if (is_int($key)) {
-                [$entityClass, $id] = explode(':', $link1);
+        foreach ($links as $key => $link) {
+            if (preg_match('/^\d+\[ENTITY\](.*)@(.*)/', $link, $matches)) {
+                [, $entityClass, $id] = $matches;
                 $resources[$entityClass][$id] = true;
-            } else {
-                [$entityClass, $id] = explode(':', $key);
-                $resources[$entityClass][$id] = true;
-
-                foreach ($link1 as $link2) {
-                    [$entityClass, $id] = explode(':', $link2);
-                    $resources[$entityClass][$id] = true;
-                }
             }
         }
 
@@ -107,13 +128,43 @@ class NavigationService
         return $newArray;
     }
 
-    private function renderLink1(string $link1): string
+    private function getInformation(string $link): array
     {
-        $resource = $this->getResource($link1);
-        $url = $this->getUrl($resource);
-        $activeClass = $url === $this->currentUrl ? ' active' : '';
+        preg_match('/^(\d+)\[(.*)\](.*)@(.*)/', $link, $matches);
+        array_shift($matches);
+        return [
+            'level'  => (int)$matches[0],
+            'type'   => $matches[1],
+            'prefix' => $matches[2],
+            'suffix' => $matches[3]
+        ];
+    }
 
-        return "<a class=\"nav-item nav-link{$activeClass}\" href=\"{$url}\">{$resource->getLabel()}</a>";
+    private function renderLink(array $link1): string
+    {
+        switch ($link1['type']) {
+            case 'ENTITY':
+                $resource = $this->getResource($link1['prefix'], $link1['suffix']);
+
+                $url = $this->getUrl($resource);
+                $label = $resource->getLabel();
+                $activeClass = $url === $this->currentUrl ? ' active' : '';
+                $target = '';
+                break;
+            case 'LINK':
+                $url = $link1['prefix'];
+                $label = $link1['suffix'];
+                $activeClass = '';
+                $target = ' target="_blank"';
+                break;
+            default:
+                throw new \Exception("Not managed!");
+        }
+
+        return <<<HTML
+<div class="nav-item"><a class="nav-link{$activeClass}" href="{$url}"{$target}>{$label}</a></div>
+HTML;
+
 
     }
 
@@ -123,10 +174,8 @@ class NavigationService
      * @return Product|Category
      * @throws Exception
      */
-    private function getResource(string $link1)
+    private function getResource(string $model, string $id)
     {
-        [$model, $id] = explode(':', $link1);
-
         if (!$resource = $this->resources[$model][$id]) {
             throw new Exception("The model << $model >> (id: $id) is not found!");
         }
@@ -155,37 +204,99 @@ class NavigationService
         return '';
     }
 
-    private function renderLinks2(string $link, array $links): string
+    private function renderStartDropdownButton(array $information)
     {
-        $resource = $this->getResource($link);
-
-        $itemsHtml = array_reduce($links, function ($acc, $link) {
-            $acc .= $this->renderLink2($link);
-            return $acc;
-        });
+        switch ($information['type']) {
+            case 'TEXT':
+                $label = $information['prefix'];
+                $slug = Str::getSnakeCase($label);
+                break;
+            case 'ENTITY':
+                $resource = $this->getResource($information['prefix'], $information['suffix']);
+                $label = $resource->getLabel();
+                $slug = $resource->getSlug();
+                break;
+            default:
+                throw new \Exception("Not managed!");
+        }
 
         return <<<HTML
-<div class="nav-item dropdown">
-    <a class="nav-link nav-link-dropdown" href="#" id="dropdown-{$resource->getSlug()}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        {$resource->getLabel()}
-    </a>
-    
-    <div class="dropdown-menu" aria-labelledby="dropdown-{$resource->getSlug()}">
-        {$itemsHtml}
-    </div>
-</div>
+<div class="nav-item nav-dropdown">
+    <button class="nav-link nav-link-dropdown" id="dropdown-{$slug}">{$label}</button>
+
+    <div class="nav-dropdown-items" aria-labelledby="dropdown-{$slug}">
 HTML;
+
     }
 
-    private function renderLink2(string $link): string
+    private function hasLevel3(int $startKey, array $informations)
     {
-        $resource = $this->getResource($link);
-        $url = $this->getUrl($resource);
+        for ($i = $startKey; $i < count($informations); $i++) {
+            if ($informations[$i]['level'] === 1) {
+                break;
+            }
+            if ($informations[$i]['level'] === 3) {
+                return true;
+            }
+        }
 
-        $activeClass = $url === $this->currentUrl ? ' active' : '';
+        return false;
+    }
+
+    private function renderDropdownItem2(array $information, bool $hasLevel3)
+    {
+        switch ($information['type']) {
+            case 'ENTITY':
+                $resource = $this->getResource($information['prefix'], $information['suffix']);
+                $url = $this->getUrl($resource);
+                $label = $resource->getLabel();
+                $activeClass = $url === $this->currentUrl ? ' active' : '';
+                $target = '';
+                break;
+            case 'LINK':
+                $url = $information['prefix'];
+                $label = $information['suffix'];
+                $activeClass = '';
+                $target = 'target="_blank"';
+                break;
+        }
+
+        if ($hasLevel3) {
+            return <<<HTML
+<h2 class="nav-dropdown-item nav-dropdown-item-title"><a class="nav-link{$activeClass}" {$target} href="{$url}">{$label}</a></h2>
+HTML;
+        } else {
+            return <<<HTML
+<div class="nav-dropdown-item"><a class="nav-link{$activeClass}" {$target} href="{$url}">{$label}</a></div>
+HTML;
+        }
+    }
+
+    private function renderEndDropdownButton()
+    {
+        return "</div></div>";
+    }
+
+    private function renderDropdownItem3(array $information)
+    {
+        switch ($information['type']) {
+            case 'ENTITY':
+                $resource = $this->getResource($information['prefix'], $information['suffix']);
+                $url = $this->getUrl($resource);
+                $label = $resource->getLabel();
+                $activeClass = $url === $this->currentUrl ? ' active' : '';
+                $target = '';
+                break;
+            case 'LINK':
+                $url = $information['prefix'];
+                $label = $information['suffix'];
+                $activeClass = '';
+                $target = ' target="_blank"';
+                break;
+        }
 
         return <<<HTML
-<a class="dropdown-item{$activeClass}" href="{$url}">{$resource->getLabel()}</a>
+<div class="nav-dropdown-item"><a class="nav-link{$activeClass}"{$target} href="{$url}">{$label}</a></div>
 HTML;
     }
 }
