@@ -14,16 +14,16 @@ function TotalComponent ({ cartItems, purchaseUrl, currency }) {
       <td colSpan='2'>{Str.toLocaleCurrency(totalPriceExcludingTaxes, currency)}</td>
     </tr>
     <tr className='header-cart-total-vat'>
-      <td className='text-right' colSpan='2'>{Translation.get('Tax total')}:</td>
+      <td colSpan='2'>{Translation.get('Tax total')}:</td>
       <td colSpan='2'>+ {Str.toLocaleCurrency(totalIncludingTaxes, currency)}</td>
     </tr>
     <tr className='header-cart-total'>
-      <td className='text-right' colSpan='2'>{Translation.get('Total')}:</td>
+      <td colSpan='2'>{Translation.get('Total')}:</td>
       <td colSpan='2'>{Str.toLocaleCurrency(totalPriceIncludingTaxes, currency)}</td>
     </tr>
     <tr>
       <td colSpan='4'>
-        <a className='float-right btn btn-primary' href={purchaseUrl}>{Translation.get('Purchase')}</a>
+        <a className='btn btn-primary' href={purchaseUrl}>{Translation.get('Purchase')}</a>
       </td>
     </tr>
     </tfoot>

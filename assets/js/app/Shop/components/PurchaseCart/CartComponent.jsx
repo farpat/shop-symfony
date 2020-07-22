@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ItemComponent from './Cart/ItemComponent'
 import TotalComponent from './Cart/TotalComponent'
+import { CartComponentPropTypes } from '../cartCommon'
 
 function CartComponent ({ cartItems, purchaseUrl, currency }) {
   const referenceIds = Object.keys(cartItems)
@@ -12,37 +13,21 @@ function CartComponent ({ cartItems, purchaseUrl, currency }) {
     if (referenceIds.length === 0) {
       window.location.href = '/'
     }
-  }, [referenceIds])
+  }, [cartItems])
 
   return <table className="table table-hover table-borderless">
     <tbody>
     {
-      referenceIds.map(referenceId => <ItemComponent item={cartItems[referenceId]} key={referenceId} currency={currency}/>)
+      referenceIds.map(referenceId => <ItemComponent item={cartItems[referenceId]} key={referenceId}
+                                                     currency={currency}/>)
     }
     </tbody>
 
-    <TotalComponent cartItems={cartItems} purchaseUrl={purchaseUrl} currency={currency}/>
+    <TotalComponent cartItems={cartItems} currency={currency} purchaseUrl={purchaseUrl}/>
   </table>
 }
 
-CartComponent.propTypes = {
-  cartItems      : PropTypes.objectOf(PropTypes.shape({
-    quantity: PropTypes.number.isRequired,
-
-    reference: PropTypes.shape({
-      url                    : PropTypes.string.isRequired,
-      label                  : PropTypes.string.isRequired,
-      unitPriceIncludingTaxes: PropTypes.number.isRequired,
-      unitPriceExcludingTaxes: PropTypes.number.isRequired,
-      mainImage              : PropTypes.shape({
-        urlThumbnail: PropTypes.string.isRequired,
-        altThumbnail: PropTypes.string.isRequired
-      })
-    })
-  })).isRequired,
-  purchaseUrl: PropTypes.string.isRequired,
-  currency   : PropTypes.string.isRequired
-}
+CartComponent.propTypes = CartComponentPropTypes
 
 const mapStateToProps = (state) => {
   return {

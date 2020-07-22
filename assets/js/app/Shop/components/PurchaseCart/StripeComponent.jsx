@@ -18,9 +18,10 @@ function StripeComponent ({ cartItems, currency, publicKey, successUrl }) {
   })
 
   useEffect(() => {
+    console.log('stripe')
     stripeCard.mount('#card-element')
     stripeCard.on('change', ({ error }) => setError(error ? error.message : ''))
-  })
+  }, [])
 
   const onPay = async function (event) {
     if (isPaying) {

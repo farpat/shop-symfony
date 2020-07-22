@@ -8,17 +8,17 @@ function TotalComponent ({ cartItems, currency }) {
   const { totalPriceExcludingTaxes, totalPriceIncludingTaxes, totalIncludingTaxes } = CartService.getPrices(cartItems)
 
   return (
-    <tfoot className='header-cart-total'>
+    <tfoot className='purchase-cart-total'>
     <tr>
       <td colSpan='2'>{Translation.get('Subtotal')}:</td>
       <td colSpan='2'>{Str.toLocaleCurrency(totalPriceExcludingTaxes, currency)}</td>
     </tr>
-    <tr className='header-cart-total-vat'>
-      <td className='text-right' colSpan='2'>{Translation.get('Tax total')}:</td>
+    <tr className='purchase-cart-total-vat'>
+      <td colSpan='2'>{Translation.get('Tax total')}:</td>
       <td colSpan='2'>+ {Str.toLocaleCurrency(totalIncludingTaxes, currency)}</td>
     </tr>
-    <tr className='header-cart-total'>
-      <td className='text-right' colSpan='2'>{Translation.get('Total')}:</td>
+    <tr className='purchase-cart-total'>
+      <td colSpan='2'>{Translation.get('Total')}:</td>
       <td colSpan='2'>{Str.toLocaleCurrency(totalPriceIncludingTaxes, currency)}</td>
     </tr>
     </tfoot>

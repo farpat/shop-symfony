@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Str from '../../../../../src/Str'
 import { connect } from 'react-redux'
 import Requestor from '@farpat/api'
+import { deleteItem, goToReference, isItemLoading, ItemComponentPropTypes, updateItemQuantity } from '../../cartCommon'
 
 function ItemComponent ({ item, currency, updateItemQuantity, isLoading, deleteItem }) {
   const changeQuantity = function (event) {
@@ -12,41 +13,25 @@ function ItemComponent ({ item, currency, updateItemQuantity, isLoading, deleteI
     }
   }
 
-  const goToReference = function (event) {
-    event.preventDefault()
-    const url = item.reference.url
-    const referenceUrlObject = new URL(window.location.origin + url)
-    const currentUrlObject = new URL(window.location.href)
-
-    window.location.href = referenceUrlObject.pathname === currentUrlObject.pathname ?
-      referenceUrlObject.origin + referenceUrlObject.pathname + '?r=1' + referenceUrlObject.hash :
-      url
-  }
-
-  const isCurrentLoading = function () {
-    const isCurrentLoading = isLoading[item.reference.id]
-    return isCurrentLoading !== undefined ? isCurrentLoading : false
-  }
-
   return <tr className="header-cart-item">
     <td>
       <input type="number" className="cart-item-quantity" value={item.quantity} onChange={changeQuantity}/>
     </td>
-    <td className="header-cart-item-td-label">
+    <td className="header-cart-item-label">
       {
         item.reference.mainImage &&
         <img src={item.reference.mainImage.urlThumbnail} alt={item.reference.mainImage.altThumbnail} width={72}
              className='header-cart-item-image'/>
       }
       <a className="header-cart-item-link" href={item.reference.url}
-         onClick={event => goToReference(event)}>{item.reference.label}</a>
+         onClick={event => goToReference(event, item.reference.url)}>{item.reference.label}</a>
     </td>
     <td>
       {Str.toLocaleCurrency(item.reference.unitPriceIncludingTaxes, currency)}
     </td>
-    <td className="header-cart-item-td-icon">
+    <td className="header-cart-item-icon">
       {
-        isCurrentLoading() ?
+        isItemLoading(isLoading, item.reference.id) ?
           <button className="btn btn-link" type="button">
             <i className="fas fa-spinner spinner"/>
           </button> :
@@ -58,26 +43,7 @@ function ItemComponent ({ item, currency, updateItemQuantity, isLoading, deleteI
   </tr>
 }
 
-ItemComponent.propTypes = {
-  item     : PropTypes.shape({
-    quantity: PropTypes.number.isRequired,
-
-    reference: PropTypes.shape({
-      url                    : PropTypes.string.isRequired,
-      label                  : PropTypes.string.isRequired,
-      unitPriceIncludingTaxes: PropTypes.number.isRequired,
-      unitPriceExcludingTaxes: PropTypes.number.isRequired,
-      mainImage              : PropTypes.shape({
-        urlThumbnail: PropTypes.string.isRequired,
-        altThumbnail: PropTypes.string.isRequired
-      })
-    })
-  }),
-  currency : PropTypes.string.isRequired,
-  isLoading: PropTypes.object.isRequired,
-
-  updateItemQuantity: PropTypes.func.isRequired
-}
+ItemComponent.propTypes = ItemComponentPropTypes
 
 const mapStateToProps = (state) => {
   return {
@@ -86,29 +52,11 @@ const mapStateToProps = (state) => {
 }
 const mapStateToDispatch = (dispatch) => {
   return {
-    updateItemQuantity: async (reference, quantity) => {
-      dispatch({ type: 'SET_CART_ITEM_IS_LOADING', reference, isLoading: true })
-
-      try {
-        const response = await Requestor.newRequest().patch(`/cart-items/${reference.id}`, { quantity })
-        dispatch({ type: 'UPDATE_ITEM_QUANTITY', reference: response.reference, quantity })
-      } catch (error) {
-        console.error(error)
-      } finally {
-        dispatch({ type: 'SET_CART_ITEM_IS_LOADING', reference, isLoading: false })
-      }
+    updateItemQuantity: (reference, quantity) => {
+      updateItemQuantity(dispatch, reference, quantity)
     },
-    deleteItem        : async (reference) => {
-      dispatch({ type: 'SET_CART_ITEM_IS_LOADING', reference, isLoading: true })
-
-      try {
-        await Requestor.newRequest().delete(`/cart-items/${reference.id}`)
-        dispatch({ type: 'DELETE_ITEM', reference })
-      } catch (error) {
-        console.error(error)
-      } finally {
-        dispatch({ type: 'SET_CART_ITEM_IS_LOADING', reference, isLoading: false })
-      }
+    deleteItem        : (reference) => {
+      deleteItem(dispatch, reference)
     }
   }
 }

@@ -15,7 +15,7 @@
   flex-direction: column;
   transition: box-shadow 0.3s;
   text-align: center;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: $light;
   border-radius: 0.25rem;
 
   a {
@@ -42,10 +42,6 @@
 .product-price {
   margin-top: 1rem;
   margin-bottom: 0.5rem;
-}
-
-.product-body {
-  background: $light;
 }
 
 .carousel-product-indicators {
