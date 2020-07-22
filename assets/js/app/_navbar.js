@@ -13,11 +13,13 @@ render(
   cartNavElement
 )
 
+//in little screen, to display menu
 const toggleButton = document.querySelector('#navbar-toggle')
 toggleButton.addEventListener('click', function () {
   toggleButton.parentElement.nextElementSibling.classList.toggle('selected')
 })
 
+//to display items into dropdown element
 const dropdowns = document.querySelectorAll('.nav-dropdown > button')
 let selectedDropdown = null
 dropdowns.forEach(dropdown => {

@@ -8,22 +8,56 @@
   }
 }
 
+.header-cart {
+  tbody, tfoot {
+    display: inline-table;
+    width: 100%;
+  }
+
+  &.selected {
+    display: block;
+    left: auto;
+  }
+}
+
+.header-cart-item-image {
+  margin-bottom: 0.5rem;
+  margin-right: 0rem;
+  display: block;
+
+  @media screen and (min-width: map-get($grid-breakpoints, "xl")) {
+    display: inline-block;
+    margin-bottom: 0;
+    margin-right: 0.5rem;
+  }
+}
+
+.header-cart-item-link {
+  display: inline-block;
+  max-width: 50vw;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+
+  @media screen and (min-width: map-get($grid-breakpoints, "xl")) {
+    display: inline;
+  }
+}
+
 .cart-item-quantity {
   width: 4rem;
   text-align: center;
 }
 
 .header-cart-item-td-label {
-  max-width: 25rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .header-cart-item-td-icon {
-  width: 3rem;
 
   i {
+    width: 1rem;
     color: $gray-500;
   }
 }

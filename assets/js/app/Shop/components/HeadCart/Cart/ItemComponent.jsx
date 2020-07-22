@@ -36,9 +36,10 @@ function ItemComponent ({ item, currency, updateItemQuantity, isLoading, deleteI
       {
         item.reference.mainImage &&
         <img src={item.reference.mainImage.urlThumbnail} alt={item.reference.mainImage.altThumbnail} width={72}
-             className='mr-2'/>
+             className='header-cart-item-image'/>
       }
-      <a href={item.reference.url} onClick={event => goToReference(event)}>{item.reference.label}</a>
+      <a className="header-cart-item-link" href={item.reference.url}
+         onClick={event => goToReference(event)}>{item.reference.label}</a>
     </td>
     <td>
       {Str.toLocaleCurrency(item.reference.unitPriceIncludingTaxes, currency)}
@@ -46,8 +47,10 @@ function ItemComponent ({ item, currency, updateItemQuantity, isLoading, deleteI
     <td className="header-cart-item-td-icon">
       {
         isCurrentLoading() ?
-          <span><i className="fas fa-spinner spinner"/></span> :
-          <button className="btn-link" type="button" onClick={() => deleteItem(item.reference)}>
+          <button className="btn btn-link" type="button">
+            <i className="fas fa-spinner spinner"/>
+          </button> :
+          <button className="btn btn-link" type="button" onClick={() => deleteItem(item.reference)}>
             <i className="fas fa-times"/>
           </button>
       }

@@ -19,7 +19,7 @@ function CartComponent ({ cartItems, purchaseUrl, currency }) {
       <i className="fas fa-shopping-cart"/> - {referenceIds.length}
     </button>
     <div className='nav-dropdown-items header-cart'>
-      <table className='table table-borderless table-hover'>
+      <table className='table table-borderless table-hover table-responsive'>
         <tbody>
         {
           referenceIds.map(referenceId =>
