@@ -2,19 +2,33 @@
 {% set carouselId = 'carousel-home' %}
 
 {% if slides is not empty %}
-    <div class="splide home-section home-slide">
-        <div class="splide__track">
-            <ul class="splide__list">
+    <section class="home-section home-slide">
+        <div id="{{ carouselId }}" class="carousel slide  carousel-fade" data-ride="carousel" data-interval="100000000000000">
+            <ol class="carousel-indicators">
                 {% for slide in slides %}
-                    <li class="splide__slide">
+                    <li data-target="#{{ carouselId }}" data-slide-to="{{ loop.index0 }}"
+                        {% if loop.first %}class="active"{% endif %}></li>
+                {% endfor %}
+            </ol>
+            <div class="carousel-inner">
+                {% for slide in slides %}
+                    <div class="carousel-item {% if loop.first %}active{% endif %}">
                         <img src="{{ slide.img }}" alt="{{ slide.title }}">
                         <div class="carousel-caption">
-                            <h2>{{ slide.title }}</h2>
+                            <h3>{{ slide.title }}</h3>
                             <p>{{ slide.description }}</p>
                         </div>
-                    </li>
+                    </div>
                 {% endfor %}
-            </ul>
+            </div>
+            <a class="carousel-control-prev" href="#{{ carouselId }}" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">{% trans %}Previous {% endtrans %}</span>
+            </a>
+            <a class="carousel-control-next" href="#{{ carouselId }}" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">{% trans %}Next{% endtrans %}</span>
+            </a>
         </div>
-    </div>
+    </section>
 {% endif %}

@@ -13,7 +13,6 @@
     "dependencies": {
         "@farpat/api": "^1.0.10",
         "@hot-loader/react-dom": "^16.13.0",
-        "@splidejs/splide": "^2.4.8",
         "bootstrap": "^4.5.0",
         "core-js": "^3.6.5",
         "jquery": "^3.5.1",

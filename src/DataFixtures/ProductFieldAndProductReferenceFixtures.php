@@ -196,21 +196,25 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
             return;
         }
 
-        $mainImage = null;
-
+        $mainProductImage = null;
         foreach ($productReferences as $productReference) {
+            $mainProductReferenceImage = null;
+
             for ($i = 0; $i < $imagesCount; $i++) {
                 $image = $this->makeImage();
-                if ($mainImage === null) {
-                    $mainImage = $image;
+                if ($mainProductImage === null) {
+                    $mainProductImage = $image;
+                }
+                if ($mainProductReferenceImage === null) {
+                    $mainProductReferenceImage = $image;
                 }
                 $productReference->addImage($image);
             }
 
-            $productReference->setMainImage($mainImage);
+            $productReference->setMainImage($mainProductReferenceImage);
         }
 
-        $product->setMainImage($mainImage);
+        $product->setMainImage($mainProductImage);
     }
 
     public function getOrder()

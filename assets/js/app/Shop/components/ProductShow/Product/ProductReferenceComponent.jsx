@@ -23,9 +23,7 @@ function ProductReferenceComponent ({ currentReference, currency, isLoading, qua
       {
         currentReference.mainImage &&
         <div className="col-md-8 reference-slider">
-          <ReferenceSliderComponent
-            currentReference={currentReference}
-          />
+          <ReferenceSliderComponent currentReference={currentReference}/>
         </div>
       }
       <div className="col-md reference-details-wrapper">

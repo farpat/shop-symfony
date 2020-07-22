@@ -9,18 +9,16 @@ function CartComponent ({ cartItems, purchaseUrl, currency }) {
   const referenceIds = Object.keys(cartItems)
 
   if (referenceIds.length === 0) {
-    return <i className="fas fa-shopping-cart text-muted"></i>
+    return <button className="nav-link nav-link-dropdown">
+      <i className="fas fa-shopping-cart text-muted"></i>
+    </button>
   }
 
-  return <div>
-    <button
-      aria-expanded="false" aria-haspopup="true"
-      className="nav-link btn btn-link dropdown-toggle mr-md-2"
-      data-toggle="dropdown" id="button-cart"
-    >
+  return <>
+    <button className="nav-link nav-link-dropdown">
       <i className="fas fa-shopping-cart"/> - {referenceIds.length}
     </button>
-    <div aria-labelledby='button-cart' className='dropdown-menu dropdown-menu-right header-cart'>
+    <div className='nav-dropdown-items header-cart'>
       <table className='table table-borderless table-hover'>
         <tbody>
         {
@@ -33,7 +31,7 @@ function CartComponent ({ cartItems, purchaseUrl, currency }) {
         <TotalComponent cartItems={cartItems} currency={currency} purchaseUrl={purchaseUrl}/>
       </table>
     </div>
-  </div>
+  </>
 }
 
 CartComponent.propTypes = {
