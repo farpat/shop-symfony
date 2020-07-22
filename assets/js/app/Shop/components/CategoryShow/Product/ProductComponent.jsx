@@ -18,7 +18,7 @@ function ProductComponent ({ product, currency, columns }) {
         {product.excerpt}
 
         <p className="product-price">
-          {Translation.get('From')} <span className='badge badge-secondary'>
+          {Translation.get('From')} <span className='badge bg-secondary'>
                 {Str.toLocaleCurrency(product.minUnitPriceIncludingTaxes, currency)}
               </span>
         </p>

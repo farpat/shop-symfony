@@ -64,8 +64,8 @@
 }
 
 .nav-product-reference {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
   margin-bottom: 0.5rem;
   border-top: 1px solid rgba($black, 0.3);
   border-bottom: 1px solid rgba($black, 0.3);
@@ -76,7 +76,7 @@
   align-items: center;
   padding: 0.5rem;
   text-decoration: none !important;
-  max-width: 24rem;
+  flex-basis: 24rem;
   margin: 0.5rem 0;
 
   &.selected {

@@ -5,7 +5,7 @@
   flex-direction: column;
   padding: 0.5rem 1rem;
 
-  a:not(.header-cart-item-link) {
+  a {
     color: inherit;
     text-decoration: none;
   }
@@ -50,6 +50,10 @@
   transition: color 0.3s;
   margin: 0.75rem 0;
 
+  &:last-child {
+    margin-right: 0;
+  }
+
   @media screen and (min-width: map-get($grid-breakpoints, "xl")) {
     margin-right: 1rem;
   }
@@ -87,13 +91,14 @@
   padding: 0;
 
   &:after {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
     content: "\f078";
     font-size: 0.55rem;
     position: relative;
     top: -2px;
     left: 2px;
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
+    margin-right: 2px;
   }
 }
 

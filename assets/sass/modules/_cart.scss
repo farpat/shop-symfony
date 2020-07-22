@@ -61,8 +61,11 @@
   white-space: nowrap;
 }
 
-.header-cart-item-icon, .purchase-cart-item-icon {
+.header-cart-item-link {
+  color: $primary !important;
+}
 
+.header-cart-item-icon, .purchase-cart-item-icon {
   i {
     width: 1rem;
     color: $gray-500;

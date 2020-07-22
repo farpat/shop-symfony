@@ -101,7 +101,6 @@ const configWebpack = {
   },
   plugins     : [
     new webpack.ProvidePlugin({
-      $     : 'jquery',
       Popper: 'popper'
     }),
 

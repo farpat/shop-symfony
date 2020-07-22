@@ -10,9 +10,7 @@ function CartComponent ({ cartItems, purchaseUrl, currency }) {
   const referenceIds = Object.keys(cartItems)
 
   if (referenceIds.length === 0) {
-    return <button className="nav-link nav-link-dropdown">
-      <i className="fas fa-shopping-cart text-muted"></i>
-    </button>
+    return null
   }
 
   return <>

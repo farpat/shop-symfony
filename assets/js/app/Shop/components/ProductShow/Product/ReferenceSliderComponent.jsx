@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 function ReferenceSliderComponent ({ currentReference }) {
   const [activatedIndex, setActivatedIndex] = useState(0)
+  const carousel = useRef(null)
 
   const getId = function () {
     return `carousel-reference-${currentReference.id}`
@@ -16,14 +17,14 @@ function ReferenceSliderComponent ({ currentReference }) {
       setActivatedIndex(event.to)
     }
 
-    $('#' + getId()).on('slid.bs.carousel', updateActivatedIndex)
+    carousel.current.addEventListener('slid.bs.carousel', updateActivatedIndex)
 
-    return () => $('#' + getId()).off('slid.bs.carousel', updateActivatedIndex)
+    return () => carousel.current.removeEventListener('slid.bs.carousel', updateActivatedIndex)
   }, [currentReference])
 
   return (
     <>
-      <div id={getId()} className='carousel slide carousel-fade carousel-product' data-ride='carousel'>
+      <div id={getId()} className='carousel slide carousel-fade carousel-product' data-ride='carousel' ref={carousel}>
         <div className='carousel-inner'>
           {
             currentReference.images.map((image, index) =>
