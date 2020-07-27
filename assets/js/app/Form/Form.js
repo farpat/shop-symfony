@@ -1,6 +1,11 @@
 import { useState } from 'react'
 
-export function getRules (rulesInString) {
+/**
+ *
+ * @param {String} rulesInString
+ * @returns {Array}
+ */
+export function getRulesFromBack (rulesInString) {
   if (rulesInString === undefined || rulesInString === '') {
     return []
   }
@@ -19,27 +24,26 @@ export function getRules (rulesInString) {
 
     rules.push(new RuleClass(parameters))
   }
+
   return rules
 }
 
-export function isRequired (rules) {
-  return rules.find(rule => rule.name === 'not-blank' || rule.name === 'is-true') !== undefined
-}
-
-export function useValueAndError (initialValue, initialError) {
-  const [value, setValue] = useState(initialValue)
-  const [error, setError] = useState(initialError)
-
-  return {
-    value, setValue,
-    error, setError
-  }
-}
-
+/**
+ *
+ * @param {String} help
+ * @param {String} id
+ * @returns {false|String}
+ */
 export function getHelpId (help, id) {
   return help !== '' ? `${id}_help` : false
 }
 
+/**
+ *
+ * @param {Boolean} required
+ * @param {String} initialClassName
+ * @returns {string}
+ */
 export function getLabelClassName (required, initialClassName = '') {
   let className = initialClassName
 
@@ -50,35 +54,43 @@ export function getLabelClassName (required, initialClassName = '') {
   return className
 }
 
+/**
+ *
+ * @param {String|undefined} error
+ * @param initialClassName
+ * @returns {string}
+ */
 export function getInputClassName (error, initialClassName = 'form-control') {
   let className = initialClassName
 
-  if (error !== '') {
+  if (error) {
     className += ' is-invalid'
   }
 
   return className
 }
 
-export function getError (rules, value) {
+/**
+ *
+ * @returns {string|undefined}
+ */
+export function getError (rules, key, value) {
   if (rules.length === 0) {
-    return ''
+    return undefined
   }
 
-  for (const rule of rules) {
-    let error = rule.check(value)
-    if (error !== '') {
-      return error
+  const rulesInKey = rules[key]
+  if (rulesInKey === undefined || rulesInKey.length === 0) {
+    return undefined
+  }
+
+  let error = ''
+  for (let rule of rulesInKey) {
+    error = rule.check(value)
+    if (error !== undefined) {
+      break
     }
   }
 
-  return ''
-}
-
-export function getValueFromEvent (event) {
-  if (event.target.tagName === 'INPUT' && event.target.type === 'checkbox') {
-    return event.target.checked
-  } else {
-    return event.target.value
-  }
+  return error
 }

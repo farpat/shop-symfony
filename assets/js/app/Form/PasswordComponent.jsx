@@ -1,37 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { hot } from 'react-hot-loader/root'
-import {
-  getHelpId,
-  getInputClassName,
-  getLabelClassName,
-  getRules,
-  isRequired,
-  getValueFromEvent,
-  useValueAndError, getError
-} from './Form'
+import { getHelpId, getInputClassName, getLabelClassName, getRulesFromBack, getError } from './Form'
 
-function PasswordComponent ({ label, name, attr, id, help, initialValue, initialError, rulesInString, withKey }) {
-  const rules = getRules(rulesInString)
-  let required = isRequired(rules)
-  const { value, error, setError, setValue } = useValueAndError(initialValue, initialError)
+function PasswordComponent ({ label, name, attr, id, help, value, isRequired, error, withKey, onUpdate = function () {} }) {
   const inputElement = <input type="password" className={getInputClassName(error)} id={id} name={name}
-                              required={required} aria-describedby={getHelpId(help, id)} value={value}
-                              onChange={event => setValue(getValueFromEvent(event))}
-                              onBlur={() => setError(getError(rules, value))} {...attr}/>
+                              required={isRequired} aria-describedby={getHelpId(help, id)} defaultValue={value}
+                              onChange={event => onUpdate(name, event.target.value)} {...attr}/>
 
   return (
     <div className="form-group">
       {
-        label !== '' && <label htmlFor={id} className={getLabelClassName(required)}>{label}</label>
+        label !== '' && <label htmlFor={id} className={getLabelClassName(isRequired)}>{label}</label>
       }
 
       {
         withKey ?
           <div className="input-group">
-            <div className='input-group-prepend'>
-              <span className='input-group-text'><i className='fas fa-key'/></span>
-            </div>
+            <span className='input-group-text'><i className='fas fa-key'/></span>
             {inputElement}
           </div> :
           inputElement
@@ -49,11 +34,14 @@ function PasswordComponent ({ label, name, attr, id, help, initialValue, initial
 
 PasswordComponent.propTypes = {
   id        : PropTypes.string.isRequired,
+  name      : PropTypes.string.isRequired,
+  isRequired: PropTypes.bool,
   withKey   : PropTypes.bool.isRequired,
-  parentForm: PropTypes.instanceOf(HTMLFormElement),
+  value     : PropTypes.string,
+  error     : PropTypes.string,
   attr      : PropTypes.object,
   label     : PropTypes.string,
-  rules     : PropTypes.string
+  onUpdate  : PropTypes.func
 }
 
-export default hot(PasswordComponent)
+export default PasswordComponent

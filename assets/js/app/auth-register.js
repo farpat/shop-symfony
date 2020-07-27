@@ -1,5 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
+import SymfonyComponentWrapper from './Form/SymfonyComponentWrapper'
 
 /**
  *
@@ -7,9 +8,8 @@ import { render } from 'react-dom'
  */
 const makeForm = function (parentForm) {
   parentForm.querySelectorAll('.js-form-component').forEach(function (field) {
-    const props = { ...JSON.parse(field.getAttribute('props')), parentForm }
-    const Component = require(`./Form/${field.dataset.component}`).default
-    render(<Component {...props} />, field)
+    const props = { ...JSON.parse(field.getAttribute('props')) }
+    render(<SymfonyComponentWrapper {...props} component={field.dataset.component}/>, field) //TODO: render a component with value and error being dynamic
   })
 }
 

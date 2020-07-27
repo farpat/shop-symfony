@@ -5,6 +5,10 @@
   flex-direction: column;
   padding: 0.5rem 1rem;
 
+  .nav-link:not(.btn) {
+    padding: 0;
+  }
+
   a {
     color: inherit;
     text-decoration: none;

@@ -5,7 +5,7 @@ import CartService from '../../services/CartService'
 import Str from '../../../../src/Str'
 import Translation from '../../../../src/Translation'
 import PropTypes from 'prop-types'
-import Requestor from '@farpat/api'
+import { jsonPost } from '@farpat/api'
 
 function StripeComponent ({ cartItems, currency, publicKey, successUrl }) {
   const [isPaying, setIsPaying] = useState(false)
@@ -18,7 +18,6 @@ function StripeComponent ({ cartItems, currency, publicKey, successUrl }) {
   })
 
   useEffect(() => {
-    console.log('stripe')
     stripeCard.mount('#card-element')
     stripeCard.on('change', ({ error }) => setError(error ? error.message : ''))
   }, [])
@@ -31,7 +30,7 @@ function StripeComponent ({ cartItems, currency, publicKey, successUrl }) {
     event.preventDefault()
 
     setIsPaying(true)
-    const response = await Requestor.newRequest().post('/purchase/create-intent')
+    const response = await jsonPost('/purchase/create-intent')
     const result = await stripe.confirmCardPayment(response.client_secret, {
       payment_method: {
         card           : stripeCard,
@@ -80,7 +79,6 @@ function StripeComponent ({ cartItems, currency, publicKey, successUrl }) {
 
           <div className={getErrorClassName()} role="alert">{error}</div>
         </div>
-
 
         <button className={getButtonClassname()} disabled={isPaying}>
           {Translation.get('Pay')} {Str.toLocaleCurrency(totalPriceIncludingTaxes, currency)}

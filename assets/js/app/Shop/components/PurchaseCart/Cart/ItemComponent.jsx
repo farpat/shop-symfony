@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Str from '../../../../../src/Str'
 import { connect } from 'react-redux'
-import Requestor from '@farpat/api'
-import { deleteItem, goToReference, isItemLoading, ItemComponentPropTypes, updateItemQuantity } from '../../cartCommon'
+import CartService from '../../../services/CartService'
+import { goToReference, isItemLoading, ItemComponentPropTypes } from '../../cartCommon'
 
 function ItemComponent ({ item, currency, updateItemQuantity, isLoading, deleteItem }) {
   const changeQuantity = function (event) {
@@ -21,7 +21,7 @@ function ItemComponent ({ item, currency, updateItemQuantity, isLoading, deleteI
     <td className="purchase-cart-item-label">
       {
         item.reference.mainImage &&
-        <img src={item.reference.mainImage.urlThumbnail} alt={item.reference.mainImage.altThumbnail} width={72}
+        <img src={item.reference.mainImage.urlThumbnail} alt={item.reference.mainImage.altThumbnail}
              className='purchase-cart-item-image'/>
       }
       <a href={item.reference.url}
@@ -31,15 +31,17 @@ function ItemComponent ({ item, currency, updateItemQuantity, isLoading, deleteI
       {Str.toLocaleCurrency(item.reference.unitPriceIncludingTaxes, currency)}
     </td>
     <td className="purchase-cart-item-icon">
-      {
-        isItemLoading(isLoading, item.reference.id) ?
-          <button className="btn btn-link" type="button">
-            <i className="fas fa-spinner spinner"/>
-          </button> :
-          <button className="btn btn-link" type="button" onClick={() => deleteItem(item.reference)}>
+      <button className="btn btn-link" type="button" onClick={() => {
+        if (!isItemLoading(isLoading, item.reference.id)) {
+          deleteItem(item.reference)
+        }
+      }}>
+        {
+          isItemLoading(isLoading, item.reference.id) ?
+            <i className="fas fa-spinner spinner"/> :
             <i className="fas fa-times"/>
-          </button>
-      }
+        }
+      </button>
     </td>
   </tr>
 }
@@ -54,10 +56,10 @@ const mapStateToProps = (state) => {
 const mapStateToDispatch = (dispatch) => {
   return {
     updateItemQuantity: (reference, quantity) => {
-      updateItemQuantity(dispatch, reference, quantity)
+      CartService.updateItemQuantityForRedux(dispatch, reference, quantity)
     },
     deleteItem        : (reference) => {
-      deleteItem(dispatch, reference)
+      CartService.deleteItemForRedux(dispatch, reference)
     }
   }
 }

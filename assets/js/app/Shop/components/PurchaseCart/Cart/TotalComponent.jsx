@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import Str from '../../../../../src/Str'
 import Translation from '../../../../../src/Translation'
 import CartService from '../../../services/CartService'
+import { TotalComponentPropTypes } from '../../cartCommon'
 
 function TotalComponent ({ cartItems, currency }) {
   const { totalPriceExcludingTaxes, totalPriceIncludingTaxes, totalIncludingTaxes } = CartService.getPrices(cartItems)
@@ -25,15 +26,6 @@ function TotalComponent ({ cartItems, currency }) {
   )
 }
 
-TotalComponent.propTypes = {
-  cartItems   : PropTypes.objectOf(PropTypes.shape({
-    quantity : PropTypes.number.isRequired,
-    reference: PropTypes.shape({
-      unitPriceIncludingTaxes: PropTypes.number.isRequired,
-      unitPriceExcludingTaxes: PropTypes.number.isRequired
-    })
-  })).isRequired,
-  currency: PropTypes.string.isRequired
-}
+TotalComponent.propTypes = TotalComponentPropTypes
 
 export default TotalComponent

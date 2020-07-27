@@ -29,11 +29,19 @@ class UniqueValidator extends ConstraintValidator
 
         $value = $this->getValue($formData, $constraint->field);
 
-        $dataInDatabase = $repository->findOneBy([
-            $constraint->field => $value
-        ]);
+        $dataInDatabase = $repository->findOneBy([$constraint->field => $value]);
 
-        if ($dataInDatabase !== null) {
+        /*
+            SI GETID $formData !== $dataInDatabase => Probleme
+            SINON SI $databaseInDatabase !== null => Probleme
+         */
+
+        if (
+            $dataInDatabase !== null &&
+            (
+                !method_exists($formData, 'getId') || $formData->getId() !== $dataInDatabase->getId()
+            )
+        ) {
             $this->context->buildViolation($constraint->message)
                 ->atPath($constraint->field)
                 ->setParameter('{{ value }}', $value)

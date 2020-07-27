@@ -48,7 +48,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
 
         $user
             ->setName($this->faker->name)
-            ->setRoles($this->faker->boolean(15) ? ['ROLE_ADMIN', 'ROLE_ADMIN'] : ['ROLE_USER'])
+            ->setRoles($this->faker->boolean(30) ? ['ROLE_ADMIN', 'ROLE_USER'] : ['ROLE_USER'])
             ->setEmail("user$i@local.dev")
             ->setPassword($this->encoder->encodePassword($user, 'secret'))
             ->setEmailVerifiedAt($this->faker->dateTime())

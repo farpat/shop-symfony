@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ReferenceSliderComponent from './ReferenceSliderComponent'
 import Str from '../../../../../src/Str'
 import { connect } from 'react-redux'
-import Requestor from '@farpat/api'
+import { jsonPost } from '@farpat/api'
 import Translation from '../../../../../src/Translation'
 
 function ProductReferenceComponent ({ currentReference, currency, isLoading, quantities, cartItems, updateQuantity, addInCart }) {
@@ -92,7 +92,7 @@ const mapDispatchToProps = (dispatch) => {
       try {
         dispatch({ type: 'SET_QUANTITY_IS_LOADING', reference, isLoading: true })
 
-        const response = await Requestor.newRequest().post('/cart-items', {
+        const response = await jsonPost('/cart-items', {
           productReferenceId: reference.id,
           quantity
         })

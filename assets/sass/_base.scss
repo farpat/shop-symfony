@@ -31,4 +31,34 @@ input[type=checkbox] + label.required:after {
   text-decoration: none;
 }
 
+.form-group {
+  margin-bottom: 1rem;
+}
+
+pre {
+  outline: 1px dotted rgba($black, 0.1);
+  padding: 1rem;
+
+  .string {
+    color: green;
+  }
+
+  .number {
+    color: darkorange;
+  }
+
+  .boolean {
+    color: blue;
+  }
+
+  .null {
+    color: magenta;
+  }
+
+  .key {
+    color: red;
+  }
+}
+
+
 $card-size: 20rem;

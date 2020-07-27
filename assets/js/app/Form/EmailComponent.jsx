@@ -1,39 +1,30 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { hot } from 'react-hot-loader/root'
 import {
   getHelpId,
   getInputClassName,
   getLabelClassName,
-  getRules,
-  isRequired,
-  getValueFromEvent,
-  useValueAndError, getError
+  getError
 } from './Form'
 
-function EmailComponent ({ label, name, attr, id, help, initialValue, initialError, rulesInString }) {
-  const rules = getRules(rulesInString)
-  let required = isRequired(rules)
-  const { value, error, setError, setValue } = useValueAndError(initialValue, initialError)
+function EmailComponent ({ label, name, attr, id, help, value, error, isRequired, onUpdate = function () {} }) {
   return (
     <div className="form-group">
       {
-        label !== '' && <label htmlFor={id} className={getLabelClassName(required)}>{label}</label>
+        label !== '' && <label htmlFor={id} className={getLabelClassName(isRequired)}>{label}</label>
       }
 
       <div className="input-group">
-        <div className='input-group-prepend'>
-          <span className='input-group-text'><i className='far fa-envelope-open'/></span>
-        </div>
+        <span className='input-group-text'><i className='far fa-envelope-open'/></span>
 
-        <input type="text" className={getInputClassName(error)} id={id} name={name}
-               required={required} aria-describedby={getHelpId(help, id)} value={value}
-               onChange={event => setValue(getValueFromEvent(event))}
-               onBlur={() => setError(getError(rules, value))} {...attr}/>
+        <input type="email" className={getInputClassName(error)} id={id} name={name}
+               onChange={event => onUpdate(name, event.target.value)}
+               required={isRequired} aria-describedby={getHelpId(help, id)} defaultValue={value} {...attr}/>
       </div>
 
       {
-        error !== '' && <div className="invalid-feedback">{error}</div>
+        error && <div className="invalid-feedback">{error}</div>
       }
 
       {
@@ -45,10 +36,11 @@ function EmailComponent ({ label, name, attr, id, help, initialValue, initialErr
 
 EmailComponent.propTypes = {
   id        : PropTypes.string.isRequired,
-  parentForm: PropTypes.instanceOf(HTMLFormElement),
+  name      : PropTypes.string.isRequired,
+  isRequired: PropTypes.bool,
   attr      : PropTypes.object,
   label     : PropTypes.string,
-  rules     : PropTypes.string
+  onUpdate  : PropTypes.func
 }
 
 export default hot(EmailComponent)

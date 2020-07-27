@@ -1,33 +1,19 @@
-import React from 'react'
-import {
-  getHelpId,
-  getInputClassName,
-  getLabelClassName,
-  getRules,
-  isRequired,
-  getValueFromEvent,
-  useValueAndError, getError
-} from './Form'
-import { hot } from 'react-hot-loader/root'
+import React, { useEffect, useState } from 'react'
+import { getHelpId, getInputClassName, getLabelClassName, getRulesFromBack, getError } from './Form'
 import PropTypes from 'prop-types'
 
-function TextComponent ({ label, name, attr, id, help, initialValue, initialError, rulesInString }) {
-  const rules = getRules(rulesInString)
-  let required = isRequired(rules)
-  const { value, error, setError, setValue } = useValueAndError(initialValue, initialError)
-
+function TextComponent ({ label, name, attr, id, help, value, isRequired, error, onUpdate = function () {} }) {
   return (
     <div className="form-group">
       {
-        label !== '' && <label htmlFor={id} className={getLabelClassName(required)}>{label}</label>
+        label !== '' && <label htmlFor={id} className={getLabelClassName(isRequired)}>{label}</label>
       }
-      <input type="text" className={getInputClassName(error)} id={id} name={name}
-             required={required} aria-describedby={getHelpId(help, id)} value={value}
-             onChange={event => setValue(getValueFromEvent(event))}
-             onBlur={() => setError(getError(rules, value))} {...attr}
+      <input type="text" className={getInputClassName(error)} id={id} name={name} defaultValue={value}
+             onChange={event => onUpdate(name, event.target.value)}
+             required={isRequired} aria-describedby={getHelpId(help, id)} {...attr}
       />
       {
-        error !== '' && <div className="invalid-feedback">{error}</div>
+        error && <div className="invalid-feedback">{error}</div>
       }
       {
         help !== '' && <small id={getHelpId(help, id)} className='form-text text-muted w-100'>{help}</small>
@@ -38,10 +24,13 @@ function TextComponent ({ label, name, attr, id, help, initialValue, initialErro
 
 TextComponent.propTypes = {
   id        : PropTypes.string.isRequired,
-  parentForm: PropTypes.instanceOf(HTMLFormElement).isRequired,
+  name      : PropTypes.string.isRequired,
+  isRequired: PropTypes.bool,
+  value     : PropTypes.string,
+  error     : PropTypes.string,
   attr      : PropTypes.object,
   label     : PropTypes.string,
-  rules     : PropTypes.string
+  onUpdate  : PropTypes.func
 }
 
-export default hot(TextComponent)
+export default TextComponent

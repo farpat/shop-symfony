@@ -2,7 +2,7 @@
 
 namespace App\Controller\Auth;
 
-use App\Form\RegisterFormType;
+use App\Form\RegisterType;
 use App\FormData\RegisterFormData;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ class RegisterController extends AbstractController
         TranslatorInterface $translator
     ): Response {
         $data = new RegisterFormData();
-        $form = $this->createForm(RegisterFormType::class, $data);
+        $form = $this->createForm(RegisterType::class, $data);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

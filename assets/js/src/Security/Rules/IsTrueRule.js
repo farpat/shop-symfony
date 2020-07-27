@@ -7,6 +7,6 @@ export default class IsTrueRule extends Rule {
   }
 
   check (value) {
-    return value ? '' : this.parameter.message
+    return value ? undefined : this.parameter.message
   }
 }

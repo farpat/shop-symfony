@@ -22,9 +22,7 @@
                     <div class="form-group">
                         <label for="login_form_email">{% trans %}E-mail{% endtrans %}</label>
                         <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="far fa-envelope-open"></i></span>
-                            </div>
+                            <span class="input-group-text"><i class="far fa-envelope-open"></i></span>
                             <input type="email" class="form-control" name="email" required
                                    placeholder="Enter your e-mail" value="{{ last_username }}" autofocus>
                         </div>
@@ -37,11 +35,11 @@
 
                     <div class="form-group row">
                         <div class="col-md-6">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" name="_remember_me"
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" name="_remember_me"
                                        id="_remember_me">
                                 <label for="_remember_me"
-                                       class="custom-control-label">{% trans %}Remember me{% endtrans %}</label>
+                                       class="form-check-label">{% trans %}Remember me{% endtrans %}</label>
                             </div>
                         </div>
                         <div class="col-md-6">

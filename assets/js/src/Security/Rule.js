@@ -15,4 +15,15 @@ export default class Rule {
     const className = this.constructor.name
     throw `You must implement << check(string value): ?string >> method in << ${className} >>`
   }
+
+  /**
+   *
+   * @param {Array} rulesInArray
+   */
+  static makeRulesInString (rulesInArray) {
+    return rulesInArray.reduce((acc, rule) => {
+      const prefix = acc === '' ? '' : '²'
+      return `${acc}${prefix}${rule.rule}ßmessage:${rule.message}`
+    }, '')
+  }
 }

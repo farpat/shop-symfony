@@ -13,6 +13,8 @@ button {
   font-size: 1rem;
   border-radius: 0.25rem;
   transition: background-color 0.15s ease-in-out;
+
+
 }
 
 .btn-primary {
@@ -23,6 +25,10 @@ button {
 
   &:hover {
     background-color: darken($primary, 10%);
+  }
+
+  &:disabled {
+    background-color: lighten($primary, 10%);
   }
 }
 

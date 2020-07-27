@@ -2,10 +2,8 @@
 
 {% block title %}My profile{% endblock %}
 
-{% block body %}
-    <main class="container">
-        <h1>My profile</h1>
+{% block script 'user-profile' %}
 
-        Objective : SPA with React router!
-    </main>
+{% block body %}
+    <main id="user-profile-component" class="container user-profile"></main>
 {% endblock %}

@@ -7,6 +7,6 @@ export default class NotBlankRule extends Rule {
   }
 
   check (value) {
-    return value.length > 0 ? '' : this.parameter.message
+    return value.length > 0 ? undefined : this.parameter.message
   }
 }

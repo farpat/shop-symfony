@@ -7,6 +7,6 @@ export default class ExpressionRule extends Rule {
   }
 
   check (value) {
-    return eval(this.parameter.expression) ? '' : this.parameter.message
+    return eval(this.parameter.expression) ? undefined : this.parameter.message
   }
 }

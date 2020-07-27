@@ -1,5 +1,5 @@
 import AutoComplete from '../src/Autocomplete'
-import Requestor from '@farpat/api'
+import { jsonGet } from '@farpat/api'
 import Str from '../src/Str'
 
 const inputContainer = document.querySelector('.nav-item-search')
@@ -41,8 +41,7 @@ new AutoComplete({
   source    : function (q, suggest) {
     inputContainer.classList.add('searching')
 
-    Requestor.newRequest()
-      .get(input.dataset.url, { q })
+    jsonGet(input.dataset.url, { q })
       .then(response => {
         inputContainer.classList.remove('searching')
 

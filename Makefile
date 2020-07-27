@@ -21,7 +21,7 @@ NO_COLOR      			= \033[m
 filter      ?= tests
 dir         ?=
 
-php := docker-compose exec php php
+php := docker-compose run --rm php php
 bash := docker-compose run --rm php bash
 composer := docker-compose run --rm php composer
 mariadb := docker-compose exec mariadb mysql -uroot -proot -e
@@ -43,7 +43,6 @@ update: ## Update the composer dependencies and npm dependencies
 clean: ## Remove cache
 	@echo "$(DANGER_COLOR)Removing Symfony cache...$(NO_COLOR)"
 	@$(php) bin/console cache:pool:clear -q cache.app
-	@$(php) bin/console cache:clear -q
 	@echo "$(DANGER_COLOR)Removing billings PDF...$(NO_COLOR)"
 	@rm -rf ./var/storage/billings
 

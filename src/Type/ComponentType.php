@@ -34,7 +34,7 @@ class ComponentType extends TextType
     {
         $view->vars['widget_element'] = true;
         $view->vars['row_attr']['class'] = 'js-form-component';
-        $view->vars['row_attr']['props'] = json_encode($this->getProps($form, $options));
+        $view->vars['row_attr']['props'] = json_encode($this->getProps($form, $options), JSON_FORCE_OBJECT);
 
         parent::buildView($view, $form, $options);
     }
@@ -45,27 +45,16 @@ class ComponentType extends TextType
         $formName = $parentForm->getName();
         $errors = $form->getErrors();
 
-        $props = [
-            'initialValue' => $form->getViewData(),
-            'label'        => $this->makeLabelAttribute($options['label'], $form->getName()),
-            'name'         => "{$formName}[{$form->getName()}]",
-            'id'           => "{$formName}_{$form->getName()}",
-            'initialError' => !isset($errors[0]) ? '' : $errors[0]->getMessage()
+        return [
+            'initialValue'  => $form->getViewData(),
+            'initialError'  => !isset($errors[0]) ? '' : $errors[0]->getMessage(),
+            'label'         => $this->makeLabelAttribute($options['label'], $form->getName()),
+            'name'          => "{$formName}[{$form->getName()}]",
+            'id'            => "{$formName}_{$form->getName()}",
+            'rulesInString' => $this->makeRulesAttribute(get_class($parentForm->getViewData()), $form->getName()),
+            'attr'          => !empty($options['attr']) ? $options['attr'] : [],
+            'help'          => $options['help'] ?? '',
         ];
-
-        if ($rules = $this->makeRulesAttribute(get_class($parentForm->getViewData()), $form->getName())) {
-            $props['rulesInString'] = $rules;
-        }
-
-        if ($attr = $options['attr']) {
-            $props['attr'] = $attr;
-        }
-
-        if ($help = $options['help']) {
-            $props['help'] = $help;
-        }
-
-        return $props;
     }
 
     /**
@@ -87,7 +76,7 @@ class ComponentType extends TextType
         return (string)$label;
     }
 
-    protected function makeRulesAttribute(string $class, string $field): ?string
+    protected function makeRulesAttribute(string $class, string $field): string
     {
         $attributes = [];
 
@@ -132,10 +121,6 @@ class ComponentType extends TextType
                 default:
                     throw new Exception("The annotation << $class >> isn't not already handled");
             }
-        }
-
-        if (empty($attributes)) {
-            return null;
         }
 
         return implode('²', $attributes);

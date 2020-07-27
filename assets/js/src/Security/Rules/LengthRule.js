@@ -36,6 +36,6 @@ export default class LengthRule extends Rule {
       return this.parameter.maxMessage.replace(/%limit%/, this.parameter.max)
     }
 
-    return ''
+    return undefined
   }
 }

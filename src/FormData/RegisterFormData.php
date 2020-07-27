@@ -47,10 +47,10 @@ final class RegisterFormData
      *     "this.getPassword() === this.getPasswordConfirmation()",
      *     message="This string doesn't match",
      *     checkFunctionInFrontend="
-    const passwordElement = document.querySelector('#register_form_password');
+    const passwordElement = document.querySelector('#register_password');
 
     if (this.tracked === undefined) {
-    const passwordConfirmationElement = document.querySelector('#register_form_password_confirmation');
+    const passwordConfirmationElement = document.querySelector('#register_password_confirmation');
     passwordElement.addEventListener('blur', function (event) { passwordConfirmationElement.focus();passwordConfirmationElement.blur(); });
     this.tracked = true;
     }
@@ -72,9 +72,9 @@ final class RegisterFormData
     /**
      * @param bool|null $is_agree_with_terms
      *
-     * @return RegisterFormData
+     * @return self
      */
-    public function setIsAgreeWithTerms(?bool $is_agree_with_terms): RegisterFormData
+    public function setIsAgreeWithTerms(?bool $is_agree_with_terms): self
     {
         $this->is_agree_with_terms = $is_agree_with_terms;
         return $this;
@@ -91,9 +91,9 @@ final class RegisterFormData
     /**
      * @param string $password_confirmation
      *
-     * @return RegisterFormData
+     * @return self
      */
-    public function setPasswordConfirmation(?string $password_confirmation): RegisterFormData
+    public function setPasswordConfirmation(?string $password_confirmation): self
     {
         $this->password_confirmation = $password_confirmation;
         return $this;
@@ -119,9 +119,9 @@ final class RegisterFormData
     /**
      * @param string $name
      *
-     * @return RegisterFormData
+     * @return self
      */
-    public function setName(?string $name): RegisterFormData
+    public function setName(?string $name): self
     {
         $this->name = $name;
         return $this;
@@ -138,9 +138,9 @@ final class RegisterFormData
     /**
      * @param string $email
      *
-     * @return RegisterFormData
+     * @return self
      */
-    public function setEmail(?string $email): RegisterFormData
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
         return $this;
@@ -157,9 +157,9 @@ final class RegisterFormData
     /**
      * @param string $password
      *
-     * @return RegisterFormData
+     * @return self
      */
-    public function setPassword(?string $password): RegisterFormData
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
         return $this;
