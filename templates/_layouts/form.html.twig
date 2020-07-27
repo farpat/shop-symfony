@@ -22,11 +22,9 @@
 {% block email_widget -%}
     {%- set type = type|default('email') -%}
     <div class="input-group{{ group_class|default('') }}">
-        <div class="input-group-prepend">
-                <span class="input-group-text">
-                   <i class="far fa-envelope-open"></i>
-                </span>
-        </div>
+        <span class="input-group-text">
+           <i class="far fa-envelope-open"></i>
+        </span>
         {{- block('form_widget_simple') -}}
     </div>
 {%- endblock email_widget %}
