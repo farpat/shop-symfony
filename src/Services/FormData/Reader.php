@@ -46,5 +46,4 @@ class Reader
     {
         return is_subclass_of($annotation, Constraint::class);
     }
-
 }

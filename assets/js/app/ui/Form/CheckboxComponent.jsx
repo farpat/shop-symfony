@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getHelpId, getInputClassName, getLabelClassName, getRulesFromBack, getError } from './Form'
+import { getHelpId, getInputClassName, getLabelClassName } from './Form'
 import TextComponent from './TextComponent'
 
 function CheckboxComponent ({ label, name, attr, id, help, value, isRequired, error, onUpdate = function () {} }) {

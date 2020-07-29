@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getHelpId, getInputClassName, getLabelClassName, getRulesFromBack, getError } from './Form'
+import { getHelpId, getInputClassName, getLabelClassName, getRulesFromBack } from './Form'
 
 function PasswordComponent ({ label, name, attr, id, help, value, isRequired, error, withKey, onUpdate = function () {} }) {
   const inputElement = <input type="password" className={getInputClassName(error)} id={id} name={name}

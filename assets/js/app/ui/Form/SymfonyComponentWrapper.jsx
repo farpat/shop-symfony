@@ -7,12 +7,12 @@ function SymfonyComponentWrapper (props) {
   const Component = require(`./${props.component}`).default
   const [data, setData] = useState({
     error: props.initialError,
-    value: props.initialValue
+    value: props.component === 'CheckboxComponent' ? !!props.initialValue : props.initialValue
   })
 
   const rules = useMemo(() => {
-    return { [props.name]: getRulesFromBack(props.rulesInString) }
-  }, [props.rulesInString])
+    return { [props.name]: getRulesFromBack(props.rules) }
+  }, [props.rules])
 
   const isRequired = useMemo(() => {
     const rule = rules[props.name]
@@ -20,7 +20,7 @@ function SymfonyComponentWrapper (props) {
       return false
     }
     return rule.find(r => r.name === 'not-blank') !== undefined
-  }, [props.rulesInString])
+  }, [props.rules])
 
   const onUpdate = function (key, value) {
     setData({ error: getError(rules, key, value), value })
@@ -34,16 +34,16 @@ function SymfonyComponentWrapper (props) {
 }
 
 SymfonyComponentWrapper.propTypes = {
-  component    : PropTypes.string.isRequired,
-  id           : PropTypes.string.isRequired,
-  name         : PropTypes.string.isRequired,
-  label        : PropTypes.string.isRequired,
-  initialValue : PropTypes.string.isRequired,
-  initialError : PropTypes.string.isRequired,
-  rulesInString: PropTypes.string.isRequired,
-  attr         : PropTypes.object.isRequired,
-  help         : PropTypes.string,
-  withKey      : PropTypes.bool,
+  component   : PropTypes.string.isRequired,
+  id          : PropTypes.string.isRequired,
+  name        : PropTypes.string.isRequired,
+  label       : PropTypes.string.isRequired,
+  initialValue: PropTypes.string.isRequired,
+  initialError: PropTypes.string.isRequired,
+  rules       : PropTypes.object.isRequired,
+  attr        : PropTypes.object.isRequired,
+  help        : PropTypes.string,
+  withKey     : PropTypes.bool,
 }
 
 export default hot(SymfonyComponentWrapper)

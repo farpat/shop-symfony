@@ -1,5 +1,5 @@
 module.exports = {
-  entry: {
+  entry  : {
     app: [
       './assets/sass/app.scss',
       './assets/js/app.js'

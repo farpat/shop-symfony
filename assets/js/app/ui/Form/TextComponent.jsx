@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getHelpId, getInputClassName, getLabelClassName, getRulesFromBack, getError } from './Form'
+import { getHelpId, getInputClassName, getLabelClassName } from './Form'
 import PropTypes from 'prop-types'
 
 function TextComponent ({ label, name, attr, id, help, value, isRequired, error, onUpdate = function () {} }) {

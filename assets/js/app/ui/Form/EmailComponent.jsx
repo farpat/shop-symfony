@@ -1,12 +1,6 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { hot } from 'react-hot-loader/root'
-import {
-  getHelpId,
-  getInputClassName,
-  getLabelClassName,
-  getError
-} from './Form'
+import { getHelpId, getInputClassName, getLabelClassName } from './Form'
 
 function EmailComponent ({ label, name, attr, id, help, value, error, isRequired, onUpdate = function () {} }) {
   return (
@@ -43,4 +37,4 @@ EmailComponent.propTypes = {
   onUpdate  : PropTypes.func
 }
 
-export default hot(EmailComponent)
+export default EmailComponent

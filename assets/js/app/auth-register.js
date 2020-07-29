@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
-import SymfonyComponentWrapper from './Form/SymfonyComponentWrapper'
+import SymfonyComponentWrapper from './ui/Form/SymfonyComponentWrapper'
 
 /**
  *

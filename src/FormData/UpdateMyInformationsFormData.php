@@ -19,13 +19,13 @@ final class UpdateMyInformationsFormData
      * @var string
      * @Assert\NotBlank()
      */
-    private $name = '';
+    private $name;
     /**
      * @var string
      * @Assert\NotBlank()
      * @Assert\Email()
      */
-    private $email = '';
+    private $email;
 
     public function __construct(array $data)
     {
@@ -37,7 +37,8 @@ final class UpdateMyInformationsFormData
 
     public function updateUser(User $user): User
     {
-        return $user->setName($this->getName())
+        return $user
+            ->setName($this->getName())
             ->setEmail($this->getEmail());
     }
 

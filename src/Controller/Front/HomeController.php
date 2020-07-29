@@ -28,11 +28,11 @@ class HomeController extends AbstractController
     {
         $elementsToDisplayInHomepageParameter = $moduleService->getParameter('home', 'display');
 
-        $elementsToDisplayInHomepage = $elementsToDisplayInHomepageParameter !== null ?
-            $elementsToDisplayInHomepageParameter->getValue() :
-            [];
-
-        return $this->render('home/index.html.twig', ['elementsToDisplayInHomepage' => $elementsToDisplayInHomepage]);
+        return $this->render('home/index.html.twig', [
+            'elementsToDisplayInHomepage' => $elementsToDisplayInHomepageParameter !== null ?
+                $elementsToDisplayInHomepageParameter->getValue() :
+                []
+        ]);
     }
 
     /**
@@ -51,7 +51,7 @@ class HomeController extends AbstractController
         NormalizerInterface $normalizer
     ) {
         $term = $request->query->get('q');
-        if ($term === null || strlen((string)$term) === 1) {
+        if ($term === null || strlen((string)$term) <= 2) {
             return $this->json([], Response::HTTP_BAD_REQUEST);
         }
 

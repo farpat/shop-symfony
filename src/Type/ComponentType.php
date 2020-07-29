@@ -46,14 +46,14 @@ class ComponentType extends TextType
         $errors = $form->getErrors();
 
         return [
-            'initialValue'  => $form->getViewData(),
-            'initialError'  => !isset($errors[0]) ? '' : $errors[0]->getMessage(),
-            'label'         => $this->makeLabelAttribute($options['label'], $form->getName()),
-            'name'          => "{$formName}[{$form->getName()}]",
-            'id'            => "{$formName}_{$form->getName()}",
-            'rulesInString' => $this->makeRulesAttribute(get_class($parentForm->getViewData()), $form->getName()),
-            'attr'          => !empty($options['attr']) ? $options['attr'] : [],
-            'help'          => $options['help'] ?? '',
+            'initialValue' => $form->getViewData(),
+            'initialError' => !isset($errors[0]) ? '' : $errors[0]->getMessage(),
+            'label'        => $this->makeLabel($options['label'], $form->getName()),
+            'name'         => "{$formName}[{$form->getName()}]",
+            'id'           => "{$formName}_{$form->getName()}",
+            'rules'        => $this->makeRules(get_class($parentForm->getViewData()), $form->getName()),
+            'attr'         => !empty($options['attr']) ? $options['attr'] : [],
+            'help'         => $options['help'] ?? '',
         ];
     }
 
@@ -63,7 +63,7 @@ class ComponentType extends TextType
      *
      * @return string
      */
-    protected function makeLabelAttribute($label, string $defaultLabel): ?string
+    protected function makeLabel($label, string $defaultLabel): ?string
     {
         if ($label === false) {
             return '';
@@ -76,9 +76,9 @@ class ComponentType extends TextType
         return (string)$label;
     }
 
-    protected function makeRulesAttribute(string $class, string $field): string
+    protected function makeRules(string $class, string $field): ?array
     {
-        $attributes = [];
+        $rules = [];
 
         foreach ($this->reader->getConstraintAnnotations($class, $field) as $constraintAnnotation) {
             $class = get_class($constraintAnnotation);
@@ -87,19 +87,34 @@ class ComponentType extends TextType
                     /** @var  NotBlank $constraintAnnotation */
                     $message = $constraintAnnotation->message !== '' ? $constraintAnnotation->message : $this->translator->trans('This value should not be blank.');
 
-                    $attributes[] = "NotBlankßmessage:{$message}";
+                    $rules[] = [
+                        'type'       => 'NotBlank',
+                        'parameters' => [
+                            'message' => $message
+                        ]
+                    ];
                     break;
                 case IsTrue::class:
                     /** @var  IsTrue $constraintAnnotation */
                     $message = $constraintAnnotation->message !== '' ? $constraintAnnotation->message : $this->translator->trans('This value should be true.');
 
-                    $attributes[] = "IsTrueßmessage:{$message}";
+                    $rules[] = [
+                        'type'       => 'IsTrue',
+                        'parameters' => [
+                            'message' => $message
+                        ]
+                    ];
                     break;
                 case Email::class:
                     /** @var  Email $constraintAnnotation */
                     $message = $constraintAnnotation->message !== '' ? $constraintAnnotation->message : $this->translator->trans('This value is not a valid email address.');
 
-                    $attributes[] = "Emailßmessage:{$message}";
+                    $rules[] = [
+                        'type'       => 'Email',
+                        'parameters' => [
+                            'message' => $message
+                        ]
+                    ];
                     break;
                 case Length::class:
                     /** @var Length $constraintAnnotation */
@@ -108,21 +123,35 @@ class ComponentType extends TextType
                     $maxMessage = $constraintAnnotation->maxMessage !== '' ? $constraintAnnotation->maxMessage : $this->translator->trans('The string must contain at most %limit% chars',
                         ['%limit%' => $constraintAnnotation->max]);
 
-                    $attributes[] = "Lengthßmin:{$constraintAnnotation->min}@max:{$constraintAnnotation->max}@minMessage:{$minMessage}@maxMessage:{$maxMessage}";
+                    $rules[] = [
+                        'type'       => 'Length',
+                        'parameters' => [
+                            'min'        => $constraintAnnotation->min,
+                            'minMessage' => $minMessage,
+                            'max'        => $constraintAnnotation->max,
+                            'maxMessage' => $maxMessage,
+                        ]
+                    ];
                     break;
-                case Expression::class:
-                    throw new Exception("The annotation << $class >> is not supported. Please, use << " . AssertExpression::class . " >> instead");
                 case AssertExpression::class:
                     /** @var AssertExpression $constraintAnnotation */
                     $message = $constraintAnnotation->message !== '' ? $constraintAnnotation->message : $this->translator->trans('This string doesn\'t match');
 
-                    $attributes[] = "Expressionßexpression:{$constraintAnnotation->checkFunctionInFrontend}@message:{$message}";
+                    $rules[] = [
+                        'type'       => 'Expression',
+                        'parameters' => [
+                            'expression' => $constraintAnnotation->checkFunctionInFrontend,
+                            'message'    => $message,
+                        ]
+                    ];
                     break;
+                case Expression::class:
+                    throw new Exception("The annotation << $class >> is not supported. Please, use << " . AssertExpression::class . " >> instead");
                 default:
                     throw new Exception("The annotation << $class >> isn't not already handled");
             }
         }
 
-        return implode('²', $attributes);
+        return empty($rules) ? null : $rules;
     }
 }

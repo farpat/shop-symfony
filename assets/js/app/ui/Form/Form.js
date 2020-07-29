@@ -1,28 +1,19 @@
-import { useState } from 'react'
-
 /**
  *
- * @param {String} rulesInString
+ * @param {Object} rulesInObject
  * @returns {Array}
  */
-export function getRulesFromBack (rulesInString) {
-  if (rulesInString === undefined || rulesInString === '') {
+
+export function getRulesFromBack (rulesInObject) {
+  if (rulesInObject === null) {
     return []
   }
 
   const rules = []
-
-  for (const ruleSplitted of rulesInString.split('²')) {
-    const [ruleName, parametersInString] = ruleSplitted.split('ß')
-
-    const RuleClass = require(`../../src/Security/Rules/${ruleName}Rule`).default
-    const parameters = {}
-    parametersInString.split('@').map(function (parameterExploded) {
-      const [key, value] = parameterExploded.split(':')
-      parameters[key] = value
-    })
-
-    rules.push(new RuleClass(parameters))
+  for (const key in rulesInObject) {
+    const rule = rulesInObject[key]
+    const RuleClass = require(`../../../src/Security/Rules/${rule.type}Rule`).default
+    rules.push(new RuleClass(rule.parameters))
   }
 
   return rules

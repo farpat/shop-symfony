@@ -18,7 +18,7 @@
 
         {% if app.user %}
             <div class="nav-item">
-                <a class="nav-link{{ active(app.request, 'app_front_user_profile') }}"
+                <a class="nav-link{{ active(app.request, 'app_front_user_profile') }}" id="nav-link-profile"
                    href="{{ path('app_front_user_profile') }}">{{ app.user.name }}</a>
             </div>
 
