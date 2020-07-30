@@ -17,9 +17,9 @@ class BuildTranslationsCommand extends Command
     private const JS_LANG = 'js-lang';
     private const LOCALES = ['fr'];
 
-    protected static $defaultName = 'app:build-translations';
+    protected static              $defaultName = 'app:build-translations';
     private ParameterBagInterface $parameterBag;
-    private Filesystem $filesystem;
+    private Filesystem            $filesystem;
 
     public function __construct(ParameterBagInterface $parameterBag, Filesystem $filesystem, string $name = null)
     {
@@ -50,10 +50,9 @@ class BuildTranslationsCommand extends Command
         if ($this->filesystem->exists($jsLangPath)) {
             $this->filesystem->remove($jsLangPath);
         }
-
-        $files = $this->getFiles();
         $this->filesystem->mkdir($jsLangPath);
-        foreach ($files as $file) {
+
+        foreach ($this->getFiles() as $file) {
             $io->comment("Handling $file");
             $this->compileTranslation($file);
         }
@@ -71,10 +70,10 @@ class BuildTranslationsCommand extends Command
     private function generateJson(TranslationUpdateCommand $command, OutputInterface $output, string $locale): int
     {
         $arguments = [
-            'command' => 'translation:update',
-            '--force' => true,
+            'command'         => 'translation:update',
+            '--force'         => true,
             '--output-format' => 'json',
-            'locale' => $locale
+            'locale'          => $locale
         ];
 
         $updateTranslationInput = new ArrayInput($arguments);

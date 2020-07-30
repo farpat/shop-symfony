@@ -18,7 +18,8 @@ class ProductController extends AbstractController
      * @Route("/categories/{categorySlug}-{categoryId}/{productSlug}-{productId}", name="show", methods={"GET"},
      *     requirements={
      *     "categorySlug":"[a-z\d\-]+", "productSlug":"[a-z\d\-]+",
-     *     "categoryId":"\d+", "productId":"\d+"}
+     *     "categoryId":"\d+", "productId":"\d+"
+     * }
      *     )
      * @Entity("product", expr="repository.getWithAllRelations(productId)")
      */
@@ -29,11 +30,15 @@ class ProductController extends AbstractController
         string $productSlug,
         NormalizerInterface $normalizer
     ) {
-        if ($categorySlug !== $product->getCategory()->getSlug() || $productSlug !== $product->getSlug() || $categoryId !== $product->getCategory()->getId()) {
+        if (
+            $categorySlug !== $product->getCategory()->getSlug() ||
+            $productSlug !== $product->getSlug() ||
+            $categoryId !== $product->getCategory()->getId()
+        ) {
             return $this->redirect($this->generateUrl('app_front_product_show', [
-                'productId' => $product->getId(),
-                'productSlug' => $product->getSlug(),
-                'categoryId' => $product->getCategory()->getId(),
+                'productId'    => $product->getId(),
+                'productSlug'  => $product->getSlug(),
+                'categoryId'   => $product->getCategory()->getId(),
                 'categorySlug' => $product->getCategory()->getSlug(),
             ]));
         }
@@ -42,8 +47,8 @@ class ProductController extends AbstractController
             ['label' => 'category', 'url' => $this->generateUrl('app_front_category_index')],
             [
                 'label' => $product->getCategory()->getLabel(),
-                'url' => $this->generateUrl('app_front_category_show', [
-                    'categoryId' => $categoryId,
+                'url'   => $this->generateUrl('app_front_category_show', [
+                    'categoryId'   => $categoryId,
                     'categorySlug' => $categorySlug
                 ])
             ],
@@ -51,9 +56,9 @@ class ProductController extends AbstractController
         ];
 
         return $this->render('product/show.html.twig', [
-            'product' => $product,
+            'product'                     => $product,
             'normalizedProductReferences' => $normalizer->normalize($product->getProductReferences(), 'json'),
-            'breadcrumb' => $breadcrumb,
+            'breadcrumb'                  => $breadcrumb,
         ]);
     }
 }

@@ -38,7 +38,7 @@ class CategoryController extends AbstractController
 
         return $this->render('category/index.html.twig', [
             'breadcrumb' => $breadcrumb,
-            'html' => $this->categoryService->generateHtml($this->categoryService->getRootCategories())
+            'html'       => $this->categoryService->generateHtml($this->categoryService->getRootCategories())
         ]);
     }
 
@@ -50,10 +50,13 @@ class CategoryController extends AbstractController
     {
         $currentPage = $request->query->get('page');
 
-        if (($currentPage !== null && filter_var($currentPage,
-                    FILTER_VALIDATE_INT) === false) || $currentPage === '1' || $categorySlug !== $category->getSlug()) {
+        if (
+            ($currentPage !== null && filter_var($currentPage, FILTER_VALIDATE_INT) === false) ||
+            $currentPage === '1' ||
+            $categorySlug !== $category->getSlug()
+        ) {
             return $this->redirect($this->generateUrl('app_front_category_show', [
-                'categoryId' => $category->getId(),
+                'categoryId'   => $category->getId(),
                 'categorySlug' => $category->getSlug(),
             ]));
         }
@@ -64,12 +67,12 @@ class CategoryController extends AbstractController
         ];
 
         return $this->render('category/show.html.twig', [
-            'category' => $category,
-            'currentPage' => $currentPage > 0 ? $currentPage : 1,
-            'perPage' => Product::PER_PAGE,
+            'category'            => $category,
+            'currentPage'         => $currentPage > 0 ? $currentPage : 1,
+            'perPage'             => Product::PER_PAGE,
             'productFieldsInJson' => $serializer->serialize($category->getProductFields(), 'json'),
-            'productsInJson' => $serializer->serialize($this->categoryService->getProducts($category), 'json'),
-            'breadcrumb' => $breadcrumb
+            'productsInJson'      => $serializer->serialize($this->categoryService->getProducts($category), 'json'),
+            'breadcrumb'          => $breadcrumb
         ]);
     }
 }

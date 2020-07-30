@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
-import Str from '../../src/Str'
 import TextComponent from '../ui/Form/TextComponent'
 import EmailComponent from '../ui/Form/EmailComponent'
-import Rule from '../../src/Security/Rule'
 import { jsonGet, jsonPut } from '@farpat/api'
 import { getError } from '../ui/Form/Form'
 import NotBlankRule from '../../src/Security/Rules/NotBlankRule'
@@ -11,18 +9,18 @@ import Arr from '../../src/Arr'
 import Alert from '../ui/Alert/Alert'
 
 const rules = {
-  name : [new NotBlankRule({ message: 'This value should not be blank' })],
+  name: [new NotBlankRule({ message: 'This value should not be blank' })],
   email: [new NotBlankRule({ message: 'This value should not be blank' }), new EmailRule({ message: 'This value is not a valid email address' })]
 }
 
 const navLinkProfile = document.querySelector('#nav-link-profile')
 
-function UpdateMyInformations () {
+function UpdateMyInformations() {
   const [state, setState] = useState({
-    information : {},
-    errors      : {},
-    alert       : null,
-    isLoading   : true,
+    information: {},
+    errors: {},
+    alert: null,
+    isLoading: true,
     isSubmitting: false
   })
 
@@ -34,7 +32,7 @@ function UpdateMyInformations () {
       setState({
         ...state,
         information: response,
-        isLoading  : false
+        isLoading: false
       })
     })()
   }, [])
@@ -45,7 +43,7 @@ function UpdateMyInformations () {
     }
   }, [state.isSubmitting])
 
-  function handleSubmit (event) {
+  function handleSubmit(event) {
     event.preventDefault()
 
     if (state.isSubmitting) {
@@ -58,9 +56,9 @@ function UpdateMyInformations () {
       .then(response => {
         setState({
           ...state,
-          errors      : {},
-          alert       : { type: 'success', message: 'Information updated with success!' },
-          information : response,
+          errors: {},
+          alert: { type: 'success', message: 'Information updated with success!' },
+          information: response,
           isSubmitting: false
         })
       })
@@ -68,7 +66,7 @@ function UpdateMyInformations () {
         setState({
           ...state,
           errors,
-          alert       : { type: 'danger', message: 'Information not updated' },
+          alert: { type: 'danger', message: 'Information not updated' },
           isSubmitting: false,
         })
       })
@@ -80,41 +78,38 @@ function UpdateMyInformations () {
     setState({
       ...state,
       information: { ...state.information, [key]: value },
-      errors     : { ...state.errors, [key]: error }
+      errors: { ...state.errors, [key]: error }
     })
   }
 
   if (state.isLoading) {
     return <div className="text-center mt-5">
-      <i className='fas fa-spinner spinner fa-7x'/>
+      <i className='fas fa-spinner spinner fa-7x' />
     </div>
   }
 
   return <form ref={form} className='mb-5' onSubmit={handleSubmit}>
     {
-      !state.isLoading && <>
-        {
-          state.alert &&
-          <Alert type={state.alert.type} message={state.alert.message}
-                 onClose={() => setState({ ...state, alert: null })}/>
-        }
-        <TextComponent id="name" name="name" label="Name" isRequired={true}
-                       onUpdate={onUpdateInformation} attr={{ autoFocus: true }}
-                       error={state.errors.name} value={state.information.name}
-        />
+      state.alert &&
+      <Alert type={state.alert.type} message={state.alert.message}
+        onClose={() => setState({ ...state, alert: null })} />
+    }
+    
+    <TextComponent id="name" name="name" label="Name" isRequired={true}
+      onUpdate={onUpdateInformation} attr={{ autoFocus: true }}
+      error={state.errors.name} value={state.information.name}
+    />
 
-        <EmailComponent id="email" name="email" label="Email" isRequired={true}
-                        onUpdate={onUpdateInformation}
-                        error={state.errors.email} value={state.information.email}
-        />
+    <EmailComponent id="email" name="email" label="Email" isRequired={true}
+      onUpdate={onUpdateInformation}
+      error={state.errors.email} value={state.information.email}
+    />
 
-        {
-          state.isSubmitting ?
-            <button className="btn btn-primary" disabled><i className="fa fa-spinner spinner"/> Loading&hellip;
+    {
+      state.isSubmitting ?
+        <button className="btn btn-primary" disabled><i className="fa fa-spinner spinner" /> Loading&hellip;
             </button> :
-            <button className="btn btn-primary">Save informations</button>
-        }
-      </>
+        <button className="btn btn-primary">Save informations</button>
     }
   </form>
 }

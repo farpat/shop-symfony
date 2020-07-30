@@ -1,0 +1,9 @@
+{
+    "To purchase your cart, you should {{ loginUrlStart }}login{{ urlEnd }} or {{ registerUrlStart }}create an account{{ urlEnd }}": "__To purchase your cart, you should {{ loginUrlStart }}login{{ urlEnd }} or {{ registerUrlStart }}create an account{{ urlEnd }}",
+    "You must have items in your cart to purchase something": "__You must have items in your cart to purchase something",
+    "Great! You paid {{ totalIncludingTaxes }} with success. You will receive an email containing the corresponding billing": "__Great! You paid {{ totalIncludingTaxes }} with success. You will receive an email containing the corresponding billing",
+    "Sorry! No products found": "__Sorry! No products found",
+    "Purchase": "__Purchase",
+    "Payment by credit card": "__Payment by credit card",
+    "From": "__From"
+}

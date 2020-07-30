@@ -7,10 +7,7 @@ use App\Entity\User;
 use App\Validator\Unique;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @Unique(field="email", entity="App\Entity\User")
- */
-final class UpdateMyInformationsFormData
+final class UpdateMyAddressesFormData
 {
 
     private ?int $id;
@@ -32,7 +29,7 @@ final class UpdateMyInformationsFormData
         $this
             ->setEmail($data['email'])
             ->setName($data['name'])
-            ->setId($data['id']);
+            ->setId(data['id']);
     }
 
     public function updateUser(User $user): User

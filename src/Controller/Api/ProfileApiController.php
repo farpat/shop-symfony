@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psy\Util\Json;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,32 +24,25 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class ProfileApiController extends AbstractController
 {
-    /** @var UserInterface|User|null */
-    private UserInterface       $user;
-    private NormalizerInterface $normalizer;
-    /**
-     * @var Request
-     */
-    private Request $request;
-    /**
-     * @var ValidatorInterface
-     */
-    private ValidatorInterface $validator;
-    /**
-     * @var EntityManagerInterface
-     */
+    /** @var UserInterface|User $user */
+    private UserInterface          $user;
+    private NormalizerInterface    $normalizer;
+    private ValidatorInterface     $validator;
     private EntityManagerInterface $entityManager;
+    private ParameterBagInterface  $parameterBag;
 
     public function __construct(
         Security $security,
         NormalizerInterface $normalizer,
         ValidatorInterface $validator,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        ParameterBagInterface $parameterBag
     ) {
         $this->user = $security->getUser();
         $this->normalizer = $normalizer;
         $this->validator = $validator;
         $this->entityManager = $entityManager;
+        $this->parameterBag = $parameterBag;
     }
 
     /**
@@ -58,19 +52,15 @@ class ProfileApiController extends AbstractController
     public function me(Request $request)
     {
         if ($request->getMethod() === 'PUT') {
-            $formData = new UpdateMyInformationsFormData($request->request->all());
-            $formData->setId($this->user->getId());
+            $formData = new UpdateMyInformationsFormData(array_merge(
+                $request->request->all(),
+                ['id' => $this->user->getId()]
+            ));
 
-            /** @var ConstraintViolation[] $errors */
-            $errors = $this->validator->validate($formData);
+            $errors = $this->getErrors($formData);
 
             if (count($errors) > 0) {
-                $erorrResponse = [];
-                foreach ($errors as $error) {
-                    $erorrResponse[$error->getPropertyPath()] = $error->getMessage();
-                }
-
-                return new JsonResponse($erorrResponse, 422);
+                return new JsonResponse($errors, 422);
             } else {
                 $formData->updateUser($this->user);
                 $this->entityManager->flush();
@@ -80,8 +70,40 @@ class ProfileApiController extends AbstractController
         return new JsonResponse($this->normalizer->normalize($this->user, 'json'));
     }
 
-    public function address(Request $request)
+    private function getErrors($formData): array
     {
-        return new JsonResponse($this->normalizer->normalize($this->user, 'addresses'));
+        /** @var ConstraintViolation[] $errors */
+        $errors = $this->validator->validate($formData);
+
+        if (count($errors) === 0) {
+            return [];
+        }
+
+        $errorResponse = [];
+        foreach ($errors as $error) {
+            $erorrResponse[$error->getPropertyPath()] = $error->getMessage();
+        }
+
+        return $errorResponse;
+    }
+
+    /**
+     * @Route("/addresses", name="addresses", methods={"GET", "PUT"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function addresses(Request $request)
+    {
+        if ($request->getMethod() === 'PUT') {
+            dd($request->request->all());
+        }
+        return new JsonResponse(array_merge(
+            $this->normalizer->normalize($this->user, 'addresses'),
+            [
+                'algolia' => [
+                    'id' => $this->parameterBag->get('ALGOLIA_API_ID'),
+                    'key' => $this->parameterBag->get('ALGOLIA_API_KEY')
+                ]
+            ]
+        ));
     }
 }

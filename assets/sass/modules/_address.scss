@@ -1,0 +1,12 @@
+.addresses {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1.5rem;
+}
+
+.address {
+  border: 1px solid rgba($black, 0.1);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}

@@ -105,6 +105,7 @@ final class RegisterFormData
         return $user->setName($this->getName())
             ->setEmail($this->getEmail())
             ->setRoles(['ROLE_USER'])
+            ->setEmailVerifiedAt(null)
             ->setPassword($passwordEncoder->encodePassword($user, $user->getPassword()));
     }
 

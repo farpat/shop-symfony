@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { forwardRef } from 'react'
 import { getHelpId, getInputClassName, getLabelClassName } from './Form'
 import PropTypes from 'prop-types'
 
-function TextComponent ({ label, name, attr, id, help, value, isRequired, error, onUpdate = function () {} }) {
+function TextComponent({ label, name, className, attr, id, help, value, isRequired, error, onUpdate = function () { } }) {
   return (
     <div className="form-group">
       {
-        label !== '' && <label htmlFor={id} className={getLabelClassName(isRequired)}>{label}</label>
+        label && <label htmlFor={id} className={getLabelClassName(isRequired)}>{label}</label>
       }
-      <input type="text" className={getInputClassName(error)} id={id} name={name} defaultValue={value}
-             onChange={event => onUpdate(name, event.target.value)}
-             required={isRequired} aria-describedby={getHelpId(help, id)} {...attr}
+      <input type="text" className={(className || '') + ' ' + getInputClassName(error)} id={id} name={name} defaultValue={value}
+        onChange={event => onUpdate(name, event.target.value)}
+        required={isRequired} aria-describedby={getHelpId(help, id)} {...attr}
       />
       {
         error && <div className="invalid-feedback">{error}</div>
@@ -23,14 +23,15 @@ function TextComponent ({ label, name, attr, id, help, value, isRequired, error,
 }
 
 TextComponent.propTypes = {
-  id        : PropTypes.string.isRequired,
-  name      : PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  className: PropTypes.string,
   isRequired: PropTypes.bool,
-  value     : PropTypes.string,
-  error     : PropTypes.string,
-  attr      : PropTypes.object,
-  label     : PropTypes.string,
-  onUpdate  : PropTypes.func
+  value: PropTypes.string,
+  error: PropTypes.string,
+  attr: PropTypes.object,
+  label: PropTypes.string,
+  onUpdate: PropTypes.func
 }
 
 export default TextComponent

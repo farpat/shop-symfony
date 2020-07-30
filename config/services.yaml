@@ -7,6 +7,8 @@ parameters:
     WEBPACK_DEV_SERVER_PORT: '%env(WEBPACK_DEV_SERVER_PORT)%'
     STRIPE_PUBLIC_KEY: '%env(STRIPE_PUBLIC_KEY)%'
     STRIPE_SECRET_KEY: '%env(STRIPE_SECRET_KEY)%'
+    ALGOLIA_API_KEY: '%env(ALGOLIA_API_KEY)%'
+    ALGOLIA_API_ID: '%env(ALGOLIA_API_ID)%'
 
 services:
     # default configuration for services in *this* file
