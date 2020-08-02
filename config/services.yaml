@@ -9,6 +9,7 @@ parameters:
     STRIPE_SECRET_KEY: '%env(STRIPE_SECRET_KEY)%'
     ALGOLIA_API_KEY: '%env(ALGOLIA_API_KEY)%'
     ALGOLIA_API_ID: '%env(ALGOLIA_API_ID)%'
+    GOOGLE_GEOCODE_KEY: '%env(GOOGLE_GEOCODE_KEY)%'
 
 services:
     # default configuration for services in *this* file

@@ -12,20 +12,17 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 final class UpdateMyInformationsFormData
 {
-
-    private ?int $id;
+    private int $id;
 
     /**
-     * @var string
      * @Assert\NotBlank()
      */
-    private $name;
+    private string $name;
     /**
-     * @var string
      * @Assert\NotBlank()
      * @Assert\Email()
      */
-    private $email;
+    private string $email;
 
     public function __construct(array $data)
     {

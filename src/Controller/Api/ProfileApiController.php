@@ -4,8 +4,10 @@ namespace App\Controller\Api;
 
 use App\Entity\User;
 use App\Form\Form\UpdateMyInformationsType;
+use App\FormData\UpdateMyAddressesFormData;
 use App\FormData\UpdateMyInformationsFormData;
 use Doctrine\ORM\EntityManagerInterface;
+use Farpat\Api\Api;
 use Psy\Util\Json;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -81,7 +83,15 @@ class ProfileApiController extends AbstractController
 
         $errorResponse = [];
         foreach ($errors as $error) {
-            $erorrResponse[$error->getPropertyPath()] = $error->getMessage();
+            $explodedPropertyPath = explode('.', $error->getPropertyPath());
+
+            if (count($explodedPropertyPath) === 1) {
+                $errorResponse[$error->getPropertyPath()] = $error->getMessage();
+            } else {
+                $errorResponse[$explodedPropertyPath[0]] = $errorResponse[$explodedPropertyPath[0]] ?? [];
+                $errorResponse[$explodedPropertyPath[0]][$explodedPropertyPath[1]] = $error->getMessage();
+            }
+
         }
 
         return $errorResponse;
@@ -94,13 +104,25 @@ class ProfileApiController extends AbstractController
     public function addresses(Request $request)
     {
         if ($request->getMethod() === 'PUT') {
-            dd($request->request->all());
+            $formData = new UpdateMyAddressesFormData(
+                $request->request->all(),
+                $this->parameterBag->get('GOOGLE_GEOCODE_KEY')
+            );
+
+            $errors = $this->getErrors($formData);
+
+            if (count($errors) > 0) {
+                return new JsonResponse($errors, 422);
+            } else {
+                $formData->updateUser($this->user);
+                $this->entityManager->flush();
+            }
         }
         return new JsonResponse(array_merge(
             $this->normalizer->normalize($this->user, 'addresses'),
             [
                 'algolia' => [
-                    'id' => $this->parameterBag->get('ALGOLIA_API_ID'),
+                    'id'  => $this->parameterBag->get('ALGOLIA_API_ID'),
                     'key' => $this->parameterBag->get('ALGOLIA_API_KEY')
                 ]
             ]

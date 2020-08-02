@@ -43,7 +43,7 @@ function UpdateMyInformations() {
     }
   }, [state.isSubmitting])
 
-  function handleSubmit(event) {
+  function onSubmit(event) {
     event.preventDefault()
 
     if (state.isSubmitting) {
@@ -88,7 +88,7 @@ function UpdateMyInformations() {
     </div>
   }
 
-  return <form ref={form} className='mb-5' onSubmit={handleSubmit}>
+  return <form ref={form} className='mb-5' onSubmit={onSubmit}>
     {
       state.alert &&
       <Alert type={state.alert.type} message={state.alert.message}
