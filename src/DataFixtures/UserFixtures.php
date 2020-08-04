@@ -109,7 +109,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
         static $currentBillingNumber = 0;
         $billings = [];
 
-        $billingsCount = random_int(1, 4);
+        $billingsCount = random_int(3, 7);
 
         for ($i = 0; $i < $billingsCount; $i++) {
             $now = new DateTime;
@@ -188,12 +188,10 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
      */
     private function makeCart(User $user, array $addresses, array $allProductReferences)
     {
-        $deliveryAddress = $addresses[array_rand($addresses)];
-
         $cart = (new Cart)
             ->setUpdatedAt(new DateTime())
             ->setComment($this->faker->boolean(25) ? $this->faker->sentence : null)
-            ->setDeliveryAddress($deliveryAddress);
+            ->setDeliveryAddress($user->getDeliveryAddress());
 
         $user->addCart($cart);
 

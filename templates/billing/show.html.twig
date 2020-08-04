@@ -22,13 +22,13 @@
 
         <div class="row">
             <div class="offset-6 col">
-                <strong>{{ billing.information.name }}</strong><br>
-                {{ billing.deliveryAddress.line1 }}<br>
-                {% if billing.deliveryAddress.line2 %}
-                    {{ billing.deliveryAddress.line2 }}
+                <strong>{{ billing.user.name }}</strong><br>
+                {{ billing.addressLine1 }}<br>
+                {% if billing.addressLine2 %}
+                    {{ billing.addressLine2 }}
                 {% endif %}
-                {{ billing.deliveryAddress.postalCode }} {{ billing.deliveryAddress.city }}<br>
-                {{ billing.deliveryAddress.country }}
+                {{ billing.addressPostalCode }} {{ billing.addressCity }}<br>
+                {{ billing.addressCountry }}
             </div>
         </div>
 
@@ -50,23 +50,23 @@
                 <tr>
                     <td>{{ item.productReference.label }}</td>
                     <td>{{ item.quantity }}</td>
-                    <td class="text-right">{{ item.productReference.formattedUnitPriceExcludingTaxes(parameter('billing', 'currency')) }}</td>
-                    <td class="text-right">{{ item.productReference.formattedUnitPriceIncludingTaxes(parameter('billing', 'currency')) }}</td>
+                    <td class="text-right">{{ item.productReference.unitPriceExcludingTaxes | price }}</td>
+                    <td class="text-right">{{ item.productReference.unitPriceIncludingTaxes | price }}</td>
                 </tr>
             {% endfor %}
             </tbody>
             <tfoot class="header-cart-total">
             <tr>
                 <td colspan="2">{% trans %}Total amount excluding taxes{% endtrans %} :</td>
-                <td colspan="2">{{ billing.formattedTotalAmountExcludingTaxes(parameter('billing', 'currency')) }}</td>
+                <td colspan="2">{{ billing.totalAmountExcludingTaxes | price }}</td>
             </tr>
             <tr class="header-cart-total-vat">
                 <td class="text-right" colspan="2">{% trans %}Including taxes{% endtrans %}</td>
-                <td colspan="2">{{ billing.formattedIncludingTaxes(parameter('billing', 'currency')) }}</td>
+                <td colspan="2">{{ billing.includingTaxes | price }}</td>
             </tr>
             <tr style="font-size: 1.5rem;">
                 <td class="text-right" colspan="2">{% trans %}Total amount including taxes{% endtrans %} :</td>
-                <td colspan="2">{{ billing.formattedTotalAmountIncludingTaxes(parameter('billing', 'currency')) }}</td>
+                <td colspan="2">{{ billing.totalAmountIncludingTaxes | price }}</td>
             </tr>
             </tfoot>
         </table>

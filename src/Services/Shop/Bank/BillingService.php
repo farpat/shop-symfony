@@ -36,7 +36,12 @@ class BillingService
     {
         $billingPdf = new Pdf();
         $billingPdf->addPage($this->twig->render('billing/show.html.twig', ['billing' => $billing]));
-        return $billingPdf->saveAs($this->getPdfPath($billing));
+        $pdfPath = $this->getPdfPath($billing);
+        $folder = dirname($pdfPath);
+        if (!is_dir($folder)) {
+            mkdir($folder);
+        }
+        return $billingPdf->saveAs($pdfPath);
     }
 
     public function getPdfPath(Billing $billing): string

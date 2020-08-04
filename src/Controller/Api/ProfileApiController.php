@@ -3,24 +3,17 @@
 namespace App\Controller\Api;
 
 use App\Entity\User;
-use App\Form\Form\UpdateMyInformationsType;
 use App\FormData\UpdateMyAddressesFormData;
 use App\FormData\UpdateMyInformationsFormData;
-use App\Repository\AddressRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Farpat\Api\Api;
-use Psy\Util\Json;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\{JsonResponse, Request};
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\{Core\Security, Core\User\UserInterface};
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Validator\ConstraintViolation;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\{ConstraintViolation, Validator\ValidatorInterface};
 
 /**
  * @Route("/profile-api", name="app_profileapi_user_")
@@ -121,7 +114,7 @@ class ProfileApiController extends AbstractController
             }
         }
         return new JsonResponse(array_merge(
-            $this->normalizer->normalize($this->user, 'addresses'),
+            $this->normalizer->normalize($this->user, 'addresses-json'),
             [
                 'algolia' => [
                     'id'  => $this->parameterBag->get('ALGOLIA_API_ID'),
@@ -129,5 +122,13 @@ class ProfileApiController extends AbstractController
                 ]
             ]
         ));
+    }
+
+    /** @Route("/billings", name="billings", methods={"GET"}) */
+    public function billings()
+    {
+        $billings = $this->user->getBillings();
+
+        return new JsonResponse($this->normalizer->normalize($billings->toArray(), 'billings-json'));
     }
 }

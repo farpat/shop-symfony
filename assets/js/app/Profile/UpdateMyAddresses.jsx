@@ -215,8 +215,6 @@ function UpdateMyAddresses () {
   }
 
   return <form ref={form} className='mb-5' onSubmit={onSubmit}>
-    <Dump object={state}/>
-
     {
       state.alert &&
       <Alert type={state.alert.type} message={state.alert.message}
@@ -271,4 +269,3 @@ function Address ({ address, index, error, isSelected, onUpdateLine2, onDeleteAd
     </div>
   </div>
 }
-
