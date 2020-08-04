@@ -23,12 +23,12 @@
         <div class="row">
             <div class="offset-6 col">
                 <strong>{{ billing.information.name }}</strong><br>
-                {{ billing.deliveredAddress.line1 }}<br>
-                {% if billing.deliveredAddress.line2 %}
-                    {{ billing.deliveredAddress.line2 }}
+                {{ billing.deliveryAddress.line1 }}<br>
+                {% if billing.deliveryAddress.line2 %}
+                    {{ billing.deliveryAddress.line2 }}
                 {% endif %}
-                {{ billing.deliveredAddress.postalCode }} {{ billing.deliveredAddress.city }}<br>
-                {{ billing.deliveredAddress.country }}
+                {{ billing.deliveryAddress.postalCode }} {{ billing.deliveryAddress.city }}<br>
+                {{ billing.deliveryAddress.country }}
             </div>
         </div>
 

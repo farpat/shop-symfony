@@ -36,8 +36,9 @@ abstract class Orderable
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Address")
+     * @ORM\JoinColumn(onDelete="SET NULL")
      */
-    protected $deliveredAddress;
+    protected $deliveryAddress;
 
     /**
      * @ORM\Column(type="integer", options={"default": 0})
@@ -82,14 +83,14 @@ abstract class Orderable
         return $this;
     }
 
-    public function getDeliveredAddress(): ?Address
+    public function getDeliveryAddress(): ?Address
     {
-        return $this->deliveredAddress;
+        return $this->deliveryAddress;
     }
 
-    public function setDeliveredAddress(?Address $deliveredAddress): self
+    public function setDeliveryAddress(?Address $deliveryAddress): self
     {
-        $this->deliveredAddress = $deliveredAddress;
+        $this->deliveryAddress = $deliveryAddress;
 
         return $this;
     }

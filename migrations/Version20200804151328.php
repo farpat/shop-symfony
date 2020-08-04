@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200619144245 extends AbstractMigration
+final class Version20200804151328 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -29,7 +29,7 @@ final class Version20200619144245 extends AbstractMigration
         $this->addSql('CREATE TABLE module (id INT AUTO_INCREMENT NOT NULL, label VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, is_active TINYINT(1) DEFAULT \'0\' NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE module_parameter (id INT AUTO_INCREMENT NOT NULL, module_id INT NOT NULL, label LONGTEXT NOT NULL, description LONGTEXT DEFAULT NULL, value LONGTEXT NOT NULL COMMENT \'(DC2Type:array)\', INDEX IDX_70F68ED8AFC2B591 (module_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE order_item (id INT AUTO_INCREMENT NOT NULL, product_reference_id INT NOT NULL, orderable_id INT NOT NULL, quantity INT NOT NULL, amount_excluding_taxes NUMERIC(10, 2) NOT NULL, amount_including_taxes NUMERIC(10, 2) NOT NULL, INDEX IDX_52EA1F099BE1FCC2 (product_reference_id), INDEX IDX_52EA1F096174077 (orderable_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE orderable (id INT AUTO_INCREMENT NOT NULL, delivered_address_id INT DEFAULT NULL, comment LONGTEXT DEFAULT NULL, items_count INT DEFAULT 0 NOT NULL, total_amount_excluding_taxes NUMERIC(10, 2) NOT NULL, total_amount_including_taxes NUMERIC(10, 2) NOT NULL, updated_at DATETIME DEFAULT NULL, created_at DATETIME NOT NULL, type VARCHAR(255) NOT NULL, INDEX IDX_132DB7D2E1E77360 (delivered_address_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE orderable (id INT AUTO_INCREMENT NOT NULL, delivery_address_id INT DEFAULT NULL, comment LONGTEXT DEFAULT NULL, items_count INT DEFAULT 0 NOT NULL, total_amount_excluding_taxes NUMERIC(10, 2) NOT NULL, total_amount_including_taxes NUMERIC(10, 2) NOT NULL, updated_at DATETIME DEFAULT NULL, created_at DATETIME NOT NULL, type VARCHAR(255) NOT NULL, INDEX IDX_132DB7D2EBF23851 (delivery_address_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE product (id INT AUTO_INCREMENT NOT NULL, main_image_id INT DEFAULT NULL, category_id INT DEFAULT NULL, label VARCHAR(255) NOT NULL, slug VARCHAR(255) NOT NULL, excerpt LONGTEXT DEFAULT NULL, description LONGTEXT DEFAULT NULL, INDEX IDX_D34A04ADE4873418 (main_image_id), INDEX IDX_D34A04AD12469DE2 (category_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE product_tag (product_id INT NOT NULL, tag_id INT NOT NULL, INDEX IDX_E3A6E39C4584665A (product_id), INDEX IDX_E3A6E39CBAD26311 (tag_id), PRIMARY KEY(product_id, tag_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE product_tax (product_id INT NOT NULL, tax_id INT NOT NULL, INDEX IDX_6EAEEE694584665A (product_id), INDEX IDX_6EAEEE69B2A824D8 (tax_id), PRIMARY KEY(product_id, tax_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -52,7 +52,7 @@ final class Version20200619144245 extends AbstractMigration
         $this->addSql('ALTER TABLE module_parameter ADD CONSTRAINT FK_70F68ED8AFC2B591 FOREIGN KEY (module_id) REFERENCES module (id)');
         $this->addSql('ALTER TABLE order_item ADD CONSTRAINT FK_52EA1F099BE1FCC2 FOREIGN KEY (product_reference_id) REFERENCES product_reference (id)');
         $this->addSql('ALTER TABLE order_item ADD CONSTRAINT FK_52EA1F096174077 FOREIGN KEY (orderable_id) REFERENCES orderable (id)');
-        $this->addSql('ALTER TABLE orderable ADD CONSTRAINT FK_132DB7D2E1E77360 FOREIGN KEY (delivered_address_id) REFERENCES address (id)');
+        $this->addSql('ALTER TABLE orderable ADD CONSTRAINT FK_132DB7D2EBF23851 FOREIGN KEY (delivery_address_id) REFERENCES address (id) ON DELETE SET NULL');
         $this->addSql('ALTER TABLE product ADD CONSTRAINT FK_D34A04ADE4873418 FOREIGN KEY (main_image_id) REFERENCES image (id)');
         $this->addSql('ALTER TABLE product ADD CONSTRAINT FK_D34A04AD12469DE2 FOREIGN KEY (category_id) REFERENCES category (id)');
         $this->addSql('ALTER TABLE product_tag ADD CONSTRAINT FK_E3A6E39C4584665A FOREIGN KEY (product_id) REFERENCES product (id) ON DELETE CASCADE');
@@ -73,7 +73,7 @@ final class Version20200619144245 extends AbstractMigration
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE orderable DROP FOREIGN KEY FK_132DB7D2E1E77360');
+        $this->addSql('ALTER TABLE orderable DROP FOREIGN KEY FK_132DB7D2EBF23851');
         $this->addSql('ALTER TABLE user DROP FOREIGN KEY FK_8D93D649EBF23851');
         $this->addSql('ALTER TABLE category_product_field DROP FOREIGN KEY FK_E4721B4F12469DE2');
         $this->addSql('ALTER TABLE product DROP FOREIGN KEY FK_D34A04AD12469DE2');

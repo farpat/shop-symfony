@@ -22,9 +22,9 @@ class BillingRepository extends ServiceEntityRepository
     public function getWithAllRelations(string $billingNumber): ?Billing
     {
         return $this->createQueryBuilder('b')
-            ->select('b', 'user', 'deliveredAddress', 'items', 'productReference')
+            ->select('b', 'user', 'deliveryAddress', 'items', 'productReference')
             ->leftJoin('b.user', 'user')
-            ->leftJoin('b.deliveredAddress', 'deliveredAddress')
+            ->leftJoin('b.deliveryAddress', 'deliveryAddress')
             ->leftJoin('b.items', 'items')
             ->leftJoin('items.productReference', 'productReference')
             ->where('b.number = :number')

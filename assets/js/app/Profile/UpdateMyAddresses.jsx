@@ -4,6 +4,7 @@ import Str from '../../src/Str'
 import TextComponent from '../ui/Form/TextComponent'
 import places from 'places.js'
 import Alert from '../ui/Alert/Alert'
+import Dump from '../ui/Dump'
 
 const getName = function (index, key) {
   return `addresses[${index}][${key}]`
@@ -70,6 +71,8 @@ function UpdateMyAddresses () {
   }
 
   const onAddAddress = () => {
+    let deliveryAddressIndex = state.information.delivery_address_index ?? state.information.addresses.length
+
     const addresses = addAddress(state.information.addresses, {
       id          : null,
       text        : '',
@@ -83,12 +86,23 @@ function UpdateMyAddresses () {
 
     setState({
       ...state,
-      information: { ...state.information, addresses }
+      information: {
+        ...state.information,
+        addresses,
+        delivery_address_index: deliveryAddressIndex
+      }
     })
   }
 
   const onDeleteAddress = (index) => {
-    const deliveryAddressIndex = index === state.information.delivery_address_index ? null : state.information.delivery_address_index
+    let deliveryAddressIndex = state.information.delivery_address_index
+    if (index === state.information.delivery_address_index) {
+      deliveryAddressIndex = state.information.addresses.findIndex((address, indexToFind) => indexToFind !== index && !address.is_deleted)
+
+      if (deliveryAddressIndex === -1) {
+        deliveryAddressIndex = null
+      }
+    }
 
     setState({
       ...state,
@@ -201,7 +215,7 @@ function UpdateMyAddresses () {
   }
 
   return <form ref={form} className='mb-5' onSubmit={onSubmit}>
-    <div dangerouslySetInnerHTML={{ __html: Str.dump(state) }}></div>
+    <Dump object={state}/>
 
     {
       state.alert &&

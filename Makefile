@@ -44,7 +44,7 @@ clean: ## Remove cache
 	@echo "$(DANGER_COLOR)Removing Symfony cache...$(NO_COLOR)"
 	@$(php) bin/console cache:pool:clear -q cache.app
 	@echo "$(DANGER_COLOR)Removing billings PDF...$(NO_COLOR)"
-	@rm -rf ./var/storage/billings
+	@rm -rf ./var/storage/billings/*
 
 help: ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "$(PRIMARY_COLOR_BOLD)%-10s$(NO_COLOR) %s\n", $$1, $$2 }' $(MAKEFILE_LIST) | sort
@@ -72,10 +72,14 @@ build: install ## Build assets projects for production
 
 migrate: dev clean ## Refresh database by running new migrations
 	@echo "$(PRIMARY_COLOR)Migrating database...$(NO_COLOR)"
-	@$(php) bin/console doctrine:database:drop --force -q
-	@$(php) bin/console doctrine:database:create -q
 	@$(php) bin/console doctrine:migrations:migrate -n -q
 	@$(php) bin/console doctrine:fixtures:load -n
+
+purge-database: ## Purge dev database
+	@$(php) bin/console doctrine:database:drop --force
+	@$(php) bin/console doctrine:database:create
+	@rm -rf migrations/*
+	@$(php) bin/console make:migration
 
 bash: install ## Run bash in PHP container
 	@$(bash)

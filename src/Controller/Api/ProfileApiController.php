@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\Form\UpdateMyInformationsType;
 use App\FormData\UpdateMyAddressesFormData;
 use App\FormData\UpdateMyInformationsFormData;
+use App\Repository\AddressRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Farpat\Api\Api;
 use Psy\Util\Json;
@@ -101,12 +102,13 @@ class ProfileApiController extends AbstractController
      * @Route("/addresses", name="addresses", methods={"GET", "PUT"})
      * @IsGranted("ROLE_USER")
      */
-    public function addresses(Request $request)
+    public function addresses(Request $request, EntityManagerInterface $entityManager)
     {
         if ($request->getMethod() === 'PUT') {
             $formData = new UpdateMyAddressesFormData(
                 $request->request->all(),
-                $this->parameterBag->get('GOOGLE_GEOCODE_KEY')
+                $this->parameterBag->get('GOOGLE_GEOCODE_KEY'),
+                $entityManager
             );
 
             $errors = $this->getErrors($formData);

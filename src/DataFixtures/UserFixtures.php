@@ -117,7 +117,8 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
             $billing = (new Billing)
                 ->setUser($user)
                 ->setComment($this->faker->boolean(25) ? $this->faker->sentence : null)
-                ->setDeliveredAddress($addresses[random_int(0, count($addresses) - 1)])
+                ->setDeliveryAddress($addresses[array_rand($addresses)])
+                ->setDeliveryAddress(null) //To set $billing->delivery_address to null
                 ->setNumber($now->format('Y-m') . '-' . (++$currentBillingNumber))
                 ->setStatus(Billing::DELIVRED_STATUS);
 
@@ -187,10 +188,12 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
      */
     private function makeCart(User $user, array $addresses, array $allProductReferences)
     {
+        $deliveryAddress = $addresses[array_rand($addresses)];
+
         $cart = (new Cart)
             ->setUpdatedAt(new DateTime())
             ->setComment($this->faker->boolean(25) ? $this->faker->sentence : null)
-            ->setDeliveredAddress($addresses[random_int(0, count($addresses) - 1)]);
+            ->setDeliveryAddress($deliveryAddress);
 
         $user->addCart($cart);
 

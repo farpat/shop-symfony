@@ -88,7 +88,7 @@ class Billing extends Orderable
     public static function createFromCart(Cart $cart, int $currentNumber): self
     {
         return (new static)
-            ->setDeliveredAddress($cart->getDeliveredAddress())
+            ->setDeliveryAddress($cart->getDeliveryAddress())
             ->setUser($cart->getUser())
             ->setNumber($cart->getCreatedAt()->format('Y-m') . '-' . $currentNumber)
             ->setStatus(self::ORDERED_STATUS)
@@ -98,20 +98,22 @@ class Billing extends Orderable
             ->setTotalAmountIncludingTaxes($cart->getTotalAmountIncludingTaxes());
     }
 
-    public function setDeliveredAddress(?Address $deliveredAddress): Orderable
+    public function setDeliveryAddress(?Address $deliveryAddress): Orderable
     {
-        $this
-            ->setAddressText($deliveredAddress->getText())
-            ->setAddressLine1($deliveredAddress->getLine1())
-            ->setAddressLine2($deliveredAddress->getLine2())
-            ->setAddressPostalCode($deliveredAddress->getPostalCode())
-            ->setAddressCity($deliveredAddress->getCity())
-            ->setAddressCountry($deliveredAddress->getCountry())
-            ->setAddressCountryCode($deliveredAddress->getCountryCode())
-            ->setAddressLatitude($deliveredAddress->getLatitude())
-            ->setAddressLongitude($deliveredAddress->getLongitude());
+        if ($deliveryAddress) {
+            $this
+                ->setAddressText($deliveryAddress->getText())
+                ->setAddressLine1($deliveryAddress->getLine1())
+                ->setAddressLine2($deliveryAddress->getLine2())
+                ->setAddressPostalCode($deliveryAddress->getPostalCode())
+                ->setAddressCity($deliveryAddress->getCity())
+                ->setAddressCountry($deliveryAddress->getCountry())
+                ->setAddressCountryCode($deliveryAddress->getCountryCode())
+                ->setAddressLatitude($deliveryAddress->getLatitude())
+                ->setAddressLongitude($deliveryAddress->getLongitude());
+        }
 
-        return parent::setDeliveredAddress($deliveredAddress);
+        return parent::setDeliveryAddress($deliveryAddress);
     }
 
     public function getStatus(): ?string
