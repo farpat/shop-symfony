@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { jsonGet } from '@farpat/api'
+import Str from '../../src/Str'
 
 function ViewMyBillings () {
   const [state, setState] = useState({
@@ -24,33 +25,33 @@ function ViewMyBillings () {
     </div>
   }
 
-  return (
-    <div>
-      <table className="table table-bordered">
-        <thead>
-        <tr>
-          <th>Number</th>
-          <th>Status</th>
-          <th>Delivery address</th>
-          <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        {
-          state.billings.map(billing => <tr key={billing.number}>
-            <td>{billing.number}</td>
-            <td>{billing.status}</td>
-            <td>{billing.address}</td>
-            <td>
-              <a href={`/billings/view/${billing.number}`} className="btn btn-link" target="_blank">See</a>
-              <a href={`/billings/export/${billing.number}`} className="btn btn-link">Download</a>
-            </td>
-          </tr>)
-        }
-        </tbody>
-      </table>
-    </div>
-  )
+  return <>
+    <table className="table table-bordered">
+      <thead>
+      <tr>
+        <th>Number</th>
+        <th>Status</th>
+        <th>Total price including taxes</th>
+        <th>Delivery address</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      {
+        state.billings.map(billing => <tr key={billing.number}>
+          <td>{billing.number}</td>
+          <td>{billing.status}</td>
+          <td>{Str.toLocaleCurrency(billing.total_price_including_taxes, 'EUR')}</td>
+          <td>{billing.address}</td>
+          <td>
+            <a href={`/billings/view/${billing.number}`} className="btn btn-link" target="_blank">See</a>|<a
+            href={`/billings/export/${billing.number}`} className="btn btn-link" download>Download</a>
+          </td>
+        </tr>)
+      }
+      </tbody>
+    </table>
+  </>
 }
 
 export default ViewMyBillings

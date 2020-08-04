@@ -17,9 +17,10 @@ class UserBillingsNormalizer implements NormalizerInterface, CacheableSupportsMe
     public function normalize($object, $format = null, array $context = []): array
     {
         return [
-            'number'  => $object->getNumber(),
-            'status'  => $object->getStatus(),
-            'address' => $object->getAddressText(),
+            'number'                      => $object->getNumber(),
+            'status'                      => $object->getStatus(),
+            'address'                     => $object->getAddressText(),
+            'total_price_including_taxes' => $object->getTotalAmountIncludingTaxes()
         ];
     }
 
