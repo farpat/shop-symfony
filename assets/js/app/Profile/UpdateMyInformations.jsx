@@ -7,6 +7,7 @@ import NotBlankRule from '../../src/Security/Rules/NotBlankRule'
 import EmailRule from '../../src/Security/Rules/EmailRule'
 import Arr from '../../src/Arr'
 import Alert from '../ui/Alert/Alert'
+import Dump from '../ui/Dump'
 
 const rules = {
   name: [new NotBlankRule({ message: 'This value should not be blank' })],

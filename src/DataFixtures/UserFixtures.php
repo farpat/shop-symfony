@@ -73,7 +73,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
             $countryCode = 'FR';
             $latitude = $this->faker->latitude;
             $longitude = $this->faker->longitude;
-            $text = $line1 . ' ' . $line2 . ' ' . $postalCode . ' ' . $city . ', ' . $country;
+            $text = $line1 . ' ' . $postalCode . ' ' . $city . ', ' . $country;
 
 
             $address = (new Address)

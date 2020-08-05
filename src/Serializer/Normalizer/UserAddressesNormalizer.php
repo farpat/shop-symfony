@@ -50,7 +50,8 @@ class UserAddressesNormalizer implements NormalizerInterface, CacheableSupportsM
             'country'      => $address->getCountry(),
             'country_code' => $address->getCountryCode(),
             'latitude'     => $address->getLatitude(),
-            'longitude'    => $address->getLongitude()
+            'longitude'    => $address->getLongitude(),
+            'status'       => null,
         ];
     }
 

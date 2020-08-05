@@ -1,10 +1,8 @@
-import React, { useRef, useState, useEffect, useLayoutEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { jsonGet, jsonPut } from '@farpat/api'
-import Str from '../../src/Str'
 import TextComponent from '../ui/Form/TextComponent'
 import places from 'places.js'
 import Alert from '../ui/Alert/Alert'
-import Dump from '../ui/Dump'
 
 const getName = function (index, key) {
   return `addresses[${index}][${key}]`
@@ -20,8 +18,8 @@ const addAddress = function (addresses, newAddress) {
 
 const deleteAddress = function (addresses, indexToDelete) {
   addresses[indexToDelete] = {
-    id        : addresses[indexToDelete].id,
-    is_deleted: true,
+    id    : addresses[indexToDelete].id,
+    status: 'DELETED',
   }
 
   return addresses
@@ -30,7 +28,8 @@ const deleteAddress = function (addresses, indexToDelete) {
 const updateAddress = function (addresses, indexToUpdate, addressToUpdate) {
   addresses[indexToUpdate] = {
     ...addresses[indexToUpdate],
-    ...addressToUpdate
+    ...addressToUpdate,
+    status: addressToUpdate.id ? 'UPDATED' : 'ADDED'
   }
 
   return addresses
@@ -82,6 +81,7 @@ function UpdateMyAddresses () {
       city        : '',
       country     : '',
       country_code: '',
+      status      : 'ADDED'
     })
 
     setState({
@@ -97,7 +97,7 @@ function UpdateMyAddresses () {
   const onDeleteAddress = (index) => {
     let deliveryAddressIndex = state.information.delivery_address_index
     if (index === state.information.delivery_address_index) {
-      deliveryAddressIndex = state.information.addresses.findIndex((address, indexToFind) => indexToFind !== index && !address.is_deleted)
+      deliveryAddressIndex = state.information.addresses.findIndex((address, indexToFind) => indexToFind !== index && address.status !== 'DELETED')
 
       if (deliveryAddressIndex === -1) {
         deliveryAddressIndex = null
@@ -224,12 +224,13 @@ function UpdateMyAddresses () {
     <div className="addresses">
       {
         state.information.addresses.map((address, index) => {
-          if (!address.is_deleted) {
+          if (address.status !== 'DELETED') {
             return <Address address={address} index={index} key={index}
                             onUpdateLine2={onUpdateLine2} onDeleteAddress={onDeleteAddress}
                             onSelectAddress={onSelectAddress}
                             isSelected={state.information.delivery_address_index === index}
-                            error={getError(state.errors, index)}></Address>
+                            error={getError(state.errors, index)}
+            />
           }
         })
       }
