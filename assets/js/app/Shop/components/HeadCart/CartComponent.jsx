@@ -1,6 +1,5 @@
 import React from 'react'
 import { hot } from 'react-hot-loader/root'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ItemComponent from './Cart/ItemComponent'
 import TotalComponent from './Cart/TotalComponent'
@@ -9,20 +8,16 @@ import { CartComponentPropTypes } from '../cartCommon'
 function CartComponent ({ cartItems, purchaseUrl, currency }) {
   const referenceIds = Object.keys(cartItems)
 
-  if (referenceIds.length === 0) {
-    return null
-  }
-
   return <>
-    <button className="nav-link nav-link-dropdown">
+    <button className={`nav-link nav-link-dropdown ${referenceIds.length > 0 ? '' : 'd-none'}`}>
       <i className="fas fa-shopping-cart"/> - {referenceIds.length}
     </button>
-    <div className='nav-dropdown-items header-cart'>
+    <div className={`nav-dropdown-items header-cart ${referenceIds.length > 0 ? '' : 'd-none'}`}>
       <table className='table table-borderless table-hover table-responsive'>
         <tbody>
         {
-          referenceIds.map(referenceId => <ItemComponent item={cartItems[referenceId]} key={referenceId}
-                                                         currency={currency}/>)
+          referenceIds.map(referenceId => <ItemComponent
+            item={cartItems[referenceId]} key={referenceId} currency={currency}/>)
         }
         </tbody>
 

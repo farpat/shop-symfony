@@ -3,8 +3,9 @@
 namespace App\EventListener;
 
 use App\Entity\Visit;
+use App\Services\Support\Str;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\{Request, Response};
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Security\Core\Security;
 
@@ -30,26 +31,37 @@ class VisitListener
         $response = $event->getResponse();
         $request = $event->getRequest();
 
-        if ($response->getStatusCode() === Response::HTTP_OK && $request->getMethod() === 'GET' && !$request->isXmlHttpRequest()) {
-            $user = $this->security->getUser();
-            $ipAddress = $request->getClientIp();
-            $url = $request->getUri();
-            $route = $request->attributes->get('_route');
-            $routeParameters = $request->attributes->get('_route_params');
-
-            $visit = (new Visit)
-                ->setUser($user)
-                ->setRoute($route)
-                ->setRouteParameters($routeParameters)
-                ->setUrl($url)
-                ->setIpAddress($ipAddress);
-
-            $lastVisit = $this->entityManager->getRepository(Visit::class)->getLastVisit($user, $ipAddress);
-
-            if ($lastVisit->getRoute() !== $route || $lastVisit->getRouteParameters() !== $routeParameters) {
-                $this->entityManager->persist($visit);
-                $this->entityManager->flush();
-            }
+        if ($this->isSupported($request, $response) === false) {
+            return;
         }
+
+        $route = $request->attributes->get('_route');
+        $user = $this->security->getUser();
+        $ipAddress = $request->getClientIp();
+        $url = $request->getUri();
+        $routeParameters = $request->attributes->get('_route_params');
+
+        $visit = (new Visit)
+            ->setUser($user)
+            ->setRoute($route)
+            ->setRouteParameters($routeParameters)
+            ->setUrl($url)
+            ->setIpAddress($ipAddress);
+
+        $lastVisit = $this->entityManager->getRepository(Visit::class)->getLastVisit($user, $ipAddress);
+
+        if ($lastVisit->getRoute() !== $route || $lastVisit->getRouteParameters() !== $routeParameters) {
+            $this->entityManager->persist($visit);
+            $this->entityManager->flush();
+        }
+    }
+
+    public function isSupported(Request $request, Response $response): bool
+    {
+        return
+            Str::startsWith($request->attributes->get('_route'), 'app') &&
+            $response->getStatusCode() === Response::HTTP_OK &&
+            $request->getMethod() === 'GET' &&
+            !$request->isXmlHttpRequest();
     }
 }

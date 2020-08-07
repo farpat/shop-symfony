@@ -44,7 +44,7 @@ class PurchaseController extends AbstractController
     }
 
     /**
-     * @Route("/", name="purchase", methods={"GET"})
+     * @Route("", name="purchase", methods={"GET"})
      */
     public function showPurchaseForm()
     {

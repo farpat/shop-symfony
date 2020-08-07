@@ -51,11 +51,10 @@ function ProductsNavigation ({ goTo, products, perPage, currentPage }) {
   }
 
   const getHref = function (page) {
-    const regex = /&page=\d+$/
+    const regex = /([&?])page=(\d+)$/
 
     if (page > 1) {
-      const queryString = `&page=${page}`
-      return regex.test(currentUrl) ? currentUrl.replace(regex, queryString) : `${currentUrl}${queryString}`
+      return currentUrl.replace(regex, (correspondance, prefixQueryString) => prefixQueryString + 'page=' + page)
     } else {
       return currentUrl.replace(regex, '')
     }
