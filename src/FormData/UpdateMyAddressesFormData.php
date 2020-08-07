@@ -65,7 +65,7 @@ final class UpdateMyAddressesFormData
             return;
         }
 
-        if ($deliveryAddressIndex !== null && !isset($addresses[$deliveryAddressIndex])) {
+        if ($deliveryAddressIndex !== null && !array_key_exists($deliveryAddressIndex, $addresses)) {
             $context->buildViolation('Bad index')
                 ->atPath('delivery_address_index')
                 ->addViolation();
@@ -108,11 +108,18 @@ final class UpdateMyAddressesFormData
 
     private function checkAddress(ExecutionContextInterface $context, int $index, array $address)
     {
+        if (!array_key_exists($address['status'])) {
+            $context->buildViolation('Bad status')
+                ->atPath("addresses.$index")
+                ->addViolation();
+            return;
+        }
+
         if ($address['status'] === 'DELETED' || $address['status'] === null) {
             return;
         }
 
-        if (!isset($address['text']) || !is_string($address['text']) || $address['text'] === '') {
+        if (!array_key_exists('text', $address) || !$address['text']) {
             $context->buildViolation('You should fill an address or delete this address')
                 ->atPath("addresses.$index")
                 ->addViolation();

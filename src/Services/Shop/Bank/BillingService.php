@@ -32,25 +32,25 @@ class BillingService
         return Billing::createFromCart($cart, $currentNumber);
     }
 
-    public function generatePdf(Billing $billing): bool
+    public function generatePdf(Billing $billing): ?string
     {
         $billingPdf = new Pdf();
         $billingPdf->addPage($this->twig->render('billing/show.html.twig', ['billing' => $billing]));
-        $pdfPath = $this->getPdfPath($billing);
+        $pdfPath = $this->getRealPdfPath($billing);
         $folder = dirname($pdfPath);
         if (!is_dir($folder)) {
             mkdir($folder);
         }
-        return $billingPdf->saveAs($pdfPath);
+        return $billingPdf->saveAs($pdfPath) ? $pdfPath : null;
     }
 
-    public function getPdfPath(Billing $billing): string
+    private function getRealPdfPath(Billing $billing): string
     {
         return $this->billingStorage->getAdapter()->getPathPrefix() . $billing->getBillingPath();
     }
 
-    public function isPdfExist(Billing $billing): bool
+    public function getPdfPath(Billing $billing): ?string
     {
-        return $this->billingStorage->has($billing->getBillingPath());
+        return $this->billingStorage->has($billing->getBillingPath()) ? $this->getRealPdfPath($billing) : null;
     }
 }

@@ -1,31 +1,31 @@
 import React from 'react'
 import { hot } from 'react-hot-loader/root'
-import { HashRouter as Router, Switch, Route, NavLink as Link, useRouteMatch } from 'react-router-dom'
-import Home from './Home'
-import UpdateMyInformations from './UpdateMyInformations'
+import { HashRouter as Router, NavLink as Link, Route, Switch, useRouteMatch } from 'react-router-dom'
+import ViewMyStatistics from './ViewMyStatistics'
+import UpdateMyInformation from './UpdateMyInformation'
 import ViewMyBillings from './ViewMyBillings'
 import UpdateMyAddresses from './UpdateMyAddresses'
 
 const routes = [
   {
     path     : '/',
-    component: Home,
-    label    : 'Home'
-  },
-  {
-    path     : '/update-my-informations',
-    component: UpdateMyInformations,
-    label    : 'Update my informations'
-  },
-  {
-    path     : '/update-my-addresses',
-    component: UpdateMyAddresses,
-    label    : 'Update my addresses'
+    component: ViewMyStatistics,
+    label    : 'View my statistics'
   },
   {
     path     : '/view-my-billings',
     component: ViewMyBillings,
     label    : 'View my billings'
+  },
+  {
+    path     : '/update-my-information',
+    component: UpdateMyInformation,
+    label    : 'Update my information'
+  },
+  {
+    path     : '/update-my-addresses',
+    component: UpdateMyAddresses,
+    label    : 'Update my addresses'
   }
 ]
 

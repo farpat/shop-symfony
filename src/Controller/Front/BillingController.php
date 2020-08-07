@@ -23,11 +23,13 @@ class BillingController extends AbstractController
      */
     public function export(Billing $billing, Request $request, BillingService $billingService)
     {
-        if ($request->query->getInt('force') === 1 || !$billingService->isPdfExist($billing)) {
-            $billingService->generatePdf($billing);
+        $pdfPath = $billingService->getPdfPath($billing);
+
+        if ($request->query->getInt('force') === 1 || $pdfPath === null) {
+            $pdfPath = $billingService->generatePdf($billing);
         }
 
-        return new BinaryFileResponse($billingService->getPdfPath($billing));
+        return new BinaryFileResponse($pdfPath);
     }
 
     /**
@@ -35,7 +37,7 @@ class BillingController extends AbstractController
      * @Entity("billing", expr="repository.getWithAllRelations(billingNumber)")
      * @IsGranted(App\Security\Voter\BillingVoter::VIEW, subject="billing")
      */
-    public function view(Billing $billing)
+    public function view(Billing $billing, BillingService  $billingService, Request  $request)
     {
         $areAssetsAbsolute = false;
 

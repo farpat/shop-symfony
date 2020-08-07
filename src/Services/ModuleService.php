@@ -56,7 +56,6 @@ class ModuleService
             throw new Exception("The module << $moduleLabel >> doesn't exist!");
         }
 
-
         $moduleParameter = (new ModuleParameter)
             ->setLabel($parameterLabel)
             ->setValue($value)

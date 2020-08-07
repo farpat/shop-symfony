@@ -7,14 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\VisitRepository")
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="type", type="string")
- * @ORM\DiscriminatorMap({
- *     "product" = "App\Entity\ProductVisit",
- *     "category" = "App\Entity\CategoryVisit"
- * })
+ * @ORM\HasLifecycleCallbacks()
  */
-abstract class Visit
+class Visit
 {
     use Creatable;
 
@@ -26,14 +21,28 @@ abstract class Visit
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
     protected $ipAddress;
 
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    protected $url;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    protected $route;
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      */
     protected $user;
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $routeParameters = [];
 
     public function getId(): ?int
     {
@@ -64,14 +73,42 @@ abstract class Visit
         return $this;
     }
 
-    public function getVisitable()
+    public function getUrl()
     {
-        if ($this->product_id !== null) {
-            return $this->getProduct();
-        }
-        if ($this->category_id !== null) {
-            return $this->getCategory();
-        }
-        return null;
+        return $this->url;
+    }
+
+    public function setUrl(?string $url): self
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    public function getRoute()
+    {
+        return $this->route;
+    }
+
+    public function setRoute(?string $route): self
+    {
+        $this->route = $route;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getRouteParameters(): array
+    {
+        return $this->routeParameters;
+    }
+
+    public function setRouteParameters(?array $routeParameters): self
+    {
+        $this->routeParameters = $routeParameters;
+
+        return $this;
     }
 }

@@ -1,3 +1,43 @@
 .user-profile {
   margin-top: 1rem;
 }
+
+.statistic {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  opacity: 0.85;
+  transition: opacity 0.3s;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &.bg-secondary, &.bg-primary {
+    color: #FFF;
+  }
+}
+
+.statistic-icon {
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.statistic-title {
+  font-size: 1.2rem;
+}
+
+.statistic-value {
+  font-size: 2rem;
+  font-weight: 300;
+  margin-bottom: 0;
+}
+
+.statistics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 9rem);
+  grid-template-rows: 9rem;
+  grid-gap: 2rem;
+}

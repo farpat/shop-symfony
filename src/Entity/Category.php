@@ -56,11 +56,6 @@ class Category
     private $products;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductVisit", mappedBy="product", orphanRemoval=true)
-     */
-    private $visits;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\ProductField")
      */
     private $productFields;
@@ -68,7 +63,6 @@ class Category
     public function __construct()
     {
         $this->products = new ArrayCollection();
-        $this->visits = new ArrayCollection();
         $this->productFields = new ArrayCollection();
     }
 
@@ -179,37 +173,6 @@ class Category
             // set the owning side to null (unless already changed)
             if ($product->getCategory() === $this) {
                 $product->setCategory(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|ProductVisit[]
-     */
-    public function getVisits(): Collection
-    {
-        return $this->visits;
-    }
-
-    public function addVisit(ProductVisit $visit): self
-    {
-        if (!$this->visits->contains($visit)) {
-            $this->visits[] = $visit;
-            $visit->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeVisit(ProductVisit $visit): self
-    {
-        if ($this->visits->contains($visit)) {
-            $this->visits->removeElement($visit);
-            // set the owning side to null (unless already changed)
-            if ($visit->getProduct() === $this) {
-                $visit->setProduct(null);
             }
         }
 

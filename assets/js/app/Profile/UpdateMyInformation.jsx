@@ -16,7 +16,7 @@ const rules = {
 
 const navLinkProfile = document.querySelector('#nav-link-profile')
 
-function UpdateMyInformations() {
+function UpdateMyInformation() {
   const [state, setState] = useState({
     information: {},
     errors: {},
@@ -115,4 +115,4 @@ function UpdateMyInformations() {
   </form>
 }
 
-export default UpdateMyInformations
+export default UpdateMyInformation

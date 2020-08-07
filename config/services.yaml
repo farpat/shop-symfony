@@ -39,6 +39,9 @@ services:
     App\EventListener\RequestTransformerListener:
         tags: [{name: kernel.event_listener, event: kernel.request}]
 
+    App\EventListener\VisitListener:
+        tags: [{name: kernel.event_listener, event: kernel.response}]
+
     App\Services\Shop\CartManagement\CartManagerInterface:
         factory: ['@App\Services\Shop\CartManagement\CartManagerFactory', 'createCartManagerInterface']
 

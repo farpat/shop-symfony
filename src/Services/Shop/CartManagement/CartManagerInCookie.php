@@ -35,7 +35,7 @@ class CartManagerInCookie implements CartManagerInterface
 
     public function deleteItem(int $productReferenceId): array
     {
-        if (!isset($this->items[$productReferenceId])) {
+        if (!array_key_exists($productReferenceId, $this->items)) {
             throw new InvalidArgumentException("The product reference is not in cart");
         }
         $productReference = $this->getProductReference($productReferenceId);
@@ -85,7 +85,7 @@ class CartManagerInCookie implements CartManagerInterface
     public function patchItem(int $quantity, int $productReferenceId): array
     {
         $this->checkQuantity($quantity);
-        if (!isset($this->items[$productReferenceId])) {
+        if (!array_key_exists($productReferenceId, $this->items)) {
             throw new InvalidArgumentException("The product reference is not in cart");
         }
         $productReference = $this->getProductReference($productReferenceId);
@@ -108,7 +108,7 @@ class CartManagerInCookie implements CartManagerInterface
     public function addItem(int $quantity, int $productReferenceId): array
     {
         $this->checkQuantity($quantity);
-        if (isset($this->items[$productReferenceId])) {
+        if (array_key_exists($productReferenceId, $this->items)) {
             throw new InvalidArgumentException("The product reference is already in cart");
         }
         $productReference = $this->getProductReference($productReferenceId);

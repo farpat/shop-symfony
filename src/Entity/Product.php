@@ -66,17 +66,11 @@ class Product
      */
     private $productReferences;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductVisit", mappedBy="product", orphanRemoval=true)
-     */
-    private $visits;
-
     public function __construct()
     {
         $this->tags = new ArrayCollection();
         $this->taxes = new ArrayCollection();
         $this->productReferences = new ArrayCollection();
-        $this->visits = new ArrayCollection();
     }
 
     public function getMinUnitPriceIncludingTaxes(): float
@@ -246,37 +240,6 @@ class Product
             // set the owning side to null (unless already changed)
             if ($productReference->getProduct() === $this) {
                 $productReference->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|ProductVisit[]
-     */
-    public function getVisits(): Collection
-    {
-        return $this->visits;
-    }
-
-    public function addVisit(ProductVisit $visit): self
-    {
-        if (!$this->visits->contains($visit)) {
-            $this->visits[] = $visit;
-            $visit->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeVisit(ProductVisit $visit): self
-    {
-        if ($this->visits->contains($visit)) {
-            $this->visits->removeElement($visit);
-            // set the owning side to null (unless already changed)
-            if ($visit->getProduct() === $this) {
-                $visit->setProduct(null);
             }
         }
 

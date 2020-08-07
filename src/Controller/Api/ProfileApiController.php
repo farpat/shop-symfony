@@ -127,8 +127,27 @@ class ProfileApiController extends AbstractController
     /** @Route("/billings", name="billings", methods={"GET"}) */
     public function billings()
     {
-        $billings = $this->user->getBillings();
+        return new JsonResponse($this->normalizer->normalize($this->user->getBillings(), 'billings-json'));
+    }
 
-        return new JsonResponse($this->normalizer->normalize($billings->toArray(), 'billings-json'));
+    /** @Route("/statistics", name="statistics", methods={"GET"}) */
+    public function statistics()
+    {
+        $statistics = [
+            [
+                'icon' => 'user',
+                'color' => 'secondary',
+                'label' => 'Users',
+                'value' => 150
+            ],
+            [
+                'icon' => 'file-invoice',
+                'color' => 'primary',
+                'label' => 'Billings',
+                'value' => $this->user->getBillings()->count()
+            ]
+        ];
+
+        return new JsonResponse($statistics);
     }
 }
