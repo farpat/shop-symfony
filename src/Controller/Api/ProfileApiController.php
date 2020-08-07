@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\User;
 use App\FormData\UpdateMyAddressesFormData;
 use App\FormData\UpdateMyInformationsFormData;
+use App\Repository\VisitRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -131,17 +132,22 @@ class ProfileApiController extends AbstractController
     }
 
     /** @Route("/statistics", name="statistics", methods={"GET"}) */
-    public function statistics()
+    public function statistics(VisitRepository $visitRepository)
     {
+        $visits = $visitRepository->getVisits($this->user,
+            new \DateTime('first day of this month midnight'),
+            (new \DateTime('last day of this month midnight'))->modify('+1 day -1 second')
+        );
+
         $statistics = [
             [
-                'icon' => 'user',
+                'icon'  => 'eye',
                 'color' => 'secondary',
-                'label' => 'Users',
-                'value' => 150
+                'label' => 'Visits',
+                'value' => count($visits)
             ],
             [
-                'icon' => 'file-invoice',
+                'icon'  => 'file-invoice',
                 'color' => 'primary',
                 'label' => 'Billings',
                 'value' => $this->user->getBillings()->count()

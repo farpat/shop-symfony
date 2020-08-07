@@ -11,14 +11,14 @@ trait Creatable
     /**
      * @ORM\Column(type="datetime")
      */
-    protected $created_at;
+    protected $createdAt;
 
     /**
      * @ORM\PrePersist()
      */
     public function updateCreatedAt()
     {
-        $this->created_at = new DateTime();
+        $this->createdAt = new DateTime();
     }
 
     /**
@@ -26,17 +26,17 @@ trait Creatable
      */
     public function getCreatedAt(): ?DateTimeInterface
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     /**
-     * @param DateTimeInterface $created_at
+     * @param DateTimeInterface $createdAt
      *
      * @return self
      */
-    public function setCreatedAt(DateTimeInterface $created_at): self
+    public function setCreatedAt(DateTimeInterface $createdAt): self
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
         return $this;
     }
 }

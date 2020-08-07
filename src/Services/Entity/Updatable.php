@@ -11,24 +11,24 @@ trait Updatable
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    protected $updated_at;
+    protected $updatedAt;
 
     /**
      * @return DateTimeInterface|null
      */
     public function getUpdatedAt(): ?DateTimeInterface
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
     /**
-     * @param DateTimeInterface|null $updated_at
+     * @param DateTimeInterface|null $updatedAt
      *
      * @return self
      */
-    public function setUpdatedAt(?DateTimeInterface $updated_at): self
+    public function setUpdatedAt(?DateTimeInterface $updatedAt): self
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
         return $this;
     }
 

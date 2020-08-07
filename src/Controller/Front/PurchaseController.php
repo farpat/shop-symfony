@@ -144,6 +144,8 @@ class PurchaseController extends AbstractController
 
         $this->entityManager->flush();
 
+        //TODO: write an email
+
         $this->addFlash('success',
             $this->translator->trans('Great! You paid {{ totalIncludingTaxes }} with success. You will receive an email containing the corresponding billing',
                 [

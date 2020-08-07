@@ -13,7 +13,8 @@
         {{ NavigationService.generateHtml() | raw }}
 
         <div class="nav-item nav-item-search">
-            <input class="form-search-input form-control form-control-sm" type="search" data-url="{{ path('app_front_home_search') }}">
+            <input class="form-search-input form-control form-control-sm" type="search"
+                   data-url="{{ path('app_front_home_search') }}">
         </div>
 
         {% if app.user %}
@@ -23,7 +24,8 @@
             </div>
 
             <div class="nav-item">
-                <a class="nav-link btn btn-login" href="{{ path('app_auth_security_logout') }}">{% trans %}Logout{% endtrans %}</a>
+                <a class="nav-link btn btn-login"
+                   href="{{ path('app_auth_security_logout') }}">{% trans %}Logout{% endtrans %}</a>
             </div>
         {% endif %}
 

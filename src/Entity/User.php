@@ -81,7 +81,7 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->created_at = new DateTime;
+        $this->createdAt = new DateTime;
         $this->addresses = new ArrayCollection();
         $this->billings = new ArrayCollection();
         $this->carts = new ArrayCollection();

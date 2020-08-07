@@ -11,21 +11,21 @@ trait SoftDeletable
     /**
      * @ORM\Column(type="datetime")
      */
-    protected $deleted_at = null;
+    protected $deletedAt = null;
 
     public function getDeletedAt(): ?DateTimeInterface
     {
-        return $this->deleted_at;
+        return $this->deletedAt;
     }
 
     /**
-     * @param DateTimeInterface|null $deleted_at
+     * @param DateTimeInterface|null $deletedAt
      *
      * @return self
      */
-    public function setDeletedAt(?DateTimeInterface $deleted_at): self
+    public function setDeletedAt(?DateTimeInterface $deletedAt): self
     {
-        $this->deleted_at = $deleted_at;
+        $this->deletedAt = $deletedAt;
         return $this;
     }
 

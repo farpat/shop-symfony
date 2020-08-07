@@ -71,21 +71,17 @@ function StripeComponent ({ cartItems, currency, publicKey, successUrl }) {
 
   const { totalPriceIncludingTaxes } = CartService.getPrices(cartItems)
 
-  return (
-    <div>
-      <form id="payment-form" onSubmit={onPay}>
-        <div className="form-group">
-          <div id="card-element"></div>
+  return <form id="payment-form" onSubmit={onPay}>
+    <div className="form-group">
+      <div id="card-element"></div>
 
-          <div className={getErrorClassName()} role="alert">{error}</div>
-        </div>
-
-        <button className={getButtonClassname()} disabled={isPaying}>
-          {Translation.get('Pay')} {Str.toLocaleCurrency(totalPriceIncludingTaxes, currency)}
-        </button>
-      </form>
+      <div className={getErrorClassName()} role="alert">{error}</div>
     </div>
-  )
+
+    <button className={getButtonClassname()} disabled={isPaying}>
+      {Translation.get('Pay')} {Str.toLocaleCurrency(totalPriceIncludingTaxes, currency)}
+    </button>
+  </form>
 }
 
 StripeComponent.propTypes = {

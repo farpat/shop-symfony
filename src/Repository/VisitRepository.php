@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Visit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -47,4 +48,27 @@ class VisitRepository extends ServiceEntityRepository
         ;
     }
     */
+
+
+    public function getLastVisit(?User $user, string $ipAddress): ?Visit
+    {
+        return $this->findOneBy(
+            ['user' => $user, 'ipAddress' => $ipAddress],
+            ['createdAt' => 'DESC']
+        );
+    }
+
+    public function getVisits(User $user, \DateTime $start, \DateTime $end): array
+    {
+        return $this->createQueryBuilder('v')
+            ->andWhere('v.user = :user')
+            ->andWhere('v.createdAt BETWEEN :start and :end')
+            ->setParameters([
+                'user'  => $user,
+                'start' => $start,
+                'end'   => $end
+            ])
+            ->getQuery()
+            ->getArrayResult();
+    }
 }
