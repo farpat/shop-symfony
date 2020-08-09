@@ -1,58 +1,39 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { hot } from 'react-hot-loader/root'
+import { jsonGet } from '@farpat/api'
 import { HashRouter as Router, NavLink as Link, Route, Switch, useRouteMatch } from 'react-router-dom'
-import ViewMyStatistics from './ViewMyStatistics'
-import UpdateMyInformation from './UpdateMyInformation'
-import ViewMyBillings from './ViewMyBillings'
-import UpdateMyAddresses from './UpdateMyAddresses'
-
-const routes = [
-  {
-    path     : '/',
-    component: ViewMyStatistics,
-    label    : 'View my statistics'
-  },
-  {
-    path     : '/view-my-billings',
-    component: ViewMyBillings,
-    label    : 'View my billings'
-  },
-  {
-    path     : '/update-my-information',
-    component: UpdateMyInformation,
-    label    : 'Update my information'
-  },
-  {
-    path     : '/update-my-addresses',
-    component: UpdateMyAddresses,
-    label    : 'Update my addresses'
-  }
-]
 
 function App () {
-  return (
-    <Router>
-      <>
-        <Navigation/>
+  const [routes, setRoutes] = useState([])
 
-        <hr/>
+  useEffect(() => {
+    (async function () {
+      const response = await jsonGet('/profile-api/navigation')
+      setRoutes(response)
+    })()
+  }, [])
 
-        <Switch>
-          {
-            routes.map(route => {
-              const Component = route.component
-              return <Route exact key={route.path} path={route.path}>
-                <Component/>
-              </Route>
-            })
-          }
-        </Switch>
-      </>
-    </Router>
-  )
+  return <Router>
+    <>
+      <Navigation routes={routes}/>
+
+      <hr/>
+
+      <Switch>
+        {
+          routes.map(route => {
+            const Component = require(`./${route.component}`).default
+            return <Route exact key={route.path} path={route.path}>
+              <Component/>
+            </Route>
+          })
+        }
+      </Switch>
+    </>
+  </Router>
 }
 
-function Navigation () {
+function Navigation ({ routes }) {
   return (
     <nav className="nav nav-pills justify-content-center">
       {

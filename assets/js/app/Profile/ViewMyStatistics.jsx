@@ -33,7 +33,6 @@ function ViewMyStatistics () {
 }
 
 function Statistic ({ statistic }) {
-  console.log(statistic.icon)
   return <div className={`statistic bg-${statistic.color}`}>
     <h2 className="statistic-title">
       <i className={`statistic-icon fas fa-${statistic.icon}`}/>

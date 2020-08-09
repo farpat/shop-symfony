@@ -38,20 +38,17 @@ class VisitListener
         $route = $request->attributes->get('_route');
         $user = $this->security->getUser();
         $ipAddress = $request->getClientIp();
-        $url = $request->getUri();
         $routeParameters = $request->attributes->get('_route_params');
-
-        $visit = (new Visit)
-            ->setUser($user)
-            ->setRoute($route)
-            ->setRouteParameters($routeParameters)
-            ->setUrl($url)
-            ->setIpAddress($ipAddress);
 
         $lastVisit = $this->entityManager->getRepository(Visit::class)->getLastVisit($user, $ipAddress);
 
-        if ($lastVisit->getRoute() !== $route || $lastVisit->getRouteParameters() !== $routeParameters) {
-            $this->entityManager->persist($visit);
+        if ($lastVisit === null || ($lastVisit->getRoute() !== $route || $lastVisit->getRouteParameters() !== $routeParameters)) {
+            $this->entityManager->persist((new Visit)
+                ->setUser($user)
+                ->setRoute($route)
+                ->setRouteParameters($routeParameters)
+                ->setUrl($request->getUri())
+                ->setIpAddress($ipAddress));
             $this->entityManager->flush();
         }
     }
