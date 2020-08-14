@@ -108,7 +108,7 @@ final class UpdateMyAddressesFormData
 
     private function checkAddress(ExecutionContextInterface $context, int $index, array $address)
     {
-        if (!array_key_exists($address['status'])) {
+        if (!array_key_exists('status', $address)) {
             $context->buildViolation('Bad status')
                 ->atPath("addresses.$index")
                 ->addViolation();
@@ -154,8 +154,10 @@ final class UpdateMyAddressesFormData
         foreach ($addresses as $index => $addressData) {
             switch ($addressData['status']) {
                 case 'DELETED':
-                    $addressToUDelete = $this->getAddress($addressData['id'], $user);
-                    $this->entityManager->remove($addressToUDelete);
+                    if ($addressData['id']) {
+                        $addressToUDelete = $this->getAddress($addressData['id'], $user);
+                        $this->entityManager->remove($addressToUDelete);
+                    }
                     break;
                 case 'UPDATED':
                     $addressToUpdate = $this->getAddress($addressData['id'], $user);

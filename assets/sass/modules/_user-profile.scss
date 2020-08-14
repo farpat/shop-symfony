@@ -3,19 +3,18 @@
 }
 
 .statistic {
+  text-decoration: none;
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
   opacity: 0.85;
   transition: opacity 0.3s;
+  color: #FFF !important;
+  padding: 1rem;
 
   &:hover {
     opacity: 1;
-  }
-
-  &.bg-secondary, &.bg-primary {
-    color: #FFF;
   }
 }
 
@@ -37,7 +36,7 @@
 
 .statistics {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 9rem);
-  grid-template-rows: 9rem;
+  grid-template-columns: repeat(auto-fill, 12rem);
+  grid-template-rows: 12rem;
   grid-gap: 2rem;
 }

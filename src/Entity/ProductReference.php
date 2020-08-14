@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Services\Support\Str;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -54,6 +53,16 @@ class ProductReference
      * @ORM\ManyToMany(targetEntity="App\Entity\Image")
      */
     private $images;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $availableStock = null;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isAvailable = true;
 
     public function __construct()
     {
@@ -164,6 +173,30 @@ class ProductReference
         if ($this->images->contains($image)) {
             $this->images->removeElement($image);
         }
+
+        return $this;
+    }
+
+    public function getAvailableStock(): ?int
+    {
+        return $this->availableStock;
+    }
+
+    public function setAvailableStock(?int $availableStock): self
+    {
+        $this->availableStock = $availableStock;
+
+        return $this;
+    }
+
+    public function getIsAvailable(): ?bool
+    {
+        return $this->isAvailable;
+    }
+
+    public function setIsAvailable(bool $isAvailable): self
+    {
+        $this->isAvailable = $isAvailable;
 
         return $this;
     }

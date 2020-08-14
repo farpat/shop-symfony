@@ -2,6 +2,9 @@
     "beberlei/doctrineextensions": {
         "version": "v1.2.7"
     },
+    "cweagans/composer-patches": {
+        "version": "1.6.7"
+    },
     "dnoegel/php-xdg-base-dir": {
         "version": "v0.1.1"
     },
@@ -132,6 +135,9 @@
             "config/packages/flysystem.yaml",
             "var/storage/.gitignore"
         ]
+    },
+    "league/mime-type-detection": {
+        "version": "1.4.0"
     },
     "mikehaertl/php-shellcommand": {
         "version": "1.6.1"

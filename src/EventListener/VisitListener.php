@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use App\Entity\User;
 use App\Entity\Visit;
 use App\Services\Support\Str;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,11 +32,12 @@ class VisitListener
         $response = $event->getResponse();
         $request = $event->getRequest();
 
-        if ($this->isSupported($request, $response) === false) {
+        if (!$this->isSupported($request, $response)) {
             return;
         }
 
         $route = $request->attributes->get('_route');
+        /** @var User $user */
         $user = $this->security->getUser();
         $ipAddress = $request->getClientIp();
         $routeParameters = $request->attributes->get('_route_params');
@@ -55,8 +57,12 @@ class VisitListener
 
     public function isSupported(Request $request, Response $response): bool
     {
+        $whiteRoutes = ['app_front_category', 'app_front_product', 'app_front_home', 'app_front_purchase_purchase'];
+
+        $route = $request->attributes->get('_route');
+
         return
-            Str::startsWith($request->attributes->get('_route'), 'app') &&
+            Str::startsWith($route, $whiteRoutes) &&
             $response->getStatusCode() === Response::HTTP_OK &&
             $request->getMethod() === 'GET' &&
             !$request->isXmlHttpRequest();

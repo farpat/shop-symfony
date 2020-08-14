@@ -109,16 +109,35 @@ class Str {
 
   /**
    *
+   * @param {string} hexa
+   * @return {{red: number, green: number, blue:number}}
+   */
+  hexaToRgb (hexa) {
+    hexa = hexa.substring(1, 7)
+
+    const red = parseInt(hexa.substring(0, 2), 16)
+    const green = parseInt(hexa.substring(2, 4), 16)
+    const blue = parseInt(hexa.substring(4, 6), 16)
+
+    return { red, green, blue }
+  }
+
+  /**
+   *
    * @param {string} currentQueryString
    * @param {string} key
    * @param {string} value
-   * @private
    */
   addQueryString (currentQueryString, key, value) {
     const prefix = currentQueryString.length === 0 ? '?' : '&'
     return `${prefix + key}=${value}`
   }
 
+  /**
+   *
+   * @param {Object} object
+   * @returns {string}
+   */
   dump (object) {
     if (typeof object !== 'object') {
       return `<pre>${object}</pre>`

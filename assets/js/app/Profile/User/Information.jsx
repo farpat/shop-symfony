@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
-import TextComponent from '../ui/Form/TextComponent'
-import EmailComponent from '../ui/Form/EmailComponent'
+import TextComponent from '../../ui/Form/TextComponent'
+import EmailComponent from '../../ui/Form/EmailComponent'
 import { jsonGet, jsonPut } from '@farpat/api'
-import { getError } from '../ui/Form/Form'
-import NotBlankRule from '../../src/Security/Rules/NotBlankRule'
-import EmailRule from '../../src/Security/Rules/EmailRule'
-import Arr from '../../src/Arr'
-import Alert from '../ui/Alert/Alert'
-import Dump from '../ui/Dump'
+import { getError } from '../../ui/Form/Form'
+import NotBlankRule from '../../../src/Security/Rules/NotBlankRule'
+import EmailRule from '../../../src/Security/Rules/EmailRule'
+import Arr from '../../../src/Arr'
+import Alert from '../../ui/Alert/Alert'
+import Dump from '../../ui/Dump'
 
 const rules = {
   name: [new NotBlankRule({ message: 'This value should not be blank' })],
@@ -16,7 +16,7 @@ const rules = {
 
 const navLinkProfile = document.querySelector('#nav-link-profile')
 
-function UpdateMyInformation() {
+function Information() {
   const [state, setState] = useState({
     information: {},
     errors: {},
@@ -115,4 +115,4 @@ function UpdateMyInformation() {
   </form>
 }
 
-export default UpdateMyInformation
+export default Information

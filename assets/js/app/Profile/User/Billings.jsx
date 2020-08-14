@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { jsonGet } from '@farpat/api'
-import Str from '../../src/Str'
+import Str from '../../../src/Str'
 
-function ViewMyBillings () {
+function Billings () {
   const [state, setState] = useState({
     billings : [],
     isLoading: true,
@@ -52,4 +52,4 @@ function ViewMyBillings () {
   </table>
 }
 
-export default ViewMyBillings
+export default Billings

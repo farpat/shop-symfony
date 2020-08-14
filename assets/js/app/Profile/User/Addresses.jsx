@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { jsonGet, jsonPut } from '@farpat/api'
-import TextComponent from '../ui/Form/TextComponent'
+import TextComponent from '../../ui/Form/TextComponent'
 import places from 'places.js'
-import Alert from '../ui/Alert/Alert'
+import Alert from '../../ui/Alert/Alert'
 
 const getName = function (index, key) {
   return `addresses[${index}][${key}]`
@@ -35,7 +35,7 @@ const updateAddress = function (addresses, indexToUpdate, addressToUpdate) {
   return addresses
 }
 
-function UpdateMyAddresses () {
+function Addresses () {
   const form = useRef(null)
   const [state, setState] = useState({
     information : {},
@@ -138,7 +138,7 @@ function UpdateMyAddresses () {
         setState({
           ...state,
           errors      : {},
-          alert       : { type: 'success', message: 'Information updated with success!' },
+          alert       : { type: 'success', message: 'Addresses updated with success!' },
           information : response,
           isSubmitting: false
         })
@@ -175,6 +175,7 @@ function UpdateMyAddresses () {
             information: {
               ...state.information,
               addresses: updateAddress(state.information.addresses, index, {
+                ...state.information.addresses[index],
                 text        : event.suggestion.value,
                 line1       : event.suggestion.name,
                 postal_code : event.suggestion.postcode,
@@ -248,7 +249,7 @@ function UpdateMyAddresses () {
   </form>
 }
 
-export default UpdateMyAddresses
+export default Addresses
 
 function Address ({ address, index, error, isSelected, onUpdateLine2, onDeleteAddress, onSelectAddress }) {
   return <div className={`address ${isSelected ? 'selected' : ''}`}>

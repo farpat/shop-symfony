@@ -1,15 +1,14 @@
 FROM php:7.4-fpm
 
-# Installation of PHP Extensions
-RUN apt-get update && \
-apt-get install -y curl zip unzip git libicu-dev libzip-dev libjpeg62-turbo-dev libfreetype6-dev libpng-dev \
-xfonts-base xfonts-75dpi fontconfig libxrender1 libonig-dev && \
-docker-php-ext-install pdo pdo_mysql intl iconv json zip gd && \
-docker-php-ext-configure gd --with-freetype --with-jpeg && \
-docker-php-ext-install -j$(nproc) gd
+# Installation of basic packages
+RUN apt-get update && apt-get install -y curl zip unzip git libzip-dev libicu-dev
 
-# Use the default production configuration
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+# PHP Extensions
+RUN docker-php-ext-install intl json zip
+# PostgreSQL
+RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo_pgsql
+# Imagick
+RUN apt-get update && apt-get install -y libmagickwand-dev --no-install-recommends && pecl install imagick && docker-php-ext-enable imagick
 
 # Override with custom opcache settings
 #COPY ./docker/php/config/opcache.ini $PHP_INI_DIR/conf.d/
@@ -23,6 +22,7 @@ php -r "unlink('composer-setup.php');"
 ENV COMPOSER_CACHE_DIR=/.cache/composer
 
 # Installation of wkhtmltopdf
-RUN curl -sL -o /tmp/w.deb https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb && \
+RUN apt-get install -y xfonts-75dpi xfonts-base && \
+curl -sL -o /tmp/w.deb https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.stretch_amd64.deb && \
 dpkg -i /tmp/w.deb && \
 rm /tmp/w.deb

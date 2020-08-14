@@ -38,7 +38,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
             ->createQueryBuilder('c')
             ->select('c', 'products')
             ->leftJoin('c.products', 'products')
-            ->where('c.isLast = 0')
+            ->where('c.isLast = false')
             ->getQuery()
             ->getResult();
 
@@ -144,6 +144,8 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
             $productReference = (new ProductReference)
                 ->setLabel($product->getLabel() . (!empty($labelsArray) ? ' => ' . implode(' | ', $labelsArray) : ''))
                 ->setProduct($product)
+                ->setAvailableStock(null)
+                ->setIsAvailable(true)
                 ->setUnitPriceExcludingTaxes($unitPriceExcludingTaxes)
                 ->setUnitPriceIncludingTaxes($unitPriceIncludingTaxes)
                 ->setFilledProductFields($filledProductfields);

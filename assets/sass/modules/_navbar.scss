@@ -67,7 +67,7 @@
   transition: color 0.3s;
 
   &:hover, &.active {
-    color: $primary;
+    color: lighten($primary, 20%);
   }
 }
 

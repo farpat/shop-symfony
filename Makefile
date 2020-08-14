@@ -21,26 +21,26 @@ NO_COLOR      			= \033[m
 filter      ?= tests
 dir         ?=
 
-php := docker-compose run --rm php php
-bash := docker-compose run --rm php bash
-composer := docker-compose run --rm php composer
-mariadb := docker-compose exec mariadb mysql -uroot -proot -e
+php := docker-compose exec php php
+bash := docker-compose exec php bash
+composer := docker-compose exec php composer
+postgres := docker-compose exec postgres psql --host=postgres --username=farrugia --dbname=shop_symfony
 npm := npm
 
 node_modules: package.json
 	@$(npm) install
 
 vendor: composer.json
-	@COMPOSER_MEMORY_LIMIT=-1 $(composer) install
+	@$(composer) install
 
 install: vendor node_modules ## Install the composer dependencies and npm dependencies
 
-update: ## Update the composer dependencies and npm dependencies
+update: dev ## Update the composer dependencies and npm dependencies
 	@$(composer) update
 	@$(npm) run update
 	@$(npm) install
 
-clean: ## Remove cache
+clean: dev ## Remove cache
 	@echo "$(DANGER_COLOR)Removing Symfony cache...$(NO_COLOR)"
 	@$(php) bin/console cache:pool:clear -q cache.app
 	@echo "$(DANGER_COLOR)Removing billings PDF...$(NO_COLOR)"
@@ -51,7 +51,7 @@ help: ## Display this help
 
 test: dev ## Run unit tests (parameters : dir=tests/Feature/LoginTest.php || filter=get)
 	@echo "Creating database: $(PRIMARY_COLOR_BOLD)$(APP_NAME)_test$(NO_COLOR)..."
-	@$(mariadb) "drop database if exists $(APP_NAME)_test; create database $(APP_NAME)_test;"
+	@$(postgres) "drop database if exists $(APP_NAME)_test; create database $(APP_NAME)_test;"
 	@$(php) bin/phpunit $(dir) --filter $(filter) --testdox
 
 dev: install ## Run development servers
@@ -75,11 +75,11 @@ migrate: dev clean ## Refresh database by running new migrations
 	@$(php) bin/console doctrine:migrations:migrate -n -q
 	@$(php) bin/console doctrine:fixtures:load -n
 
-purge-database: ## Purge dev database
+purge-database: dev ## Purge dev database
 	@$(php) bin/console doctrine:database:drop --force
 	@$(php) bin/console doctrine:database:create
 	@rm -rf migrations/*
 	@$(php) bin/console make:migration
 
-bash: install ## Run bash in PHP container
+bash: dev ## Run bash in PHP container
 	@$(bash)

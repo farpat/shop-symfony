@@ -1,5 +1,9 @@
 {% extends "_layouts/pdf.html.twig" %}
 
+{% block title %}
+    {% trans %}Billing{% endtrans %}: {{ billing.number }}
+{% endblock %}
+
 {% block body %}
     <div class="container my-5">
         <div class="row">
@@ -21,7 +25,7 @@
         </div>
 
         <div class="row">
-            <div class="offset-6 col">
+            <div class="offset-6 col text-right">
                 <strong>{{ billing.user.name }}</strong><br>
                 {{ billing.addressLine1 }}<br>
                 {% if billing.addressLine2 %}
@@ -32,17 +36,19 @@
             </div>
         </div>
 
-        <h1 class="h4 mt-3">
-            {% trans %}Billing{% endtrans %}{{ billing.number }}- {{ billing.updatedAt | date('d F Y') }}
-        </h1>
+        <p class="lead">
+            {% trans %}Billing number{% endtrans %}: {{ billing.number }}<br>
+            {% trans %}Billing date{% endtrans %}: {{ billing.updatedAt | date('d F Y') }}
+        </p>
 
-        <table class="table table-bordered my-5">
+        <table class="table table-striped my-5">
             <thead>
             <tr>
                 <th>{% trans %}Description{% endtrans %}</th>
                 <th>{% trans %}Quantity{% endtrans %}</th>
                 <th>{% trans %}Unit price excluding taxes{% endtrans %}</th>
-                <th>{% trans %}Amount excluding taxes{% endtrans %}</th>
+                <th>{% trans %}Taxes{% endtrans %}</th>
+                <th>{% trans %}Total amount including taxes{% endtrans %}</th>
             </tr>
             </thead>
             <tbody>
@@ -51,22 +57,25 @@
                     <td>{{ item.productReference.label }}</td>
                     <td>{{ item.quantity }}</td>
                     <td class="text-right">{{ item.productReference.unitPriceExcludingTaxes | price }}</td>
-                    <td class="text-right">{{ item.productReference.unitPriceIncludingTaxes | price }}</td>
+                    <td class="text-right">{{ item.priceOfTaxes | price }}</td>
+                    <td class="text-right">{{ item.amountIncludingTaxes | price }}</td>
                 </tr>
             {% endfor %}
             </tbody>
             <tfoot class="header-cart-total">
             <tr>
-                <td colspan="2">{% trans %}Total amount excluding taxes{% endtrans %} :</td>
-                <td colspan="2">{{ billing.totalAmountExcludingTaxes | price }}</td>
+                <td class="border-0" colspan="4">{% trans %}Total amount excluding taxes{% endtrans %} :</td>
+                <td class="border-0">{{ billing.totalAmountExcludingTaxes | price }}</td>
             </tr>
             <tr class="header-cart-total-vat">
-                <td class="text-right" colspan="2">{% trans %}Including taxes{% endtrans %}</td>
-                <td colspan="2">{{ billing.includingTaxes | price }}</td>
+                <td class="border-0" class="text-right" colspan="4">{% trans %}Including taxes{% endtrans %}</td>
+                <td class="border-0">{{ billing.includingTaxes | price }}</td>
             </tr>
             <tr style="font-size: 1.5rem;">
-                <td class="text-right" colspan="2">{% trans %}Total amount including taxes{% endtrans %} :</td>
-                <td colspan="2">{{ billing.totalAmountIncludingTaxes | price }}</td>
+                <td class="border-0" class="text-right"
+                    colspan="4">{% trans %}Total amount including taxes{% endtrans %} :
+                </td>
+                <td class="border-0">{{ billing.totalAmountIncludingTaxes | price }}</td>
             </tr>
             </tfoot>
         </table>

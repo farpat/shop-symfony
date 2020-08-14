@@ -39,6 +39,11 @@
                 <a class="nav-link btn btn-login{{ active(app.request, 'app_auth_security_login') }}"
                    href="{{ path('app_auth_security_login') }}">{% trans %}Login{% endtrans %}</a>
             </div>
+
+            <div class="nav-item">
+                <a class="nav-link btn btn-login{{ active(app.request, 'app_auth_security_usurp_index') }}"
+                   href="{{ path('app_auth_security_usurp_index') }}">{% trans %}Usurp{% endtrans %}</a>
+            </div>
         {% endif %}
 
         <div id="cart-nav" class="nav-item nav-dropdown nav-item-cart"

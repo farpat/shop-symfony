@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TaxRepository")
@@ -25,7 +26,7 @@ class Tax
     private $label;
 
     /**
-     * @ORM\Column(type="string", length=50, columnDefinition="ENUM('PERCENTAGE', 'UNITY')")
+     * @ORM\Column(type="string", length=50)
      */
     private $type;
 
@@ -58,6 +59,10 @@ class Tax
 
     public function setType(string $type): self
     {
+        if (!in_array($type, [self::PERCENTAGE_TYPE, self::UNITY_TYPE])) {
+            throw new InvalidArgumentException("The $type << $type >> doesn't exists for Tax entity!");
+        }
+
         $this->type = $type;
 
         return $this;

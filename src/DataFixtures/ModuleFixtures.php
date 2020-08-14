@@ -68,12 +68,7 @@ class ModuleFixtures extends Fixture implements OrderedFixtureInterface
                 'paragraph' => $this->faker->paragraph
             ],
         ]);
-        //<div>
-        //    </div>
-        //    <div>
-        //    </div>
-        //    <div>
-        //    </div>
+
         $this->moduleService->createParameter('home', 'carousel', [
             [
                 'title'       => 'Slide 1',

@@ -4,6 +4,6 @@ import './app/_navbar'
 
 const script = document.body.dataset.script
 if (script !== '') {
-  console.log(`./app/${script}.js`)
+  console.log(`--- LOADING ./app/${script}.js ---`)
   import(`./app/${script}`)
 }

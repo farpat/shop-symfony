@@ -9,6 +9,7 @@ use App\Services\ModuleService;
 use League\Flysystem\FilesystemInterface;
 use mikehaertl\wkhtmlto\Pdf;
 use Twig\Environment as Twig;
+use Twig\Error\{LoaderError, RuntimeError, SyntaxError};
 
 class BillingService
 {
@@ -32,6 +33,11 @@ class BillingService
         return Billing::createFromCart($cart, $currentNumber);
     }
 
+    /**
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function generatePdf(Billing $billing): ?string
     {
         $billingPdf = new Pdf();

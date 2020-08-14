@@ -2,7 +2,9 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Product;
 use App\Entity\User;
+use App\Entity\Visit;
 use App\FormData\UpdateMyAddressesFormData;
 use App\FormData\UpdateMyInformationsFormData;
 use App\Repository\VisitRepository;
@@ -17,18 +19,15 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Validator\{ConstraintViolation, Validator\ValidatorInterface};
 
 /**
- * @Route("/profile-api", name="app_profileapi_user_")
+ * @Route("/profile-api", name="app_api_profile_")
  */
-class ProfileApiController extends AbstractController
+class ProfileController extends AbstractController
 {
     private NormalizerInterface    $normalizer;
     private ValidatorInterface     $validator;
     private EntityManagerInterface $entityManager;
     private ParameterBagInterface  $parameterBag;
-    /**
-     * @var Security
-     */
-    private Security $security;
+    private Security               $security;
 
     public function __construct(
         Security $security,
@@ -53,34 +52,59 @@ class ProfileApiController extends AbstractController
         /** @var User $user */
         $user = $this->security->getUser();
 
-        $navigations = [
+        $userNavigation = [
             [
-                'path'      => '/',
-                'component' => 'ViewMyStatistics',
-                'label'     => 'View my statistics'
+                'icon'      => 'fas fa-eye',
+                'color'     => 'primary',
+                'label'     => 'Monthly visits',
+                'value'     => $this->entityManager->getRepository(Visit::class)->getVisitsCount($user,
+                    new \DateTime('first day of this month midnight'),
+                    (new \DateTime('last day of this month midnight'))->modify('+1 day -1 second')
+                ),
+                'path'      => '/visits',
+                'component' => 'User/Visits'
             ],
             [
-                'path'      => '/view-my-billings',
-                'component' => 'ViewMyBillings',
-                'label'     => 'View my billings'
+                'icon'      => 'fas fa-file-invoice',
+                'color'     => 'success',
+                'label'     => 'Billings',
+                'value'     => $user->getBillings()->count(),
+                'path'      => '/billings',
+                'component' => 'User/Billings',
             ],
             [
-                'path'      => '/update-my-information',
-                'component' => 'UpdateMyInformation',
-                'label'     => 'Update my information'
+                'icon'      => 'fas fa-info',
+                'color'     => 'secondary',
+                'label'     => 'Update my information',
+                'value'     => null,
+                'path'      => '/information',
+                'component' => 'User/Information',
             ],
             [
-                'path'      => '/update-my-addresses',
-                'component' => 'UpdateMyAddresses',
-                'label'     => 'Update my addresses'
+                'icon'      => 'fas fa-address-book',
+                'color'     => 'secondary',
+                'label'     => 'Update my addresses',
+                'value'     => $user->getAddresses()->count(),
+                'path'      => '/addresses',
+                'component' => 'User/Addresses',
             ],
         ];
 
+        $adminNavigation = [];
         if ($user->isAdmin()) {
-
+            $adminNavigation = [
+                [
+                    'icon'      => 'fab fa-product-hunt',
+                    'color'     => 'success',
+                    'label'     => 'Product management',
+                    'value'     => $this->entityManager->getRepository(Product::class)->count([]),
+                    'path'      => '/product',
+                    'component' => 'Admin/ProductManagement'
+                ],
+            ];
         }
 
-        return new JsonResponse($navigations);
+        return new JsonResponse(['user' => $userNavigation, 'admin' => $adminNavigation]);
     }
 
     /**
@@ -172,7 +196,10 @@ class ProfileApiController extends AbstractController
         ));
     }
 
-    /** @Route("/billings", name="billings", methods={"GET"}) */
+    /**
+     * @Route("/billings", name="billings", methods={"GET"})
+     * @IsGranted("ROLE_USER")
+     */
     public function billings()
     {
         /** @var User $user */
@@ -181,31 +208,20 @@ class ProfileApiController extends AbstractController
         return new JsonResponse($this->normalizer->normalize($user->getBillings(), 'billings-json'));
     }
 
-    /** @Route("/statistics", name="statistics", methods={"GET"}) */
-    public function statistics(VisitRepository $visitRepository)
+    /**
+     * @Route("/visits", name="visits", methods={"GET"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function visits(VisitRepository $visitRepository)
     {
         /** @var User $user */
         $user = $this->security->getUser();
+
         $visits = $visitRepository->getVisits($user,
             new \DateTime('first day of this month midnight'),
             (new \DateTime('last day of this month midnight'))->modify('+1 day -1 second')
         );
 
-        $statistics = [
-            [
-                'icon'  => 'eye',
-                'color' => 'secondary',
-                'label' => 'Monthly visits',
-                'value' => count($visits)
-            ],
-            [
-                'icon'  => 'file-invoice',
-                'color' => 'primary',
-                'label' => 'Billings',
-                'value' => $user->getBillings()->count()
-            ]
-        ];
-
-        return new JsonResponse($statistics);
+        return new JsonResponse($this->normalizer->normalize($visits, 'billings-json'));
     }
 }
