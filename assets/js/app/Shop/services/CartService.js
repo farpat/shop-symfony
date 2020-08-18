@@ -140,7 +140,7 @@ class CartService {
     dispatch({ type: 'SET_CART_ITEM_IS_LOADING', reference, isLoading: true })
 
     try {
-      const response = jsonPatch(`/cart-items/${reference.id}`, { quantity })
+      const response = await jsonPatch(`/cart-items/${reference.id}`, { quantity })
       dispatch({ type: 'UPDATE_ITEM_QUANTITY', reference: response.reference, quantity })
     } catch (error) {
       console.error(error)
@@ -159,7 +159,7 @@ class CartService {
     dispatch({ type: 'SET_CART_ITEM_IS_LOADING', reference, isLoading: true })
 
     try {
-      jsonDelete(`/cart-items/${reference.id}`)
+      await jsonDelete(`/cart-items/${reference.id}`)
       dispatch({ type: 'DELETE_ITEM', reference })
     } catch (error) {
       console.error(error)

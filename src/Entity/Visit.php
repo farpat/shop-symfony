@@ -36,7 +36,7 @@ class Visit
      */
     protected $route;
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="visits")
      */
     protected $user;
     /**

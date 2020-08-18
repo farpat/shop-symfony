@@ -16,7 +16,7 @@
         "bootstrap": "^5.0.0-alpha1",
         "chart.js": "^2.9.3",
         "core-js": "^3.6.5",
-        "lodash": "^4.17.19",
+        "lodash": "^4.17.20",
         "multiple-select": "^1.5.2",
         "places.js": "^1.19.0",
         "popper.js": "^1.16.1",

@@ -17,28 +17,34 @@ function App () {
     })()
   }, [])
 
+  const renderNavigation = function (navigation) {
+    return navigation.map(navigationItem => {
+      const Component = require(`./${navigationItem.component}`).default
+      return <Route key={navigationItem.path} path={navigationItem.path}>
+        <Component/>
+      </Route>
+    })
+  }
+
   return <Router>
     {
       isSelected ?
         <Link to='/' className="d-block mb-5" onClick={() => setIsSelected(false)}>&larr; back to home</Link> :
-        <Navigation navigations={navigations} setIsSelected={setIsSelected}/>
+        <Navigations navigations={navigations} setIsSelected={setIsSelected}/>
     }
-
 
     <Switch>
       {
-        navigations.user.map(route => {
-          const Component = require(`./${route.component}`).default
-          return <Route key={route.path} path={route.path}>
-            <Component/>
-          </Route>
-        })
+        renderNavigation(navigations.user)
+      }
+      {
+        renderNavigation(navigations.admin)
       }
     </Switch>
   </Router>
 }
 
-function Navigation ({ navigations, setIsSelected }) {
+function Navigations ({ navigations, setIsSelected }) {
   return <>
     <h2>My profile</h2>
     <nav className="statistics">

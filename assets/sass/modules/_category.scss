@@ -68,6 +68,10 @@
 }
 
 .category-media {
+  a {
+    text-decoration: none;
+  }
+
   .media {
     display: flex;
     margin: 1rem 0;
@@ -79,9 +83,10 @@
 
   .media-title {
     font-size: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   img {
-    max-width: 4rem;
+    max-width: 6rem;
   }
 }
