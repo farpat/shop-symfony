@@ -47,7 +47,7 @@ function Addresses () {
 
   useEffect(() => {
     (async function () {
-      const response = await jsonGet('/profile-api/addresses')
+      const response = await jsonGet('/api/profile/user/addresses')
       setState({
         ...state,
         information: response,
@@ -56,8 +56,8 @@ function Addresses () {
     })()
   }, [])
 
-  const onUpdateLine2 = (key, value) => {
-    const [, formattedKey] = key.match(/^addresses\[([0-9]+)\]/)
+  const onUpdateSecondLine = (key, value) => {
+    const [, formattedKey] = key.match(/^addresses\[([0-9]+)]/)
 
     const addresses = state.information.addresses
     addresses[window.parseInt(formattedKey)]['line2'] = value
@@ -133,7 +133,7 @@ function Addresses () {
 
     setState({ ...state, isSubmitting: true, alert: null })
 
-    jsonPut('/profile-api/addresses', state.information)
+    jsonPut('/api/profile/user//addresses', state.information)
       .then(response => {
         setState({
           ...state,
@@ -227,7 +227,7 @@ function Addresses () {
         state.information.addresses.map((address, index) => {
           if (address.status !== 'DELETED') {
             return <Address address={address} index={index} key={index}
-                            onUpdateLine2={onUpdateLine2} onDeleteAddress={onDeleteAddress}
+                            onUpdateSecondLine={onUpdateSecondLine} onDeleteAddress={onDeleteAddress}
                             onSelectAddress={onSelectAddress}
                             isSelected={state.information.delivery_address_index === index}
                             error={getError(state.errors, index)}
@@ -244,14 +244,14 @@ function Addresses () {
       state.isSubmitting ?
         <button className="btn btn-primary" disabled><i className="fa fa-spinner spinner"/> Loading&hellip;
         </button> :
-        <button className="btn btn-primary">Save informations</button>
+        <button className="btn btn-primary">Save information</button>
     }
   </form>
 }
 
 export default Addresses
 
-function Address ({ address, index, error, isSelected, onUpdateLine2, onDeleteAddress, onSelectAddress }) {
+function Address ({ address, index, error, isSelected, onUpdateSecondLine, onDeleteAddress, onSelectAddress }) {
   return <div className={`address ${isSelected ? 'selected' : ''}`}>
 
     <TextComponent id={'address_text_' + index} className='algolia'
@@ -259,7 +259,7 @@ function Address ({ address, index, error, isSelected, onUpdateLine2, onDeleteAd
 
     <TextComponent id={'address_line2_' + index} name={getName(index, 'line2')} value={address.line2}
                    attr={{ placeholder: 'Address line 2' }}
-                   onUpdate={onUpdateLine2}/>
+                   onUpdate={onUpdateSecondLine}/>
 
     <div>
       <button type="button" className="btn btn-link text-danger" onClick={() => onDeleteAddress(index)}>Delete</button>

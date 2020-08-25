@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\ProductField;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method ProductField|null find($id, $lockMode = null, $lockVersion = null)
@@ -47,4 +47,17 @@ class ProductFieldRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function getAllForApi(): array
+    {
+        $data = $this->createQueryBuilder('pf')
+            ->getQuery()
+            ->getArrayResult();
+
+        $productFields = [];
+        foreach ($data as $key => $datum) {
+            $productFields[$datum['id']] = $datum;
+        }
+
+        return $productFields;
+    }
 }

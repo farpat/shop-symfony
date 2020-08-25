@@ -80,9 +80,9 @@ class SecurityController extends AbstractController
     /**
      * @Route("/usurp", name="usurp_index", methods={"GET"})
      */
-    public function usurpList(UserRepository $userRepository)
+    public function usurpIndex(UserRepository $userRepository)
     {
-        $users = $userRepository->findAll();
+        $users = $userRepository->findBy([], ['roles' => 'DESC']);
         return $this->render('auth/security/usurp.html.twig', compact('users'));
     }
 }

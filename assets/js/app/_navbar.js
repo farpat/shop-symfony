@@ -7,9 +7,7 @@ import HeadCartComponent from './Shop/components/HeadCart/CartComponent'
 //Header cart component (in navbar)
 const cartNavElement = document.querySelector('#cart-nav')
 render(
-  <Provider store={productAndCartStore}>
-    <HeadCartComponent/>
-  </Provider>,
+  <Provider store={productAndCartStore}><HeadCartComponent/></Provider>,
   cartNavElement
 )
 
@@ -20,24 +18,23 @@ toggleButton.addEventListener('click', function () {
 })
 
 //to display items into dropdown element
-const dropdowns = document.querySelectorAll('.nav-dropdown > button')
+const dropdownButtons = document.querySelectorAll('.nav-dropdown > button')
 let selectedDropdown = null
-dropdowns.forEach(dropdown => {
-  dropdown.addEventListener('click', function (event) {
-    event.preventDefault()
-    const dropdownMenuElement = dropdown.nextElementSibling
-    const isSelected = dropdownMenuElement.classList.contains('selected')
+const toggleSelectDropdown = function (event) {
+  event.preventDefault()
+  const currentDropdown = event.target.nextElementSibling
 
-    if (selectedDropdown) {
-      selectedDropdown.nextElementSibling.classList.remove('selected')
-      selectedDropdown = null
+  if (currentDropdown === selectedDropdown) {
+    currentDropdown.classList.remove('selected')
+    selectedDropdown = null
+  } else {
+    if (selectedDropdown !== null) {
+      selectedDropdown.classList.remove('selected')
     }
-
-    if (isSelected) {
-      dropdownMenuElement.classList.remove('selected')
-    } else {
-      selectedDropdown = dropdown
-      dropdownMenuElement.classList.add('selected')
-    }
-  })
+    currentDropdown.classList.add('selected')
+    selectedDropdown = currentDropdown
+  }
+}
+dropdownButtons.forEach(dropdownButton => {
+  dropdownButton.addEventListener('click', toggleSelectDropdown)
 })

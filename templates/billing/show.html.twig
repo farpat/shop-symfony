@@ -41,12 +41,12 @@
             {% trans %}Billing date{% endtrans %}: {{ billing.updatedAt | date('d F Y') }}
         </p>
 
-        <table class="table table-striped my-5">
+        <table class="table my-5">
             <thead>
             <tr>
                 <th>{% trans %}Description{% endtrans %}</th>
                 <th>{% trans %}Quantity{% endtrans %}</th>
-                <th>{% trans %}Unit price excluding taxes{% endtrans %}</th>
+                <th>{% trans %}Unit price{% endtrans %}</th>
                 <th>{% trans %}Taxes{% endtrans %}</th>
                 <th>{% trans %}Total amount including taxes{% endtrans %}</th>
             </tr>

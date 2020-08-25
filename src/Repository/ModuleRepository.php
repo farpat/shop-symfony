@@ -5,7 +5,7 @@ namespace App\Repository;
 use Exception;
 use App\Entity\{Module, ModuleParameter};
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Module|null find($id, $lockMode = null, $lockVersion = null)

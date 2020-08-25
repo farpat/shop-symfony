@@ -5,8 +5,8 @@ namespace App\Repository;
 use App\Entity\Category;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
 /**
@@ -90,11 +90,24 @@ class CategoryRepository extends ServiceEntityRepository
                 )
             )
             ->setParameters([
-                'nomenclature' => $category->getNomenclature(),
+                'nomenclature'           => $category->getNomenclature(),
                 'nomenclatureExpression' => "{$category->getNomenclature()}.%"
             ])
             ->getQuery()
             ->getResult();
+    }
+
+    public function getAllForApi(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c', 'image', 'products', 'productReferences')
+            ->leftJoin('c.image', 'image')
+            ->leftJoin('c.productFields', 'productFields')
+            ->leftJoin('c.products', 'products')
+            ->leftJoin('products.productReferences', 'productReferences')
+            ->orderBy('c.nomenclature', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**
@@ -126,7 +139,7 @@ class CategoryRepository extends ServiceEntityRepository
             ->andWhere('LENGTH(c.nomenclature) - LENGTH(REPLACE(c.nomenclature,\'.\',\'\')) + 1 = :level')
             ->setParameters([
                 'nomenclatureExpression' => "{$parentCategory->getNomenclature()}.%",
-                'level' => $parentCategory->getLevel() + 1
+                'level'                  => $parentCategory->getLevel() + 1
             ])
             ->getQuery()
             ->getResult();

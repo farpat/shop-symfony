@@ -21,9 +21,9 @@ NO_COLOR      			= \033[m
 filter      ?= tests
 dir         ?=
 
-php := docker-compose exec php php
-bash := docker-compose exec php bash
-composer := docker-compose exec php composer
+php := docker-compose run --rm php php
+bash := docker-compose run --rm php bash
+composer := docker-compose run --rm php composer
 postgres := docker-compose exec postgres psql --host=postgres --username=farrugia --dbname=shop_symfony
 npm := npm
 
@@ -35,21 +35,21 @@ vendor: composer.json
 
 install: vendor node_modules ## Install the composer dependencies and npm dependencies
 
-update: dev ## Update the composer dependencies and npm dependencies
+update: ## Update the composer dependencies and npm dependencies
 	@$(composer) update
 	@$(npm) run update
 	@$(npm) install
 
-clean: dev ## Remove cache
+clean: ## Remove cache
 	@echo "$(DANGER_COLOR)Removing Symfony cache...$(NO_COLOR)"
-	@$(php) bin/console cache:pool:clear -q cache.app
+	@$(php) bin/console cache:pool:clear --quiet cache.app
 	@echo "$(DANGER_COLOR)Removing billings PDF...$(NO_COLOR)"
 	@rm -rf ./var/storage/billings/*
 
 help: ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "$(PRIMARY_COLOR_BOLD)%-10s$(NO_COLOR) %s\n", $$1, $$2 }' $(MAKEFILE_LIST) | sort
 
-test: dev ## Run unit tests (parameters : dir=tests/Feature/LoginTest.php || filter=get)
+test: ## Run unit tests (parameters : dir=tests/Feature/LoginTest.php || filter=get)
 	@echo "Creating database: $(PRIMARY_COLOR_BOLD)$(APP_NAME)_test$(NO_COLOR)..."
 	@$(postgres) "drop database if exists $(APP_NAME)_test; create database $(APP_NAME)_test;"
 	@$(php) bin/phpunit $(dir) --filter $(filter) --testdox
@@ -70,16 +70,18 @@ build: install ## Build assets projects for production
 	@rm -rf ./public/assets/*
 	@$(npm) run build
 
-migrate: dev clean ## Refresh database by running new migrations
+migrate: clean ## Refresh database by running new migrations
 	@echo "$(PRIMARY_COLOR)Migrating database...$(NO_COLOR)"
-	@$(php) bin/console doctrine:migrations:migrate -n -q
-	@$(php) bin/console doctrine:fixtures:load -n
+	@$(php) bin/console doctrine:migrations:migrate --no-interaction --quiet
+	@$(php) bin/console doctrine:fixtures:load --no-interaction --no-debug
 
-purge-database: dev ## Purge dev database
+purge-database: ## Purge dev database (?MIGRATE)
 	@$(php) bin/console doctrine:database:drop --force
 	@$(php) bin/console doctrine:database:create
+ifdef MIGRATE
 	@rm -rf migrations/*
 	@$(php) bin/console make:migration
+endif
 
-bash: dev ## Run bash in PHP container
+bash: ## Run bash in PHP container
 	@$(bash)

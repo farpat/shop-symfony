@@ -6,9 +6,9 @@ RUN apt-get update && apt-get install -y curl zip unzip git libzip-dev libicu-de
 # PHP Extensions
 RUN docker-php-ext-install intl json zip
 # PostgreSQL
-RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo_pgsql
+RUN apt-get install -y libpq-dev && docker-php-ext-install pdo_pgsql
 # Imagick
-RUN apt-get update && apt-get install -y libmagickwand-dev --no-install-recommends && pecl install imagick && docker-php-ext-enable imagick
+RUN apt-get install -y libmagickwand-dev --no-install-recommends && pecl install imagick && docker-php-ext-enable imagick
 
 # Override with custom opcache settings
 #COPY ./docker/php/config/opcache.ini $PHP_INI_DIR/conf.d/
@@ -23,6 +23,6 @@ ENV COMPOSER_CACHE_DIR=/.cache/composer
 
 # Installation of wkhtmltopdf
 RUN apt-get install -y xfonts-75dpi xfonts-base && \
-curl -sL -o /tmp/w.deb https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.stretch_amd64.deb && \
+curl -sL -o /tmp/w.deb https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb && \
 dpkg -i /tmp/w.deb && \
 rm /tmp/w.deb

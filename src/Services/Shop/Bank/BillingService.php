@@ -38,16 +38,21 @@ class BillingService
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function generatePdf(Billing $billing): ?string
+    public function generatePdf(Billing $billing): string
     {
         $billingPdf = new Pdf();
-        $billingPdf->addPage($this->twig->render('billing/show.html.twig', ['billing' => $billing]));
+        $billingPdf->addPage($page = $this->twig->render('billing/show.html.twig', ['billing' => $billing]));
         $pdfPath = $this->getRealPdfPath($billing);
         $folder = dirname($pdfPath);
         if (!is_dir($folder)) {
             mkdir($folder);
         }
-        return $billingPdf->saveAs($pdfPath) ? $pdfPath : null;
+
+        if ($billingPdf->saveAs($pdfPath)) {
+            return $pdfPath;
+        } else {
+            throw new \Exception($billingPdf->getError());
+        }
     }
 
     private function getRealPdfPath(Billing $billing): string

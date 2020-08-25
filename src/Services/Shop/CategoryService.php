@@ -88,9 +88,7 @@ class CategoryService
             $children = $this->categoryRepository->getChildren($parentCategory);
             $string .= <<<HTML
                 <div class="media">
-                    <a href="{$this->getShowUrl($parentCategory)}" class="media-link">
-                        $imageElement
-                    </a>
+                    <a href="{$this->getShowUrl($parentCategory)}" class="media-link">$imageElement</a>
                     <div class="media-body">
                         <h2 class="media-title"><a href="{$this->getShowUrl($parentCategory)}">{$parentCategory->getLabel()}</a></h2>
                         {$this->generateHtml($children, false)}

@@ -12,7 +12,7 @@ function Visits () {
 
   useEffect(() => {
     (async function () {
-      const response = await jsonGet('/profile-api/visits')
+      const response = await jsonGet('/api/profile/user//visits')
       setState({
         ...state,
         visits   : response,
@@ -25,6 +25,7 @@ function Visits () {
     if (!state.isLoading) {
       const labels = state.visits.map(visit => visit.url)
       const data = state.visits.map(visit => visit.count)
+      canvas.current.height = data.length * 12.5
       const blue = getComputedStyle(document.body).getPropertyValue('--bs-blue').trim()
 
       new Chart(canvas.current, {
@@ -32,15 +33,16 @@ function Visits () {
         data   : {
           labels,
           datasets: [{
-            label          : 'Monthly visits',
             data,
             backgroundColor: blue + 'DD',
             borderColor    : blue,
-            borderWidth    : 1
           }]
         },
         options: {
           legend: { display: false },
+          scales: {
+            xAxes: [{ ticks: { beginAtZero: true, stepSize: 1 } }]
+          }
         }
       })
     }

@@ -37,7 +37,7 @@ class BillingController extends AbstractController
      * @Entity("billing", expr="repository.getWithAllRelations(billingNumber)")
      * @IsGranted(App\Security\Voter\BillingVoter::VIEW, subject="billing")
      */
-    public function view(Billing $billing, BillingService  $billingService, Request  $request)
+    public function view(Billing $billing, BillingService $billingService, Request $request)
     {
         $areAssetsAbsolute = false;
 

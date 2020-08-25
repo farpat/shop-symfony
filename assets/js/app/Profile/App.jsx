@@ -4,20 +4,34 @@ import { jsonGet } from '@farpat/api'
 import { HashRouter as Router, NavLink as Link, Route, Switch, useRouteMatch } from 'react-router-dom'
 
 function App () {
-  const [navigations, setNavigations] = useState({ user: [], admin: [] })
-  const [isSelected, setIsSelected] = useState(false)
+  const [state, setState] = useState({
+    navigations: { user: [], admin: [] },
+    isSelected : false,
+    isLoading  : true
+  })
+
+  console.log('render')
 
   useEffect(() => {
     (async function () {
-      const response = await jsonGet('/profile-api/navigation')
-      setNavigations(response)
-      if (window.location.hash !== '#/') {
-        setIsSelected(true)
+      if (!state.isSelected) {
+        setState({
+          ...state,
+          navigation: { ...state.navigation, user: [], admin: [] }
+        })
+
+        const response = await jsonGet('/api/profile/user//navigation')
+        setState({
+          ...state,
+          navigations: { ...state.navigation, ...response },
+          isLoading  : false,
+          isSelected : window.location.hash !== '' && window.location.hash !== '#/'
+        })
       }
     })()
-  }, [])
+  }, [state.isSelected])
 
-  const renderNavigation = function (navigation) {
+  const renderComponent = function (navigation) {
     return navigation.map(navigationItem => {
       const Component = require(`./${navigationItem.component}`).default
       return <Route key={navigationItem.path} path={navigationItem.path}>
@@ -26,58 +40,69 @@ function App () {
     })
   }
 
+  const renderNavigation = function (navigationItems, h2) {
+    if (navigationItems.length === 0) {
+      return null
+    }
+
+    return <>
+      <h2 className={h2.class}>{h2.title}</h2>
+      <nav className="statistics">
+        {
+          navigationItems.map(navigationItem =>
+            <NavigationItem key={navigationItem.path} navigationItem={navigationItem}
+                            setIsSelected={setIsSelected}/>
+          )
+        }
+      </nav>
+    </>
+  }
+
+  const setIsSelected = function () {
+    setState({ ...state, isSelected: true })
+  }
+
+  if (state.isLoading) {
+    return <div className="text-center mt-5">
+      <i className='fas fa-spinner spinner fa-7x'/>
+    </div>
+  }
+
   return <Router>
     {
-      isSelected ?
-        <Link to='/' className="d-block mb-5" onClick={() => setIsSelected(false)}>&larr; back to home</Link> :
-        <Navigations navigations={navigations} setIsSelected={setIsSelected}/>
+      state.isSelected ?
+        <Link to='/' className="d-block mb-5"
+              onClick={() => setState({ ...state, isSelected: false, isLoading: true })}>
+          &larr; back to home
+        </Link> :
+        <>
+          {
+            renderNavigation(state.navigations.user, { title: 'My profile', class: null })
+          }
+          {
+            renderNavigation(state.navigations.admin, { title: 'Admin', class: 'mt-5' })
+          }
+        </>
     }
 
     <Switch>
       {
-        renderNavigation(navigations.user)
+        renderComponent(state.navigations.user)
       }
       {
-        renderNavigation(navigations.admin)
+        renderComponent(state.navigations.admin)
       }
     </Switch>
   </Router>
-}
-
-function Navigations ({ navigations, setIsSelected }) {
-  return <>
-    <h2>My profile</h2>
-    <nav className="statistics">
-      {
-        navigations.user.map(navigationItem =>
-          <NavigationItem key={navigationItem.path} navigationItem={navigationItem} setIsSelected={setIsSelected}/>
-        )
-      }
-    </nav>
-
-    {
-      navigations.admin.length > 0 &&
-      <>
-        <h2 className="mt-5">Admin</h2>
-
-        <nav className="statistics">
-          {
-            navigations.admin.map(navigationItem =>
-              <NavigationItem key={navigationItem.path} navigationItem={navigationItem} setIsSelected={setIsSelected}/>
-            )
-          }
-        </nav>
-      </>
-    }
-  </>
 }
 
 function NavigationItem ({ navigationItem, setIsSelected }) {
   const isCurrentRoute = useRouteMatch({ path: navigationItem.path, exact: true })
 
   return <Link
-    to={navigationItem.path} isActive={() => isCurrentRoute !== null} activeClassName="active"
-    onClick={() => setIsSelected(true)}
+    to={navigationItem.path}
+    isActive={() => isCurrentRoute !== null} activeClassName="active"
+    onClick={() => setIsSelected()}
     className={`statistic bg-${navigationItem.color}`}
   >
     <h2 className="statistic-title">

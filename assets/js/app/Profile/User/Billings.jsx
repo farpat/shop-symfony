@@ -10,7 +10,7 @@ function Billings () {
 
   useEffect(() => {
     (async function () {
-      const response = await jsonGet('/profile-api/billings')
+      const response = await jsonGet('/api/profile/user//billings')
       setState({
         ...state,
         billings : response,

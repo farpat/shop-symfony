@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200814130320 extends AbstractMigration
+final class Version20200825083417 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -80,9 +80,10 @@ final class Version20200814130320 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN reset_password_request.expires_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('CREATE TABLE tag (id INT NOT NULL, label VARCHAR(255) NOT NULL, type VARCHAR(50) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE tax (id INT NOT NULL, label VARCHAR(255) NOT NULL, type VARCHAR(50) NOT NULL, value NUMERIC(10, 2) NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE TABLE "user" (id INT NOT NULL, delivery_address_id INT DEFAULT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, email_verified_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, remember_token VARCHAR(100) DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE "user" (id INT NOT NULL, delivery_address_id INT DEFAULT NULL, email VARCHAR(180) NOT NULL, roles TEXT NOT NULL, password VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, email_verified_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, remember_token VARCHAR(100) DEFAULT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649E7927C74 ON "user" (email)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649EBF23851 ON "user" (delivery_address_id)');
+        $this->addSql('COMMENT ON COLUMN "user".roles IS \'(DC2Type:array)\'');
         $this->addSql('CREATE TABLE visit (id INT NOT NULL, user_id INT DEFAULT NULL, ip_address VARCHAR(255) NOT NULL, url VARCHAR(255) NOT NULL, route VARCHAR(255) NOT NULL, route_parameters TEXT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_437EE939A76ED395 ON visit (user_id)');
         $this->addSql('COMMENT ON COLUMN visit.route_parameters IS \'(DC2Type:array)\'');
