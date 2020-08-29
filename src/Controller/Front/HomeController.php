@@ -8,7 +8,6 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\{JsonResponse, Request, Response};
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -24,7 +23,7 @@ class HomeController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function index(ModuleService $moduleService, Security $security)
+    public function index(ModuleService $moduleService)
     {
         $elementsToDisplayInHomepageParameter = $moduleService->getParameter('home', 'display');
 

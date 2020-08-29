@@ -12,7 +12,7 @@ function Visits () {
 
   useEffect(() => {
     (async function () {
-      const response = await jsonGet('/api/profile/user//visits')
+      const response = await jsonGet('/api/profile/user/visits')
       setState({
         ...state,
         visits   : response,

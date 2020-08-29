@@ -20,7 +20,7 @@ function App () {
           navigation: { ...state.navigation, user: [], admin: [] }
         })
 
-        const response = await jsonGet('/api/profile/user//navigation')
+        const response = await jsonGet('/api/profile/navigation')
         setState({
           ...state,
           navigations: { ...state.navigation, ...response },

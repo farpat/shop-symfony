@@ -2,8 +2,8 @@
 
 namespace App\Controller\Api\Profile;
 
-use App\Repository\CategoryRepository;
 use App\Repository\ProductFieldRepository;
+use App\Services\Shop\CategoryService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,13 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminController extends AbstractController
 {
     /**
-     * @Route("/products", name="products", methods={"GET"})
+     * @Route("/categories", name="categories", methods={"GET"})
      */
-    public function products(CategoryRepository $categoryRepository, ProductFieldRepository $productFieldRepository)
+    public function categories(CategoryService $categoryService, ProductFieldRepository $productFieldRepository)
     {
         return $this->json([
             'productFields' => $productFieldRepository->getAllForApi(),
-            'categories'    => $categoryRepository->getAllForApi()
+            'categories'    => $categoryService->generateListForCategoryIndexAdmin($categoryService->getRootCategories())
         ], 200);
     }
 }

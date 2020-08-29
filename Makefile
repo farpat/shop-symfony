@@ -47,9 +47,9 @@ clean: ## Remove cache
 	@rm -rf ./var/storage/billings/*
 
 help: ## Display this help
-	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "$(PRIMARY_COLOR_BOLD)%-10s$(NO_COLOR) %s\n", $$1, $$2 }' $(MAKEFILE_LIST) | sort
+	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "$(PRIMARY_COLOR_BOLD)%-15s$(NO_COLOR) %s\n", $$1, $$2 }' $(MAKEFILE_LIST) | sort
 
-test: ## Run unit tests (parameters : dir=tests/Feature/LoginTest.php || filter=get)
+test: ## Run PHP tests (parameters : dir=tests/Feature/LoginTest.php || filter=get)
 	@echo "Creating database: $(PRIMARY_COLOR_BOLD)$(APP_NAME)_test$(NO_COLOR)..."
 	@$(postgres) "drop database if exists $(APP_NAME)_test; create database $(APP_NAME)_test;"
 	@$(php) bin/phpunit $(dir) --filter $(filter) --testdox
@@ -75,7 +75,7 @@ migrate: clean ## Refresh database by running new migrations
 	@$(php) bin/console doctrine:migrations:migrate --no-interaction --quiet
 	@$(php) bin/console doctrine:fixtures:load --no-interaction --no-debug
 
-purge-database: ## Purge dev database (?MIGRATE)
+purge-database: ## Purge dev database (MIGRATE=0[default])
 	@$(php) bin/console doctrine:database:drop --force
 	@$(php) bin/console doctrine:database:create
 ifdef MIGRATE

@@ -38,7 +38,7 @@ class CategoryController extends AbstractController
 
         return $this->render('category/index.html.twig', [
             'breadcrumb' => $breadcrumb,
-            'html'       => $this->categoryService->generateHtml($this->categoryService->getRootCategories())
+            'html'       => $this->categoryService->generateHtmlForCategoryIndex($this->categoryService->getRootCategories())
         ]);
     }
 

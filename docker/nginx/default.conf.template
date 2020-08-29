@@ -11,7 +11,7 @@ server {
     charset utf-8;
 
     location / {
-        try_files ${DOLLAR}uri ${DOLLAR}uri/ /index.php?${DOLLAR}query_string;
+        try_files $uri $uri/ /index.php?$query_string;
     }
 
     location = /favicon.ico { access_log off; log_not_found off; }
@@ -19,10 +19,10 @@ server {
 
     error_page 404 /index.php;
 
-    location ~ \.php${DOLLAR} {
+    location ~ \.php$ {
         fastcgi_pass ${PHP_SERVICE}:9000;
         fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME ${DOLLAR}realpath_root${DOLLAR}fastcgi_script_name;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         include fastcgi_params;
     }
 

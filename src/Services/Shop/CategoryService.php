@@ -62,13 +62,43 @@ class CategoryService
         return $this->categoryRepository->getProducts($category);
     }
 
+    public function generateListForCategoryIndexAdmin(array $parentCategories, bool $isRootCall = true): array
+    {
+        $cacheKey = 'category#generateListForCategoryIndexAdmin';
+        $cacheItem = $this->cache->getItem($cacheKey);
+
+        if ($isRootCall && $this->cache->hasItem($cacheKey)) {
+            return $cacheItem->get();
+        }
+
+        if (empty($parentCategories)) {
+            return [];
+        }
+
+        $array = [];
+        foreach ($parentCategories as $parentCategory) {
+            $children = $this->categoryRepository->getChildren($parentCategory);
+
+            $array[] = [
+                'category' => $parentCategory,
+                'children' => $this->generateListForCategoryIndexAdmin($children, false)
+            ];
+        }
+
+        if ($isRootCall) {
+            $this->cache->save($cacheItem->set($array));
+        }
+
+        return $array;
+    }
+
     /**
      * @param Category[] $parentCategories
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    public function generateHtml(array $parentCategories, bool $isRootCall = true): string
+    public function generateHtmlForCategoryIndex(array $parentCategories, bool $isRootCall = true): string
     {
-        $cacheKey = 'category#generateHtml';
+        $cacheKey = 'category#generateHtmlForCategoryIndex';
         $cacheItem = $this->cache->getItem($cacheKey);
 
         if ($isRootCall && $this->cache->hasItem($cacheKey)) {
@@ -91,7 +121,7 @@ class CategoryService
                     <a href="{$this->getShowUrl($parentCategory)}" class="media-link">$imageElement</a>
                     <div class="media-body">
                         <h2 class="media-title"><a href="{$this->getShowUrl($parentCategory)}">{$parentCategory->getLabel()}</a></h2>
-                        {$this->generateHtml($children, false)}
+                        {$this->generateHtmlForCategoryIndex($children, false)}
                     </div>
                 </div>
                 HTML;

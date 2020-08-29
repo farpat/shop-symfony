@@ -20,9 +20,8 @@ toggleButton.addEventListener('click', function () {
 //to display items into dropdown element
 const dropdownButtons = document.querySelectorAll('.nav-dropdown > button')
 let selectedDropdown = null
-const toggleSelectDropdown = function (event) {
+const toggleSelectDropdown = function (event, currentDropdown) {
   event.preventDefault()
-  const currentDropdown = event.target.nextElementSibling
 
   if (currentDropdown === selectedDropdown) {
     currentDropdown.classList.remove('selected')
@@ -36,5 +35,5 @@ const toggleSelectDropdown = function (event) {
   }
 }
 dropdownButtons.forEach(dropdownButton => {
-  dropdownButton.addEventListener('click', toggleSelectDropdown)
+  dropdownButton.addEventListener('click', (event) => toggleSelectDropdown(event, dropdownButton.nextElementSibling))
 })

@@ -97,19 +97,6 @@ class CategoryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function getAllForApi(): array
-    {
-        return $this->createQueryBuilder('c')
-            ->select('c', 'image', 'products', 'productReferences')
-            ->leftJoin('c.image', 'image')
-            ->leftJoin('c.productFields', 'productFields')
-            ->leftJoin('c.products', 'products')
-            ->leftJoin('products.productReferences', 'productReferences')
-            ->orderBy('c.nomenclature', 'ASC')
-            ->getQuery()
-            ->getArrayResult();
-    }
-
     /**
      * @return Category[]
      */

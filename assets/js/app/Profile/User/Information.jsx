@@ -29,7 +29,7 @@ function Information() {
 
   useEffect(() => {
     (async function () {
-      const response = await jsonGet('/api/profile/user//me')
+      const response = await jsonGet('/api/profile/user/me')
       setState({
         ...state,
         information: response,
@@ -53,7 +53,7 @@ function Information() {
 
     setState({ ...state, isSubmitting: true, alert: null })
 
-    jsonPut('/api/profile/user//me', state.information)
+    jsonPut('/api/profile/user/me', state.information)
       .then(response => {
         setState({
           ...state,

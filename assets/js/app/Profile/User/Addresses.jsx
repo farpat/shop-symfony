@@ -133,7 +133,7 @@ function Addresses () {
 
     setState({ ...state, isSubmitting: true, alert: null })
 
-    jsonPut('/api/profile/user//addresses', state.information)
+    jsonPut('/api/profile/user/addresses', state.information)
       .then(response => {
         setState({
           ...state,

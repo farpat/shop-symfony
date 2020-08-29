@@ -2,7 +2,7 @@
 
 namespace App\Controller\Api\Profile;
 
-use App\Entity\{Product, User, Visit};
+use App\Entity\{Category, Product, User, Visit};
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\{Core\Security};
 
 /**
- * @Route("/api/profile/", name="app_api_profile_profile_")
+ * @Route("/api/profile", name="app_api_profile_profile_")
  */
 class ProfileController extends AbstractController
 {
@@ -76,12 +76,12 @@ class ProfileController extends AbstractController
         if ($user->isAdmin()) {
             $adminNavigation = [
                 [
-                    'icon'      => 'fab fa-product-hunt',
+                    'icon'      => 'fas fa-list',
                     'color'     => 'success',
-                    'label'     => 'Product management',
-                    'value'     => $this->entityManager->getRepository(Product::class)->count([]),
-                    'path'      => '/product',
-                    'component' => 'Admin/ProductManagement'
+                    'label'     => 'Categories management',
+                    'value'     => $this->entityManager->getRepository(Category::class)->count([]),
+                    'path'      => '/categories',
+                    'component' => 'Admin/CategoryManagement'
                 ],
             ];
         }

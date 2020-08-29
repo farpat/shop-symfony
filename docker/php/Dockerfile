@@ -14,10 +14,7 @@ RUN apt-get install -y libmagickwand-dev --no-install-recommends && pecl install
 #COPY ./docker/php/config/opcache.ini $PHP_INI_DIR/conf.d/
 
 # Installation of composer
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-php composer-setup.php && \
-mv composer.phar /usr/local/bin/composer && \
-php -r "unlink('composer-setup.php');"
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin/ --filename=composer
 
 ENV COMPOSER_CACHE_DIR=/.cache/composer
 
