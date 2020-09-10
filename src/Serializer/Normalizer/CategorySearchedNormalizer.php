@@ -4,6 +4,7 @@ namespace App\Serializer\Normalizer;
 
 use App\Entity\Category;
 use App\Services\Shop\CategoryService;
+use App\Services\Support\Arr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -30,17 +31,16 @@ class CategorySearchedNormalizer implements NormalizerInterface, CacheableSuppor
      */
     public function normalize($object, $format = null, array $context = []): array
     {
-        $url = $this->urlGenerator->generate('app_front_category_show', [
-            'categoryId' => $object->getId(),
-            'categorySlug' => $object->getSlug()
-        ]);
-
-        return [
-            'id' => $object->getId(),
-            'label' => $object->getLabel(),
-            'image' => $object->getImage() ? $object->getImage()->getUrlThumbnail() : null,
-            'url' => $url
-        ];
+        return array_merge(
+            Arr::get(['id', 'label'], $object),
+            [
+                'image' => $object->getImage() ? $object->getImage()->getUrlThumbnail() : null,
+                'url'   => $this->urlGenerator->generate('app_front_category_show', [
+                    'categoryId'   => $object->getId(),
+                    'categorySlug' => $object->getSlug()
+                ])
+            ]
+        );
     }
 
     public function supportsNormalization($data, $format = null): bool

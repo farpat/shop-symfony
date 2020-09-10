@@ -3,6 +3,7 @@
 namespace App\Serializer\Normalizer;
 
 use App\Entity\ProductField;
+use App\Services\Support\Arr;
 use App\Services\Support\Str;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
@@ -20,11 +21,12 @@ class ProductFieldNormalizer implements NormalizerInterface, CacheableSupportsMe
      */
     public function normalize($object, $format = null, array $context = []): array
     {
-        return [
-            'label' => $object->getLabel(),
-            'key' => Str::getSnakeCase($object->getLabel()) . '-' . $object->getId(),
-            'type' => $object->getType(),
-        ];
+        return array_merge(
+            Arr::get(['label', 'type'], $object),
+            [
+                'key' => Str::getSnakeCase($object->getLabel()) . '-' . $object->getId(),
+            ]
+        );
     }
 
     public function supportsNormalization($data, $format = null): bool

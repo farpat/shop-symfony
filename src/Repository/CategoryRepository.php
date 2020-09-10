@@ -103,8 +103,9 @@ class CategoryRepository extends ServiceEntityRepository
     public function getRootCategories(): array
     {
         return $this->createQueryBuilder('c')
-            ->select('c', 'image')
+            ->select('c', 'image', 'productFields')
             ->leftJoin('c.image', 'image')
+            ->leftJoin('c.productFields', 'productFields')
             ->where('(LENGTH(c.nomenclature) - LENGTH(REPLACE(c.nomenclature, \'.\', \'\'))) + 1 = 1')
             ->getQuery()
             ->getResult();
@@ -122,6 +123,9 @@ class CategoryRepository extends ServiceEntityRepository
         }
 
         return $this->createQueryBuilder('c')
+            ->select('c', 'image', 'productFields')
+            ->leftJoin('c.image', 'image')
+            ->leftJoin('c.productFields', 'productFields')
             ->where('c.nomenclature LIKE :nomenclatureExpression')
             ->andWhere('LENGTH(c.nomenclature) - LENGTH(REPLACE(c.nomenclature,\'.\',\'\')) + 1 = :level')
             ->setParameters([

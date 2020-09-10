@@ -1,6 +1,7 @@
 import React, { createRef, useEffect, useState } from 'react'
 import { jsonGet, jsonPost, jsonPut } from '@farpat/api'
 import TextComponent from '../../ui/Form/TextComponent'
+import Dump from '../../ui/Dump'
 
 function CategoriesManagement () {
   const [state, setState] = useState({
@@ -168,6 +169,8 @@ function EditForm ({ categoryItem, cancelEditingOrAdding, setCategoryItems }) {
       </div>
     </div>
 
+    <Dump object={categoryItem.category}/>
+
     <TextComponent id={'label'} label="Label" name={'label'} attr={{ placeholder: 'Label' }}
                    value={categoryItem.category.label} onUpdate={onUpdate}/>
 
@@ -175,6 +178,7 @@ function EditForm ({ categoryItem, cancelEditingOrAdding, setCategoryItems }) {
                    value={categoryItem.category.description} onUpdate={onUpdate}/>
 
     <button className="btn btn-link" type="button" onClick={cancelEditingOrAdding}>Cancel</button>
+
     {
       state.isSubmitting ?
         <button className="btn btn-primary" disabled={true} type="submit">Editing...</button> :

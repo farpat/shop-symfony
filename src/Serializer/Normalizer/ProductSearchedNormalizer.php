@@ -3,6 +3,7 @@
 namespace App\Serializer\Normalizer;
 
 use App\Entity\Product;
+use App\Services\Support\Arr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -25,20 +26,18 @@ class ProductSearchedNormalizer implements NormalizerInterface, CacheableSupport
      */
     public function normalize($object, $format = null, array $context = []): array
     {
-        $url = $this->urlGenerator->generate('app_front_product_show', [
-            'categorySlug' => $object->getCategory()->getSlug(),
-            'categoryId' => $object->getCategory()->getId(),
-            'productSlug' => $object->getSlug(),
-            'productId' => $object->getId()
-        ]);
-
-        return [
-            'id' => $object->getId(),
-            'label' => $object->getLabel(),
-            'image' => $object->getMainImage() ? $object->getMainImage()->getUrlThumbnail() : null,
-            'url' => $url,
-            'minUnitPriceIncludingTaxes' => $object->getMinUnitPriceIncludingTaxes()
-        ];
+        return array_merge(
+            Arr::get(['id', 'label', 'minUnitPriceIncludingTaxes'], $object),
+            [
+                'image' => $object->getMainImage() ? $object->getMainImage()->getUrlThumbnail() : null,
+                'url'   => $this->urlGenerator->generate('app_front_product_show', [
+                    'categorySlug' => $object->getCategory()->getSlug(),
+                    'categoryId'   => $object->getCategory()->getId(),
+                    'productSlug'  => $object->getSlug(),
+                    'productId'    => $object->getId()
+                ]),
+            ]
+        );
     }
 
     public function supportsNormalization($data, $format = null): bool

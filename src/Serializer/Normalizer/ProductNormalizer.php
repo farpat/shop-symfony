@@ -2,7 +2,9 @@
 
 namespace App\Serializer\Normalizer;
 
+use App\Entity\Image;
 use App\Entity\Product;
+use App\Services\Support\Arr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
@@ -31,26 +33,33 @@ class ProductNormalizer implements NormalizerInterface, CacheableSupportsMethodI
      */
     public function normalize($object, $format = null, array $context = []): array
     {
-        return [
-            'id' => $object->getId(),
-            'url' => $this->urlGenerator->generate('app_front_product_show', [
-                'productId' => $object->getId(),
-                'productSlug' => $object->getSlug(),
-                'categoryId' => $object->getCategory()->getId(),
-                'categorySlug' => $object->getCategory()->getSlug()
-            ]),
-            'label' => $object->getLabel(),
-            'slug' => $object->getSlug(),
-            'excerpt' => $object->getExcerpt(),
-            'minUnitPriceIncludingTaxes' => $object->getMinUnitPriceIncludingTaxes(),
-            'image' => $object->getMainImage() ? [
-                'urlThumbnail' => $object->getMainImage()->getUrlThumbnail(),
-                'altThumbnail' => $object->getMainImage()->getAltThumbnail()
-            ] : null,
-            'references' => array_map(fn($productReference
-            ) => ['filled_product_fields' => $productReference->getFilledProductFields()],
-                $object->getProductReferences()->toArray())
-        ];
+        return array_merge(
+            Arr::get(['id', 'label', 'slug', 'excerpt', 'minUnitPriceIncludingTaxes'], $object),
+            [
+                'url'        => $this->urlGenerator->generate('app_front_product_show', [
+                    'productId'    => $object->getId(),
+                    'productSlug'  => $object->getSlug(),
+                    'categoryId'   => $object->getCategory()->getId(),
+                    'categorySlug' => $object->getCategory()->getSlug()
+                ]),
+                'image'      => $object->getMainImage() ? [
+                    'urlThumbnail' => $object->getMainImage()->getUrlThumbnail(),
+                    'altThumbnail' => $object->getMainImage()->getAltThumbnail()
+                ] : null,
+                'references' => array_map(fn($productReference
+                ) => ['filled_product_fields' => $productReference->getFilledProductFields()],
+                    $object->getProductReferences()->toArray())
+            ]
+        );
+    }
+
+    private function getImageInArray(?Image $image): ?array
+    {
+        if ($image === null) {
+            return null;
+        }
+
+        return Arr::get(['id, url', 'alt', 'url_thumbnail', 'alt_thumbnail'], $image);
     }
 
     public function supportsNormalization($data, $format = null): bool

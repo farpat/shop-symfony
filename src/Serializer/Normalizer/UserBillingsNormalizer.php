@@ -3,6 +3,7 @@
 namespace App\Serializer\Normalizer;
 
 use App\Entity\Billing;
+use App\Services\Support\Arr;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -16,12 +17,12 @@ class UserBillingsNormalizer implements NormalizerInterface, CacheableSupportsMe
      */
     public function normalize($object, $format = null, array $context = []): array
     {
-        return [
-            'number'                      => $object->getNumber(),
-            'status'                      => $object->getStatus(),
-            'address'                     => $object->getAddressText(),
-            'total_price_including_taxes' => $object->getTotalAmountIncludingTaxes()
-        ];
+        return array_merge(
+            Arr::get(['number', 'status', 'total_price_including_taxes'], $object),
+            [
+                'address' => $object->getAddressText()
+            ]
+        );
     }
 
     public function supportsNormalization($data, $format = null): bool

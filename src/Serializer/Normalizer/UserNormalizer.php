@@ -2,8 +2,8 @@
 
 namespace App\Serializer\Normalizer;
 
-use App\Entity\Address;
 use App\Entity\User;
+use App\Services\Support\Arr;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -17,10 +17,7 @@ class UserNormalizer implements NormalizerInterface, CacheableSupportsMethodInte
      */
     public function normalize($object, $format = null, array $context = []): array
     {
-        return [
-            'email'            => $object->getEmail(),
-            'name'             => $object->getName(),
-        ];
+        return Arr::get(['email', 'name'], $object);
     }
 
     public function supportsNormalization($data, $format = null): bool
