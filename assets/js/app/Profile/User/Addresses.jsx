@@ -216,6 +216,7 @@ function Addresses () {
   }
 
   return <form ref={form} className='mb-5' onSubmit={onSubmit}>
+    <h1>Update my addresses</h1>
     {
       state.alert &&
       <Alert type={state.alert.type} message={state.alert.message}

@@ -1,0 +1,45 @@
+.category-management {
+  margin-bottom: 3rem;
+
+  > .list-group-flush {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .list-group-item {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .list-group-item-1 {
+    padding: 1rem 0;
+    border-bottom-width: 2px;
+  }
+}
+
+.category-management-nomenclature {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-right: 1.5rem;
+}
+
+%category-management-btn {
+  border: none;
+  background: transparent;
+  font-size: 0.75rem;
+}
+
+.category-management-btn-edit {
+  @extend %category-management-btn;
+  color: $primary;
+}
+
+.category-management-btn-delete {
+  @extend %category-management-btn;
+  color: $danger;
+}
+
+.category-management-btn-add {
+  @extend %category-management-btn;
+  color: $success;
+}

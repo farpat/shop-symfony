@@ -55,7 +55,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
             ->setLabel($label)
             ->setNomenclature(strtoupper($label))
             ->setSlug($slug)
-            ->setDescription($this->faker->paragraphs(3, true))
+            ->setDescription($this->faker->sentence)
             ->setIsLast(false)
             ->setImage($this->makeImage());
 
@@ -83,7 +83,7 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
                 ->setLabel($label)
                 ->setSlug($slug)
                 ->setNomenclature($nomenclature)
-                ->setDescription($this->faker->paragraphs(3, true))
+                ->setDescription($this->faker->sentence)
                 ->setImage($this->makeImage())
                 ->setIsLast(true);
 

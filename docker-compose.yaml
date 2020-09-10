@@ -40,9 +40,9 @@ services:
     maildev:
         image: maildev/maildev:2.0.0-beta3
         ports:
-            - 1080:80
+            - 1080:1080
     webpack_dev_server:
-        image: node:14-alpine
+        image: node
         ports:
             - ${WEBPACK_DEV_SERVER_PORT}:${WEBPACK_DEV_SERVER_PORT}
         volumes:

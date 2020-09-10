@@ -10,8 +10,6 @@ function App () {
     isLoading  : true
   })
 
-  console.log('render')
-
   useEffect(() => {
     (async function () {
       if (!state.isSelected) {

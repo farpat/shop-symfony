@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\{Exception\ExceptionInterface, Normalizer\Norma
 use Symfony\Component\Validator\{ConstraintViolation, Validator\ValidatorInterface};
 
 /**
- * @Route("/api/profile/user/", name="app_api_profile_user_")
+ * @Route("/api/profile/user", name="app_api_profile_user_")
  */
 class UserController extends AbstractController
 {

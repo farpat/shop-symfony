@@ -2,15 +2,17 @@ import React, { forwardRef } from 'react'
 import { getHelpId, getInputClassName, getLabelClassName } from './Form'
 import PropTypes from 'prop-types'
 
-function TextComponent({ label, name, className, attr, id, help, value, isRequired, error, onUpdate = function () { } }) {
+const TextComponent = forwardRef(function ({ label, name, inputClassName, wrapperclassName, attr, id, help, value, isRequired, error, onUpdate = function () { } }, ref) {
   return (
-    <div className="form-group">
+    <div className={'form-group ' + (wrapperclassName || '')}>
       {
         label && <label htmlFor={id} className={getLabelClassName(isRequired)}>{label}</label>
       }
-      <input type="text" className={(className || '') + ' ' + getInputClassName(error)} id={id} name={name} defaultValue={value}
-        onChange={event => onUpdate(name, event.target.value)}
-        required={isRequired} aria-describedby={getHelpId(help, id)} {...attr}
+      <input type="text" className={(inputClassName || '') + ' ' + getInputClassName(error)} id={id} name={name}
+             ref={ref}
+             defaultValue={value}
+             onChange={event => onUpdate(name, event.target.value)}
+             required={isRequired} aria-describedby={getHelpId(help, id)} {...attr}
       />
       {
         error && <div className="invalid-feedback">{error}</div>
@@ -20,18 +22,18 @@ function TextComponent({ label, name, className, attr, id, help, value, isRequir
       }
     </div>
   )
-}
+})
 
 TextComponent.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  className: PropTypes.string,
+  id        : PropTypes.string.isRequired,
+  name      : PropTypes.string.isRequired,
+  className : PropTypes.string,
   isRequired: PropTypes.bool,
-  value: PropTypes.string,
-  error: PropTypes.string,
-  attr: PropTypes.object,
-  label: PropTypes.string,
-  onUpdate: PropTypes.func
+  value     : PropTypes.string,
+  error     : PropTypes.string,
+  attr      : PropTypes.object,
+  label     : PropTypes.string,
+  onUpdate  : PropTypes.func
 }
 
 export default TextComponent

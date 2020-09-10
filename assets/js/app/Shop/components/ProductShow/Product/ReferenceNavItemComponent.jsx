@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-function ReferenceNavItemComponent ({ reference, currentReference, setCurrentReference }) {
+function ReferenceNavItemComponent ({ reference, currentReference, changeReferenceInNav }) {
   const getItemClass = function () {
     let className = 'nav-product-reference-item'
     if (reference === currentReference) {
@@ -21,11 +21,12 @@ function ReferenceNavItemComponent ({ reference, currentReference, setCurrentRef
       className={getItemClass()}
       onClick={(event) => {
         event.preventDefault()
-        setCurrentReference(reference)
+        changeReferenceInNav(reference)
       }}
     >
       {
-        reference.mainImage && <img className="nav-product-reference-image" src={reference.mainImage.urlThumbnail} alt={reference.mainImage.altThumbnail}/>
+        reference.mainImage && <img className="nav-product-reference-image" src={reference.mainImage.urlThumbnail}
+                                    alt={reference.mainImage.altThumbnail}/>
       }
 
       <h2 className="nav-product-reference-title">{reference.label}</h2>
@@ -47,7 +48,7 @@ ReferenceNavItemComponent.propTypes = {
     label: PropTypes.string.isRequired
   }),
 
-  setCurrentReference: PropTypes.func.isRequired
+  changeReferenceInNav: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -58,7 +59,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setCurrentReference: (reference) => dispatch({ type: 'UPDATE_REFERENCE', reference })
+    changeReferenceInNav: (reference) => dispatch({ type: 'CHANGE_REFERENCE_IN_NAV', reference })
   }
 }
 

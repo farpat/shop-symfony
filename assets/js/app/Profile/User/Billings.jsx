@@ -25,31 +25,34 @@ function Billings () {
     </div>
   }
 
-  return <table className="table table-bordered">
-    <thead>
-    <tr>
-      <th>Number</th>
-      <th>Status</th>
-      <th>Total price including taxes</th>
-      <th>Delivery address</th>
-      <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    {
-      state.billings.map(billing => <tr key={billing.number}>
-        <td>{billing.number}</td>
-        <td>{billing.status}</td>
-        <td>{Str.toLocaleCurrency(billing.total_price_including_taxes, 'EUR')}</td>
-        <td>{billing.address}</td>
-        <td>
-          <a href={`/billings/view/${billing.number}`} className="btn btn-link" target="_blank">See</a>|<a
-          href={`/billings/export/${billing.number}`} className="btn btn-link" download>Download</a>
-        </td>
-      </tr>)
-    }
-    </tbody>
-  </table>
+  return <>
+    <h1>Billings</h1>
+    <table className="table table-bordered">
+      <thead>
+      <tr>
+        <th>Number</th>
+        <th>Status</th>
+        <th>Total price including taxes</th>
+        <th>Delivery address</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      {
+        state.billings.map(billing => <tr key={billing.number}>
+          <td>{billing.number}</td>
+          <td>{billing.status}</td>
+          <td>{Str.toLocaleCurrency(billing.total_price_including_taxes, 'EUR')}</td>
+          <td>{billing.address}</td>
+          <td>
+            <a href={`/billings/view/${billing.number}`} className="btn btn-link" target="_blank">See</a>|<a
+            href={`/billings/export/${billing.number}`} className="btn btn-link" download>Download</a>
+          </td>
+        </tr>)
+      }
+      </tbody>
+    </table>
+  </>
 }
 
 export default Billings

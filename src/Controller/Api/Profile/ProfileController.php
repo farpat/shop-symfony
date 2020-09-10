@@ -81,7 +81,7 @@ class ProfileController extends AbstractController
                     'label'     => 'Categories management',
                     'value'     => $this->entityManager->getRepository(Category::class)->count([]),
                     'path'      => '/categories',
-                    'component' => 'Admin/CategoryManagement'
+                    'component' => 'Admin/CategoriesManagement'
                 ],
             ];
         }

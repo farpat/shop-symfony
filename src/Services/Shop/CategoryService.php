@@ -52,9 +52,7 @@ class CategoryService
 
     public function getRootCategories(): array
     {
-        return $this->cache->get('category#getRootCategories', function (ItemInterface $item) {
-            return $this->categoryRepository->getRootCategories();
-        });
+        return $this->categoryRepository->getRootCategories();
     }
 
     public function getProducts(Category $category): array
@@ -62,34 +60,40 @@ class CategoryService
         return $this->categoryRepository->getProducts($category);
     }
 
-    public function generateListForCategoryIndexAdmin(array $parentCategories, bool $isRootCall = true): array
-    {
-        $cacheKey = 'category#generateListForCategoryIndexAdmin';
-        $cacheItem = $this->cache->getItem($cacheKey);
+    public function generateListForCategoryIndexAdmin(
+        array $parentCategories,
+        bool $isRootCall = true,
+        bool $mustDeleteCache = false
+    ): array {
 
-        if ($isRootCall && $this->cache->hasItem($cacheKey)) {
-            return $cacheItem->get();
-        }
+        $getCategories = function ($parentCategories) {
+            $array = [];
 
-        if (empty($parentCategories)) {
-            return [];
-        }
+            if (empty($parentCategories)) {
+                return $array;
+            }
 
-        $array = [];
-        foreach ($parentCategories as $parentCategory) {
-            $children = $this->categoryRepository->getChildren($parentCategory);
+            foreach ($parentCategories as $parentCategory) {
+                $children = $this->categoryRepository->getChildren($parentCategory);
 
-            $array[] = [
-                'category' => $parentCategory,
-                'children' => $this->generateListForCategoryIndexAdmin($children, false)
-            ];
-        }
+                $array[] = [
+                    'category' => $parentCategory,
+                    'children' => $this->generateListForCategoryIndexAdmin($children, false)
+                ];
+            }
+
+            return $array;
+        };
 
         if ($isRootCall) {
-            $this->cache->save($cacheItem->set($array));
+            $cacheKey = 'category#generateListForCategoryIndexAdmin';
+            if ($mustDeleteCache) {
+                $this->cache->deleteItem($cacheKey);
+            }
+            return $this->cache->get($cacheKey, fn() => $getCategories($parentCategories));
+        } else {
+            return $getCategories($parentCategories);
         }
-
-        return $array;
     }
 
     /**

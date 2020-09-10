@@ -65,8 +65,9 @@
 .nav-link {
   transition: color 0.3s;
   color: inherit;
+  padding: 0.375rem 0.75rem;
 
-  &:hover, &.active {
+  &:hover:not(.btn), &.active:not(.btn) {
     color: lighten($primary, 10%);
   }
 }
