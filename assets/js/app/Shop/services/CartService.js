@@ -8,7 +8,7 @@ class CartService {
 
   /**
    *
-   * @param Object cartItems
+   * @param {Object} cartItems
    * @returns {{totalIncludingTaxes: number, totalPriceExcludingTaxes: number, totalPriceIncludingTaxes: number}}
    */
   getPrices (cartItems) {
@@ -17,8 +17,8 @@ class CartService {
 
     Object.keys(cartItems).map(referenceId => {
       const item = cartItems[referenceId]
-      totalPriceExcludingTaxes += item.quantity * item.reference.unitPriceExcludingTaxes
-      totalPriceIncludingTaxes += item.quantity * item.reference.unitPriceIncludingTaxes
+      totalPriceExcludingTaxes += item.quantity * item.reference.unit_price_excluding_taxes
+      totalPriceIncludingTaxes += item.quantity * item.reference.unit_price_including_taxes
     })
 
     return {

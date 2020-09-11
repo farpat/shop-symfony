@@ -4,9 +4,9 @@ namespace App\Serializer\Normalizer;
 
 use App\Entity\Image;
 use App\Entity\Product;
+use App\Entity\ProductReference;
 use App\Services\Support\Arr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -29,12 +29,11 @@ class ProductNormalizer implements NormalizerInterface, CacheableSupportsMethodI
      * @param array $context
      *
      * @return array
-     * @throws ExceptionInterface
      */
-    public function normalize($object, $format = null, array $context = []): array
+    public function normalize($object, string $format = null, array $context = []): array
     {
         return array_merge(
-            Arr::get(['id', 'label', 'slug', 'excerpt', 'minUnitPriceIncludingTaxes'], $object),
+            Arr::get(['id', 'label', 'slug', 'excerpt', 'min_unit_price_including_taxes'], $object),
             [
                 'url'        => $this->urlGenerator->generate('app_front_product_show', [
                     'productId'    => $object->getId(),
@@ -42,27 +41,33 @@ class ProductNormalizer implements NormalizerInterface, CacheableSupportsMethodI
                     'categoryId'   => $object->getCategory()->getId(),
                     'categorySlug' => $object->getCategory()->getSlug()
                 ]),
-                'image'      => $object->getMainImage() ? [
-                    'urlThumbnail' => $object->getMainImage()->getUrlThumbnail(),
-                    'altThumbnail' => $object->getMainImage()->getAltThumbnail()
-                ] : null,
-                'references' => array_map(fn($productReference
-                ) => ['filled_product_fields' => $productReference->getFilledProductFields()],
-                    $object->getProductReferences()->toArray())
+                'image'      => $this->getImageInArray($object->getMainImage()),
+                'references' => $this->getReferencesInArray($object->getProductReferences()->toArray())
             ]
         );
     }
 
-    private function getImageInArray(?Image $image): ?array
+    public function getImageInArray(?Image $image): ?array
     {
         if ($image === null) {
             return null;
         }
 
-        return Arr::get(['id, url', 'alt', 'url_thumbnail', 'alt_thumbnail'], $image);
+        return Arr::get(['url_thumbnail', 'alt_thumbnail'], $image);
     }
 
-    public function supportsNormalization($data, $format = null): bool
+    /**
+     * @param ProductReference[] $references
+     */
+    public function getReferencesInArray(array $references): array
+    {
+        return array_map(
+            fn($productReference) => ['filled_product_fields' => $productReference->getFilledProductFields()],
+            $references
+        );
+    }
+
+    public function supportsNormalization($data, string $format = null): bool
     {
         return $data instanceof Product && $format === 'json';
     }

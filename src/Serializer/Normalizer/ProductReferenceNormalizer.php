@@ -31,7 +31,7 @@ class ProductReferenceNormalizer implements NormalizerInterface, CacheableSuppor
      * @return array
      * @throws ExceptionInterface
      */
-    public function normalize($object, $format = null, array $context = []): array
+    public function normalize($object, string $format = null, array $context = []): array
     {
         $productUrl = $this->urlGenerator->generate('app_front_product_show', [
             'categorySlug' => $object->getProduct()->getCategory()->getSlug(),
@@ -41,10 +41,10 @@ class ProductReferenceNormalizer implements NormalizerInterface, CacheableSuppor
         ]);
 
         return array_merge(
-            Arr::get(['filledProductFields', 'id', 'label', 'unitPriceExcludingTaxes', 'unitPriceIncludingTaxes'],
+            Arr::get(['filled_product_fields', 'id', 'label', 'unit_price_excluding_taxes', 'unit_price_including_taxes'],
                 $object),
             [
-                'mainImage' => $this->getImageInArray($object->getMainImage()),
+                'main_image' => $this->getImageInArray($object->getMainImage()),
                 'images'    => array_map(fn($image) => $this->getImageInArray($image),
                     $object->getImages()->toArray()),
                 'url'       => $productUrl . '#' . $object->getId(),
@@ -58,7 +58,7 @@ class ProductReferenceNormalizer implements NormalizerInterface, CacheableSuppor
             return null;
         }
 
-        return Arr::get(['id, url', 'alt', 'url_thumbnail', 'alt_thumbnail'], $image);
+        return Arr::get(['id', 'url', 'alt', 'url_thumbnail', 'alt_thumbnail'], $image);
     }
 
     public function supportsNormalization($data, $format = null): bool

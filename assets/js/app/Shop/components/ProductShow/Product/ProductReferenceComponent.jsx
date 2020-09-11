@@ -21,7 +21,7 @@ function ProductReferenceComponent ({ currentReference, currency, isLoading, qua
   return (
     <article className="row">
       {
-        currentReference.mainImage &&
+        currentReference.main_image &&
         <div className="col-md-8 reference-slider">
           <ReferenceSliderComponent currentReference={currentReference}/>
         </div>
@@ -48,7 +48,7 @@ function ProductReferenceComponent ({ currentReference, currency, isLoading, qua
                 {
                   isCurrentLoading(currentReference) ?
                     <button disabled>
-                      <i className="fa fa-shopping-cart"/> Loading ...
+                      <i className="fa fa-shopping-cart"/> Loading...
                     </button> :
                     <button onClick={() => addInCart(currentReference, getQuantity(currentReference))}>
                       <i className="fa fa-shopping-cart"/> {Translation.get('Add to cart')}
@@ -59,7 +59,7 @@ function ProductReferenceComponent ({ currentReference, currency, isLoading, qua
         </div>
         <div className="reference-price">
           {
-            Str.toLocaleCurrency(currentReference.unitPriceIncludingTaxes, currency)
+            Str.toLocaleCurrency(currentReference.unit_price_including_taxes, currency)
           }
         </div>
       </div>
@@ -67,11 +67,22 @@ function ProductReferenceComponent ({ currentReference, currency, isLoading, qua
   )
 }
 
-// noinspection JSDeprecatedSymbols
 ProductReferenceComponent.propTypes = {
-  quantities: PropTypes.object.isRequired,
-  isLoading : PropTypes.object.isRequired,
-  cartItems : PropTypes.object.isRequired,
+  currentReference: PropTypes.shape({
+    id    : PropTypes.number.isRequired,
+    images: PropTypes.arrayOf(
+      PropTypes.shape({
+        id           : PropTypes.number.isRequired,
+        url          : PropTypes.string.isRequired,
+        alt          : PropTypes.string.isRequired,
+        url_thumbnail: PropTypes.string.isRequired,
+        alt_thumbnail: PropTypes.string.isRequired
+      })
+    )
+  }),
+  quantities      : PropTypes.object.isRequired,
+  isLoading       : PropTypes.object.isRequired,
+  cartItems       : PropTypes.object.isRequired,
 
   updateQuantity: PropTypes.func.isRequired,
   addInCart     : PropTypes.func.isRequired

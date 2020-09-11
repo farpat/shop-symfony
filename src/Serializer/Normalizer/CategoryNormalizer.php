@@ -20,13 +20,13 @@ class CategoryNormalizer implements NormalizerInterface, CacheableSupportsMethod
      * @return array
      * @throws ExceptionInterface
      */
-    public function normalize($object, $format = null, array $context = []): array
+    public function normalize($object, string $format = null, array $context = []): array
     {
         return array_merge(
             Arr::get(['id', 'label', 'nomenclature', 'slug', 'description', 'is_last'], $object),
             [
-                'image'         => $this->getImageInArray($object->getImage()),
-                'productFields' => array_map(
+                'image'          => $this->getImageInArray($object->getImage()),
+                'product_fields' => array_map(
                     fn(ProductField $productField) => $productField->getId(),
                     $object->getProductFields()->toArray()
                 )

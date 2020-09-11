@@ -20,11 +20,11 @@ ProductComponent.propTypes = {
   currentReference: PropTypes.shape({
     id                     : PropTypes.number.isRequired,
     label                  : PropTypes.string.isRequired,
-    mainImage              : PropTypes.shape({
-      urlThumbnail: PropTypes.string.isRequired,
-      altThumbnail: PropTypes.string.isRequired
+    main_image             : PropTypes.shape({
+      url_thumbnail: PropTypes.string.isRequired,
+      alt_thumbnail: PropTypes.string.isRequired
     }),
-    unitPriceIncludingTaxes: PropTypes.number.isRequired
+    unit_price_including_taxes: PropTypes.number.isRequired
   }),
   currency        : PropTypes.string.isRequired
 }

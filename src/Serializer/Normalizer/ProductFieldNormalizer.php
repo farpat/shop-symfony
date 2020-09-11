@@ -19,7 +19,7 @@ class ProductFieldNormalizer implements NormalizerInterface, CacheableSupportsMe
      * @return array
      * @throws ExceptionInterface
      */
-    public function normalize($object, $format = null, array $context = []): array
+    public function normalize($object, string $format = null, array $context = []): array
     {
         return array_merge(
             Arr::get(['label', 'type'], $object),

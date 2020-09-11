@@ -1,20 +1,21 @@
 import PropTypes from 'prop-types'
 
 /** PROPTYPES **/
+const referencePropType = PropTypes.shape({
+  url                    : PropTypes.string.isRequired,
+  label                  : PropTypes.string.isRequired,
+  unit_price_including_taxes: PropTypes.number.isRequired,
+  unit_price_excluding_taxes: PropTypes.number.isRequired,
+  mainImage              : PropTypes.shape({
+    url_thumbnail: PropTypes.string.isRequired,
+    alt_thumbnail: PropTypes.string.isRequired
+  })
+})
+
 export const CartComponentPropTypes = {
   cartItems  : PropTypes.objectOf(PropTypes.shape({
-    quantity: PropTypes.number.isRequired,
-
-    reference: PropTypes.shape({
-      url                    : PropTypes.string.isRequired,
-      label                  : PropTypes.string.isRequired,
-      unitPriceIncludingTaxes: PropTypes.number.isRequired,
-      unitPriceExcludingTaxes: PropTypes.number.isRequired,
-      mainImage              : PropTypes.shape({
-        urlThumbnail: PropTypes.string.isRequired,
-        altThumbnail: PropTypes.string.isRequired
-      })
-    })
+    quantity : PropTypes.number.isRequired,
+    reference: referencePropType
   })).isRequired,
   purchaseUrl: PropTypes.string.isRequired,
   currency   : PropTypes.string.isRequired
@@ -22,18 +23,8 @@ export const CartComponentPropTypes = {
 
 export const ItemComponentPropTypes = {
   item     : PropTypes.shape({
-    quantity: PropTypes.number.isRequired,
-
-    reference: PropTypes.shape({
-      url                    : PropTypes.string.isRequired,
-      label                  : PropTypes.string.isRequired,
-      unitPriceIncludingTaxes: PropTypes.number.isRequired,
-      unitPriceExcludingTaxes: PropTypes.number.isRequired,
-      mainImage              : PropTypes.shape({
-        urlThumbnail: PropTypes.string.isRequired,
-        altThumbnail: PropTypes.string.isRequired
-      })
-    })
+    quantity : PropTypes.number.isRequired,
+    reference: referencePropType
   }),
   currency : PropTypes.string.isRequired,
   isLoading: PropTypes.object.isRequired,
@@ -42,14 +33,14 @@ export const ItemComponentPropTypes = {
 }
 
 export const TotalComponentPropTypes = {
-  cartItems   : PropTypes.objectOf(PropTypes.shape({
+  cartItems: PropTypes.objectOf(PropTypes.shape({
     quantity : PropTypes.number.isRequired,
     reference: PropTypes.shape({
-      unitPriceIncludingTaxes: PropTypes.number.isRequired,
-      unitPriceExcludingTaxes: PropTypes.number.isRequired
+      unit_price_including_taxes: PropTypes.number.isRequired,
+      unit_price_excluding_taxes: PropTypes.number.isRequired
     })
   })).isRequired,
-  currency: PropTypes.string.isRequired
+  currency : PropTypes.string.isRequired
 }
 
 /** FUNCTIONS IN COMPONENT **/
@@ -58,7 +49,7 @@ export const TotalComponentPropTypes = {
  * @param {Event} event
  * @param {String} referenceUrl
  */
-export function goToReference(event, referenceUrl) {
+export function goToReference (event, referenceUrl) {
   event.preventDefault()
   const referenceUrlObject = new URL(window.location.origin + referenceUrl)
   const currentUrlObject = new URL(window.location.href)
@@ -74,7 +65,7 @@ export function goToReference(event, referenceUrl) {
  * @param {Number} referenceId
  * @returns {*}
  */
-export function isItemLoading(isLoading, referenceId) {
+export function isItemLoading (isLoading, referenceId) {
   const isCurrentLoading = isLoading[referenceId]
   return isCurrentLoading !== undefined ? isCurrentLoading : false
 }

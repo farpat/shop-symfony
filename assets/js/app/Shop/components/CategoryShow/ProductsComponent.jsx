@@ -34,10 +34,10 @@ ProductsComponent.propTypes = {
     url                       : PropTypes.string.isRequired,
     excerpt                   : PropTypes.string,
     label                     : PropTypes.string.isRequired,
-    minUnitPriceIncludingTaxes: PropTypes.number.isRequired,
+    min_unit_price_including_taxes: PropTypes.number.isRequired,
     image                     : PropTypes.shape({
-      urlThumbnail: PropTypes.string.isRequired,
-      altThumbnail: PropTypes.string
+      url_thumbnail: PropTypes.string.isRequired,
+      alt_thumbnail: PropTypes.string
     })
   })),
   currentPage: PropTypes.number.isRequired,

@@ -97,7 +97,7 @@ ProductsNavigation.propTypes = {
     excerpt: PropTypes.string,
     label  : PropTypes.string.isRequired,
     image  : PropTypes.shape({
-      urlThumbnail: PropTypes.string.isRequired
+      url_thumbnail: PropTypes.string.isRequired
     })
   })),
   perPage    : PropTypes.number.isRequired,

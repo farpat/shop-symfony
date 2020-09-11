@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Str from '../../../../../src/Str'
 import { connect } from 'react-redux'
 import CartService from '../../../services/CartService'
@@ -20,15 +19,15 @@ function ItemComponent ({ item, currency, updateItemQuantity, isLoading, deleteI
     </td>
     <td className="purchase-cart-item-label">
       {
-        item.reference.mainImage &&
-        <img src={item.reference.mainImage.urlThumbnail} alt={item.reference.mainImage.altThumbnail}
+        item.reference.main_image &&
+        <img src={item.reference.main_image.url_thumbnail} alt={item.reference.main_image.alt_thumbnail}
              className='purchase-cart-item-image'/>
       }
       <a href={item.reference.url}
          onClick={event => goToReference(event, item.reference.url)}>{item.reference.label}</a>
     </td>
     <td>
-      {Str.toLocaleCurrency(item.reference.unitPriceIncludingTaxes, currency)}
+      {Str.toLocaleCurrency(item.reference.unit_price_including_taxes, currency)}
     </td>
     <td className="purchase-cart-item-icon">
       <button className="btn btn-link" type="button" onClick={() => {

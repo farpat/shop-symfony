@@ -16,7 +16,7 @@ class UserAddressesNormalizer implements NormalizerInterface, CacheableSupportsM
      * @param array $context
      * @return array
      */
-    public function normalize($object, $format = null, array $context = []): array
+    public function normalize($object, string $format = null, array $context = []): array
     {
         $deliveryAddressIndex = null;
 

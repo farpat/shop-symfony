@@ -9,7 +9,7 @@ function ProductComponent ({ product, currency, columns }) {
     {
       product.image &&
       <a href={product.url}>
-        <img src={product.image.urlThumbnail} alt={product.image.altThumbnail} className='product-img-top'/>
+        <img src={product.image.url_thumbnail} alt={product.image.alt_thumbnail} className='product-img-top'/>
       </a>
     }
     <div className='product-body'>
@@ -19,7 +19,7 @@ function ProductComponent ({ product, currency, columns }) {
 
         <p className="product-price">
           {Translation.get('From')} <span className='badge bg-secondary'>
-                {Str.toLocaleCurrency(product.minUnitPriceIncludingTaxes, currency)}
+                {Str.toLocaleCurrency(product.min_unit_price_including_taxes, currency)}
               </span>
         </p>
       </div>
@@ -29,14 +29,14 @@ function ProductComponent ({ product, currency, columns }) {
 
 ProductComponent.propTypes = {
   product : PropTypes.shape({
-    id                        : PropTypes.number.isRequired,
-    url                       : PropTypes.string.isRequired,
-    excerpt                   : PropTypes.string,
-    label                     : PropTypes.string.isRequired,
-    minUnitPriceIncludingTaxes: PropTypes.number.isRequired,
-    image                     : PropTypes.shape({
-      urlThumbnail: PropTypes.string.isRequired,
-      altThumbnail: PropTypes.string
+    id                            : PropTypes.number.isRequired,
+    url                           : PropTypes.string.isRequired,
+    excerpt                       : PropTypes.string,
+    label                         : PropTypes.string.isRequired,
+    min_unit_price_including_taxes: PropTypes.number.isRequired,
+    image                         : PropTypes.shape({
+      url_thumbnail: PropTypes.string.isRequired,
+      alt_thumbnail: PropTypes.string
     })
   }),
   currency: PropTypes.string.isRequired,

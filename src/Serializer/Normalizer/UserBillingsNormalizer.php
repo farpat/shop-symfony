@@ -15,7 +15,7 @@ class UserBillingsNormalizer implements NormalizerInterface, CacheableSupportsMe
      * @param array $context
      * @return array
      */
-    public function normalize($object, $format = null, array $context = []): array
+    public function normalize($object, string $format = null, array $context = []): array
     {
         return array_merge(
             Arr::get(['number', 'status', 'total_price_including_taxes'], $object),

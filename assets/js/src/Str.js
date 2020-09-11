@@ -61,6 +61,12 @@ class Str {
     return text
   }
 
+  /**
+   *
+   * @param {number} amount
+   * @param {string} currency
+   * @returns {string}
+   */
   toLocaleCurrency (amount, currency) {
     if (typeof amount === 'string') {
       amount = parseFloat(amount)

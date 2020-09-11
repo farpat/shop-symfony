@@ -89,8 +89,8 @@ StripeComponent.propTypes = {
     quantity: PropTypes.number.isRequired,
 
     reference: PropTypes.shape({
-      unitPriceIncludingTaxes: PropTypes.number.isRequired,
-      unitPriceExcludingTaxes: PropTypes.number.isRequired,
+      unit_price_including_taxes: PropTypes.number.isRequired,
+      unit_price_excluding_taxes: PropTypes.number.isRequired,
     })
   })).isRequired,
   currency  : PropTypes.string.isRequired,

@@ -10,7 +10,7 @@ const renderProduct = function (item, searchValue) {
 <div data-url="${item.url}" class="autocomplete-suggestion" data-val="${searchValue}">${(item.image ? `<div class="autocomplete-img"><img src="${item.image}" alt="${item.label}"></div>` : '')}
     <div class="autocomplete-description">
         <p class="autocomplete-description-label">${(Str.markValueIntoText(searchValue, item.label))}</p>
-        <p class="autocomplete-description-price">From ${Str.toLocaleCurrency(item.minUnitPriceIncludingTaxes, 'EUR')}</p>
+        <p class="autocomplete-description-price">From ${Str.toLocaleCurrency(item.min_unit_price_including_taxes, 'EUR')}</p>
     </div>
 </div>
 `
@@ -52,7 +52,7 @@ new AutoComplete({
   renderItem: function (item, q) {
     if (item.label === null) {
       return renderNotItems()
-    } else if (item.minUnitPriceIncludingTaxes !== undefined) {
+    } else if (item.min_unit_price_including_taxes !== undefined) {
       return renderProduct(item, q)
     } else {
       return renderCategory(item, q)

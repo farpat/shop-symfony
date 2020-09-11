@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 function ReferenceSliderComponent ({ currentReference }) {
@@ -56,7 +56,7 @@ function ReferenceSliderComponent ({ currentReference }) {
             currentReference.images.map((image, index) =>
               <li className={activatedIndex === index ? 'active' : ''} data-slide-to={index} data-target={'#' + getId()}
                   key={index}>
-                <img src={image.urlThumbnail} alt={image.altThumbnail}/>
+                <img src={image.url_thumbnail} alt={image.alt_thumbnail}/>
               </li>
             )
           }
@@ -69,15 +69,15 @@ function ReferenceSliderComponent ({ currentReference }) {
 ReferenceSliderComponent.propTypes = {
   currentReference: PropTypes.shape({
     id                     : PropTypes.number.isRequired,
-    label                  : PropTypes.string.isRequired,
-    images                 : PropTypes.arrayOf(PropTypes.shape({
-      id          : PropTypes.number.isRequired,
-      url         : PropTypes.string.isRequired,
-      alt         : PropTypes.string.isRequired,
-      urlThumbnail: PropTypes.string.isRequired,
-      altThumbnail: PropTypes.string.isRequired
-    })),
-    unitPriceIncludingTaxes: PropTypes.number.isRequired
+    images                 : PropTypes.arrayOf(
+      PropTypes.shape({
+        id           : PropTypes.number.isRequired,
+        url          : PropTypes.string.isRequired,
+        alt          : PropTypes.string.isRequired,
+        url_thumbnail: PropTypes.string.isRequired,
+        alt_thumbnail: PropTypes.string.isRequired
+      })
+    )
   }),
 }
 
