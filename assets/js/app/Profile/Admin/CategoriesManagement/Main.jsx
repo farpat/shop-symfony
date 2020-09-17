@@ -45,8 +45,6 @@ function CategoriesManagement () {
   )
 }
 
-CategoriesManagement.propTypes = {}
-
 function CategoryItem ({ categoryItem, isFirstLevel = false, setState, state }) {
   const hasChildren = categoryItem.children.length > 0
   const isEditing = categoryItem === state.editing
@@ -115,24 +113,55 @@ function CategoryItem ({ categoryItem, isFirstLevel = false, setState, state }) 
     }
 
     {
-      isDisplayingButtons && <Button type="Add" onClick={() => setAdding(categoryItem)}>Add a child</Button>
+      (!categoryItem.category.is_last_level && isDisplayingButtons) &&
+      <Button type="Add" onClick={() => setAdding(categoryItem)}>Add a child</Button>
     }
   </li>
 }
 
-CategoryItem.prototype = {
-  categoryItem: PropTypes.shape({
-    category: PropTypes.shape({
-      id          : PropTypes.number.isRequired,
-      nomenclature: PropTypes.string.isRequired,
-      description : PropTypes.string.isRequired
+const categoryPropTypes = PropTypes.shape({
+  id            : PropTypes.number.isRequired,
+  label         : PropTypes.string.isRequired,
+  nomenclature  : PropTypes.string.isRequired,
+  slug          : PropTypes.string.isRequired,
+  description   : PropTypes.string.isRequired,
+  is_last_level : PropTypes.bool.isRequired,
+  image         : PropTypes.shape({
+    id           : PropTypes.number.isRequired,
+    url          : PropTypes.string,
+    alt          : PropTypes.string,
+    url_thumbnail: PropTypes.string,
+    alt_thumbnail: PropTypes.string,
+  }),
+  product_fields: PropTypes.arrayOf(PropTypes.shape({
+    id         : PropTypes.number.isRequired,
+    label      : PropTypes.string.isRequired,
+    type       : PropTypes.string.isRequired,
+    is_required: PropTypes.bool.isRequired,
+  }))
+})
+const categoryItemPropTypes = PropTypes.shape({
+  category: categoryPropTypes,
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.arrayOf(categoryPropTypes)
+  ]),
+})
+CategoryItem.propTypes = {
+  categoryItem: categoryItemPropTypes,
+  state       : PropTypes.shape({
+    information: PropTypes.shape({
+      categories: PropTypes.oneOfType([
+        PropTypes.array,
+        PropTypes.arrayOf(categoryItemPropTypes)
+      ])
     }),
-    children: PropTypes.arrayOf(PropTypes.shape({
-      id          : PropTypes.number.isRequired,
-      nomenclature: PropTypes.string.isRequired,
-      description : PropTypes.string.isRequired
-    }))
-  })
+    isLoading  : PropTypes.bool.isRequired,
+    editing    : categoryItemPropTypes,
+    adding     : categoryItemPropTypes,
+  }),
+  isFirstLevel: PropTypes.bool,
+  setState    : PropTypes.func.isRequired
 }
 
 function Button ({ type, children, onClick }) {
@@ -141,7 +170,7 @@ function Button ({ type, children, onClick }) {
   </button>
 }
 
-Button.prototype = {
+Button.propTypes = {
   type    : PropTypes.string.isRequired,
   children: PropTypes.string,
   onClick : PropTypes.func.isRequired,

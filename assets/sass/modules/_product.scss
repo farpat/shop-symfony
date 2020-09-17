@@ -67,8 +67,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
   margin-bottom: 0.5rem;
-  border-top: 1px solid rgba($black, 0.3);
-  border-bottom: 1px solid rgba($black, 0.3);
+  border-bottom: 1px dotted rgba($black, 0.35);
 }
 
 .nav-product-reference-item {

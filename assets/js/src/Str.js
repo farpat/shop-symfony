@@ -85,6 +85,11 @@ class Str {
     })
   }
 
+  /**
+   *
+   * @param {number} bytes
+   * @returns {string}
+   */
   bytesToSize (bytes) {
     let i = 0
     while (bytes >= 1024) {

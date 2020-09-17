@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20200829141350 extends AbstractMigration
+final class Version20200916185537 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -43,12 +43,12 @@ final class Version20200829141350 extends AbstractMigration
         $this->addSql('CREATE INDEX number_index ON billing (number)');
         $this->addSql('CREATE TABLE cart (id INT NOT NULL, user_id INT NOT NULL, webhook_payment_id VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_BA388B7A76ED395 ON cart (user_id)');
-        $this->addSql('CREATE TABLE category (id INT NOT NULL, image_id INT DEFAULT NULL, label VARCHAR(255) NOT NULL, nomenclature TEXT NOT NULL, slug VARCHAR(255) NOT NULL, description TEXT NOT NULL, is_last BOOLEAN NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE category (id INT NOT NULL, image_id INT DEFAULT NULL, label VARCHAR(255) NOT NULL, nomenclature TEXT NOT NULL, slug VARCHAR(255) NOT NULL, description TEXT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_64C19C13DA5256D ON category (image_id)');
         $this->addSql('CREATE TABLE category_product_field (category_id INT NOT NULL, product_field_id INT NOT NULL, PRIMARY KEY(category_id, product_field_id))');
         $this->addSql('CREATE INDEX IDX_E4721B4F12469DE2 ON category_product_field (category_id)');
         $this->addSql('CREATE INDEX IDX_E4721B4F8F876D27 ON category_product_field (product_field_id)');
-        $this->addSql('CREATE TABLE image (id INT NOT NULL, url VARCHAR(255) NOT NULL, alt VARCHAR(255) NOT NULL, url_thumbnail VARCHAR(255) DEFAULT NULL, alt_thumbnail VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE image (id INT NOT NULL, label VARCHAR(255) NOT NULL, url VARCHAR(255) NOT NULL, alt VARCHAR(255) NOT NULL, url_thumbnail VARCHAR(255) DEFAULT NULL, alt_thumbnail VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE module (id INT NOT NULL, label VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, is_active BOOLEAN DEFAULT \'false\' NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE module_parameter (id INT NOT NULL, module_id INT NOT NULL, label TEXT NOT NULL, description TEXT DEFAULT NULL, value TEXT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_70F68ED8AFC2B591 ON module_parameter (module_id)');

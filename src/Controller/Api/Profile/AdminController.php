@@ -33,7 +33,6 @@ class AdminController extends AbstractController
     public function categories(ProductFieldRepository $productFieldRepository)
     {
         return $this->json([
-            'productFields' => $productFieldRepository->getAllForApi(),
             'categories'    => $this->categoryService->generateListForCategoryIndexAdmin(
                 $this->categoryService->getRootCategories()
             )

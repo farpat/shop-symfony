@@ -3,6 +3,7 @@
 namespace App\Services\DataFixtures;
 
 use App\Entity\Image;
+use App\Services\Support\Str;
 use Doctrine\Bundle\FixturesBundle\Fixture as FixturesBundleFixture;
 use Faker\Factory;
 use Faker\Generator;
@@ -27,9 +28,10 @@ abstract class Fixture extends FixturesBundleFixture
 
         $url = "https://picsum.photos/id/{$id}/{$normalSize[0]}/{$normalSize[1]}/";
         $urlThumbnail = "https://picsum.photos/id/{$id}/{$thumbSize[0]}/{$thumbSize[1]}/";
-        $alt = $this->faker->sentence;
+        $alt = $this->faker->words(3, true);
 
         $image = (new Image)
+            ->setLabel(Str::getSnakeCase($this->faker->words(3, true)) . '.jpg')
             ->setUrl($url)
             ->setAlt($alt)
             ->setUrlThumbnail($urlThumbnail)

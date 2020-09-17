@@ -12,13 +12,13 @@ use Symfony\Component\Security\Core\Security;
 
 class VisitListener
 {
-    /**
-     * @var Security
-     */
-    private Security $security;
-    /**
-     * @var EntityManagerInterface
-     */
+    private const WHITE_ROUTES = [
+        'app_front_category',
+        'app_front_product',
+        'app_front_home',
+        'app_front_purchase_purchase'
+    ];
+    private Security               $security;
     private EntityManagerInterface $entityManager;
 
     public function __construct(Security $security, EntityManagerInterface $entityManager)
@@ -57,12 +57,10 @@ class VisitListener
 
     public function isSupported(Request $request, Response $response): bool
     {
-        $whiteRoutes = ['app_front_category', 'app_front_product', 'app_front_home', 'app_front_purchase_purchase'];
-
         $route = $request->attributes->get('_route');
 
         return
-            Str::startsWith($route, $whiteRoutes) &&
+            Str::startsWith($route, self::WHITE_ROUTES) &&
             $response->getStatusCode() === Response::HTTP_OK &&
             $request->getMethod() === 'GET' &&
             !$request->isXmlHttpRequest();

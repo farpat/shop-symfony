@@ -11,18 +11,16 @@ render(
   cartNavElement
 )
 
-//in little screen, to display menu
+//in order to display menu in little screen
 const toggleButton = document.querySelector('#navbar-toggle')
 toggleButton.addEventListener('click', function () {
   toggleButton.parentElement.nextElementSibling.classList.toggle('selected')
 })
 
-//to display items into dropdown element
+//in order to display items into dropdown element
 const dropdownButtons = document.querySelectorAll('.nav-dropdown > button')
 let selectedDropdown = null
-const toggleSelectDropdown = function (event, currentDropdown) {
-  event.preventDefault()
-
+const toggleSelectDropdown = function (currentDropdown) {
   if (currentDropdown === selectedDropdown) {
     currentDropdown.classList.remove('selected')
     selectedDropdown = null
@@ -35,5 +33,8 @@ const toggleSelectDropdown = function (event, currentDropdown) {
   }
 }
 dropdownButtons.forEach(dropdownButton => {
-  dropdownButton.addEventListener('click', (event) => toggleSelectDropdown(event, dropdownButton.nextElementSibling))
+  dropdownButton.addEventListener('click', (event) => {
+    event.preventDefault()
+    toggleSelectDropdown(dropdownButton.nextElementSibling)
+  })
 })

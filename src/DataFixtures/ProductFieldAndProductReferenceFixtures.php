@@ -3,7 +3,6 @@
 namespace App\DataFixtures;
 
 use App\Entity\{Category, Product, ProductField, ProductReference, Tax};
-use App\Repository\CategoryRepository;
 use App\Services\DataFixtures\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -31,32 +30,29 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
     {
         $this->entityManager = $manager;
 
-        /** @var CategoryRepository $categoryRepository */
         $categoryRepository = $manager->getRepository(Category::class);
         /** @var Category[] $categoriesFirstLevel */
-        $categoriesFirstLevel = $categoryRepository
-            ->createQueryBuilder('c')
-            ->select('c', 'products')
-            ->leftJoin('c.products', 'products')
-            ->where('c.isLast = false')
+        $categoriesFirstLevel = $categoryRepository->createQueryBuilder('c')
+            ->leftJoin('c.image', 'image')
+            ->leftJoin('c.productFields', 'productFields')
+            ->where('(LENGTH(c.nomenclature) - LENGTH(REPLACE(c.nomenclature, \'.\', \'\'))) + 1 = 1')
             ->getQuery()
             ->getResult();
 
         foreach ($categoriesFirstLevel as $category) {
             /** @var Category[] $subCategories */
-            $subCategories = $categoryRepository
-                ->createQueryBuilder('c')
+            $subCategories = $categoryRepository->createQueryBuilder('c')
                 ->select('c')
                 ->where('c.nomenclature LIKE :nomenclature')
                 ->setParameter('nomenclature', $category->getNomenclature() . '.%')
                 ->getQuery()
                 ->getResult();
 
-            $productFields = $this->makeProductFields($category, $subCategories);
-            //Forced to flush because we need product field ids to create consistent product references
-            $manager->flush();
 
             foreach ($subCategories as $subCategory) {
+                $productFields = $this->makeProductFields($subCategory);
+                $manager->flush();             //Forced to flush because we need product field ids to create consistent product references
+
                 foreach ($subCategory->getProducts() as $product) {
                     $productReferences = $this->makeProductReferences($product, $productFields);
                     $this->attachImages($product, $productReferences);
@@ -69,13 +65,13 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
 
     /**
      * @param Category $category
-     * @param Category[] $subCategories
      *
      * @return ProductField[]
      * @throws Exception
      */
-    private function makeProductFields(Category $category, $subCategories): array
+    private function makeProductFields(Category $category): array
     {
+        //$numbers and $strings is used, don't remove this variables !!!
         $numbers = self::NUMBER_PRODUCT_FIELDS;
         $strings = self::STRING_PRODUCT_FIELDS;
 
@@ -98,10 +94,6 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
                 ->setIsRequired(true);
 
             $category->addProductField($productField);
-            foreach ($subCategories as $subCategory) {
-                $subCategory->addProductField($productField);
-            }
-
             $this->entityManager->persist($productField);
 
             $productFields[] = $productField;
@@ -122,7 +114,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
         [$unitPriceExcludingTaxes, $unitPriceIncludingTaxes] = $this->computePricesOfProduct($product);
 
         $productReferences = [];
-        $productReferencesCount = random_int(1, 3);
+        $productReferencesCount = empty($productFields) ? 1 : random_int(1, 3);
 
         for ($i = 0; $i < $productReferencesCount; $i++) {
             $filledProductfields = [];

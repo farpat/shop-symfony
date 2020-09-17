@@ -118,7 +118,7 @@ class CategoryRepository extends ServiceEntityRepository
      */
     public function getChildren(Category $parentCategory): array
     {
-        if ($parentCategory->getIsLast()) {
+        if ($parentCategory->isLastLevel()) {
             return [];
         }
 

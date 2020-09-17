@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Category
 {
     public const PRODUCTS_PER_PAGE = 8;
+    public const MAX_LEVEL = 2;
 
     /**
      * @ORM\Id()
@@ -41,11 +42,6 @@ class Category
     private $description;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isLast;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Image")
      */
     private $image;
@@ -64,23 +60,6 @@ class Category
     {
         $this->products = new ArrayCollection();
         $this->productFields = new ArrayCollection();
-    }
-
-    public function getLevel(): int
-    {
-        return substr_count($this->getNomenclature(), '.') + 1;
-    }
-
-    public function getNomenclature(): ?string
-    {
-        return $this->nomenclature;
-    }
-
-    public function setNomenclature(string $nomenclature): self
-    {
-        $this->nomenclature = $nomenclature;
-
-        return $this;
     }
 
     public function getId(): ?int
@@ -124,14 +103,24 @@ class Category
         return $this;
     }
 
-    public function getIsLast(): ?bool
+    public function isLastLevel(): ?bool
     {
-        return $this->isLast;
+        return $this->getLevel() === self::MAX_LEVEL;
     }
 
-    public function setIsLast(bool $isLast): self
+    public function getLevel(): int
     {
-        $this->isLast = $isLast;
+        return substr_count($this->getNomenclature(), '.') + 1;
+    }
+
+    public function getNomenclature(): ?string
+    {
+        return $this->nomenclature;
+    }
+
+    public function setNomenclature(string $nomenclature): self
+    {
+        $this->nomenclature = $nomenclature;
 
         return $this;
     }

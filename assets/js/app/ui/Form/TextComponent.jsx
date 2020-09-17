@@ -2,9 +2,9 @@ import React, { forwardRef } from 'react'
 import { getHelpId, getInputClassName, getLabelClassName } from './Form'
 import PropTypes from 'prop-types'
 
-const TextComponent = forwardRef(function ({ label, name, inputClassName, wrapperclassName, attr, id, help, value, isRequired, error, onUpdate = function () { } }, ref) {
+const TextComponent = forwardRef(function ({ label, name, inputClassName, wrapperClassName, attr, id, help, value, isRequired, error, onUpdate = function () { } }, ref) {
   return (
-    <div className={'form-group ' + (wrapperclassName || '')}>
+    <div className={'form-group ' + (wrapperClassName || '')}>
       {
         label && <label htmlFor={id} className={getLabelClassName(isRequired)}>{label}</label>
       }
