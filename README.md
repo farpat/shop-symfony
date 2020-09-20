@@ -1,6 +1,8 @@
 # Installation
 
 - `git clone git@gitlab.com:farpat/shop-symfony.git`
+- `cp .env.example .env` 
+- Change .env to correspond with your environment
 - `make install`
 - And enjoy!
 - (To display help run `make help` or `make`)

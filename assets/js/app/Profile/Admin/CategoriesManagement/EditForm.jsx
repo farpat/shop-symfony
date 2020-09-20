@@ -2,7 +2,8 @@ import TextComponent from '../../../ui/Form/TextComponent'
 import React, { createRef, useState } from 'react'
 import FileComponent from '../../../ui/Form/FileComponent'
 import { jsonPut } from '@farpat/api'
-import PropTypes from 'prop-types'
+import CheckboxComponent from '../../../ui/Form/CheckboxComponent'
+import ChoiceComponent from '../../../ui/Form/ChoiceComponent'
 
 function EditForm ({ categoryItem, cancelEditingOrAdding, setCategoryItems }) {
   const [prefix, ...suffix] = categoryItem.category.nomenclature.split('.')
@@ -12,11 +13,13 @@ function EditForm ({ categoryItem, cancelEditingOrAdding, setCategoryItems }) {
   const [state, setState] = useState({
     errors      : {},
     category    : {
-      id          : categoryItem.category.id,
-      nomenclature: categoryItem.category.nomenclature,
+      id            : categoryItem.category.id,
+      nomenclature  : categoryItem.category.nomenclature,
       endNomenclature,
-      label       : categoryItem.category.label,
-      description : categoryItem.category.description,
+      label         : categoryItem.category.label,
+      description   : categoryItem.category.description,
+      image         : categoryItem.category.image,
+      product_fields: categoryItem.category.product_fields
     },
     isSubmitting: false
   })
@@ -25,24 +28,36 @@ function EditForm ({ categoryItem, cancelEditingOrAdding, setCategoryItems }) {
     if (name === 'end-nomenclature') {
       name = 'nomenclature'
       value = (startNomenclature !== '' ? startNomenclature + '.' : '') + value.replaceAll('.', '')
+    } else {
+      const regex = /product_fields\[(\w+)\]\[(\d+)\]/
+      const results = name.match(regex)
+      if (results) {
+        let [, field, index] = results
+        index = parseInt(index, 10)
+        name = 'product_fields'
+        value = state.category.product_fields.map((product_field, i) => {
+          return i === index ?
+            { ...product_field, status: 'UPDATED', [field]: value } :
+            product_field
+        })
+      }
     }
+
+    console.log(name, value)
 
     setState({ ...state, category: { ...state.category, [name]: value } })
   }
 
-  const onSubmit = async (event) => {
-    event.preventDefault()
-    const formData = new FormData(event.target)
-
+  const onSubmit = async () => {
     debugger
-    return false
+
+    const formData = new FormData(this)
 
     if (state.isSubmitting) {
       return
     }
 
     try {
-      event.preventDefault()
       setState({ ...state, isSubmitting: true })
       const categories = await jsonPut(`/api/profile/admin/categories/${state.category.id}/edit`, formData)
       setCategoryItems(categories)
@@ -52,7 +67,10 @@ function EditForm ({ categoryItem, cancelEditingOrAdding, setCategoryItems }) {
     }
   }
 
-  return <form onSubmit={onSubmit}>
+  return <form onSubmit={(event) => {
+    event.preventDefault()
+    onSubmit()
+  }}>
     <div className="row">
       <div className="col">
 
@@ -64,10 +82,56 @@ function EditForm ({ categoryItem, cancelEditingOrAdding, setCategoryItems }) {
         <ImageLegend category={categoryItem.category}/>
       </div>
     </div>
-
-
+    {
+      categoryItem.category.is_last_level &&
+      <ProductFieldsLegend productFields={state.category.product_fields} onUpdate={onUpdate}/>
+    }
     <FooterButtons isSubmitting={state.isSubmitting} cancelEditingOrAdding={cancelEditingOrAdding}/>
   </form>
+}
+
+function ProductFieldsLegend ({ productFields, onUpdate }) {
+  return <table className="table product-fields-table">
+    <thead>
+    <tr>
+      <th>Type</th>
+      <th>Label</th>
+      <th style={{ width: '8rem' }}>Is required ?</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {
+      productFields.map((productField, index) => {
+        if (productField.status && productField.status === 'DELETED') {
+          return null
+        }
+
+        return <tr key={index} style={{ verticalAlign: 'middle' }}>
+          <td>
+            <ChoiceComponent name={`product_fields[type][${index}]`} id={`product_fields[type][${index}]`}
+                             choices={[{ value: 'string', label: 'String' }, { value: 'number', label: 'Numeric' }]}
+                             wrapperClassName={'m-0'} onUpdate={onUpdate}/>
+          </td>
+          <td>
+            <TextComponent id={`product_fields[label][${index}]`} name={`product_fields[label][${index}]`}
+                           value={productField.label} wrapperClassName="m-0" onUpdate={onUpdate}/>
+          </td>
+          <td>
+            <CheckboxComponent id={`product_fields[is_required][${index}]`}
+                               name={`product_fields[is_required][${index}]`}
+                               wrapperClassName="m-0 d-flex justify-content-center" value={productField.is_required}
+                               onUpdate={onUpdate}/>
+          </td>
+          <td>
+            <button type="button" className="btn btn-link text-danger"
+                    onClick={() => onUpdate(`product_fields[status][${index}]`, 'DELETED')}>&times;</button>
+          </td>
+        </tr>
+      })
+    }
+    </tbody>
+  </table>
 }
 
 function FooterButtons ({ isSubmitting, cancelEditingOrAdding }) {

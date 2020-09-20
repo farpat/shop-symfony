@@ -27,7 +27,8 @@ class CategoryNormalizer implements NormalizerInterface, CacheableSupportsMethod
             [
                 'image'          => $this->getImageInArray($object->getImage()),
                 'product_fields' => array_map(
-                    fn(ProductField $productField) => Arr::get(['id', 'type', 'label', 'is_required'], $productField),
+                    fn(ProductField $productField) => array_merge(Arr::get(['id', 'type', 'label', 'is_required'],
+                        $productField), ['status' => null]),
                     $object->getProductFields()->toArray()
                 )
             ]

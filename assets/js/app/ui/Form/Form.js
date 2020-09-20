@@ -21,9 +21,9 @@ export function getRulesFromBack (rulesInObject) {
 
 /**
  *
- * @param {String} help
- * @param {String} id
- * @returns {false|String}
+ * @param {string} help
+ * @param {string} id
+ * @returns {boolean|string}
  */
 export function getHelpId (help, id) {
   return help !== '' ? `${id}_help` : false

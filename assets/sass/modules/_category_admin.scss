@@ -43,3 +43,18 @@
   @extend %category-management-btn;
   color: $success;
 }
+
+.product-fields-table {
+  td, th {
+    text-align: center;
+  }
+
+  .btn-link {
+    opacity: 0.5;
+    text-decoration: none;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

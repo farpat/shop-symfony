@@ -1,11 +1,10 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { getHelpId, getInputClassName, getLabelClassName } from './Form'
-import TextComponent from './TextComponent'
 
-function CheckboxComponent ({ label, name, attr, id, help, value, isRequired, error, onUpdate = function () {} }) {
+const CheckboxComponent = forwardRef(function ({ label, name, attr, wrapperClassName, id, help, value, isRequired, error, onUpdate = function () {} }, ref) {
   return (
-    <div className="form-group">
+    <div className={`form-group ${wrapperClassName || ''}`}>
       <div className="form-check form-switch">
 
         <input type="checkbox" className={getInputClassName(error, 'form-check-input')} id={id} name={name}
@@ -31,17 +30,19 @@ function CheckboxComponent ({ label, name, attr, id, help, value, isRequired, er
       </div>
     </div>
   )
-}
+})
 
 CheckboxComponent.propTypes = {
-  id        : PropTypes.string.isRequired,
-  name      : PropTypes.string.isRequired,
-  isRequired: PropTypes.bool,
-  value     : PropTypes.bool,
-  error     : PropTypes.string,
-  attr      : PropTypes.object,
-  label     : PropTypes.string,
-  onUpdate  : PropTypes.func
+  label           : PropTypes.string,
+  name            : PropTypes.string.isRequired,
+  attr            : PropTypes.object,
+  wrapperClassName: PropTypes.string,
+  id              : PropTypes.string.isRequired,
+  help            : PropTypes.string,
+  value           : PropTypes.bool,
+  isRequired      : PropTypes.bool,
+  error           : PropTypes.string,
+  onUpdate        : PropTypes.func
 }
 
 export default CheckboxComponent

@@ -226,14 +226,16 @@ function Addresses () {
     <div className="addresses">
       {
         state.information.addresses.map((address, index) => {
-          if (address.status !== 'DELETED') {
-            return <Address address={address} index={index} key={index}
-                            onUpdateSecondLine={onUpdateSecondLine} onDeleteAddress={onDeleteAddress}
-                            onSelectAddress={onSelectAddress}
-                            isSelected={state.information.delivery_address_index === index}
-                            error={getError(state.errors, index)}
-            />
+          if (address.status && address.status === 'DELETED') {
+            return null
           }
+
+          return <Address address={address} index={index} key={index}
+                          onUpdateSecondLine={onUpdateSecondLine} onDeleteAddress={onDeleteAddress}
+                          onSelectAddress={onSelectAddress}
+                          isSelected={state.information.delivery_address_index === index}
+                          error={getError(state.errors, index)}
+          />
         })
       }
       <button type="button" className="btn btn-link text-success address address-add" onClick={onAddAddress}>
