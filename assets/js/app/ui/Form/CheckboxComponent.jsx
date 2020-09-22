@@ -8,7 +8,7 @@ const CheckboxComponent = forwardRef(function ({ label, name, attr, wrapperClass
       <div className="form-check form-switch">
 
         <input type="checkbox" className={getInputClassName(error, 'form-check-input')} id={id} name={name}
-               required={isRequired} aria-describedby={getHelpId(help, id)} checked={value}
+               required={isRequired} aria-describedby={getHelpId(help, id)} checked={value} value='1'
                onChange={event => onUpdate(name, event.target.checked)} {...attr}
         />
 

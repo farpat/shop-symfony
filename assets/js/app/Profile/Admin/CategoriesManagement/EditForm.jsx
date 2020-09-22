@@ -1,5 +1,5 @@
 import TextComponent from '../../../ui/Form/TextComponent'
-import React, { createRef, useState } from 'react'
+import React, { createRef, useRef, useState } from 'react'
 import FileComponent from '../../../ui/Form/FileComponent'
 import { jsonPut } from '@farpat/api'
 import CheckboxComponent from '../../../ui/Form/CheckboxComponent'
@@ -12,46 +12,11 @@ function EditForm ({ categoryItem, cancelEditingOrAdding, setCategoryItems }) {
 
   const [state, setState] = useState({
     errors      : {},
-    category    : {
-      id            : categoryItem.category.id,
-      nomenclature  : categoryItem.category.nomenclature,
-      endNomenclature,
-      label         : categoryItem.category.label,
-      description   : categoryItem.category.description,
-      image         : categoryItem.category.image,
-      product_fields: categoryItem.category.product_fields
-    },
     isSubmitting: false
   })
 
-  const onUpdate = function (name, value) {
-    if (name === 'end-nomenclature') {
-      name = 'nomenclature'
-      value = (startNomenclature !== '' ? startNomenclature + '.' : '') + value.replaceAll('.', '')
-    } else {
-      const regex = /product_fields\[(\w+)\]\[(\d+)\]/
-      const results = name.match(regex)
-      if (results) {
-        let [, field, index] = results
-        index = parseInt(index, 10)
-        name = 'product_fields'
-        value = state.category.product_fields.map((product_field, i) => {
-          return i === index ?
-            { ...product_field, status: 'UPDATED', [field]: value } :
-            product_field
-        })
-      }
-    }
-
-    console.log(name, value)
-
-    setState({ ...state, category: { ...state.category, [name]: value } })
-  }
-
-  const onSubmit = async () => {
-    debugger
-
-    const formData = new FormData(this)
+  const onSubmit = async (form) => {
+    const formData = new FormData(form)
 
     if (state.isSubmitting) {
       return
@@ -69,28 +34,29 @@ function EditForm ({ categoryItem, cancelEditingOrAdding, setCategoryItems }) {
 
   return <form onSubmit={(event) => {
     event.preventDefault()
-    onSubmit()
+    onSubmit(event.target)
   }}>
     <div className="row">
       <div className="col">
 
-        <CategoryLegend category={categoryItem.category} state={state} onUpdate={onUpdate}
+        <CategoryLegend category={categoryItem.category}
+                        endNomenclature={endNomenclature}
                         startNomenclature={startNomenclature}
                         isDisplayNomenclatureLabel={suffix.length > 0}/>
       </div>
       <div className="col">
-        <ImageLegend category={categoryItem.category}/>
+        <ImageLegend image={categoryItem.category.image}/>
       </div>
     </div>
     {
       categoryItem.category.is_last_level &&
-      <ProductFieldsLegend productFields={state.category.product_fields} onUpdate={onUpdate}/>
+      <ProductFieldsLegend productFields={categoryItem.category.product_fields}/>
     }
     <FooterButtons isSubmitting={state.isSubmitting} cancelEditingOrAdding={cancelEditingOrAdding}/>
   </form>
 }
 
-function ProductFieldsLegend ({ productFields, onUpdate }) {
+function ProductFieldsLegend ({ productFields }) {
   return <table className="table product-fields-table">
     <thead>
     <tr>
@@ -111,21 +77,19 @@ function ProductFieldsLegend ({ productFields, onUpdate }) {
           <td>
             <ChoiceComponent name={`product_fields[type][${index}]`} id={`product_fields[type][${index}]`}
                              choices={[{ value: 'string', label: 'String' }, { value: 'number', label: 'Numeric' }]}
-                             wrapperClassName={'m-0'} onUpdate={onUpdate}/>
+                             wrapperClassName={'m-0'}/>
           </td>
           <td>
             <TextComponent id={`product_fields[label][${index}]`} name={`product_fields[label][${index}]`}
-                           value={productField.label} wrapperClassName="m-0" onUpdate={onUpdate}/>
+                           value={productField.label} wrapperClassName="m-0"/>
           </td>
           <td>
             <CheckboxComponent id={`product_fields[is_required][${index}]`}
                                name={`product_fields[is_required][${index}]`}
-                               wrapperClassName="m-0 d-flex justify-content-center" value={productField.is_required}
-                               onUpdate={onUpdate}/>
+                               wrapperClassName="m-0 d-flex justify-content-center" value={productField.is_required}/>
           </td>
           <td>
-            <button type="button" className="btn btn-link text-danger"
-                    onClick={() => onUpdate(`product_fields[status][${index}]`, 'DELETED')}>&times;</button>
+            <button type="button" className="btn btn-link text-danger">&times;</button>
           </td>
         </tr>
       })
@@ -145,27 +109,35 @@ function FooterButtons ({ isSubmitting, cancelEditingOrAdding }) {
   </>
 }
 
-function ImageLegend ({ category }) {
-  const imageRef = createRef()
+function ImageLegend ({ image }) {
+  const isDeletedRef = useRef(null)
 
   return <fieldset>
     <legend>Image</legend>
 
-    <FileComponent id={'url'} name={'url'} ref={imageRef} onDelete={() => imageRef.current.value = ''}
-                   initialText={category.image ? category.image.label : 'Browse'}
-                   onUpdate={(name, files) => {
-                     console.log(name, files)
-                   }}/>
+    <FileComponent id={`image[url]`} name={`image[url]`}
+                   onUpdate={(name, value) => {
+                     isDeletedRef.current.value = 0
+                   }}
+                   onDelete={(name) => {
+                     isDeletedRef.current.value = 1
+                   }}
+                   currentText={image.label}
+                   initialText={'Choose an image'}
+                   buttonText={'Browse'}/>
 
-    <TextComponent id={'alt'} label="Image description" name={'alt'} attr={{ placeholder: '(alt)' }}
-                   value={category.image.alt}
-                   onUpdate={(name, value) => console.log(name, value)}/>
+    <input type="hidden" name={`image[is_deleted]`} defaultValue="0" ref={isDeletedRef}/>
+
+    <TextComponent id={`image[alt]`} label="Image description" name={`image[alt]`}
+                   attr={{ placeholder: '(alt)' }}
+                   value={image ? image.alt : ''}
+    />
   </fieldset>
 }
 
-function CategoryLegend ({ category, state, onUpdate, startNomenclature, isDisplayNomenclatureLabel }) {
-  const endNomenclatureRef = createRef()
+function CategoryLegend ({ category, endNomenclature, startNomenclature, isDisplayNomenclatureLabel }) {
   const labelClassName = isDisplayNomenclatureLabel ? '' : ' d-none'
+  const endNomenclatureRef = createRef()
 
   return <fieldset>
     <legend>Category</legend>
@@ -175,19 +147,21 @@ function CategoryLegend ({ category, state, onUpdate, startNomenclature, isDispl
       <div className="col m-0">
         <TextComponent wrapperClassName={'m-0'} id={'end-nomenclature'} name={'end-nomenclature'}
                        ref={endNomenclatureRef}
-                       value={state.category.endNomenclature} onUpdate={onUpdate}
-                       attr={{ placeholder: 'Nomenclature' }}
+                       value={endNomenclature} onUpdate={(name, value) => {
+          value = value.replaceAll('.', '')
+          endNomenclatureRef.current.value = value
+        }} attr={{ placeholder: 'Nomenclature' }}
         />
 
-        <input type="hidden" name="nomenclature" value={state.category.nomenclature}/>
+        <input type="hidden" name="nomenclature" value={category.nomenclature}/>
       </div>
     </div>
 
     <TextComponent id={'label'} label="Label" name={'label'} attr={{ placeholder: 'Label' }}
-                   value={category.label} onUpdate={onUpdate}/>
+                   value={category.label}/>
 
     <TextComponent id={'description'} label="Description" name={'description'} attr={{ placeholder: 'Description' }}
-                   value={category.description} onUpdate={onUpdate}/>
+                   value={category.description}/>
   </fieldset>
 }
 

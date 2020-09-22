@@ -3,9 +3,9 @@ import { getHelpId, getInputClassName, getLabelClassName } from './Form'
 import PropTypes from 'prop-types'
 import Str from '../../../src/Str'
 
-const FileComponent = forwardRef(function ({ label, name, inputClassName, wrapperClassName, attr, id, help, initialText, isRequired, error, onDelete = function () { }, onUpdate = function () { } }, ref) {
+const FileComponent = forwardRef(function ({ label, name, inputClassName, wrapperClassName, attr, id, help, initialText, currentText, buttonText, isRequired, error, onDelete = function () { }, onUpdate = function () { } }, ref) {
   const isMultiple = name.substr(-2) === '[]'
-  const [text, setText] = useState(initialText)
+  const [text, setText] = useState(currentText || initialText)
 
   return (
     <div className={'form-file mb-3' + (wrapperClassName || '')}>
@@ -29,7 +29,7 @@ const FileComponent = forwardRef(function ({ label, name, inputClassName, wrappe
       />
       <label htmlFor={id} className={getLabelClassName(isRequired, 'form-file-label')} style={{ cursor: 'pointer' }}>
         <span className="form-file-text text-black-50">{text}</span>
-        <FileButton isFilled={text !== initialText} onDeletePicture={() => {
+        <FileButton isFilled={text !== initialText} buttonText={buttonText} onDeletePicture={() => {
           setText(initialText)
           onDelete(name)
         }}/>
@@ -44,7 +44,7 @@ const FileComponent = forwardRef(function ({ label, name, inputClassName, wrappe
   )
 })
 
-function FileButton ({ isFilled, onDeletePicture }) {
+function FileButton ({ isFilled, onDeletePicture, buttonText }) {
   const handleClick = function () {
     if (isFilled) {
       onDeletePicture()
@@ -57,7 +57,7 @@ function FileButton ({ isFilled, onDeletePicture }) {
   }
 
   return <button type="button" className="form-file-button" onClick={handleClick}>
-    Browse
+    {buttonText}
   </button>
 }
 
