@@ -13,5 +13,7 @@
     "Account has expired.": "Le compte a expir\u00e9.",
     "Credentials have expired.": "Les identifiants ont expir\u00e9.",
     "Account is disabled.": "Le compte est d\u00e9sactiv\u00e9.",
-    "Account is locked.": "Le compte est bloqu\u00e9."
+    "Account is locked.": "Le compte est bloqu\u00e9.",
+    "Too many failed login attempts, please try again later.": "Plusieurs tentatives de connexion ont \u00e9chou\u00e9, veuillez r\u00e9essayer plus tard.",
+    "Invalid or expired login link.": "Lien de connexion invalide ou expir\u00e9."
 }

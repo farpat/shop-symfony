@@ -1,6 +1,8 @@
 version: '3'
 
 services:
+    chrome:
+        image: selenium/standalone-chrome
     nginx:
         image: nginx:alpine
         ports:
@@ -33,10 +35,6 @@ services:
             - db_data:/var/lib/mysql
         environment:
             MYSQL_ROOT_PASSWORD: secret
-    maildev:
-        image: maildev/maildev:2.0.0-beta3
-        ports:
-            - 1080:1080
     webpack_dev_server:
         image: farpat/mynode
         ports:

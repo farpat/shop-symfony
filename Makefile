@@ -23,9 +23,9 @@ dir         ?=
 
 php := docker-compose run --rm php php
 bash := docker-compose run --rm php bash
-composer := docker-compose run --rm php composer
-postgres := docker-compose exec postgres psql --host=postgres --username=farrugia --dbname=shop_symfony
-npm := npm
+composer := docker-compose exec --rm php composer
+mariadb := docker-compose exec mariadb mysql -psecret -e
+npm := docker-compose run --rm webpack_dev_server npm
 
 node_modules: package.json
 	@$(npm) install
@@ -51,7 +51,7 @@ help: ## Display this help
 
 test: ## Run PHP tests (parameters : dir=tests/Feature/LoginTest.php || filter=get)
 	@echo "Creating database: $(PRIMARY_COLOR_BOLD)$(APP_NAME)_test$(NO_COLOR)..."
-	@$(postgres) "drop database if exists $(APP_NAME)_test; create database $(APP_NAME)_test;"
+	@$(mariadb) "drop database if exists $(APP_NAME)_test; create database $(APP_NAME)_test;"
 	@$(php) bin/phpunit $(dir) --filter $(filter) --testdox
 
 dev: install ## Run development servers
@@ -76,8 +76,7 @@ migrate: clean ## Refresh database by running new migrations
 	@$(php) bin/console doctrine:fixtures:load --no-interaction --no-debug
 
 purge-database: ## Purge dev database (MIGRATE=0[default])
-	@$(php) bin/console doctrine:database:drop --force
-	@$(php) bin/console doctrine:database:create
+	@$(mariadb) "drop database if exists $(APP_NAME); create database $(APP_NAME);"
 ifdef MIGRATE
 	@rm -rf migrations/*
 	@$(php) bin/console make:migration

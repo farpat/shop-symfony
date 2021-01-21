@@ -39,5 +39,10 @@
     "Reset your password": "__Reset your password",
     "Send password reset email": "__Send password reset email",
     "Forgot your password ?": "__Forgot your password ?",
-    "Sorry! No products found.": "__Sorry! No products found."
+    "Sorry! No products found.": "__Sorry! No products found.",
+    "Billing number": "__Billing number",
+    "Billing date": "__Billing date",
+    "Unit price": "__Unit price",
+    "Taxes": "__Taxes",
+    "Usurp": "__Usurp"
 }

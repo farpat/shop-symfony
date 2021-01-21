@@ -103,11 +103,6 @@ const configWebpack = {
     new webpack.ProvidePlugin({
       Popper: 'popper'
     }),
-
-    new MiniCssExtractPlugin({
-      filename: '[name].[hash:4].css',
-      disable : isDebug
-    })
   ]
 }
 
@@ -116,6 +111,10 @@ if (!isDebug) {
   const ManifestPlugin = require('webpack-manifest-plugin')
 
   configWebpack.plugins.push(
+    new MiniCssExtractPlugin({
+      filename: '[name].[hash:4].css'
+    }),
+
     new WebpackBundleAnalyzerPlugin({
       analyzerMode: 'static',
       openAnalyzer: false
