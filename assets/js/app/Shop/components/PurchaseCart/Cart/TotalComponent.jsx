@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Str from '../../../../../src/Str'
 import Translation from '../../../../../src/Translation'
 import CartService from '../../../services/CartService'

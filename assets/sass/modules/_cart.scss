@@ -1,5 +1,5 @@
 .header-cart {
-  padding: 0rem;
+  padding: 0;
 }
 
 .header-cart-item, .purchase-cart-item {
@@ -23,13 +23,13 @@
   &.selected {
     display: block;
     left: auto;
-    box-shadow: 0px 0px 9px -6px rgba($black, 0.8);
+    box-shadow: 0 0 9px -6px rgba($black, 0.8);
   }
 }
 
 .header-cart-item-image, .purchase-cart-item-image {
   margin-bottom: 0.5rem;
-  margin-right: 0rem;
+  margin-right: 0;
   display: block;
   width: 72px;
 

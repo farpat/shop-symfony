@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import Str from '../../../../../src/Str'
 import { connect } from 'react-redux'
 import {  goToReference, isItemLoading, ItemComponentPropTypes } from '../../cartCommon'

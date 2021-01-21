@@ -3,7 +3,6 @@
 namespace App\Controller\Front;
 
 use App\Entity\Product;
-use App\Services\Shop\CartManagerInDatabase;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { hot } from 'react-hot-loader/root'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import ItemComponent from './Cart/ItemComponent'
 import TotalComponent from './Cart/TotalComponent'

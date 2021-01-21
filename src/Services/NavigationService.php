@@ -158,7 +158,7 @@ class NavigationService
                 $target = ' target="_blank"';
                 break;
             default:
-                throw new \Exception("Not managed!");
+                throw new Exception("Not managed!");
         }
 
         return <<<HTML
@@ -217,7 +217,7 @@ HTML;
                 $slug = $resource->getSlug();
                 break;
             default:
-                throw new \Exception("Not managed!");
+                throw new Exception("Not managed!");
         }
 
         return <<<HTML
@@ -248,6 +248,7 @@ HTML;
         switch ($information['type']) {
             case 'ENTITY':
                 $resource = $this->getResource($information['prefix'], $information['suffix']);
+
                 $url = $this->getUrl($resource);
                 $label = $resource->getLabel();
                 $activeClass = $url === $this->currentUrl ? ' active' : '';

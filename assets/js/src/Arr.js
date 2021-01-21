@@ -72,15 +72,13 @@ class Arr {
    * @returns {boolean}
    */
   isEmpty (arr) {
+    //if object
     if (arr.length !== undefined && arr.length === 0) {
       return true
     }
 
-    if (typeof arr === 'object' && Object.keys(arr).length === 0) {
-      return true
-    }
-
-    return false
+    //if array
+    return typeof arr === 'object' && Object.keys(arr).length === 0
   }
 
   /**

@@ -22,28 +22,19 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticator;
 use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
 {
     use TargetPathTrait;
 
-    private $entityManager;
-    private $urlGenerator;
-    private $csrfTokenManager;
-    private $passwordEncoder;
-    /**
-     * @var CartRepository
-     */
-    private CartRepository $cartRepository;
-    /**
-     * @var ProductReferenceRepository
-     */
+    private                            $entityManager;
+    private                            $urlGenerator;
+    private                            $csrfTokenManager;
+    private                            $passwordEncoder;
+    private CartRepository             $cartRepository;
     private ProductReferenceRepository $productReferenceRepository;
-    /**
-     * @var SerializerInterface
-     */
-    private SerializerInterface $serializer;
+    private NormalizerInterface        $normalizer;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -52,7 +43,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         UserPasswordEncoderInterface $passwordEncoder,
         CartRepository $cartRepository,
         ProductReferenceRepository $productReferenceRepository,
-        SerializerInterface $serializer
+        NormalizerInterface $normalizer
     ) {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
@@ -60,7 +51,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $this->passwordEncoder = $passwordEncoder;
         $this->cartRepository = $cartRepository;
         $this->productReferenceRepository = $productReferenceRepository;
-        $this->serializer = $serializer;
+        $this->normalizer = $normalizer;
     }
 
     public function supports(Request $request)
@@ -73,8 +64,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     public function getCredentials(Request $request)
     {
         $credentials = [
-            'email' => $request->request->get('email'),
-            'password' => $request->request->get('password'),
+            'email'      => $request->request->get('email'),
+            'password'   => $request->request->get('password'),
             'csrf_token' => $request->request->get('_csrf_token'),
         ];
 
@@ -119,7 +110,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         $cartManager = new CartManagerInDatabase($this->entityManager, $this->productReferenceRepository,
-            $this->cartRepository, $token->getUser(), $this->serializer);
+            $this->cartRepository, $token->getUser(), $this->normalizer);
         if ($cartManager->merge(
             $request->cookies->has(CartManagerInCookie::COOKIE_KEY) ?
                 unserialize($request->cookies->get(CartManagerInCookie::COOKIE_KEY)) : []

@@ -39,7 +39,6 @@ class BillingVoter extends Voter
             case self::EXPORT:
             case self::VIEW:
                 return $user->isAdmin() || $subject->getUser() === $user;
-                break;
         }
 
         return false;

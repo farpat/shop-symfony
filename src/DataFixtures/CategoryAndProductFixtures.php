@@ -125,9 +125,6 @@ class CategoryAndProductFixtures extends Fixture implements OrderedFixtureInterf
         return $products;
     }
 
-    /**
-     * @return Tax[]
-     */
     private function attachTaxes(Product $product, Tax $vatTax, Tax $ecoTax)
     {
         $product->addTax($vatTax);

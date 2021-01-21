@@ -7,6 +7,7 @@ use App\Entity\Address;
 use App\Entity\User;
 use App\Repository\AddressRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Farpat\Api\Api;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -207,7 +208,7 @@ final class UpdateMyAddressesFormData
         $address = $this->addressRepository->findOneBy(['id' => $id, 'user' => $user]);
 
         if ($address === null) {
-            throw new \Exception("Address << $id >> doesn't exists!");
+            throw new Exception("Address << $id >> doesn't exists!");
         }
 
         return $address;

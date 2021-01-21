@@ -5,9 +5,9 @@ namespace App\Services\Shop;
 
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
-use App\Services\CacheWrapper;
 use App\Services\ModuleService;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -98,7 +98,7 @@ class CategoryService
 
     /**
      * @param Category[] $parentCategories
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function generateHtmlForCategoryIndex(array $parentCategories, bool $isRootCall = true): string
     {

@@ -4,7 +4,10 @@ namespace App\Repository;
 
 use App\Entity\User;
 use App\Entity\Visit;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -29,10 +32,10 @@ class VisitRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
-    public function getVisitsCount(User $user, \DateTime $start, \DateTime $end): int
+    public function getVisitsCount(User $user, DateTime $start, DateTime $end): int
     {
         return $this->createQueryBuilder('v')
             ->select('count(v.id)')
@@ -47,7 +50,7 @@ class VisitRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function getVisits(User $user, \DateTime $start, \DateTime $end): array
+    public function getVisits(User $user, DateTime $start, DateTime $end): array
     {
         return $this->createQueryBuilder('v')
             ->select('count(v.id) as count, v.url')

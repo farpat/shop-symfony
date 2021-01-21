@@ -1,5 +1,3 @@
-import Arr from './Arr'
-
 const units = ['o', 'Ko', 'Mo', 'Go', 'To', 'Po', 'Eo', 'Zo', 'Yo']
 
 /**
@@ -12,24 +10,6 @@ class Str {
 
   isNumeric (number) {
     return !isNaN(number)
-  }
-
-  transformKeysToStar (str) {
-    const keys = this.parseKeysInString(str)
-
-    if (typeof keys === 'string') {
-      return str
-    }
-
-    let transformedKey = keys[0]
-    for (let i = 1; i + 1 < keys.length; i++) {
-      transformedKey += '.*'
-    }
-
-    const lastKey = Arr.last(keys)
-    transformedKey += (this.isNumeric(lastKey)) ? '.*' : `.${lastKey}`
-
-    return transformedKey
   }
 
   parseKeysInString (str) {
@@ -100,11 +80,16 @@ class Str {
     return `${bytes.toFixed(2)} ${units[i]}`
   }
 
+  /**
+   *
+   * @param {string} size
+   * @returns {number}
+   */
   sizeToBytes (size) {
     const sizes = size.split(' ')
-    let bytes = sizes[0]
+    let [bytes, unit] = sizes[0]
     let i = 0
-    while (units[i] && units[i] !== sizes[1]) {
+    while (units[i] && units[i] !== unit) {
       bytes *= 1024
       ++i
     }

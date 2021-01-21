@@ -170,8 +170,8 @@ export default class Input {
       this.element.value = this.lastValue
       this.containerElement.style.display = 'none'
     } else if (e.key === 'Enter') {
-      var sel = this.containerElement.querySelector('.autocomplete-suggestion.selected')
-      if (sel && this.containerElement.style.display != 'none') {
+      sel = this.containerElement.querySelector('.autocomplete-suggestion.selected')
+      if (sel && this.containerElement.style.display !== 'none') {
         this.options.onSelect(e, sel.getAttribute('data-val'), sel)
         setTimeout(function () {
           this.containerElement.style.display = 'none'

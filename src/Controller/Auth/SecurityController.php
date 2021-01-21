@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * @Route(name="app_auth_security_")
@@ -57,10 +57,10 @@ class SecurityController extends AbstractController
         EntityManagerInterface $entityManager,
         ProductReferenceRepository $productReferenceRepository,
         CartRepository $cartRepository,
-        SerializerInterface $serializer
+        NormalizerInterface $normalizer
     ) {
         $cartManager = new CartManagerInDatabase($entityManager, $productReferenceRepository, $cartRepository, $user,
-            $serializer);
+            $normalizer);
         if ($cartManager->merge(
             $request->cookies->has(CartManagerInCookie::COOKIE_KEY) ?
                 unserialize($request->cookies->get(CartManagerInCookie::COOKIE_KEY)) : []

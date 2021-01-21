@@ -6,6 +6,7 @@ namespace App\Services\Shop\Bank;
 use App\Entity\Billing;
 use App\Entity\Cart;
 use App\Services\ModuleService;
+use Exception;
 use League\Flysystem\FilesystemInterface;
 use mikehaertl\wkhtmlto\Pdf;
 use Twig\Environment as Twig;
@@ -51,7 +52,7 @@ class BillingService
         if ($billingPdf->saveAs($pdfPath)) {
             return $pdfPath;
         } else {
-            throw new \Exception($billingPdf->getError());
+            throw new Exception($billingPdf->getError());
         }
     }
 
