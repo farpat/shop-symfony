@@ -23,7 +23,7 @@ dir         ?=
 
 php := docker-compose run --rm php php
 bash := docker-compose run --rm php bash
-composer := docker-compose exec --rm php composer
+composer := docker-compose run --rm php composer
 mariadb := docker-compose exec mariadb mysql -psecret -e
 npm := docker-compose run --rm webpack_dev_server npm
 
