@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { hot } from 'react-hot-loader/root'
 import { jsonGet } from '@farpat/api'
 import { HashRouter as Router, NavLink as Link, Route, Switch, useRouteMatch } from 'react-router-dom'
 
@@ -110,4 +109,4 @@ function NavigationItem ({ navigationItem, setIsSelected }) {
   </Link>
 }
 
-export default hot(App)
+export default App

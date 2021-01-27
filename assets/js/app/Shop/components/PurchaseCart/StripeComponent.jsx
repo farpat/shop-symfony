@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { hot } from 'react-hot-loader/root'
+
 import { connect } from 'react-redux'
 import CartService from '../../services/CartService'
 import Str from '../../../../src/Str'
@@ -109,4 +109,4 @@ const mapDispatchToProps = (dispatch) => {
   return {}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(hot(StripeComponent))
+export default connect(mapStateToProps, mapDispatchToProps)(StripeComponent)

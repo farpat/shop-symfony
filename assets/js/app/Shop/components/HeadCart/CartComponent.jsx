@@ -1,5 +1,5 @@
 import React from 'react'
-import { hot } from 'react-hot-loader/root'
+
 import { connect } from 'react-redux'
 import ItemComponent from './Cart/ItemComponent'
 import TotalComponent from './Cart/TotalComponent'
@@ -41,4 +41,4 @@ const mapDispatchToProps = (dispatch) => {
   return {}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(hot(CartComponent))
+export default connect(mapStateToProps, mapDispatchToProps)(CartComponent)

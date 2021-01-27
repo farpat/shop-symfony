@@ -3,7 +3,22 @@ import { getHelpId, getInputClassName, getLabelClassName } from './Form'
 import PropTypes from 'prop-types'
 import Str from '../../../src/Str'
 
-const FileComponent = forwardRef(function ({ label, name, inputClassName, wrapperClassName, attr, id, help, initialText, currentText, buttonText, isRequired, error, onDelete = function () { }, onUpdate = function () { } }, ref) {
+const FileComponent = forwardRef(function ({
+  label,
+  name,
+  inputClassName,
+  wrapperClassName,
+  attr,
+  id,
+  help,
+  initialText,
+  currentText,
+  buttonText,
+  isRequired,
+  error,
+  onDelete = function () { },
+  onUpdate = function () { }
+}, ref) {
   const isMultiple = name.substr(-2) === '[]'
   const [text, setText] = useState(currentText || initialText)
 

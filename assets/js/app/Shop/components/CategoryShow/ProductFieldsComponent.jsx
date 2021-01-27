@@ -1,5 +1,5 @@
 import React from 'react'
-import { hot } from 'react-hot-loader/root'
+
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import NumberFieldComponent from './ProductField/NumberFieldComponent'
@@ -39,4 +39,4 @@ const mapDispatchToProps = (dispatch) => {
   return {}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(hot(ProductFieldsComponent))
+export default connect(mapStateToProps, mapDispatchToProps)(ProductFieldsComponent)

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { hot } from 'react-hot-loader/root'
+
 import { connect } from 'react-redux'
 import ProductComponent from './Product/ProductComponent'
 import ProductsNavigation from './Product/ProductsNavigation'
@@ -30,12 +30,12 @@ function ProductsComponent ({ products, currentPage, perPage }) {
 
 ProductsComponent.propTypes = {
   products   : PropTypes.arrayOf(PropTypes.shape({
-    id                        : PropTypes.number.isRequired,
-    url                       : PropTypes.string.isRequired,
-    excerpt                   : PropTypes.string,
-    label                     : PropTypes.string.isRequired,
+    id                            : PropTypes.number.isRequired,
+    url                           : PropTypes.string.isRequired,
+    excerpt                       : PropTypes.string,
+    label                         : PropTypes.string.isRequired,
     min_unit_price_including_taxes: PropTypes.number.isRequired,
-    image                     : PropTypes.shape({
+    image                         : PropTypes.shape({
       url_thumbnail: PropTypes.string.isRequired,
       alt_thumbnail: PropTypes.string
     })
@@ -56,4 +56,4 @@ const mapDispatchToProps = (dispatch) => {
   return {}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(hot(ProductsComponent))
+export default connect(mapStateToProps, mapDispatchToProps)(ProductsComponent)

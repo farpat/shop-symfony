@@ -1,8 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { getHelpId, getInputClassName, getLabelClassName} from './Form'
+import { getHelpId, getInputClassName, getLabelClassName } from './Form'
 
-function PasswordComponent ({ label, name, attr, id, help, value, isRequired, error, withKey, onUpdate = function () {} }) {
+function PasswordComponent ({
+  label,
+  name,
+  attr,
+  id,
+  help,
+  value,
+  isRequired,
+  error,
+  withKey,
+  onUpdate = function () {}
+}) {
   const inputElement = <input type="password" className={getInputClassName(error)} id={id} name={name}
                               required={isRequired} aria-describedby={getHelpId(help, id)} defaultValue={value}
                               onChange={event => onUpdate(name, event.target.value)} {...attr}/>

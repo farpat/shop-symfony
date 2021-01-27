@@ -6,7 +6,15 @@ import { connect } from 'react-redux'
 import { jsonPost } from '@farpat/api'
 import Translation from '../../../../../src/Translation'
 
-function ProductReferenceComponent ({ currentReference, currency, isLoading, quantities, cartItems, updateQuantity, addInCart }) {
+function ProductReferenceComponent ({
+  currentReference,
+  currency,
+  isLoading,
+  quantities,
+  cartItems,
+  updateQuantity,
+  addInCart
+}) {
   const getQuantity = function (reference) {
     return quantities[reference.id] || 1
   }

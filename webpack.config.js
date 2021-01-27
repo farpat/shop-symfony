@@ -1,5 +1,4 @@
-var Encore = require('@symfony/webpack-encore')
-var Chokidar = require('chokidar')
+const Encore = require('@symfony/webpack-encore')
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -14,10 +13,6 @@ Encore
   .setPublicPath('/assets')
 
   .addEntry('app', './assets/js/app.js')
-
-  .configureBabel(babelConfig => {
-    babelConfig.plugins.push('react-hot-loader/babel')
-  })
 
   // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
   .splitEntryChunks()
@@ -48,6 +43,9 @@ Encore
   .enableReactPreset()
 
 if (Encore.isDevServer()) {
+  const Chokidar = require('chokidar')
+  const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+
   Encore.disableCssExtraction()
 
   Encore.configureDevServerOptions(options => {
@@ -55,10 +53,15 @@ if (Encore.isDevServer()) {
       Chokidar.watch('templates/**/*.twig').on('change', () => server.sockWrite(server.sockets, 'content-changed'))
     }
   })
-}
 
-if (Encore.isProduction()) {
+  Encore.addPlugin(new ReactRefreshWebpackPlugin())
+
+  Encore.configureBabel(config => {
+    config.plugins.push(require('react-refresh/babel'))
+  })
+} else if (Encore.isProduction()) {
   const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+
   Encore.addPlugin(new BundleAnalyzerPlugin({
     analyzerMode: 'static',
     openAnalyzer: false

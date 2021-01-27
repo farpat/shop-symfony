@@ -1,5 +1,4 @@
-import React, { useState, useMemo } from 'react'
-import { hot } from 'react-hot-loader/root'
+import React, { useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { getError, getRulesFromBack } from './Form'
 
@@ -46,4 +45,4 @@ SymfonyComponentWrapper.propTypes = {
   withKey     : PropTypes.bool,
 }
 
-export default hot(SymfonyComponentWrapper)
+export default SymfonyComponentWrapper

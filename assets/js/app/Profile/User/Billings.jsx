@@ -45,8 +45,7 @@ function Billings () {
           <td>{Str.toLocaleCurrency(billing.total_amount_including_taxes, 'EUR')}</td>
           <td>{billing.address}</td>
           <td>
-            <a href={`/billings/view/${billing.number}`} className="btn btn-link" target="_blank">See</a>|<a
-            href={`/billings/export/${billing.number}`} className="btn btn-link" download>Download</a>
+            <a href={`/billings/export/${billing.number}`} className="btn btn-link" download>Download</a>
           </td>
         </tr>)
       }

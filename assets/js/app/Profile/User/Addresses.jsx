@@ -132,8 +132,9 @@ function Addresses () {
     }
 
     setState({ ...state, isSubmitting: true, alert: null })
-
-    jsonPut('/api/profile/user/addresses', state.information)
+    const data = { ...state.information }
+    delete data.algolia
+    jsonPut('/api/profile/user/addresses', data)
       .then(response => {
         setState({
           ...state,
@@ -255,7 +256,7 @@ function Addresses () {
 function Address ({ address, index, error, isSelected, onUpdateSecondLine, onDeleteAddress, onSelectAddress }) {
   return <div className={`address ${isSelected ? 'selected' : ''}`}>
 
-    <TextComponent id={'address_text_' + index} className='algolia'
+    <TextComponent id={'address_text_' + index} inputClassName='algolia'
                    name={getName(index, 'text')} error={error} value={address.text}/>
 
     <TextComponent id={'address_line2_' + index} name={getName(index, 'line2')} value={address.line2}

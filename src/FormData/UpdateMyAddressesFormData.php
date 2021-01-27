@@ -14,12 +14,12 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 final class UpdateMyAddressesFormData
 {
-    private static array            $geocodesByIndex   = [];
-    private ?int                    $deliveryAddressIndex;
-    private array                   $addresses;
-    private string                  $googleGeocodeKey;
-    private EntityManagerInterface  $entityManager;
-    private ?AddressRepository      $addressRepository = null;
+    private static array           $geocodesByIndex   = [];
+    private ?int                   $deliveryAddressIndex;
+    private array                  $addresses;
+    private string                 $googleGeocodeKey;
+    private EntityManagerInterface $entityManager;
+    private ?AddressRepository     $addressRepository = null;
 
     public function __construct(array $data, string $googleGeocodeKey, EntityManagerInterface $entityManager)
     {
@@ -116,8 +116,14 @@ final class UpdateMyAddressesFormData
             return;
         }
 
-        if ($address['status'] === 'DELETED' || $address['status'] === null) {
+        if ($address['status'] === 'DELETED') {
             return;
+        }
+
+        if (!is_int($address['id'])) {
+            $context->buildViolation('Bad identifiant')
+                ->atPath("addresses.$index")
+                ->addViolation();
         }
 
         if (!array_key_exists('text', $address) || !$address['text']) {
@@ -150,18 +156,25 @@ final class UpdateMyAddressesFormData
     {
         $this->addressRepository = $this->entityManager->getRepository(Address::class);
 
-        $addresses = $this->getAddresses();
+        $addressesInPostData = $this->getAddresses();
+        $addressesInDatabase = $this->getAddressesInDatabaseFromData($addressesInPostData);
 
-        foreach ($addresses as $index => $addressData) {
+        foreach ($addressesInPostData as $index => $addressData) {
             switch ($addressData['status']) {
+                case null:
+                    if ($index === $this->getDeliveryAddressIndex()) {
+                        $addressToUpdate = $this->getAddress($addressesInDatabase, $addressData['id'], $user);
+                        $user->setDeliveryAddress($addressToUpdate);
+                    }
+                    break;
                 case 'DELETED':
                     if ($addressData['id']) {
-                        $addressToUDelete = $this->getAddress($addressData['id'], $user);
+                        $addressToUDelete = $this->getAddress($addressesInDatabase, $addressData['id'], $user);
                         $this->entityManager->remove($addressToUDelete);
                     }
                     break;
                 case 'UPDATED':
-                    $addressToUpdate = $this->getAddress($addressData['id'], $user);
+                    $addressToUpdate = $this->getAddress($addressesInDatabase, $addressData['id'], $user);
 
                     $addressToUpdate
                         ->setText($addressData['text'])
@@ -179,7 +192,7 @@ final class UpdateMyAddressesFormData
                     }
                     break;
                 case 'ADDED':
-                    $addressToAdd = (new Address())
+                    $addressToAdd = (new Address)
                         ->setUser($user)
                         ->setText($addressData['text'])
                         ->setLine1($addressData['line1'])
@@ -203,9 +216,29 @@ final class UpdateMyAddressesFormData
         return $user;
     }
 
-    private function getAddress(int $id, User $user): Address
+    /**
+     * @param array $addressData
+     * @return Address[]
+     */
+    private function getAddressesInDatabaseFromData(array $addressInPostData): array
     {
-        $address = $this->addressRepository->findOneBy(['id' => $id, 'user' => $user]);
+        /** @var Address $addresses */
+        $addresses = $this->entityManager->getRepository(Address::class)->findBy(
+            ['id' => array_map(fn(array $addressData) => $addressData['id'], $addressInPostData)]
+        );
+
+        $adressesById = [];
+
+        foreach ($addresses as $key => $address) {
+            $adressesById[$address->getId()] = $address;
+        }
+
+        return $adressesById;
+    }
+
+    private function getAddress(array $addresses, int $id, User $user): Address
+    {
+        $address = $addresses[$id] ?? null;
 
         if ($address === null) {
             throw new Exception("Address << $id >> doesn't exists!");

@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollectionInterface;
 
 /**
  * @Route("/billings", name="app_front_billing_")
@@ -21,7 +22,7 @@ class BillingController extends AbstractController
      * @Entity("billing", expr="repository.getWithAllRelations(billingNumber)")
      * @IsGranted(App\Security\Voter\BillingVoter::EXPORT, subject="billing")
      */
-    public function export(Billing $billing, Request $request, BillingService $billingService)
+    public function export(Billing $billing, Request $request, BillingService $billingService, EntrypointLookupCollectionInterface $entrypointLookupCollection)
     {
         $pdfPath = $billingService->getPdfPath($billing);
 
@@ -30,17 +31,5 @@ class BillingController extends AbstractController
         }
 
         return new BinaryFileResponse($pdfPath);
-    }
-
-    /**
-     * @Route("/view/{billingNumber}", name="view", methods={"GET"})
-     * @Entity("billing", expr="repository.getWithAllRelations(billingNumber)")
-     * @IsGranted(App\Security\Voter\BillingVoter::VIEW, subject="billing")
-     */
-    public function view(Billing $billing, BillingService $billingService, Request $request)
-    {
-        return $this->render('billing/show.html.twig', [
-            'billing' => $billing,
-        ]);
     }
 }

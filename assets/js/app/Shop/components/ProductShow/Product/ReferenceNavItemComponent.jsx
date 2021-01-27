@@ -26,7 +26,7 @@ function ReferenceNavItemComponent ({ reference, currentReference, changeReferen
     >
       {
         reference.main_image && <img className="nav-product-reference-image" src={reference.main_image.url_thumbnail}
-                                    alt={reference.main_image.alt_thumbnail}/>
+                                     alt={reference.main_image.alt_thumbnail}/>
       }
 
       <h2 className="nav-product-reference-title">{reference.label}</h2>
@@ -36,8 +36,8 @@ function ReferenceNavItemComponent ({ reference, currentReference, changeReferen
 
 ReferenceNavItemComponent.propTypes = {
   reference       : PropTypes.shape({
-    id       : PropTypes.number.isRequired,
-    label    : PropTypes.string.isRequired,
+    id        : PropTypes.number.isRequired,
+    label     : PropTypes.string.isRequired,
     main_image: PropTypes.shape({
       url_thumbnail: PropTypes.string.isRequired,
       alt_thumbnail: PropTypes.string.isRequired

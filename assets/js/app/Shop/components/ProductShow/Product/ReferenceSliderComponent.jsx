@@ -68,8 +68,8 @@ function ReferenceSliderComponent ({ currentReference }) {
 
 ReferenceSliderComponent.propTypes = {
   currentReference: PropTypes.shape({
-    id                     : PropTypes.number.isRequired,
-    images                 : PropTypes.arrayOf(
+    id    : PropTypes.number.isRequired,
+    images: PropTypes.arrayOf(
       PropTypes.shape({
         id           : PropTypes.number.isRequired,
         url          : PropTypes.string.isRequired,

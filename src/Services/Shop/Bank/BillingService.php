@@ -41,7 +41,9 @@ class BillingService
      */
     public function generatePdf(Billing $billing): string
     {
-        $billingPdf = new Pdf();
+        $billingPdf = new Pdf([
+            'enable-local-file-access',
+        ]);
         $billingPdf->addPage($page = $this->twig->render('billing/show.html.twig', ['billing' => $billing]));
         $pdfPath = $this->getRealPdfPath($billing);
         $folder = dirname($pdfPath);

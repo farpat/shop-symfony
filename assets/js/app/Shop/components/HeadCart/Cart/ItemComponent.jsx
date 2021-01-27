@@ -1,7 +1,7 @@
 import React from 'react'
 import Str from '../../../../../src/Str'
 import { connect } from 'react-redux'
-import {  goToReference, isItemLoading, ItemComponentPropTypes } from '../../cartCommon'
+import { goToReference, isItemLoading, ItemComponentPropTypes } from '../../cartCommon'
 import CartService from '../../../services/CartService'
 
 function ItemComponent ({ item, currency, updateItemQuantity, isLoading, deleteItem }) {

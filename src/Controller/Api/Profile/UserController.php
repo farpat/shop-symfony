@@ -2,7 +2,7 @@
 
 namespace App\Controller\Api\Profile;
 
-use App\Entity\{Product, User, Visit};
+use App\Entity\{User};
 use App\FormData\{UpdateMyAddressesFormData, UpdateMyInformationsFormData};
 use App\Repository\VisitRepository;
 use DateTime;
@@ -124,7 +124,7 @@ class UserController extends AbstractController
         return new JsonResponse(array_merge(
             $this->normalizer->normalize($user, 'addresses-json'),
             [
-                'algolia' => [
+                'algolia'                => [
                     'id'  => $this->parameterBag->get('ALGOLIA_API_ID'),
                     'key' => $this->parameterBag->get('ALGOLIA_API_KEY')
                 ]

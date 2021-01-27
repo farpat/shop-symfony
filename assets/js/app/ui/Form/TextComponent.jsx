@@ -1,8 +1,20 @@
-import React, { forwardRef} from 'react'
+import React, { forwardRef } from 'react'
 import { getHelpId, getInputClassName, getLabelClassName } from './Form'
 import PropTypes from 'prop-types'
 
-const TextComponent = forwardRef(function ({ label, name, inputClassName, wrapperClassName, attr, id, help, value, isRequired, error, onUpdate = function () { } }, ref) {
+const TextComponent = forwardRef(function ({
+  label,
+  name,
+  inputClassName,
+  wrapperClassName,
+  attr,
+  id,
+  help,
+  value,
+  isRequired,
+  error,
+  onUpdate = function () { }
+}, ref) {
   return (
     <div className={`form-group ${wrapperClassName || ''}`}>
       {

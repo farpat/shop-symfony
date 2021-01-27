@@ -4,7 +4,20 @@ import PropTypes from 'prop-types'
 import Choices from 'choices.js'
 import 'choices.js/public/assets/styles/choices.css'
 
-const ChoiceComponent = forwardRef(function ({ label, name, selectClassName, wrapperClassName, attr, id, help, value, choices, isRequired, error, onUpdate = function () { } }, ref) {
+const ChoiceComponent = forwardRef(function ({
+  label,
+  name,
+  selectClassName,
+  wrapperClassName,
+  attr,
+  id,
+  help,
+  value,
+  choices,
+  isRequired,
+  error,
+  onUpdate = function () { }
+}, ref) {
   useEffect(() => {
     new Choices(document.getElementById(id))
   }, [])

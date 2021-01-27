@@ -1,5 +1,5 @@
 import React from 'react'
-import { hot } from 'react-hot-loader/root'
+
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import ReferenceNavComponent from './Product/ReferenceNavComponent'
@@ -18,9 +18,9 @@ function ProductComponent ({ currency, currentReference }) {
 
 ProductComponent.propTypes = {
   currentReference: PropTypes.shape({
-    id                     : PropTypes.number.isRequired,
-    label                  : PropTypes.string.isRequired,
-    main_image             : PropTypes.shape({
+    id                        : PropTypes.number.isRequired,
+    label                     : PropTypes.string.isRequired,
+    main_image                : PropTypes.shape({
       url_thumbnail: PropTypes.string.isRequired,
       alt_thumbnail: PropTypes.string.isRequired
     }),
@@ -40,4 +40,4 @@ const mapDispatchToProps = (dispatch) => {
   return {}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(hot(ProductComponent))
+export default connect(mapStateToProps, mapDispatchToProps)(ProductComponent)

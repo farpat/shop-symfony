@@ -1,4 +1,4 @@
-import { jsonPatch, jsonDelete } from '@farpat/api'
+import { jsonDelete, jsonPatch } from '@farpat/api'
 
 class CartService {
   constructor () {

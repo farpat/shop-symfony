@@ -86,7 +86,8 @@ export default class Input {
     var context = this.containerElement || document
 
     context.addEventListener('mouseover', (e) => {
-      var found; var el = e.target
+      var found
+      var el = e.target
 
       while (el && !(found = el.classList.contains('autocomplete-suggestion'))) el = el.parentElement
       // test with `found = el.closest('.autocomplete-suggestion')`
@@ -142,7 +143,8 @@ export default class Input {
 
   keydownHandler (e) {
     if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && this.containerElement.innerHTML) {
-      var next; var sel = this.containerElement.querySelector('.autocomplete-suggestion.selected')
+      var next
+      var sel = this.containerElement.querySelector('.autocomplete-suggestion.selected')
       if (!sel) {
         next = (e.key === 'ArrowDown')
           ? this.containerElement.querySelector('.autocomplete-suggestion')

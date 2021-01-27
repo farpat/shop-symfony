@@ -2,7 +2,18 @@ import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { getHelpId, getInputClassName, getLabelClassName } from './Form'
 
-const CheckboxComponent = forwardRef(function ({ label, name, attr, wrapperClassName, id, help, value, isRequired, error, onUpdate = function () {} }, ref) {
+const CheckboxComponent = forwardRef(function ({
+  label,
+  name,
+  attr,
+  wrapperClassName,
+  id,
+  help,
+  value,
+  isRequired,
+  error,
+  onUpdate = function () {}
+}, ref) {
   return (
     <div className={`form-group ${wrapperClassName || ''}`}>
       <div className="form-check form-switch">
@@ -33,16 +44,16 @@ const CheckboxComponent = forwardRef(function ({ label, name, attr, wrapperClass
 })
 
 CheckboxComponent.propTypes = {
-  label           : PropTypes.string,
-  name            : PropTypes.string.isRequired,
-  attr            : PropTypes.object,
+  label: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  attr: PropTypes.object,
   wrapperClassName: PropTypes.string,
-  id              : PropTypes.string.isRequired,
-  help            : PropTypes.string,
-  value           : PropTypes.bool,
-  isRequired      : PropTypes.bool,
-  error           : PropTypes.string,
-  onUpdate        : PropTypes.func
+  id: PropTypes.string.isRequired,
+  help: PropTypes.string,
+  value: PropTypes.bool,
+  isRequired: PropTypes.bool,
+  error: PropTypes.string,
+  onUpdate: PropTypes.func
 }
 
 export default CheckboxComponent

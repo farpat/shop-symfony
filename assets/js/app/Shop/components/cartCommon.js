@@ -2,11 +2,11 @@ import PropTypes from 'prop-types'
 
 /** PROPTYPES **/
 const referencePropType = PropTypes.shape({
-  url                    : PropTypes.string.isRequired,
-  label                  : PropTypes.string.isRequired,
+  url                       : PropTypes.string.isRequired,
+  label                     : PropTypes.string.isRequired,
   unit_price_including_taxes: PropTypes.number.isRequired,
   unit_price_excluding_taxes: PropTypes.number.isRequired,
-  mainImage              : PropTypes.shape({
+  mainImage                 : PropTypes.shape({
     url_thumbnail: PropTypes.string.isRequired,
     alt_thumbnail: PropTypes.string.isRequired
   })
