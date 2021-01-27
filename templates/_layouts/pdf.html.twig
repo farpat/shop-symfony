@@ -11,14 +11,14 @@
               integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
               crossorigin="anonymous">
 
-        <link rel="stylesheet" href="{{ get_asset('app.css', areAssetsAbsolute ?? true) }}">
+        <link rel="stylesheet" href="{{ get_asset('app.css') }}">
     {% endblock %}
 </head>
 <body>
 {% block body %}{% endblock %}
 
 {% block javascripts %}
-    <script src="{{ get_asset('app.js', areAssetsAbsolute ?? true) }}"></script>
+    <script src="{{ get_asset('app.js') }}"></script>
 {% endblock %}
 </body>
 </html>

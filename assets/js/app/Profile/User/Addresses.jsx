@@ -252,8 +252,6 @@ function Addresses () {
   </form>
 }
 
-export default Addresses
-
 function Address ({ address, index, error, isSelected, onUpdateSecondLine, onDeleteAddress, onSelectAddress }) {
   return <div className={`address ${isSelected ? 'selected' : ''}`}>
 
@@ -274,3 +272,5 @@ function Address ({ address, index, error, isSelected, onUpdateSecondLine, onDel
     </div>
   </div>
 }
+
+export default Addresses

@@ -21,11 +21,14 @@ NO_COLOR      			= \033[m
 filter      ?= tests
 dir         ?=
 
+php_test := docker-compose -f docker-compose-test.yaml run --rm php php
+mariadb_test := docker-compose -f docker-compose-test.yaml exec mariadb mysql -psecret -e
+
 php := docker-compose run --rm php php
-bash := docker-compose run --rm php bash
-composer := docker-compose run --rm php composer
 mariadb := docker-compose exec mariadb mysql -psecret -e
-npm := docker-compose run --rm webpack_dev_server npm
+bash := docker-compose run --rm php zsh
+composer := docker-compose run --rm php composer
+npm := docker-compose run --rm asset_dev_server npm
 
 node_modules: package.json
 	@$(npm) install
@@ -50,21 +53,22 @@ help: ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "$(PRIMARY_COLOR_BOLD)%-15s$(NO_COLOR) %s\n", $$1, $$2 }' $(MAKEFILE_LIST) | sort
 
 test: ## Run PHP tests (parameters : dir=tests/Feature/LoginTest.php || filter=get)
-	@echo "Creating database: $(PRIMARY_COLOR_BOLD)$(APP_NAME)_test$(NO_COLOR)..."
-	@$(mariadb) "drop database if exists $(APP_NAME)_test; create database $(APP_NAME)_test;"
-	@$(php) bin/phpunit $(dir) --filter $(filter) --testdox
+	@docker-compose -f docker-compose-test.yaml up -d
+	@$(mariadb_test) "drop database if exists $(DOCKER_APP_NAME)_test; create database $(DOCKER_APP_NAME)_test;"
+	@$(php_test) bin/phpunit $(dir) --filter $(filter) --testdox
+	@docker-compose -f docker-compose-test.yaml down
 
 dev: install ## Run development servers
-	@docker-compose up -d nginx webpack_dev_server #laravel_echo_server
-	@echo "Dev server launched on http://localhost:$(APP_PORT)"
+	@docker-compose up -d
+	@echo "Dev server launched on http://localhost:$(DOCKER_APP_PORT)"
 	@echo "Mail server launched on http://localhost:1080"
-	@echo "Webpack dev server launched on http://localhost:3000"
+	@echo "Asset dev server launched on http://localhost:3000"
 
 stop-dev: ## Stop development servers
 	@docker-compose down
-	@echo "Dev server stopped: http://localhost:$(APP_PORT)"
+	@echo "Dev server stopped: http://localhost:$(DOCKER_APP_PORT)"
 	@echo "Mail server stopped: http://localhost:1080"
-	@echo "Webpack dev server stopped: http://localhost:3000"
+	@echo "Asset dev server stopped: http://localhost:3000"
 
 build: install ## Build assets projects for production
 	@rm -rf ./public/assets/*
@@ -75,8 +79,8 @@ migrate: clean ## Refresh database by running new migrations
 	@$(php) bin/console doctrine:migrations:migrate --no-interaction --quiet
 	@$(php) bin/console doctrine:fixtures:load --no-interaction --no-debug
 
-purge-database: ## Purge dev database (MIGRATE=0[default])
-	@$(mariadb) "drop database if exists $(APP_NAME); create database $(APP_NAME);"
+purge-database: ## Purge dev database (MIGRATE=0[default] : remove migrations and make:migration)
+	@$(mariadb) "drop database if exists $(DOCKER_APP_NAME); create database $(DOCKER_APP_NAME);"
 ifdef MIGRATE
 	@rm -rf migrations/*
 	@$(php) bin/console make:migration

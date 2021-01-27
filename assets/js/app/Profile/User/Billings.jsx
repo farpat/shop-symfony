@@ -42,7 +42,7 @@ function Billings () {
         state.billings.map(billing => <tr key={billing.number}>
           <td>{billing.number}</td>
           <td>{billing.status}</td>
-          <td>{Str.toLocaleCurrency(billing.total_price_including_taxes, 'EUR')}</td>
+          <td>{Str.toLocaleCurrency(billing.total_amount_including_taxes, 'EUR')}</td>
           <td>{billing.address}</td>
           <td>
             <a href={`/billings/view/${billing.number}`} className="btn btn-link" target="_blank">See</a>|<a

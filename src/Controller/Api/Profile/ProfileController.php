@@ -2,7 +2,7 @@
 
 namespace App\Controller\Api\Profile;
 
-use App\Entity\{Category, Product, User, Visit};
+use App\Entity\{Category, User, Visit};
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;

@@ -4,7 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    WEBPACK_DEV_SERVER_PORT: '%env(WEBPACK_DEV_SERVER_PORT)%'
+    DOCKER_ASSET_DEV_SERVER_PORT: '%env(DOCKER_ASSET_DEV_SERVER_PORT)%'
     STRIPE_PUBLIC_KEY: '%env(STRIPE_PUBLIC_KEY)%'
     STRIPE_SECRET_KEY: '%env(STRIPE_SECRET_KEY)%'
     ALGOLIA_API_KEY: '%env(ALGOLIA_API_KEY)%'

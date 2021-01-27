@@ -39,11 +39,8 @@ class BillingController extends AbstractController
      */
     public function view(Billing $billing, BillingService $billingService, Request $request)
     {
-        $areAssetsAbsolute = false;
-
         return $this->render('billing/show.html.twig', [
-            'billing'           => $billing,
-            'areAssetsAbsolute' => $areAssetsAbsolute
+            'billing' => $billing,
         ]);
     }
 }

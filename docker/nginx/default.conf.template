@@ -1,6 +1,6 @@
 server {
     listen 80;
-    root ${PROJECT_PATH}/public;
+    root ${DOCKER_PROJECT_PATH}/public;
 
     add_header X-Frame-Options "SAMEORIGIN";
     add_header X-XSS-Protection "1; mode=block";

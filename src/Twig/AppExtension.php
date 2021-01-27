@@ -7,7 +7,6 @@ use App\Services\NavigationService;
 use App\Services\Support\Str;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -67,22 +66,22 @@ class AppExtension extends AbstractExtension
         return $request->getPathInfo() === $this->urlGenerator->generate($route) ? ' active' : '';
     }
 
-    public function getAsset(string $asset, bool $isAbsolute = false): string
+    public function getAsset(string $asset): string
     {
         static $json;
 
-        if (!$isAbsolute && $webpackDevServerPort = $this->parameterBag->get('WEBPACK_DEV_SERVER_PORT')) {
-            return substr($asset, -4) !== '.css' ? "http://localhost:$webpackDevServerPort/assets/$asset" : '';
-        } else {
-            $publicPath = $this->parameterBag->get('kernel.project_dir') . '/public';
-            $assetPath = $publicPath . '/assets';
-
+        $publicPath = $this->parameterBag->get('kernel.project_dir') . '/public';
+        $assetPath = $publicPath . '/assets';
+        if (is_file($assetPath . '/manifest.json')) {
             if (!$json) {
                 $json = new Package(new JsonManifestVersionStrategy($assetPath . '/manifest.json'));
             }
 
-            return $isAbsolute ? $publicPath . $json->getUrl($asset) : $json->getUrl($asset);
+            return $json->getUrl($asset);
         }
+
+        $assetDevServerPort = $this->parameterBag->get('DOCKER_ASSET_DEV_SERVER_PORT');
+        return substr($asset, -4) !== '.css' ? "http://localhost:$assetDevServerPort/assets/$asset" : '';
     }
 
     public function getBreadcrumb(array $links): string
