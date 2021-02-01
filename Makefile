@@ -17,7 +17,7 @@ NO_COLOR      			= \033[m
 filter      ?= tests
 dir         ?=
 
-php_test := docker-compose -f docker-compose-test.yaml run --rm php php
+php_test := docker-compose -f docker-compose-test.yaml exec php php
 mariadb_test := docker-compose -f docker-compose-test.yaml exec mariadb mysql -psecret -e
 
 php := docker-compose run --rm php php
