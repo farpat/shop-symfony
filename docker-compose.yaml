@@ -45,7 +45,7 @@ services:
         volumes:
             - .:${DOCKER_PROJECT_PATH}
         working_dir: ${DOCKER_PROJECT_PATH}
-        command: ./node_modules/.bin/encore dev-server --hot --host 0.0.0.0 --port 3000
+        command: ./node_modules/.bin/encore dev-server --hot --public http://localhost:3000 --host 0.0.0.0 --port 3000
 
 volumes:
     db_data:

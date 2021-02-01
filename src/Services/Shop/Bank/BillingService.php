@@ -9,20 +9,27 @@ use App\Services\ModuleService;
 use Exception;
 use League\Flysystem\FilesystemInterface;
 use mikehaertl\wkhtmlto\Pdf;
+use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollectionInterface;
 use Twig\Environment as Twig;
 use Twig\Error\{LoaderError, RuntimeError, SyntaxError};
 
 class BillingService
 {
-    private ModuleService       $moduleService;
-    private FilesystemInterface $billingStorage;
-    private Twig                $twig;
+    private ModuleService                       $moduleService;
+    private FilesystemInterface                 $billingStorage;
+    private Twig                                $twig;
+    private EntrypointLookupCollectionInterface $entrypointLookupCollection;
 
-    public function __construct(ModuleService $moduleService, FilesystemInterface $billingStorage, Twig $twig)
-    {
+    public function __construct(
+        ModuleService $moduleService,
+        FilesystemInterface $billingStorage,
+        Twig $twig,
+        EntrypointLookupCollectionInterface $entrypointLookupCollection
+    ) {
         $this->moduleService = $moduleService;
         $this->billingStorage = $billingStorage;
         $this->twig = $twig;
+        $this->entrypointLookupCollection = $entrypointLookupCollection;
     }
 
     public function createBillingFromCart(Cart $cart): Billing
@@ -35,6 +42,8 @@ class BillingService
     }
 
     /**
+     * @param array{billing: Billing, cssPath: string} $variables
+     * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -54,7 +63,7 @@ class BillingService
         if ($billingPdf->saveAs($pdfPath)) {
             return $pdfPath;
         } else {
-            throw new Exception($billingPdf->getError());
+            throw new Exception($billingPdf->getError() . PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL . $page);
         }
     }
 

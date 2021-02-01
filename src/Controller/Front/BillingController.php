@@ -10,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollectionInterface;
 
 /**
  * @Route("/billings", name="app_front_billing_")
@@ -22,8 +21,11 @@ class BillingController extends AbstractController
      * @Entity("billing", expr="repository.getWithAllRelations(billingNumber)")
      * @IsGranted(App\Security\Voter\BillingVoter::EXPORT, subject="billing")
      */
-    public function export(Billing $billing, Request $request, BillingService $billingService, EntrypointLookupCollectionInterface $entrypointLookupCollection)
-    {
+    public function export(
+        Billing $billing,
+        Request $request,
+        BillingService $billingService
+    ) {
         $pdfPath = $billingService->getPdfPath($billing);
 
         if ($request->query->getInt('force') === 1 || $pdfPath === null) {
