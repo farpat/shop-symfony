@@ -27,12 +27,13 @@ class ModuleExtension extends AbstractExtension
      * @param string $moduleLabel
      * @param string $parameterLabel
      *
-     * @return array|string|null
+     * @return array<mixed>|string|null
      * @throws Exception
      */
     public function getParameter(string $moduleLabel, string $parameterLabel)
     {
-        $value = $this->moduleService->getParameter($moduleLabel, $parameterLabel)->getValue();
+        $moduleParameter = $this->moduleService->getParameter($moduleLabel, $parameterLabel);
+        $value = $moduleParameter->getValue();
         return array_key_exists('_value', $value) ? $value['_value'] : $value;
     }
 }

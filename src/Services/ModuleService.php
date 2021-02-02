@@ -78,7 +78,7 @@ class ModuleService
         return "module#getParameter#{$moduleLabel}#{$parameterLabel}";
     }
 
-    public function getParameter(string $moduleLabel, string $parameterLabel): ?ModuleParameter
+    public function getParameter(string $moduleLabel, string $parameterLabel): ModuleParameter
     {
         $cacheKey = $this->getCacheKeyFromString($moduleLabel, $parameterLabel);
 

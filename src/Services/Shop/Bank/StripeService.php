@@ -30,7 +30,7 @@ class StripeService
         $this->setApiKey();
 
         return PaymentIntent::create([
-            'amount'   => $cart->getTotalAmountIncludingTaxes() * 100,
+            'amount'   => (float)$cart->getTotalAmountIncludingTaxes() * 100,
             'currency' => $this->currency,
             'metadata' => ['integration_check' => 'accept_a_payment']
         ]);

@@ -45,6 +45,9 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.3",
         "fzaninotto/faker": "^1.9",
+        "phpstan/phpstan": "^0.12.70",
+        "phpstan/phpstan-doctrine": "^0.12.30",
+        "phpstan/phpstan-symfony": "^0.12.16",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.21",
         "symfony/profiler-pack": "*",

@@ -2,21 +2,23 @@
 
 namespace App\Services\Shop\CartManagement;
 
+use App\Entity\OrderItem;
+
 interface CartManagerInterface
 {
 
     /**
-     * @return ['quantity' => $quantity, 'productReferenceId' => $productReferenceId]
+     * @return array{quantity: int, reference: array}
      */
     public function deleteItem(int $productReferenceId): array;
 
     /**
-     * @return ['quantity' => $quantity, 'productReferenceId' => $productReferenceId]
+     * @return array{quantity: int, reference: array}
      */
     public function patchItem(int $quantity, int $productReferenceId): array;
 
     /**
-     * @return ['quantity' => $quantity, 'productReferenceId' => $productReferenceId]
+     * @return array{quantity: int, reference: array}
      */
     public function addItem(int $quantity, int $productReferenceId): array;
 
@@ -24,7 +26,7 @@ interface CartManagerInterface
 
     /**
      * Get items without fetching reference via database
-     * @return array
+     * @return OrderItem[]
      */
     public function getPureItems(): array;
 }

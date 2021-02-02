@@ -8,24 +8,27 @@ class Str
     /**
      * The cache of getSnakeCase-cased words.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected static $snakeCache = [];
 
     /**
      * The cache of camel-cased words.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected static $camelCache = [];
 
     /**
      * The cache of getPascalCase-cased words.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected static $pascalCache = [];
 
+    /**
+     * @param array{'style': string, 'code': string, 'symbol': string} $currencyParameter
+     */
     public static function getFormattedPrice(array $currencyParameter, float $price): string
     {
         switch ($currencyParameter['style']) {
@@ -79,12 +82,8 @@ class Str
     /**
      * Convert a string to snake case.
      *
-     * @param string $string
-     * @param string $delimiter
-     *
-     * @return string
      */
-    public static function getSnakeCase($string, $delimiter = '_')
+    public static function getSnakeCase(string $string, string $delimiter = '_'): string
     {
         $key = $string;
 
@@ -93,11 +92,12 @@ class Str
         }
 
         if (!ctype_lower($string)) {
-            $string = preg_replace('/\s+/u', '', ucwords($string));
+            $string = (string)preg_replace('/\s+/u', '', ucwords($string));
             $string = mb_strtolower(preg_replace('/(.)(?=[A-Z])/u', '$1' . $delimiter, $string), 'UTF-8');
         }
 
-        return static::$snakeCache[$key][$delimiter] = $string;
+        static::$snakeCache[$key][$delimiter] = $string;
+        return $string;
     }
 
     /**
@@ -122,11 +122,10 @@ class Str
     /**
      * Determine if a given string starts with a given substring.
      *
-     * @param string $haystack
      * @param string|string[] $needles
      * @return bool
      */
-    public static function startsWith($haystack, $needles)
+    public static function startsWith(string $haystack, $needles): bool
     {
         foreach ((array)$needles as $needle) {
             if ((string)$needle !== '' && strncmp($haystack, $needle, strlen($needle)) === 0) {

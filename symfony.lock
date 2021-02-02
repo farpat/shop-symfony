@@ -163,6 +163,15 @@
     "phpdocumentor/type-resolver": {
         "version": "1.3.0"
     },
+    "phpstan/phpstan": {
+        "version": "0.12.70"
+    },
+    "phpstan/phpstan-doctrine": {
+        "version": "0.12.30"
+    },
+    "phpstan/phpstan-symfony": {
+        "version": "0.12.16"
+    },
     "predis/predis": {
         "version": "v1.1.6"
     },

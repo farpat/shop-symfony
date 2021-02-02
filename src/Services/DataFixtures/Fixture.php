@@ -10,10 +10,7 @@ use Faker\Generator;
 
 abstract class Fixture extends FixturesBundleFixture
 {
-    /**
-     * @var Generator
-     */
-    protected $faker;
+    protected Generator $faker;
 
     public function __construct()
     {
@@ -36,8 +33,6 @@ abstract class Fixture extends FixturesBundleFixture
             ->setAlt($alt)
             ->setUrlThumbnail($urlThumbnail)
             ->setAltThumbnail($alt);
-
-        $this->entityManager->persist($image);
 
         return $image;
     }

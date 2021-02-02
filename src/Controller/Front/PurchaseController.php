@@ -6,9 +6,9 @@ use App\Entity\{Cart, User};
 use App\Services\{ModuleService,
     Shop\Bank\BillingService,
     Shop\Bank\StripeService,
+    Shop\CartManagement\CartManagerInDatabase,
     Shop\CartManagement\CartManagerInterface,
-    Support\Str
-};
+    Support\Str};
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Stripe\Event;
@@ -87,6 +87,8 @@ class PurchaseController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
+        /** @var Cart $cart */
+        $cart = $this->cartManager->getCart();
         return new JsonResponse([
             'customer_name'            => $user->getUsername(),
             'customer_billing_address' => [
@@ -96,7 +98,7 @@ class PurchaseController extends AbstractController
                 'city'        => $user->getDeliveryAddress()->getCity(),
                 'country'     => $user->getDeliveryAddress()->getCountryCode(),
             ],
-            'client_secret'            => $this->stripeService->createIntent($this->cartManager->getCart())->client_secret
+            'client_secret'            => $this->stripeService->createIntent($cart)->client_secret
         ]);
     }
 

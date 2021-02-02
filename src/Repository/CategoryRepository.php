@@ -70,7 +70,7 @@ class CategoryRepository extends ServiceEntityRepository
     /**
      * @param Category $category
      *
-     * @return array
+     * @return Product[]
      */
     public function getProducts(Category $category): array
     {

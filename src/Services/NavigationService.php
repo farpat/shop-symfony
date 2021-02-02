@@ -169,7 +169,6 @@ HTML;
     }
 
     /**
-     * @param string $link1
      *
      * @return Product|Category
      * @throws Exception
@@ -243,21 +242,32 @@ HTML;
         return false;
     }
 
+    /**
+     * @param array{type: 'ENTITY'|'LINK', prefix: string, suffix: string, level: int} $information
+     * @param bool $hasLevel3
+     * @return string
+     * @throws Exception
+     */
     private function renderDropdownItem2(array $information, bool $hasLevel3)
     {
+        $activeClass = '';
+        $target = '';
+        $label = '';
+        $url = '';
+
         switch ($information['type']) {
             case 'ENTITY':
                 $resource = $this->getResource($information['prefix'], $information['suffix']);
 
                 $url = $this->getUrl($resource);
                 $label = $resource->getLabel();
-                $activeClass = $url === $this->currentUrl ? ' active' : '';
-                $target = '';
+                if ($url === $this->currentUrl) {
+                    $activeClass = 'active';
+                }
                 break;
             case 'LINK':
                 $url = $information['prefix'];
                 $label = $information['suffix'];
-                $activeClass = '';
                 $target = 'target="_blank"';
                 break;
         }
@@ -280,18 +290,21 @@ HTML;
 
     private function renderDropdownItem3(array $information)
     {
+        $activeClass = '';
+        $target = '';
+        $label = '';
+        $url = '';
+        
         switch ($information['type']) {
             case 'ENTITY':
                 $resource = $this->getResource($information['prefix'], $information['suffix']);
                 $url = $this->getUrl($resource);
                 $label = $resource->getLabel();
                 $activeClass = $url === $this->currentUrl ? ' active' : '';
-                $target = '';
                 break;
             case 'LINK':
                 $url = $information['prefix'];
                 $label = $information['suffix'];
-                $activeClass = '';
                 $target = ' target="_blank"';
                 break;
         }

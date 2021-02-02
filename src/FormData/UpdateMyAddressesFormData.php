@@ -33,10 +33,9 @@ final class UpdateMyAddressesFormData
 
     /**
      * @param ExecutionContextInterface $context
-     * @param $payload
      * @Assert\Callback
      */
-    public function validate(ExecutionContextInterface $context, $payload)
+    public function validate(ExecutionContextInterface $context)
     {
         $this->checkDeliveryAddressIndex($context);
         foreach ($this->getAddresses() as $index => $address) {
@@ -222,7 +221,7 @@ final class UpdateMyAddressesFormData
      */
     private function getAddressesInDatabaseFromData(array $addressInPostData): array
     {
-        /** @var Address $addresses */
+        /** @var Address[] $addresses */
         $addresses = $this->entityManager->getRepository(Address::class)->findBy(
             ['id' => array_map(fn(array $addressData) => $addressData['id'], $addressInPostData)]
         );

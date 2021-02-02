@@ -53,10 +53,13 @@ class AppExtension extends AbstractExtension
         ];
     }
 
-    public function getPrice(float $price)
+    public function getPrice(float $price): string
     {
+        /** @var array{style: string, code: string, symbol:string} $currencyParameter */
+        $currencyParameter = $this->moduleService->getParameter('billing', 'currency')->getValue();
+
         return Str::getFormattedPrice(
-            $this->moduleService->getParameter('billing', 'currency')->getValue(),
+            $currencyParameter,
             $price
         );
     }
@@ -84,6 +87,10 @@ class AppExtension extends AbstractExtension
         return substr($asset, -4) !== '.css' ? "http://localhost:$assetDevServerPort/assets/$asset" : '';
     }
 
+    /**
+     * @param array<int, array{label: string, 'url': ?string}> $links
+     * @return string
+     */
     public function getBreadcrumb(array $links): string
     {
         $linksCount = count($links);

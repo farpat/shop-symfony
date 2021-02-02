@@ -151,7 +151,7 @@ abstract class Orderable
         return $this;
     }
 
-    public function getTotalAmountIncludingTaxes(): ?string
+    public function getTotalAmountIncludingTaxes(): ?float
     {
         return $this->totalAmountIncludingTaxes;
     }

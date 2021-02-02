@@ -4,6 +4,7 @@ namespace App\Services\Shop;
 
 
 use App\Entity\Category;
+use App\Entity\Product;
 use App\Repository\CategoryRepository;
 use App\Services\ModuleService;
 use Psr\Cache\CacheItemPoolInterface;
@@ -34,11 +35,18 @@ class CategoryService
         $this->cache = $cache;
     }
 
+    /**
+     * @param int[] $ids
+     * @return Category[]
+     */
     public function getCategoriesForMenu(array $ids): array
     {
         return $this->categoryRepository->getCategoriesForMenu($ids);
     }
 
+    /**
+     * @return Category[]
+     */
     public function getCategoriesInHome(): array
     {
         return $this->cache->get('category#getCategoriesInHome', function (ItemInterface $item) {
@@ -50,23 +58,38 @@ class CategoryService
         });
     }
 
+    /**
+     * @return Category[]
+     */
     public function getRootCategories(): array
     {
         return $this->categoryRepository->getRootCategories();
     }
 
+    /**
+     * @param Category $category
+     * @return Product[]
+     */
     public function getProducts(Category $category): array
     {
         return $this->categoryRepository->getProducts($category);
     }
 
+    /**
+     * @param Category[] $parentCategories
+     * @return array<int, array{category: Category, children: Category[]}>
+     */
     public function generateListForCategoryIndexAdmin(
         array $parentCategories,
         bool $isRootCall = true,
         bool $mustDeleteCache = false
     ): array {
 
-        $getCategories = function ($parentCategories) {
+        /**
+         * @param Category[] $parentCategories
+         * @return array
+         */
+        $getCategories = function (array $parentCategories) {
             $array = [];
 
             if (empty($parentCategories)) {
@@ -98,7 +121,6 @@ class CategoryService
 
     /**
      * @param Category[] $parentCategories
-     * @throws InvalidArgumentException
      */
     public function generateHtmlForCategoryIndex(array $parentCategories, bool $isRootCall = true): string
     {

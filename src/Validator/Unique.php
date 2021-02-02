@@ -15,24 +15,21 @@ class Unique extends Constraint
      * Any public properties become valid options for the annotation.
      * Then, use these in your validator class.
      */
-    public $message = 'The value "{{ value }}" is already used';
+    public string $message = 'The value "{{ value }}" is already used';
+
+    public string $entity;
+
+    public string $field;
 
     /**
-     * @var string
+     * @return string[]
      */
-    public $entity;
-
-    /**
-     * @var string
-     */
-    public $field;
-
-    public function getRequiredOptions()
+    public function getRequiredOptions(): array
     {
         return ['field', 'entity'];
     }
 
-    public function getTargets()
+    public function getTargets(): string
     {
         return self::CLASS_CONSTRAINT;
     }

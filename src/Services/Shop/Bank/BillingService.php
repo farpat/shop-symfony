@@ -7,6 +7,7 @@ use App\Entity\Billing;
 use App\Entity\Cart;
 use App\Services\ModuleService;
 use Exception;
+use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use mikehaertl\wkhtmlto\Pdf;
 use Symfony\WebpackEncoreBundle\Asset\EntrypointLookupCollectionInterface;
@@ -16,6 +17,9 @@ use Twig\Error\{LoaderError, RuntimeError, SyntaxError};
 class BillingService
 {
     private ModuleService                       $moduleService;
+    /**
+     * @var Filesystem
+     */
     private FilesystemInterface                 $billingStorage;
     private Twig                                $twig;
     private EntrypointLookupCollectionInterface $entrypointLookupCollection;
@@ -42,8 +46,6 @@ class BillingService
     }
 
     /**
-     * @param array{billing: Billing, cssPath: string} $variables
-     * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError

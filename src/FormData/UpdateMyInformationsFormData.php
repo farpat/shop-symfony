@@ -52,7 +52,7 @@ final class UpdateMyInformationsFormData
      *
      * @return RegisterFormData
      */
-    public function setName(?string $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
         return $this;
@@ -71,7 +71,7 @@ final class UpdateMyInformationsFormData
      *
      * @return self
      */
-    public function setEmail(?string $email): self
+    public function setEmail(string $email): self
     {
         $this->email = $email;
         return $this;
@@ -90,7 +90,7 @@ final class UpdateMyInformationsFormData
      *
      * @return self
      */
-    public function setId(?int $id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
         return $this;

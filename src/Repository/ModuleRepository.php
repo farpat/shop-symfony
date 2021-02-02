@@ -22,7 +22,6 @@ class ModuleRepository extends ServiceEntityRepository
 
     public function getParameter(string $moduleLabel, string $parameterLabel): ModuleParameter
     {
-        /** @var Module $module */
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $moduleParameter = $queryBuilder
             ->select('p')

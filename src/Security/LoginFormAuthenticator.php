@@ -109,8 +109,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+        /** @var User $user */
+        $user = $token->getUser();
         $cartManager = new CartManagerInDatabase($this->entityManager, $this->productReferenceRepository,
-            $this->cartRepository, $token->getUser(), $this->normalizer);
+            $this->cartRepository, $user, $this->normalizer);
         if ($cartManager->merge(
             $request->cookies->has(CartManagerInCookie::COOKIE_KEY) ?
                 unserialize($request->cookies->get(CartManagerInCookie::COOKIE_KEY)) : []

@@ -7,6 +7,7 @@ use App\Services\FormData\AssertExpression;
 use App\Services\FormData\Reader;
 use Exception;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Validator\Constraints\Email;
@@ -30,6 +31,9 @@ class ComponentType extends TextType
         $this->translator = $translator;
     }
 
+    /**
+     * @return void
+     */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['widget_element'] = true;
@@ -39,15 +43,20 @@ class ComponentType extends TextType
         parent::buildView($view, $form, $options);
     }
 
+    /**
+     * @param mixed[] $options
+     * @return mixed[]
+     */
     protected function getProps(FormInterface $form, array $options): array
     {
+        /** @var FormInterface $parentForm */
         $parentForm = $form->getParent();
         $formName = $parentForm->getName();
         $errors = $form->getErrors();
 
         return [
             'initialValue' => $form->getViewData(),
-            'initialError' => !isset($errors[0]) ? '' : $errors[0]->getMessage(),
+            'initialError' => $errors->count() > 0 && $errors[0] instanceof FormError ? $errors[0]->getMessage() : '',
             'label'        => $this->makeLabel($options['label'], $form->getName()),
             'name'         => "{$formName}[{$form->getName()}]",
             'id'           => "{$formName}_{$form->getName()}",
@@ -76,6 +85,9 @@ class ComponentType extends TextType
         return (string)$label;
     }
 
+    /**
+     * @return ?array<int, array{type: string, parameters: array}>
+     */
     protected function makeRules(string $class, string $field): ?array
     {
         $rules = [];

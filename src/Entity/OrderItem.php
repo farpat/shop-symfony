@@ -66,7 +66,7 @@ class OrderItem
         return $this->amountExcludingTaxes;
     }
 
-    public function setAmountExcludingTaxes(string $amountExcludingTaxes): self
+    public function setAmountExcludingTaxes(float $amountExcludingTaxes): self
     {
         $this->amountExcludingTaxes = $amountExcludingTaxes;
 
@@ -83,7 +83,7 @@ class OrderItem
         return $this->amountIncludingTaxes;
     }
 
-    public function setAmountIncludingTaxes(string $amountIncludingTaxes): self
+    public function setAmountIncludingTaxes(float $amountIncludingTaxes): self
     {
         $this->amountIncludingTaxes = $amountIncludingTaxes;
 

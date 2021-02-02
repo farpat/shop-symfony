@@ -39,6 +39,7 @@ class BuildTranslationsCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        /** @var TranslationUpdateCommand $updateTranslationCommand */
         $updateTranslationCommand = $this->getApplication()->find('translation:update');
 
         foreach (self::LOCALES as $locale) {

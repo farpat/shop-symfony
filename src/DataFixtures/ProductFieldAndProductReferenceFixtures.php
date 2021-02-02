@@ -195,7 +195,7 @@ class ProductFieldAndProductReferenceFixtures extends Fixture implements Ordered
             $mainProductReferenceImage = null;
 
             for ($i = 0; $i < $imagesCount; $i++) {
-                $image = $this->makeImage();
+                $this->entityManager->persist($image = $this->makeImage());
                 if ($mainProductImage === null) {
                     $mainProductImage = $image;
                 }

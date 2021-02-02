@@ -2,7 +2,7 @@
 
 namespace App\Controller\Front;
 
-use App\Repository\{CategoryRepository, ModuleRepository, ProductRepository};
+use App\Repository\{CategoryRepository, ProductRepository};
 use App\Services\ModuleService;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +18,6 @@ class HomeController extends AbstractController
 {
     /**
      * @Route("/", name="index", methods={"GET"})
-     * @param ModuleRepository $moduleRepository
      *
      * @return Response
      * @throws Exception
@@ -28,9 +27,7 @@ class HomeController extends AbstractController
         $elementsToDisplayInHomepageParameter = $moduleService->getParameter('home', 'display');
 
         return $this->render('home/index.html.twig', [
-            'elementsToDisplayInHomepage' => $elementsToDisplayInHomepageParameter !== null ?
-                $elementsToDisplayInHomepageParameter->getValue() :
-                []
+            'elementsToDisplayInHomepage' => $elementsToDisplayInHomepageParameter->getValue()
         ]);
     }
 

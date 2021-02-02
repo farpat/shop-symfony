@@ -3,6 +3,7 @@
 namespace App\Security\Voter;
 
 use App\Entity\Billing;
+use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -28,6 +29,7 @@ class BillingVoter extends Voter
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
+        /** @var User $user */
         $user = $token->getUser();
 
         // if the user is anonymous, do not grant access
