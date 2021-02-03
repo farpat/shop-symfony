@@ -8,7 +8,7 @@ class Str
     /**
      * The cache of getSnakeCase-cased words.
      *
-     * @var array<string, string>
+     * @var array<string, array<string, string>>
      */
     protected static $snakeCache = [];
 
@@ -93,7 +93,7 @@ class Str
 
         if (!ctype_lower($string)) {
             $string = (string)preg_replace('/\s+/u', '', ucwords($string));
-            $string = mb_strtolower(preg_replace('/(.)(?=[A-Z])/u', '$1' . $delimiter, $string), 'UTF-8');
+            $string = mb_strtolower((string)preg_replace('/(.)(?=[A-Z])/u', '$1' . $delimiter, $string), 'UTF-8');
         }
 
         static::$snakeCache[$key][$delimiter] = $string;

@@ -5,6 +5,11 @@ namespace App\Services\Support;
 
 class Arr
 {
+    /**
+     * @param string[] $attributes
+     * @param object $object
+     * @return array<string, mixed>
+     */
     public static function get(array $attributes, object $object): array
     {
         $array = [];
@@ -12,10 +17,12 @@ class Arr
             $methodNameWithGet = 'get' . Str::getPascalCase($attribute);
             $methodName = Str::getCamelCase($attribute);
 
-            if (method_exists($object, $methodNameWithGet)) {
-                $array[$attribute] = call_user_func([$object, $methodNameWithGet]);
-            } elseif (method_exists($object, $methodName)) {
-                $array[$attribute] = call_user_func([$object, $methodName]);
+            $callableWithGet = [$object, $methodNameWithGet];
+            $callableWithoutGet = [$object, $methodName];
+            if (is_callable($callableWithGet)) {
+                $array[$attribute] = call_user_func($callableWithGet);
+            } elseif (is_callable($callableWithoutGet)) {
+                $array[$attribute] = call_user_func($callableWithoutGet);
             }
         }
 
