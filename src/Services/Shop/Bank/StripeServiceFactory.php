@@ -23,7 +23,7 @@ class StripeServiceFactory
         $this->moduleService = $moduleService;
     }
 
-    public function createStripeService()
+    public function createStripeService(): StripeService
     {
         return new StripeService(
             $this->parameterBag->get('STRIPE_PUBLIC_KEY'),

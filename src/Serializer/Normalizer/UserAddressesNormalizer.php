@@ -35,7 +35,7 @@ class UserAddressesNormalizer implements NormalizerInterface, CacheableSupportsM
         ];
     }
 
-    public function getAddressInArray(?Address $address)
+    public function getAddressInArray(?Address $address): ?array
     {
         if ($address === null) {
             return null;

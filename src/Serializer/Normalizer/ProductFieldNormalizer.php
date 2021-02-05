@@ -24,7 +24,7 @@ class ProductFieldNormalizer implements NormalizerInterface, CacheableSupportsMe
         return array_merge(
             Arr::get(['label', 'type'], $object),
             [
-                'key' => Str::getSnakeCase($object->getLabel()) . '-' . $object->getId(),
+                'key' => Str::getSnakeCase((string)$object->getLabel()) . '-' . $object->getId(),
             ]
         );
     }

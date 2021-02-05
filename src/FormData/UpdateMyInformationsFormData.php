@@ -50,7 +50,6 @@ final class UpdateMyInformationsFormData
     /**
      * @param string $name
      *
-     * @return RegisterFormData
      */
     public function setName(string $name): self
     {
@@ -61,7 +60,7 @@ final class UpdateMyInformationsFormData
     /**
      * @return string
      */
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -85,11 +84,6 @@ final class UpdateMyInformationsFormData
         return $this->id;
     }
 
-    /**
-     * @param mixed $id
-     *
-     * @return self
-     */
     public function setId(int $id): self
     {
         $this->id = $id;

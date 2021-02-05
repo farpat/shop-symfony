@@ -90,7 +90,7 @@ class OrderItem
         return $this;
     }
 
-    public function getProductReference(): ?ProductReference
+    public function getProductReference(): ProductReference
     {
         return $this->productReference;
     }

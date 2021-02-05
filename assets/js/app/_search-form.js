@@ -34,11 +34,12 @@ const renderNotItems = function () {
 `
 }
 
+// eslint-disable-next-line no-new
 new AutoComplete({
-  selector  : input,
-  minChars  : 2,
-  cache     : true,
-  source    : function (q, suggest) {
+  selector: input,
+  minChars: 2,
+  cache: true,
+  source: function (q, suggest) {
     inputContainer.classList.add('searching')
 
     jsonGet(input.dataset.url, { q })
@@ -58,7 +59,7 @@ new AutoComplete({
       return renderCategory(item, q)
     }
   },
-  onSelect  : function (e, term, item) {
+  onSelect: function (e, term, item) {
     if (item.dataset.url !== undefined) {
       window.location.href = item.dataset.url
     }

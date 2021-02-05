@@ -23,12 +23,15 @@ abstract class Fixture extends FixturesBundleFixture
         $normalSize = [1000, 400];
         $thumbSize = [300, 120];
 
+        /** @var string $label */
+        $label = $this->faker->words(3, true);
         $url = "https://picsum.photos/id/{$id}/{$normalSize[0]}/{$normalSize[1]}/";
         $urlThumbnail = "https://picsum.photos/id/{$id}/{$thumbSize[0]}/{$thumbSize[1]}/";
+        /** @var string $alt */
         $alt = $this->faker->words(3, true);
 
         $image = (new Image)
-            ->setLabel(Str::getSnakeCase($this->faker->words(3, true)) . '.jpg')
+            ->setLabel(Str::getSnakeCase($label) . '.jpg')
             ->setUrl($url)
             ->setAlt($alt)
             ->setUrlThumbnail($urlThumbnail)

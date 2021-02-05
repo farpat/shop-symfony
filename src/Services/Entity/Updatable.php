@@ -11,7 +11,7 @@ trait Updatable
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    protected $updatedAt;
+    protected ?\DateTimeInterface $updatedAt;
 
     /**
      * @return DateTimeInterface|null
@@ -35,7 +35,7 @@ trait Updatable
     /**
      * @ORM\PreUpdate()
      */
-    public function updateUpdatedAt()
+    public function updateUpdatedAt(): void
     {
         $this->setUpdatedAt(new DateTime());
     }

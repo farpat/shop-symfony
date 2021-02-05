@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints\Expression;
  */
 class AssertExpression extends Expression
 {
-    public $checkFunctionInFrontend;
+    public string $checkFunctionInFrontend;
 
     public function __construct($options = null)
     {

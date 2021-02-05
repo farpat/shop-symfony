@@ -7,8 +7,7 @@ use App\Entity\Category;
 use App\Entity\Product;
 use App\Repository\CategoryRepository;
 use App\Services\ModuleService;
-use Psr\Cache\CacheItemPoolInterface;
-use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Cache\Adapter\TraceableAdapter;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -19,7 +18,7 @@ class CategoryService
     private UrlGeneratorInterface $urlGenerator;
     private ModuleService         $moduleService;
     /**
-     * @var CacheInterface|CacheItemPoolInterface
+     * @var TraceableAdapter|CacheInterface
      */
     private CacheInterface $cache;
 
@@ -77,18 +76,12 @@ class CategoryService
 
     /**
      * @param Category[] $parentCategories
-     * @return array<int, array{category: Category, children: Category[]}>
      */
     public function generateListForCategoryIndexAdmin(
         array $parentCategories,
-        bool $isRootCall = true,
-        bool $mustDeleteCache = false
+        bool $mustDeleteCache = false,
+        bool $isRootCall = true
     ): array {
-
-        /**
-         * @param Category[] $parentCategories
-         * @return array
-         */
         $getCategories = function (array $parentCategories) {
             $array = [];
 
@@ -101,7 +94,7 @@ class CategoryService
 
                 $array[] = [
                     'category' => $parentCategory,
-                    'children' => $this->generateListForCategoryIndexAdmin($children, false)
+                    'children' => $this->generateListForCategoryIndexAdmin($children)
                 ];
             }
 
@@ -111,7 +104,7 @@ class CategoryService
         if ($isRootCall) {
             $cacheKey = 'category#generateListForCategoryIndexAdmin';
             if ($mustDeleteCache) {
-                $this->cache->deleteItem($cacheKey);
+                $this->cache->delete($cacheKey);
             }
             return $this->cache->get($cacheKey, fn() => $getCategories($parentCategories));
         } else {
@@ -124,25 +117,15 @@ class CategoryService
      */
     public function generateHtmlForCategoryIndex(array $parentCategories, bool $isRootCall = true): string
     {
-        $cacheKey = 'category#generateHtmlForCategoryIndex';
-        $cacheItem = $this->cache->getItem($cacheKey);
+        $getHtml = function ($parentCategories) {
+            $string = '';
+            foreach ($parentCategories as $parentCategory) {
+                $sourceAttribute = $parentCategory->getImage() ? $parentCategory->getImage()->getUrlThumbnail() : 'https://via.placeholder.com/80x32';
+                $altAttribute = $parentCategory->getImage() ? $parentCategory->getImage()->getAltThumbnail() : $parentCategory->getLabel();
+                $imageElement = "<img src='$sourceAttribute' alt='$altAttribute'>";
 
-        if ($isRootCall && $this->cache->hasItem($cacheKey)) {
-            return $cacheItem->get();
-        }
-
-        if (empty($parentCategories)) {
-            return '';
-        }
-
-        $string = '';
-        foreach ($parentCategories as $parentCategory) {
-            $sourceAttribute = $parentCategory->getImage() ? $parentCategory->getImage()->getUrlThumbnail() : 'https://via.placeholder.com/80x32';
-            $altAttribute = $parentCategory->getImage() ? $parentCategory->getImage()->getAltThumbnail() : $parentCategory->getLabel();
-            $imageElement = "<img src='$sourceAttribute' alt='$altAttribute'>";
-
-            $children = $this->categoryRepository->getChildren($parentCategory);
-            $string .= <<<HTML
+                $children = $this->categoryRepository->getChildren($parentCategory);
+                $string .= <<<HTML
                 <div class="media">
                     <a href="{$this->getShowUrl($parentCategory)}" class="media-link">$imageElement</a>
                     <div class="media-body">
@@ -151,16 +134,22 @@ class CategoryService
                     </div>
                 </div>
                 HTML;
-        }
+            }
+
+            return $string;
+        };
 
         if ($isRootCall) {
-            $this->cache->save($cacheItem->set($string));
+            $cacheKey = 'category#generateHtmlForCategoryIndex';
+            return $this->cache->get($cacheKey, fn() => $getHtml($parentCategories));
+        } else {
+            return $getHtml($parentCategories);
         }
 
-        return $string;
+
     }
 
-    private function getShowUrl(Category $category)
+    private function getShowUrl(Category $category): string
     {
         return $this->urlGenerator->generate('app_front_category_show', [
             'categorySlug' => $category->getSlug(),

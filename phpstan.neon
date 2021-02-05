@@ -9,3 +9,6 @@ parameters:
         - src
         - tests
     checkGenericClassInNonGenericObjectType: false
+    checkMissingIterableValueType: false
+    ignoreErrors:
+        - '#Call to an undefined method#'

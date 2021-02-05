@@ -37,14 +37,14 @@ class CategoryService {
     const currentProducts = this.getFilteredProducts(products, currentFilters)
 
     this.data = {
-      allProducts     : products,
+      allProducts: products,
       allProductFields: productFieldsElement ? JSON.parse(productFieldsElement.dataset.productFields) : null,
       perPage,
       columns,
-      currency        : document.querySelector('#cart-nav').dataset.currency,
+      currency: document.querySelector('#cart-nav').dataset.currency,
       currentFilters,
       currentProducts,
-      currentPage     : this.ensureCurrentPage(currentPage, currentProducts)
+      currentPage: this.ensureCurrentPage(currentPage, currentProducts)
     }
 
     if (this.data.currentPage !== currentPage) {

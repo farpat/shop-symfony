@@ -26,10 +26,12 @@ class ProductSearchedNormalizer implements NormalizerInterface, CacheableSupport
      */
     public function normalize($object, string $format = null, array $context = []): array
     {
+        $mainImage = $object->getMainImage();
+
         return array_merge(
             Arr::get(['id', 'label', 'minUnitPriceIncludingTaxes'], $object),
             [
-                'image' => $object->getMainImage() ? $object->getMainImage()->getUrlThumbnail() : null,
+                'image' => $mainImage ? $mainImage->getUrlThumbnail() : null,
                 'url'   => $this->urlGenerator->generate('app_front_product_show', [
                     'categorySlug' => $object->getCategory()->getSlug(),
                     'categoryId'   => $object->getCategory()->getId(),

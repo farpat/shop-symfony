@@ -1,9 +1,17 @@
 import Rule from '../Rule'
 
 export default class LengthRule extends Rule {
+  /**
+   *
+   * @param {object} parameter
+   * @param {number} parameter.min
+   * @param {number} parameter.max
+   * @param {?string} parameter.minMessage
+   * @param {string} parameter.maxMessage
+   */
   constructor (parameter) {
     if (parameter.min === undefined && parameter.max === undefined) {
-      throw 'The << LengthRule >> rule waits in parameter either << min >> parameter or << max >> parameter or both'
+      throw new Error('The << LengthRule >> rule waits in parameter either << min >> parameter or << max >> parameter or both')
     }
 
     super(parameter)
@@ -11,13 +19,13 @@ export default class LengthRule extends Rule {
 
     if (this.isDefined(this.parameter.min)) {
       if (parameter.minMessage === 'undefined') {
-        throw 'The << LengthRule >> rule waits << minMessage >> because << min >> is filled'
+        throw new Error('The << LengthRule >> rule waits << minMessage >> because << min >> is filled')
       }
       this.parameter.min = Number.parseInt(this.parameter.min)
     }
     if (this.isDefined(this.parameter.max)) {
       if (parameter.maxMessage === 'undefined') {
-        throw 'The << LengthRule >> rule waits << maxMessage >> because << max >> is filled'
+        throw new Error('The << LengthRule >> rule waits << maxMessage >> because << max >> is filled')
       }
       this.parameter.max = Number.parseInt(this.parameter.max)
     }

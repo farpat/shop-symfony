@@ -8,7 +8,6 @@ use App\Entity\ModuleParameter;
 use App\Repository\ModuleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -16,10 +15,7 @@ class ModuleService
 {
     private ModuleRepository       $moduleRepository;
     private EntityManagerInterface $entityManager;
-    /**
-     * @var CacheItemPoolInterface|CacheInterface
-     */
-    private CacheInterface $cache;
+    private CacheInterface         $cache;
 
     public function __construct(
         ModuleRepository $moduleRepository,
@@ -70,7 +66,7 @@ class ModuleService
 
     private function getCacheKeyFromObject(ModuleParameter $moduleParameter): string
     {
-        return $this->getCacheKeyFromString($moduleParameter->getModule()->getLabel(), $moduleParameter->getLabel());
+        return $this->getCacheKeyFromString((string)$moduleParameter->getModule()->getLabel(), (string)$moduleParameter->getLabel());
     }
 
     private function getCacheKeyFromString(string $moduleLabel, string $parameterLabel): string

@@ -25,6 +25,9 @@ class ResetPasswordRequestRepository extends ServiceEntityRepository implements 
         parent::__construct($registry, ResetPasswordRequest::class);
     }
 
+    /**
+     * @param User $user
+     */
     public function createResetPasswordRequest(
         object $user,
         DateTimeInterface $expiresAt,

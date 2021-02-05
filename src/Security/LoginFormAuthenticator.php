@@ -28,13 +28,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 {
     use TargetPathTrait;
 
-    private                            $entityManager;
-    private                            $urlGenerator;
-    private                            $csrfTokenManager;
-    private                            $passwordEncoder;
-    private CartRepository             $cartRepository;
-    private ProductReferenceRepository $productReferenceRepository;
-    private NormalizerInterface        $normalizer;
+    private EntityManagerInterface       $entityManager;
+    private UrlGeneratorInterface        $urlGenerator;
+    private CsrfTokenManagerInterface    $csrfTokenManager;
+    private UserPasswordEncoderInterface $passwordEncoder;
+    private CartRepository               $cartRepository;
+    private ProductReferenceRepository   $productReferenceRepository;
+    private NormalizerInterface          $normalizer;
 
     public function __construct(
         EntityManagerInterface $entityManager,

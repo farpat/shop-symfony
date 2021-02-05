@@ -3,17 +3,15 @@
 namespace App\Controller\Api\Profile;
 
 use App\Entity\Category;
-use App\Repository\ProductFieldRepository;
 use App\Services\Shop\CategoryService;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/api/profile/admin", name="app_api_profile_admin_")
- * @IsGranted("ROLE_ADMIN")
+ * IsGranted("ROLE_ADMIN")
  */
 class AdminController extends AbstractController
 {
@@ -30,10 +28,10 @@ class AdminController extends AbstractController
     /**
      * @Route("/categories", name="categories", methods={"GET"})
      */
-    public function categories(ProductFieldRepository $productFieldRepository)
+    public function categories()
     {
         return $this->json([
-            'categories'    => $this->categoryService->generateListForCategoryIndexAdmin(
+            'categories' => $this->categoryService->generateListForCategoryIndexAdmin(
                 $this->categoryService->getRootCategories()
             )
         ]);
@@ -68,7 +66,6 @@ class AdminController extends AbstractController
         return $this->json(
             $this->categoryService->generateListForCategoryIndexAdmin(
                 $this->categoryService->getRootCategories(),
-                true,
                 true)
         );
     }

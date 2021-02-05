@@ -78,7 +78,7 @@ class ModuleParameter
         return $this;
     }
 
-    public function getModule(): ?Module
+    public function getModule(): Module
     {
         return $this->module;
     }

@@ -11,12 +11,12 @@ trait Creatable
     /**
      * @ORM\Column(type="datetime")
      */
-    protected $createdAt;
+    protected \DateTimeInterface $createdAt;
 
     /**
      * @ORM\PrePersist()
      */
-    public function updateCreatedAt()
+    public function updateCreatedAt(): void
     {
         $this->createdAt = new DateTime();
     }

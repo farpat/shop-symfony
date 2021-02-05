@@ -31,10 +31,11 @@ class CategorySearchedNormalizer implements NormalizerInterface, CacheableSuppor
      */
     public function normalize($object, string $format = null, array $context = []): array
     {
+        $image = $object->getImage();
         return array_merge(
             Arr::get(['id', 'label'], $object),
             [
-                'image' => $object->getImage() ? $object->getImage()->getUrlThumbnail() : null,
+                'image' => $image ? $image->getUrlThumbnail() : null,
                 'url'   => $this->urlGenerator->generate('app_front_category_show', [
                     'categoryId'   => $object->getId(),
                     'categorySlug' => $object->getSlug()

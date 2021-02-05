@@ -25,7 +25,7 @@ class StripeService
 
     }
 
-    public function createIntent(Cart $cart)
+    public function createIntent(Cart $cart): PaymentIntent
     {
         $this->setApiKey();
 
@@ -36,7 +36,7 @@ class StripeService
         ]);
     }
 
-    private function setApiKey()
+    private function setApiKey(): void
     {
         if (!$this->isPrivateKeySetted) {
             Stripe::setApiKey($this->secretKey);
@@ -52,7 +52,7 @@ class StripeService
         return $this->publicKey;
     }
 
-    public function handleRequest(Request $request)
+    public function handleRequest(Request $request): Event
     {
         $this->setApiKey();
 

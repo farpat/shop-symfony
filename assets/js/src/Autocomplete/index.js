@@ -8,15 +8,15 @@ export default class Autocomplete {
   }
 
   setOptions (options) {
-    var defaultOptions = {
-      selector  : 0,
-      source    : 0,
-      minChars  : 3,
-      delay     : 150,
+    const defaultOptions = {
+      selector: 0,
+      source: 0,
+      minChars: 3,
+      delay: 150,
       offsetLeft: 0,
-      offsetTop : 1,
-      cache     : 1,
-      menuClass : undefined,
+      offsetTop: 1,
+      cache: 1,
+      menuClass: undefined,
       renderItem: function (item, search) {
         if (!item.label) {
           return ''
@@ -24,7 +24,7 @@ export default class Autocomplete {
 
         return `<div class="autocomplete-suggestion" data-val="${item}">${Str.markValueIntoText(search, item.label)}</div>`
       },
-      onSelect  : function (e, term, item) {
+      onSelect: function (e, term, item) {
       }
     }
     this.options = { ...defaultOptions, ...options }

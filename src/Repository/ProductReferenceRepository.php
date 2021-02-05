@@ -19,6 +19,10 @@ class ProductReferenceRepository extends ServiceEntityRepository
         parent::__construct($registry, ProductReference::class);
     }
 
+    /**
+     * @param array $ids
+     * @return ProductReference[]
+     */
     public function getWithAllRelations(array $ids)
     {
         return $this->createQueryBuilder('pr')

@@ -29,10 +29,14 @@ class CartManagerInCookie implements CartManagerInterface
         $this->productReferenceRepository = $productReferenceRepository;
         $this->entityManager = $entityManager;
         $this->request = $request;
-        $this->items = ($request && $request->cookies->has(self::COOKIE_KEY)) ? unserialize($request->cookies->get(self::COOKIE_KEY)) : [];
+        $this->items = ($request && $request->cookies->has(self::COOKIE_KEY)) ? unserialize((string)$request->cookies->get(self::COOKIE_KEY)) : [];
         $this->normalizer = $normalizer;
     }
 
+    /**
+     * @return array{quantity: int, reference: array}
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     */
     public function deleteItem(int $productReferenceId): array
     {
         if (!array_key_exists($productReferenceId, $this->items)) {
@@ -44,7 +48,7 @@ class CartManagerInCookie implements CartManagerInterface
 
         return [
             'quantity'  => 0,
-            'reference' => $this->normalizer->normalize($productReference, 'json')
+            'reference' => (array)$this->normalizer->normalize($productReference, 'json')
         ];
     }
 
@@ -62,6 +66,10 @@ class CartManagerInCookie implements CartManagerInterface
         return $this->items;
     }
 
+    /**
+     * @return array<int, array{quantity: int, reference: array}>
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     */
     public function getItems(): array
     {
         $items = [];
@@ -73,15 +81,19 @@ class CartManagerInCookie implements CartManagerInterface
         $references = [];
 
         foreach ($this->productReferenceRepository->getWithAllRelations(array_keys($this->items)) as $reference) {
-            $references[$reference->getId()] = $reference;
+            $references[(int)$reference->getId()] = $reference;
         }
 
-        return $this->normalizer->normalize(array_map(fn($item) => [
+        return (array)$this->normalizer->normalize(array_map(fn($item) => [
             'quantity'  => $item['quantity'],
             'reference' => $references[$item['referenceId']]
         ], $this->items), 'json');
     }
 
+    /**
+     * @return array{quantity: int, reference: array}
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     */
     public function patchItem(int $quantity, int $productReferenceId): array
     {
         $this->checkQuantity($quantity);
@@ -94,17 +106,21 @@ class CartManagerInCookie implements CartManagerInterface
 
         return [
             'quantity'  => $quantity,
-            'reference' => $this->normalizer->normalize($productReference, 'json')
+            'reference' => (array)$this->normalizer->normalize($productReference, 'json')
         ];
     }
 
-    private function checkQuantity(int $quantity)
+    private function checkQuantity(int $quantity): void
     {
         if ($quantity < 1) {
             throw new InvalidArgumentException("The quantity ($quantity) must be greather than 1");
         }
     }
 
+    /**
+     * @return array{quantity: int, reference: array}
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     */
     public function addItem(int $quantity, int $productReferenceId): array
     {
         $this->checkQuantity($quantity);
@@ -120,7 +136,7 @@ class CartManagerInCookie implements CartManagerInterface
 
         return [
             'quantity'  => $quantity,
-            'reference' => $this->normalizer->normalize($productReference, 'json')
+            'reference' => (array)$this->normalizer->normalize($productReference, 'json')
         ];
     }
 }

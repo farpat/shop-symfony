@@ -60,6 +60,7 @@ class VisitListener
         $route = $request->attributes->get('_route');
 
         return
+            $route &&
             Str::startsWith($route, self::WHITE_ROUTES) &&
             $response->getStatusCode() === Response::HTTP_OK &&
             $request->getMethod() === 'GET' &&

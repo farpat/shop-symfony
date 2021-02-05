@@ -4,20 +4,20 @@ import { Provider } from 'react-redux'
 import productAndCartStore from './Shop/services/ProductAndCartStore'
 import HeadCartComponent from './Shop/components/HeadCart/CartComponent'
 
-//Header cart component (in navbar)
+// Header cart component (in navbar)
 const cartNavElement = document.querySelector('#cart-nav')
 render(
   <Provider store={productAndCartStore}><HeadCartComponent/></Provider>,
   cartNavElement
 )
 
-//in order to display menu in little screen
+// in order to display menu in little screen
 const toggleButton = document.querySelector('#navbar-toggle')
 toggleButton.addEventListener('click', function () {
   toggleButton.parentElement.nextElementSibling.classList.toggle('selected')
 })
 
-//in order to display items into dropdown element
+// in order to display items into dropdown element
 const dropdownButtons = document.querySelectorAll('.nav-dropdown > button')
 let selectedDropdown = null
 const toggleSelectDropdown = function (currentDropdown) {

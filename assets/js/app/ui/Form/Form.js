@@ -76,7 +76,7 @@ export function getError (rules, key, value) {
   }
 
   let error = ''
-  for (let rule of rulesInKey) {
+  for (const rule of rulesInKey) {
     error = rule.check(value)
     if (error !== undefined) {
       break

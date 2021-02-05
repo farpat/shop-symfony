@@ -6,7 +6,6 @@ namespace App\Services\Shop;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use App\Services\ModuleService;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -14,9 +13,6 @@ class ProductService
 {
     private ProductRepository $productRepository;
     private ModuleService     $moduleService;
-    /**
-     * @var CacheInterface|CacheItemPoolInterface
-     */
     private CacheInterface    $cache;
 
     public function __construct(

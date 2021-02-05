@@ -9,7 +9,6 @@ use App\Services\Shop\CategoryService;
 use App\Services\Shop\ProductService;
 use App\Services\Support\Str;
 use Exception;
-use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -22,10 +21,7 @@ class NavigationService
     private UrlGeneratorInterface $urlGenerator;
     private ModuleService         $moduleService;
     private ProductService        $productService;
-    /**
-     * @var CacheItemPoolInterface|CacheInterface
-     */
-    private CacheInterface $cache;
+    private CacheInterface        $cache;
 
     public function __construct(
         ModuleService $moduleService,
@@ -35,7 +31,8 @@ class NavigationService
         CategoryService $categoryService,
         CacheInterface $cache
     ) {
-        $this->currentUrl = $requestStack->getCurrentRequest() ? $requestStack->getCurrentRequest()->getPathInfo() : null;
+        $request = $requestStack->getCurrentRequest();
+        $this->currentUrl = $request ? $request->getPathInfo() : null;
         $this->productService = $productService;
         $this->categoryService = $categoryService;
         $this->urlGenerator = $urlGenerator;
@@ -86,7 +83,11 @@ class NavigationService
         return $html;
     }
 
-    private function getResources(array $links)
+    /**
+     * @param array $links
+     * @return array<class-string, array<int, object>>
+     */
+    private function getResources(array $links): array
     {
         $resources = [];
 
@@ -98,6 +99,7 @@ class NavigationService
         }
 
         foreach ($resources as $entityClass => $ids) {
+            /** @var int[] $ids */
             $ids = array_keys($ids);
             $items = [];
             switch ($entityClass) {
@@ -109,16 +111,17 @@ class NavigationService
                     break;
             }
 
-            $resources[$entityClass] = $this->getById($items);
+            $resources[$entityClass] = $this->getObjectById($items);
         }
 
+        /** @var array<class-string, array<int, object>> */
         return $resources;
     }
 
     /**
      * @param Product[]|Category[] $array
      */
-    private function getById(array $array)
+    private function getObjectById(array $array): array
     {
         $newArray = [];
         foreach ($array as $item) {
@@ -128,6 +131,9 @@ class NavigationService
         return $newArray;
     }
 
+    /**
+     * @return array{level: int, type: string, prefix: string, suffix: string}
+     */
     private function getInformation(string $link): array
     {
         preg_match('/^(\d+)\[(.*)\](.*)@(.*)/', $link, $matches);
@@ -182,14 +188,20 @@ HTML;
         return $resource;
     }
 
-    private function getUrl($entity): string
+    /**
+     * @param Product|Category $entity
+     * @return string
+     * @throws Exception
+     */
+    private function getUrl(object $entity): string
     {
         if ($entity instanceof Product) {
+            $category = $entity->getCategory();
             return $this->urlGenerator->generate('app_front_product_show', [
                 'productId'    => $entity->getId(),
                 'productSlug'  => $entity->getSlug(),
-                'categoryId'   => $entity->getCategory()->getId(),
-                'categorySlug' => $entity->getCategory()->getSlug()
+                'categoryId'   => $category ? $category->getId() : '',
+                'categorySlug' => $category ? $category->getSlug() : ''
             ]);
         }
 
@@ -200,10 +212,11 @@ HTML;
             ]);
         }
 
-        return '';
+        $class = get_class($entity);
+        throw new Exception("The entity << $class >> is not supported");
     }
 
-    private function renderStartDropdownButton(array $information)
+    private function renderStartDropdownButton(array $information): string
     {
         switch ($information['type']) {
             case 'TEXT':
@@ -228,7 +241,7 @@ HTML;
 
     }
 
-    private function hasLevel3(int $startKey, array $informations)
+    private function hasLevel3(int $startKey, array $informations): bool
     {
         for ($i = $startKey; $i < count($informations); $i++) {
             if ($informations[$i]['level'] === 1) {
@@ -243,7 +256,7 @@ HTML;
     }
 
     /**
-     * @param array{type: 'ENTITY'|'LINK', prefix: string, suffix: string, level: int} $information
+     * @param array{type: string, prefix: string, suffix: string, level: int} $information
      * @param bool $hasLevel3
      * @return string
      * @throws Exception
@@ -283,18 +296,18 @@ HTML;
         }
     }
 
-    private function renderEndDropdownButton()
+    private function renderEndDropdownButton(): string
     {
         return "</div></div>";
     }
 
-    private function renderDropdownItem3(array $information)
+    private function renderDropdownItem3(array $information): string
     {
         $activeClass = '';
         $target = '';
         $label = '';
         $url = '';
-        
+
         switch ($information['type']) {
             case 'ENTITY':
                 $resource = $this->getResource($information['prefix'], $information['suffix']);

@@ -9,7 +9,7 @@ import SymfonyComponentWrapper from './ui/Form/SymfonyComponentWrapper'
 const makeForm = function (parentForm) {
   parentForm.querySelectorAll('.js-form-component').forEach(function (field) {
     const props = { ...JSON.parse(field.getAttribute('props')) }
-    render(<SymfonyComponentWrapper {...props} component={field.dataset.component}/>, field) //TODO: render a component with value and error being dynamic
+    render(<SymfonyComponentWrapper {...props} component={field.dataset.component}/>, field) // TODO: render a component with value and error being dynamic
   })
 }
 

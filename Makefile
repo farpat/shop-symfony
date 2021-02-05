@@ -1,4 +1,4 @@
-.PHONY: install update clean help test dusk dev stop-dev build migrate bash
+.PHONY: install update clean help test dusk dev stop-dev build migrate bash lint-js lint-php
 .DEFAULT_GOAL   = help
 
 include .env
@@ -25,6 +25,7 @@ mariadb := docker-compose exec mariadb mysql -psecret -e
 bash := docker-compose run --rm php zsh
 composer := docker-compose run --rm php composer
 npm := docker-compose run --rm asset_dev_server npm
+npx := docker-compose run --rm asset_dev_server npx
 
 node_modules: package.json
 	@$(npm) install
@@ -54,7 +55,7 @@ test: ## Run PHP tests (parameters : dir=tests/Feature/LoginTest.php || filter=g
 	@$(php_test) bin/phpunit $(dir) --filter $(filter) --testdox
 	@docker-compose -f docker-compose-test.yaml down
 
-dev: install ## Run development servers
+dev: ## Run development servers
 	@docker-compose up -d
 	@echo "Dev server launched on http://localhost:$(DOCKER_APP_PORT)"
 	@echo "Mail server launched on http://localhost:1080"
@@ -84,3 +85,9 @@ endif
 
 bash: ## Run bash in PHP container
 	@$(bash)
+
+lint-js: ## Lint JavaScript and fix auto
+	@$(npx) eslint assets/js --fix
+
+lint-php: ## Lint PHP
+	@$(php) -d memory_limit=-1 vendor/bin/phpstan analyze

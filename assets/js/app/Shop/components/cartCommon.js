@@ -2,31 +2,31 @@ import PropTypes from 'prop-types'
 
 /** PROPTYPES **/
 const referencePropType = PropTypes.shape({
-  url                       : PropTypes.string.isRequired,
-  label                     : PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
   unit_price_including_taxes: PropTypes.number.isRequired,
   unit_price_excluding_taxes: PropTypes.number.isRequired,
-  mainImage                 : PropTypes.shape({
+  mainImage: PropTypes.shape({
     url_thumbnail: PropTypes.string.isRequired,
     alt_thumbnail: PropTypes.string.isRequired
   })
 })
 
 export const CartComponentPropTypes = {
-  cartItems  : PropTypes.objectOf(PropTypes.shape({
-    quantity : PropTypes.number.isRequired,
+  cartItems: PropTypes.objectOf(PropTypes.shape({
+    quantity: PropTypes.number.isRequired,
     reference: referencePropType
   })).isRequired,
   purchaseUrl: PropTypes.string.isRequired,
-  currency   : PropTypes.string.isRequired
+  currency: PropTypes.string.isRequired
 }
 
 export const ItemComponentPropTypes = {
-  item     : PropTypes.shape({
-    quantity : PropTypes.number.isRequired,
+  item: PropTypes.shape({
+    quantity: PropTypes.number.isRequired,
     reference: referencePropType
   }),
-  currency : PropTypes.string.isRequired,
+  currency: PropTypes.string.isRequired,
   isLoading: PropTypes.object.isRequired,
 
   updateItemQuantity: PropTypes.func.isRequired
@@ -34,13 +34,13 @@ export const ItemComponentPropTypes = {
 
 export const TotalComponentPropTypes = {
   cartItems: PropTypes.objectOf(PropTypes.shape({
-    quantity : PropTypes.number.isRequired,
+    quantity: PropTypes.number.isRequired,
     reference: PropTypes.shape({
       unit_price_including_taxes: PropTypes.number.isRequired,
       unit_price_excluding_taxes: PropTypes.number.isRequired
     })
   })).isRequired,
-  currency : PropTypes.string.isRequired
+  currency: PropTypes.string.isRequired
 }
 
 /** FUNCTIONS IN COMPONENT **/
@@ -54,9 +54,9 @@ export function goToReference (event, referenceUrl) {
   const referenceUrlObject = new URL(window.location.origin + referenceUrl)
   const currentUrlObject = new URL(window.location.href)
 
-  window.location.href = referenceUrlObject.pathname === currentUrlObject.pathname ?
-    referenceUrlObject.origin + referenceUrlObject.pathname + '?r=1' + referenceUrlObject.hash :
-    referenceUrl
+  window.location.href = referenceUrlObject.pathname === currentUrlObject.pathname
+    ? referenceUrlObject.origin + referenceUrlObject.pathname + '?r=1' + referenceUrlObject.hash
+    : referenceUrl
 }
 
 /**

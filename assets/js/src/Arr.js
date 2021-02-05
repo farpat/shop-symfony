@@ -11,7 +11,7 @@ class Arr {
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
 
-      if (!object || !object.hasOwnProperty(key)) {
+      if (!object || !Object.prototype.hasOwnProperty.call(object, key)) {
         return undefined
       }
 
@@ -72,12 +72,12 @@ class Arr {
    * @returns {boolean}
    */
   isEmpty (arr) {
-    //if object
+    // if object
     if (arr.length !== undefined && arr.length === 0) {
       return true
     }
 
-    //if array
+    // if array
     return typeof arr === 'object' && Object.keys(arr).length === 0
   }
 

@@ -10,8 +10,8 @@ use Symfony\Component\Validator\Constraint;
 
 class Reader
 {
-    //$cache[classFormData][field] => #annotations
-    private $cache = [];
+    /** @var array<class-string, array{string, object[]}> */
+    private array $cache = [];
     /**
      * @var SymfonyReader
      */
@@ -26,7 +26,7 @@ class Reader
      * @param string $classFormData
      * @param string $field
      *
-     * @return array
+     * @return object[]
      * @throws ReflectionException
      */
     public function getConstraintAnnotations(string $classFormData, string $field): array
@@ -34,7 +34,7 @@ class Reader
         if (!isset($this->cache[$classFormData][$field])) {
             $property = new ReflectionProperty($classFormData, $field);
 
-            $this->cache[$classFormData][$field] = array_filter(
+            $this->cache[$classFormData][$field] = (array)array_filter(
                 $this->reader->getPropertyAnnotations($property),
                 fn($annotation) => $this->isConstraint($annotation)
             );
@@ -42,7 +42,7 @@ class Reader
         return $this->cache[$classFormData][$field];
     }
 
-    private function isConstraint($annotation): bool
+    private function isConstraint(object $annotation): bool
     {
         return is_subclass_of($annotation, Constraint::class);
     }

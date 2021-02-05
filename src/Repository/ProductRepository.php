@@ -21,10 +21,10 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param int[] $ids
      * @return Product[]
-     * @throws Exception
      */
-    public function getProductsInHome($ids): array
+    public function getProductsInHome(array $ids): array
     {
         return $this->createQueryBuilder('p')
             ->select('p', 'mainImage', 'category', 'productReferences')

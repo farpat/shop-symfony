@@ -18,7 +18,7 @@ class BillingService
 {
     private ModuleService                       $moduleService;
     /**
-     * @var Filesystem
+     * @var Filesystem|FilesystemInterface
      */
     private FilesystemInterface                 $billingStorage;
     private Twig                                $twig;

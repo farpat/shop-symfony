@@ -1,7 +1,7 @@
 const units = ['o', 'Ko', 'Mo', 'Go', 'To', 'Po', 'Eo', 'Zo', 'Yo']
 
 /**
- * @static {Object} parseKeysCache
+ * @static {object} parseKeysCache
  */
 class Str {
   constructor () {
@@ -13,7 +13,7 @@ class Str {
   }
 
   parseKeysInString (str) {
-    if (!Str.parseKeysCache.hasOwnProperty(str)) {
+    if (!Object.prototype.hasOwnProperty.call(Str.parseKeysCache, str)) {
       const keys = Array.from(str.matchAll(/\[?([\w_-]+)\]?/g))
 
       Str.parseKeysCache[str] = keys.length === 1
@@ -24,11 +24,16 @@ class Str {
     return Str.parseKeysCache[str]
   }
 
+  /**
+   *
+   * @param {string} text
+   * @returns {string}
+   */
   formatCardNumber (text) {
     text = text.replace(/\s+/g, '').replace(/[^0-9]/gi, '')
 
     const matches = text.match(/\d{4,16}/g)
-    const match = matches && matches[0] || ''
+    const match = matches.length > 0 ? matches[0] : ''
     const parts = []
     for (let i = 0, len = match.length; i < len; i += 4) {
       parts.push(match.substring(i, i + 4))
@@ -141,7 +146,7 @@ class Str {
 
     let json = JSON.stringify(object, undefined, 4)
     json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    return `<pre>${json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+    return `<pre>${json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g, function (match) {
       let cls = 'number'
       if (/^"/.test(match)) {
         cls = /:$/.test(match) ? 'key' : 'string'

@@ -14,10 +14,10 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 class CartManagerInDatabase implements CartManagerInterface
 {
     private ProductReferenceRepository $productReferenceRepository;
-    private EntityManagerInterface $entityManager;
-    private User $user;
-    private Cart $cart;
-    private NormalizerInterface $normalizer;
+    private EntityManagerInterface     $entityManager;
+    private User                       $user;
+    private Cart                       $cart;
+    private NormalizerInterface        $normalizer;
     /** @var OrderItem[] $items */
     private array $items;
 
@@ -42,6 +42,11 @@ class CartManagerInDatabase implements CartManagerInterface
         return $cart;
     }
 
+    /**
+     * @param int $productReferenceId
+     * @return array{quantity: int, reference: array<string, mixed>}
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     */
     public function deleteItem(int $productReferenceId): array
     {
         $productReference = $this->getProductReference($productReferenceId);
@@ -56,8 +61,8 @@ class CartManagerInDatabase implements CartManagerInterface
         }
 
         return [
-            'quantity' => 0,
-            'reference' => $this->normalizer->normalize($orderItem->getProductReference(), 'json')
+            'quantity'  => 0,
+            'reference' => (array)$this->normalizer->normalize($orderItem->getProductReference(), 'json')
         ];
     }
 
@@ -127,6 +132,12 @@ class CartManagerInDatabase implements CartManagerInterface
         return true;
     }
 
+    /**
+     * @param int $quantity
+     * @param int $productReferenceId
+     * @return array{quantity: int, reference: array}
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     */
     public function patchItem(int $quantity, int $productReferenceId): array
     {
         $this->checkQuantity($quantity);
@@ -146,18 +157,22 @@ class CartManagerInDatabase implements CartManagerInterface
         $this->entityManager->persist($orderItem);
 
         return [
-            'quantity' => $orderItem->getQuantity(),
-            'reference' => $this->normalizer->normalize($orderItem->getProductReference(), 'json')
+            'quantity'  => (int)$orderItem->getQuantity(),
+            'reference' => (array)$this->normalizer->normalize($orderItem->getProductReference(), 'json')
         ];
     }
 
-    private function checkQuantity(int $quantity)
+    private function checkQuantity(int $quantity): void
     {
         if ($quantity < 1) {
             throw new InvalidArgumentException("The quantity ($quantity) must be greather than 1");
         }
     }
 
+    /**
+     * @return array{quantity: int, reference: array}
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     */
     public function addItem(int $quantity, int $productReferenceId): array
     {
         $this->checkQuantity($quantity);
@@ -176,8 +191,8 @@ class CartManagerInDatabase implements CartManagerInterface
         $this->cart->addItem($orderItem);
 
         return [
-            'quantity' => $orderItem->getQuantity(),
-            'reference' => $this->normalizer->normalize($orderItem->getProductReference(), 'json')
+            'quantity'  => (int)$orderItem->getQuantity(),
+            'reference' => (array)$this->normalizer->normalize($orderItem->getProductReference(), 'json')
         ];
     }
 
@@ -196,7 +211,7 @@ class CartManagerInDatabase implements CartManagerInterface
 
         foreach ($this->items as $item) {
             $items[$item->getProductReference()->getId()] = [
-                'quantity' => $item->getQuantity(),
+                'quantity'  => $item->getQuantity(),
                 'reference' => $this->normalizer->normalize($item->getProductReference(), 'json')
             ];
         }

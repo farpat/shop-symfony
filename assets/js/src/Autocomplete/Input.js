@@ -41,7 +41,7 @@ export default class Input {
   }
 
   updateScreen (resizeEvent, nextElement) {
-    var rect = this.element.getBoundingClientRect()
+    const rect = this.element.getBoundingClientRect()
     this.containerElement.style.left = `${Math.round(rect.left + window.pageXOffset + this.options.offsetLeft)}px`
     this.containerElement.style.top = `${Math.round(rect.bottom + window.pageYOffset + this.options.offsetTop)}px`
     this.containerElement.style.width = `${Math.round(rect.right - rect.left)}px` // outerWidth
@@ -58,8 +58,8 @@ export default class Input {
         if (nextElement === null) {
           this.containerElement.scrollTop = 0
         } else {
-          var scrTop = this.containerElement.scrollTop
-          var selTop = nextElement.getBoundingClientRect().top - this.containerElement.getBoundingClientRect().top
+          const scrTop = this.containerElement.scrollTop
+          const selTop = nextElement.getBoundingClientRect().top - this.containerElement.getBoundingClientRect().top
           if (selTop + this.containerElement.suggestionHeight - this.containerElement.maxHeight > 0) {
             this.containerElement.scrollTop = selTop + this.containerElement.suggestionHeight + scrTop - this.containerElement.maxHeight
           } else if (selTop < 0) {
@@ -71,10 +71,10 @@ export default class Input {
   };
 
   setOnMouseLeaveAnElement () {
-    var context = this.containerElement || document
+    const context = this.containerElement || document
 
     context.addEventListener('mouseleave', (e) => {
-      var selectedItem = context.querySelector('.autocomplete-suggestion.selected')
+      const selectedItem = context.querySelector('.autocomplete-suggestion.selected')
 
       if (selectedItem !== null) {
         selectedItem.classList.remove('selected')
@@ -83,16 +83,16 @@ export default class Input {
   }
 
   setOnMouseHoverAnElement () {
-    var context = this.containerElement || document
+    const context = this.containerElement || document
 
     context.addEventListener('mouseover', (e) => {
-      var found
-      var el = e.target
+      let found
+      let el = e.target
 
       while (el && !(found = el.classList.contains('autocomplete-suggestion'))) el = el.parentElement
       // test with `found = el.closest('.autocomplete-suggestion')`
       if (found) {
-        var selectedItem = context.querySelector('.autocomplete-suggestion.selected')
+        const selectedItem = context.querySelector('.autocomplete-suggestion.selected')
         if (selectedItem !== null) {
           selectedItem.classList.remove('selected')
         }
@@ -102,13 +102,13 @@ export default class Input {
   }
 
   setOnMouseDownAnElement () {
-    var context = this.containerElement || document
+    const context = this.containerElement || document
 
     context.addEventListener('mousedown', (e) => {
-      var targetElement = e.target
+      const targetElement = e.target
 
       if (targetElement.classList.contains('autocomplete-suggestion')) {
-        var value = targetElement.getAttribute('data-val')
+        const value = targetElement.getAttribute('data-val')
         this.element.value = value
         this.options.onSelect(e, value, targetElement)
         this.containerElement.style.display = 'none'
@@ -117,7 +117,7 @@ export default class Input {
   }
 
   blurHandler () {
-    var hoveredElement = document.querySelector('.autocomplete-suggestions:hover')
+    const hoveredElement = document.querySelector('.autocomplete-suggestions:hover')
 
     if (hoveredElement === null) {
       this.lastValue = this.element.value
@@ -126,7 +126,7 @@ export default class Input {
   }
 
   suggest (data) {
-    var val = this.element.value
+    const val = this.element.value
     this.cache[val] = data
 
     if (data.length > 0 && val.length >= this.options.minChars) {
@@ -142,9 +142,10 @@ export default class Input {
   }
 
   keydownHandler (e) {
+    let sel
     if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && this.containerElement.innerHTML) {
-      var next
-      var sel = this.containerElement.querySelector('.autocomplete-suggestion.selected')
+      let next
+      sel = this.containerElement.querySelector('.autocomplete-suggestion.selected')
       if (!sel) {
         next = (e.key === 'ArrowDown')
           ? this.containerElement.querySelector('.autocomplete-suggestion')
@@ -183,10 +184,10 @@ export default class Input {
   }
 
   keyupHandler (e) {
-    var key = e.key
+    const key = e.key
 
-    if (!key || key !== 'Enter' && key !== 'Escape') {
-      var val = this.element.value
+    if (!key || (key !== 'Enter' && key !== 'Escape')) {
+      const val = this.element.value
 
       if (val.length >= this.options.minChars) {
         if (val !== this.lastValue) {
@@ -199,8 +200,8 @@ export default class Input {
             }
 
             // no requests if previous suggestions were empty
-            for (var i = 1; i < val.length - this.options.minChars; i++) {
-              var part = val.slice(0, val.length - i)
+            for (let i = 1; i < val.length - this.options.minChars; i++) {
+              const part = val.slice(0, val.length - i)
               if (part in this.cache && !this.cache[part].length) {
                 this.suggest([])
                 return

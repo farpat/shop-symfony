@@ -15,11 +15,11 @@ class CartService {
     let totalPriceExcludingTaxes = 0
     let totalPriceIncludingTaxes = 0
 
-    Object.keys(cartItems).map(referenceId => {
+    for (const referenceId of Object.keys(cartItems)) {
       const item = cartItems[referenceId]
       totalPriceExcludingTaxes += item.quantity * item.reference.unit_price_excluding_taxes
       totalPriceIncludingTaxes += item.quantity * item.reference.unit_price_including_taxes
-    })
+    }
 
     return {
       totalPriceExcludingTaxes,
@@ -34,14 +34,14 @@ class CartService {
    */
   createInitialData (headCartElement) {
     this.data = {
-      quantities         : {},
+      quantities: {},
       quantitiesInLoading: {},
 
-      cartItems         : JSON.parse(headCartElement.dataset.cartItems),
+      cartItems: JSON.parse(headCartElement.dataset.cartItems),
       cartItemsInLoading: {},
 
       purchaseUrl: headCartElement.dataset.purchaseUrl,
-      currency   : document.querySelector('#cart-nav').dataset.currency,
+      currency: document.querySelector('#cart-nav').dataset.currency
     }
   }
 
@@ -84,7 +84,7 @@ class CartService {
   updateItemQuantity (reference, quantity) {
     this.data = {
       ...this.data,
-      cartItems : {
+      cartItems: {
         ...this.data.cartItems,
         [reference.id]: { quantity, reference }
       },
@@ -100,7 +100,7 @@ class CartService {
   addInCart (reference, quantity) {
     this.data = {
       ...this.data,
-      cartItems : {
+      cartItems: {
         ...this.data.cartItems,
         [reference.id]: { quantity, reference }
       },
